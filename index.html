@@ -691,8 +691,6 @@ class="expense">
 
 </div>
 
-<div class="stat"><small>إجمالي دخل المكتب</small><strong id="officeTotalIncome" class="income">0 SAR</strong></div>
-
 <div class="stat">
 
 <small>
@@ -824,6 +822,8 @@ class="expense">
 </strong>
 
 </div>
+<div class="stat"><small>إجمالي دخل المكتب</small><strong id="officeTotalIncome" class="income">0 SAR</strong></div>
+
 
 
 </div>
@@ -833,9 +833,16 @@ class="expense">
 class="card"
 style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>
-➕ إضافة مصروف مكتب
-</h3>
+<h3>➕ إضافة دخل مكتب</h3>
+<div class="grid">
+<div class="field"><label>التاريخ</label><input id="offIncDate" type="date"></div>
+<div class="field"><label>اسم الدخل</label><input id="offIncName" placeholder="مثال: أتعاب، استشارة، خدمة..."></div>
+<div class="field"><label>المبلغ (SAR)</label><input id="offIncAmount" type="number" min="0" step="0.01" placeholder="0"></div>
+<div class="field"><label>ملاحظات</label><input id="offIncNote" placeholder="بيان إضافي..."></div>
+<div class="full"><button class="btn green" id="saveOfficeIncomeBtn">حفظ الدخل</button></div>
+</div>
+
+<h3>➕ إضافة مصروف مكتب</h3>
 
 
 <div class="grid">
@@ -3095,6 +3102,13 @@ document.getElementById(
 ).textContent=
 formatNum(db.officeExpenses.length);
 
+
+const incomeBody=document.getElementById("officeIncomeBody");
+if(incomeBody){
+incomeBody.innerHTML=db.officeIncome.length?db.officeIncome.map(item=>`
+<tr><td><span class="num-val">${escapeHTML(item.date)}</span></td><td><strong>${escapeHTML(item.name)}</strong></td><td class="income">${money(item.amount)}</td><td>${escapeHTML(item.note||"")}</td><td><button class="btn red" onclick="deleteOfficeIncome('${item.id}')">حذف</button></td></tr>`).join(""):
+`<tr><td colspan="5"><div class="empty">لا يوجد دخل مكتب مضاف</div></td></tr>`;
+}
 
 const tbody=
 document.getElementById(
