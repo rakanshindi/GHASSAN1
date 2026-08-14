@@ -1,0 +1,1804 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>إدارة المشاريع والدخل والمصاريف</title>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#f4f6f8;
+color:#17202a;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif
+}
+
+.wrap{
+max-width:1100px;
+margin:auto;
+padding:18px
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:15px
+}
+
+.brand h1{
+font-size:24px;
+margin:0
+}
+
+.brand p{
+margin:5px 0;
+color:#667085;
+font-size:13px
+}
+
+button,.btn{
+border:0;
+border-radius:10px;
+padding:11px 15px;
+font-weight:800;
+cursor:pointer;
+background:#0f172a;
+color:white
+}
+
+.btn.secondary{
+background:#fff;
+color:#111827;
+border:1px solid #d7dce2
+}
+
+.btn.green{
+background:#16a34a
+}
+
+.btn.red{
+background:#dc2626
+}
+
+.card{
+background:#fff;
+border:1px solid #e6e9ee;
+border-radius:16px;
+padding:16px;
+margin-bottom:15px;
+box-shadow:0 4px 16px rgba(0,0,0,.04)
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px
+}
+
+.stat{
+padding:16px;
+border-radius:14px;
+background:#f8fafc
+}
+
+.stat small{
+color:#667085
+}
+
+.stat strong{
+display:block;
+font-size:23px;
+margin-top:7px
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px
+}
+
+.field label{
+display:block;
+font-weight:800;
+font-size:13px;
+margin-bottom:6px
+}
+
+.field input,
+.field select{
+width:100%;
+height:44px;
+border:1px solid #d7dce2;
+border-radius:10px;
+padding:0 11px;
+font-size:14px;
+background:#fff
+}
+
+.full{
+grid-column:1/-1
+}
+
+.tabs{
+display:flex;
+gap:8px;
+overflow:auto;
+margin-bottom:15px
+}
+
+.tab{
+white-space:nowrap;
+background:#fff;
+color:#111827;
+border:1px solid #d7dce2
+}
+
+.tab.active{
+background:#0f172a;
+color:#fff
+}
+
+.table-wrap{
+overflow:auto
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:760px
+}
+
+th,td{
+padding:10px 8px;
+border-bottom:1px solid #edf0f3;
+text-align:right;
+font-size:13px
+}
+
+th{
+background:#f8fafc
+}
+
+.income{
+color:#15803d;
+font-weight:800
+}
+
+.expense{
+color:#b91c1c;
+font-weight:800
+}
+
+.muted{
+color:#667085
+}
+
+.actions{
+display:flex;
+gap:7px;
+flex-wrap:wrap
+}
+
+.search{
+max-width:350px
+}
+
+.notice{
+padding:11px;
+border-radius:10px;
+background:#eff6ff;
+color:#1e40af;
+margin-bottom:12px;
+font-size:13px
+}
+
+.empty{
+padding:25px;
+text-align:center;
+color:#667085
+}
+
+@media(max-width:800px){
+.stats{
+grid-template-columns:repeat(2,1fr)
+}
+}
+
+@media(max-width:560px){
+.grid{
+grid-template-columns:1fr
+}
+
+.full{
+grid-column:auto
+}
+
+.wrap{
+padding:12px
+}
+
+.top{
+align-items:flex-start
+}
+
+.stats{
+gap:8px
+}
+
+.stat strong{
+font-size:19px
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<div class="top">
+
+<div class="brand">
+<h1>📊 إدارة المشاريع</h1>
+<p>الدخل والمصاريف وصافي كل مشروع</p>
+</div>
+
+<div class="actions">
+
+<button class="btn secondary" id="importBtn">
+استيراد Excel
+</button>
+
+<button class="btn secondary" id="exportBtn">
+تصدير Excel
+</button>
+
+<input
+id="fileInput"
+type="file"
+accept=".xlsx,.xls"
+hidden
+>
+
+</div>
+</div>
+
+
+<div class="notice">
+البيانات تحفظ تلقائيًا في هذا المتصفح.
+يمكنك استيراد ملف Excel وتسجيل الدخل والمصاريف والبحث عنها.
+</div>
+
+
+<div class="stats">
+
+<div class="stat">
+<small>إجمالي الدخل</small>
+<strong id="totalIncome">0 ر.س</strong>
+</div>
+
+<div class="stat">
+<small>إجمالي المصاريف</small>
+<strong id="totalExpense">0 ر.س</strong>
+</div>
+
+<div class="stat">
+<small>صافي الربح</small>
+<strong id="netProfit">0 ر.س</strong>
+</div>
+
+<div class="stat">
+<small>عدد المشاريع</small>
+<strong id="projectCount">0</strong>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="tabs" id="tabs">
+
+<button class="tab active" data-view="dashboard">
+الرئيسية
+</button>
+
+<button class="tab" data-view="projects">
+المشاريع
+</button>
+
+<button class="tab" data-view="transactions">
+الدخل والمصاريف
+</button>
+
+</div>
+
+<div id="content"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const STORAGE_KEY="ghassan_finance_database_v1";
+
+
+let db;
+
+try{
+
+db=JSON.parse(
+localStorage.getItem(STORAGE_KEY)
+||
+'{"projects":[],"transactions":[]}'
+);
+
+}catch(e){
+
+db={
+projects:[],
+transactions:[]
+};
+
+}
+
+
+const categories=[
+"عامة",
+"مقاولات",
+"حكومي",
+"استشاري",
+"مواد",
+"أجور",
+"معدات",
+"نقل",
+"مشتريات",
+"إيجار",
+"رواتب",
+"أخرى"
+];
+
+
+const money=function(number){
+
+return new Intl.NumberFormat(
+"ar-SA",
+{
+maximumFractionDigits:2
+}
+).format(
+Number(number)||0
+)+" ر.س";
+
+};
+
+
+const escapeHTML=function(value){
+
+return String(value??"")
+.replace(/[&<>"']/g,function(m){
+
+return {
+
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+
+}[m];
+
+});
+
+};
+
+
+function save(){
+
+localStorage.setItem(
+STORAGE_KEY,
+JSON.stringify(db)
+);
+
+updateStats();
+
+}
+
+
+function projectName(id){
+
+const project=db.projects.find(
+function(p){
+return p.id===id;
+}
+);
+
+return project ? project.name : "غير محدد";
+
+}
+
+
+function totals(){
+
+let income=0;
+let expense=0;
+
+db.transactions.forEach(
+function(t){
+
+if(t.type==="income"){
+
+income+=Number(t.amount)||0;
+
+}else{
+
+expense+=Number(t.amount)||0;
+
+}
+
+});
+
+return {
+income:income,
+expense:expense
+};
+
+}
+
+
+function updateStats(){
+
+const total=totals();
+
+document.getElementById(
+"totalIncome"
+).textContent=money(total.income);
+
+document.getElementById(
+"totalExpense"
+).textContent=money(total.expense);
+
+document.getElementById(
+"netProfit"
+).textContent=money(
+total.income-total.expense
+);
+
+document.getElementById(
+"projectCount"
+).textContent=db.projects.length;
+
+}
+
+
+function render(view="dashboard"){
+
+document.querySelectorAll(".tab").forEach(
+function(button){
+
+button.classList.toggle(
+"active",
+button.dataset.view===view
+);
+
+});
+
+
+const content=
+document.getElementById("content");
+
+
+if(view==="dashboard"){
+dashboard(content);
+}
+
+if(view==="projects"){
+projects(content);
+}
+
+if(view==="transactions"){
+transactions(content);
+}
+
+updateStats();
+
+}
+
+
+/* =========================
+الرئيسية
+========================= */
+
+function dashboard(content){
+
+let rows=[];
+
+db.projects.forEach(
+function(project){
+
+const transactions=
+db.transactions.filter(
+function(t){
+return t.projectId===project.id;
+}
+);
+
+let income=0;
+let expense=0;
+
+transactions.forEach(
+function(t){
+
+if(t.type==="income"){
+
+income+=Number(t.amount)||0;
+
+}else{
+
+expense+=Number(t.amount)||0;
+
+}
+
+});
+
+rows.push({
+name:project.name,
+income:income,
+expense:expense,
+net:income-expense
+});
+
+});
+
+
+content.innerHTML=`
+
+<h2>ملخص المشاريع</h2>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>المشروع</th>
+
+<th>الدخل</th>
+
+<th>المصاريف</th>
+
+<th>الصافي</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${
+rows.length
+
+?
+
+rows.map(
+function(row){
+
+return `
+
+<tr>
+
+<td>
+${escapeHTML(row.name)}
+</td>
+
+<td class="income">
+${money(row.income)}
+</td>
+
+<td class="expense">
+${money(row.expense)}
+</td>
+
+<td>
+${money(row.net)}
+</td>
+
+</tr>
+
+`;
+
+}
+).join("")
+
+:
+
+`
+
+<tr>
+
+<td colspan="4">
+
+<div class="empty">
+لا توجد مشاريع حتى الآن
+</div>
+
+</td>
+
+</tr>
+
+`
+
+}
+
+</tbody>
+
+</table>
+
+</div>
+
+`;
+
+
+}
+
+
+/* =========================
+المشاريع
+========================= */
+
+function projects(content){
+
+content.innerHTML=`
+
+<h2>إضافة مشروع جديد</h2>
+
+<div class="grid">
+
+<div class="field">
+
+<label>
+اسم المشروع
+</label>
+
+<input
+id="projectNameInput"
+placeholder="مثال: مشروع عمارة عبدالرحمن نغيمش"
+>
+
+</div>
+
+
+<div style="align-self:end">
+
+<button
+class="btn green"
+id="addProjectButton"
+>
+إضافة مشروع
+</button>
+
+</div>
+
+</div>
+
+
+<h2 style="margin-top:25px">
+المشاريع الحالية
+</h2>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>المشروع</th>
+
+<th>الدخل</th>
+
+<th>المصاريف</th>
+
+<th>الصافي</th>
+
+<th>إجراء</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${
+db.projects.length
+
+?
+
+db.projects.map(
+function(project){
+
+const transactions=
+db.transactions.filter(
+function(t){
+return t.projectId===project.id;
+}
+);
+
+let income=0;
+let expense=0;
+
+transactions.forEach(
+function(t){
+
+if(t.type==="income"){
+
+income+=Number(t.amount)||0;
+
+}else{
+
+expense+=Number(t.amount)||0;
+
+}
+
+});
+
+
+return `
+
+<tr>
+
+<td>
+${escapeHTML(project.name)}
+</td>
+
+<td class="income">
+${money(income)}
+</td>
+
+<td class="expense">
+${money(expense)}
+</td>
+
+<td>
+${money(income-expense)}
+</td>
+
+<td>
+
+<button
+class="btn red"
+onclick="deleteProject('${project.id}')"
+>
+حذف
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+}
+).join("")
+
+:
+
+`
+
+<tr>
+
+<td colspan="5">
+
+<div class="empty">
+لا توجد مشاريع
+</div>
+
+</td>
+
+</tr>
+
+`
+
+}
+
+</tbody>
+
+</table>
+
+</div>
+
+`;
+
+
+document.getElementById(
+"addProjectButton"
+).onclick=function(){
+
+const input=
+document.getElementById(
+"projectNameInput"
+);
+
+const name=input.value.trim();
+
+
+if(!name){
+
+alert("اكتب اسم المشروع");
+
+return;
+
+}
+
+
+db.projects.push({
+
+id:
+Date.now().toString()+Math.random(),
+
+name:name
+
+});
+
+
+save();
+
+render("projects");
+
+};
+
+
+}
+
+
+/* =========================
+حذف مشروع
+========================= */
+
+window.deleteProject=function(id){
+
+const project=db.projects.find(
+function(p){
+return p.id===id;
+}
+);
+
+if(!project){
+return;
+}
+
+
+if(
+!confirm(
+"هل تريد حذف المشروع وجميع العمليات المرتبطة به؟"
+)
+){
+
+return;
+
+}
+
+
+db.projects=
+db.projects.filter(
+function(p){
+return p.id!==id;
+}
+);
+
+
+db.transactions=
+db.transactions.filter(
+function(t){
+return t.projectId!==id;
+}
+);
+
+
+save();
+
+render("projects");
+
+};
+
+
+/* =========================
+الدخل والمصاريف
+========================= */
+
+function transactions(content){
+
+content.innerHTML=`
+
+<h2>إضافة عملية جديدة</h2>
+
+<div class="grid">
+
+
+<div class="field">
+
+<label>
+نوع العملية
+</label>
+
+<select id="transactionType">
+
+<option value="expense">
+مصروف
+</option>
+
+<option value="income">
+دخل
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+المشروع
+</label>
+
+<select id="transactionProject">
+
+<option value="">
+اختر المشروع
+</option>
+
+${
+db.projects.map(
+function(project){
+
+return `
+
+<option value="${project.id}">
+
+${escapeHTML(project.name)}
+
+</option>
+
+`;
+
+}
+).join("")
+}
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+التاريخ
+</label>
+
+<input
+id="transactionDate"
+type="date"
+value="${new Date().toISOString().slice(0,10)}"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+التصنيف
+</label>
+
+<select id="transactionCategory">
+
+${
+categories.map(
+function(category){
+
+return `
+
+<option>
+${category}
+</option>
+
+`;
+
+}
+).join("")
+}
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+المبلغ
+</label>
+
+<input
+id="transactionAmount"
+type="number"
+min="0"
+step="0.01"
+placeholder="0"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+البيان / اسم الشخص
+</label>
+
+<input
+id="transactionNote"
+placeholder="مثال: محمد - مواد"
+>
+
+</div>
+
+
+<div class="full">
+
+<button
+class="btn green"
+id="saveTransactionButton"
+>
+حفظ العملية
+</button>
+
+</div>
+
+
+</div>
+
+
+<h2 style="margin-top:25px">
+البحث
+</h2>
+
+
+<input
+id="transactionSearch"
+class="search"
+placeholder="اكتب اسم محمد أو اسم المشروع أو البيان..."
+>
+
+
+<div
+class="table-wrap"
+style="margin-top:15px"
+>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>التاريخ</th>
+
+<th>المشروع</th>
+
+<th>النوع</th>
+
+<th>التصنيف</th>
+
+<th>المبلغ</th>
+
+<th>البيان</th>
+
+<th>إجراء</th>
+
+</tr>
+
+</thead>
+
+<tbody id="transactionsBody">
+
+</tbody>
+
+</table>
+
+</div>
+
+`;
+
+
+document.getElementById(
+"saveTransactionButton"
+).onclick=function(){
+
+const type=
+document.getElementById(
+"transactionType"
+).value;
+
+const projectId=
+document.getElementById(
+"transactionProject"
+).value;
+
+const date=
+document.getElementById(
+"transactionDate"
+).value;
+
+const category=
+document.getElementById(
+"transactionCategory"
+).value;
+
+const amount=
+Number(
+document.getElementById(
+"transactionAmount"
+).value
+);
+
+const note=
+document.getElementById(
+"transactionNote"
+).value.trim();
+
+
+if(!projectId){
+
+alert("اختر المشروع");
+
+return;
+
+}
+
+
+if(!(amount>0)){
+
+alert("أدخل مبلغًا صحيحًا");
+
+return;
+
+}
+
+
+db.transactions.unshift({
+
+id:
+Date.now().toString()+Math.random(),
+
+projectId:projectId,
+
+type:type,
+
+date:date,
+
+category:category,
+
+amount:amount,
+
+note:note
+
+});
+
+
+save();
+
+render("transactions");
+
+};
+
+
+document.getElementById(
+"transactionSearch"
+).oninput=function(){
+
+drawTransactions();
+
+};
+
+
+drawTransactions();
+
+
+function drawTransactions(){
+
+const search=
+document.getElementById(
+"transactionSearch"
+).value
+.trim()
+.toLowerCase();
+
+
+const filtered=
+db.transactions.filter(
+function(transaction){
+
+const text=
+
+projectName(transaction.projectId)
++" "
++
+transaction.note
++" "
++
+transaction.category
++" "
++
+transaction.amount
++" "
++
+transaction.date;
+
+return text
+.toLowerCase()
+.includes(search);
+
+});
+
+
+document.getElementById(
+"transactionsBody"
+).innerHTML=
+
+filtered.length
+
+?
+
+filtered.map(
+function(transaction){
+
+return `
+
+<tr>
+
+<td>
+${escapeHTML(transaction.date)}
+</td>
+
+<td>
+${escapeHTML(
+projectName(transaction.projectId)
+)}
+</td>
+
+<td
+class="${
+transaction.type==="income"
+?
+"income"
+:
+"expense"
+}"
+>
+
+${
+transaction.type==="income"
+?
+"دخل"
+:
+"مصروف"
+}
+
+</td>
+
+<td>
+${escapeHTML(transaction.category)}
+</td>
+
+<td>
+${money(transaction.amount)}
+</td>
+
+<td>
+${escapeHTML(transaction.note)}
+</td>
+
+<td>
+
+<button
+class="btn red"
+onclick="deleteTransaction('${transaction.id}')"
+>
+حذف
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+}
+).join("")
+
+:
+
+`
+
+<tr>
+
+<td colspan="7">
+
+<div class="empty">
+لا توجد عمليات
+</div>
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+}
+
+
+/* =========================
+حذف عملية
+========================= */
+
+window.deleteTransaction=function(id){
+
+if(
+!confirm(
+"هل تريد حذف هذه العملية؟"
+)
+){
+
+return;
+
+}
+
+
+db.transactions=
+db.transactions.filter(
+function(t){
+return t.id!==id;
+}
+);
+
+
+save();
+
+render("transactions");
+
+};
+
+
+/* =========================
+التنقل
+========================= */
+
+document.getElementById(
+"tabs"
+).onclick=function(event){
+
+const button=
+event.target.closest(".tab");
+
+
+if(!button){
+return;
+}
+
+
+render(
+button.dataset.view
+);
+
+};
+
+
+/* =========================
+استيراد Excel
+========================= */
+
+document.getElementById(
+"importBtn"
+).onclick=function(){
+
+document.getElementById(
+"fileInput"
+).click();
+
+};
+
+
+document.getElementById(
+"fileInput"
+).onchange=async function(event){
+
+const file=
+event.target.files[0];
+
+
+if(!file){
+return;
+}
+
+
+try{
+
+const data=
+await file.arrayBuffer();
+
+
+const workbook=
+XLSX.read(
+data,
+{
+type:"array",
+cellDates:true
+}
+);
+
+
+let importedProjects=0;
+let importedTransactions=0;
+
+
+for(
+const sheetName of workbook.SheetNames
+){
+
+const sheet=
+workbook.Sheets[sheetName];
+
+
+const rows=
+XLSX.utils.sheet_to_json(
+sheet,
+{
+header:1,
+defval:""
+}
+);
+
+
+if(!rows.length){
+continue;
+}
+
+
+let project=
+db.projects.find(
+function(p){
+return p.name===sheetName;
+}
+);
+
+
+if(!project){
+
+project={
+
+id:
+Date.now().toString()+Math.random(),
+
+name:sheetName
+
+};
+
+db.projects.push(project);
+
+importedProjects++;
+
+}
+
+
+const headers=
+rows[0].map(
+function(value){
+
+return String(value)
+.trim();
+
+}
+);
+
+
+for(
+let rowIndex=1;
+rowIndex<rows.length;
+rowIndex++
+){
+
+const row=
+rows[rowIndex];
+
+
+if(!row.length){
+continue;
+}
+
+
+let dateValue=
+row[0];
+
+
+let date="";
+
+
+if(dateValue instanceof Date){
+
+date=
+dateValue
+.toISOString()
+.slice(0,10);
+
+}else{
+
+date=
+String(dateValue||"")
+.trim();
+
+}
+
+
+if(!date){
+
+date=
+new Date()
+.toISOString()
+.slice(0,10);
+
+}
+
+
+let note="";
+
+if(row[5]){
+note=String(row[5]).trim();
+}
+
+if(!note && row[11]){
+note=String(row[11]).trim();
+}
+
+
+let foundNumber=false;
+
+
+for(
+let column=1;
+column<row.length;
+column++
+){
+
+const raw=row[column];
+
+if(
+raw===""
+||
+raw===null
+||
+raw===undefined
+){
+continue;
+}
+
+
+const number=
+Number(
+String(raw)
+.replace(/,/g,"")
+);
+
+
+if(!Number.isFinite(number)){
+continue;
+}
+
+if(number===0){
+continue;
+}
+
+
+foundNumber=true;
+
+
+const header=
+headers[column]
+||
+"أخرى";
+
+
+const headerLower=
+header.toLowerCase();
+
+
+const isIncome=
+header==="دخل"
+||
+header==="الدفعات"
+||
+header==="دفعات"
+||
+headerLower.includes("دخل")
+||
+headerLower.includes("دفعة");
+
+
+db.transactions.push({
+
+id:
+Date.now().toString()
++Math.random(),
+
+projectId:
+project.id,
+
+type:
+isIncome
+?
+"income"
+:
+"expense",
+
+date:date,
+
+category:
+isIncome
+?
+"دخل"
+:
+header,
+
+amount:
+Math.abs(number),
+
+note:note
+
+});
+
+
+importedTransactions++;
+
+}
+
+
+}
+
+}
+
+
+save();
+
+render("dashboard");
+
+
+alert(
+"تم استيراد ملف Excel بنجاح\n\n"+
+"المشاريع الجديدة: "
++
+importedProjects
++
+"\nالعمليات المستوردة: "
++
+importedTransactions
+);
+
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"حدث خطأ أثناء قراءة ملف Excel"
+);
+
+}
+
+
+event.target.value="";
+
+};
+
+
+/* =========================
+تصدير Excel
+========================= */
+
+document.getElementById(
+"exportBtn"
+).onclick=function(){
+
+const rows=[
+
+[
+"المشروع",
+"التاريخ",
+"النوع",
+"التصنيف",
+"المبلغ",
+"البيان"
+]
+
+];
+
+
+db.transactions.forEach(
+function(transaction){
+
+rows.push([
+
+projectName(
+transaction.projectId
+),
+
+transaction.date,
+
+transaction.type==="income"
+?
+"دخل"
+:
+"مصروف",
+
+transaction.category,
+
+transaction.amount,
+
+transaction.note
+
+]);
+
+});
+
+
+const worksheet=
+XLSX.utils.aoa_to_sheet(
+rows
+);
+
+
+const workbook=
+XLSX.utils.book_new();
+
+
+XLSX.utils.book_append_sheet(
+workbook,
+worksheet,
+"العمليات"
+);
+
+
+XLSX.writeFile(
+workbook,
+"نسخة_احتياطية_للمشاريع.xlsx"
+);
+
+};
+
+
+/* =========================
+تشغيل الموقع
+========================= */
+
+render("dashboard");
+
+</script>
+
+</body>
+</html>
