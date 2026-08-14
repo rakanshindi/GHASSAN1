@@ -634,6 +634,16 @@ id="logoutBtn">
 
 </div>
 
+<div class="card" id="fullSiteWallet" style="margin-top:20px">
+<h2>💰 محفظة كامل الموقع</h2>
+<div class="stats" style="margin-top:15px">
+<div class="stat"><small>صافي السيولة الحالية</small><strong id="walletBalance" class="income">0 SAR</strong></div>
+<div class="stat"><small>إجمالي الدخل</small><strong id="walletIncome" class="income">0 SAR</strong></div>
+<div class="stat"><small>إجمالي المصروفات</small><strong id="walletExpense" class="expense">0 SAR</strong></div>
+<div class="stat"><small>الربح / الخسارة</small><strong id="walletProfit">0 SAR</strong></div>
+</div>
+</div>
+
 </div>
 
 
@@ -2232,6 +2242,7 @@ currentOpenedPropertyId=null;
 pageHistory = ["portalScreen"];
 
 navigateTo("portalScreen");
+updateWallet();
 
 };
 
@@ -2845,7 +2856,7 @@ console.error("Personal Expenses Firebase Error:", error);
 function updateWallet(){
 let income=0, expense=0; const cats={};
 const add=(type,amount,cat)=>{amount=Number(amount)||0;if(type==="income")income+=amount;else{expense+=amount;const c=cat||"عام";cats[c]=(cats[c]||0)+amount;}};
-db.transactions.forEach(t=>add(t.type,t.amount,t.category)); db.officeIncome.forEach(x=>add("income",x.amount,"دخل المكتب")); db.officeExpenses.forEach(x=>add("expense",x.amount,x.name)); db.contracting.forEach(x=>add(x.type,x.amount,x.category)); db.services.forEach(x=>{income+=Number(x.collectedAmount)||0; expense+=Math.max(0,(Number(x.collectedAmount)||0)-(Number(x.profit)||0));}); db.rentals.forEach(x=>{income+=Number(x.amount)||0;expense+=Number(x.expenseAmount)||0;}); db.propertyExpenses.forEach(x=>{expense+=Number(x.amount)||0;cats[x.category||"عام"]=(cats[x.category||"عام"]||0)+(Number(x.amount)||0);}); db.personalExpenses.forEach(x=>{expense+=Number(x.amount)||0;cats["مصاريف شخصية"]=(cats["مصاريف شخصية"]||0)+(Number(x.amount)||0);});
+db.transactions.forEach(t=>add(t.type,t.amount,t.category)); db.officeIncome.forEach(x=>add("income",x.amount,"دخل المكتب")); db.officeExpenses.forEach(x=>add("expense",x.amount,x.name)); db.contracting.forEach(x=>add(x.type,x.amount,x.category)); db.services.forEach(x=>{income+=Number(x.collectedAmount)||0; expense+=Number(x.expense!==undefined?x.expense:Math.max(0,(Number(x.collectedAmount)||0)-(Number(x.profit)||0)))||0;}); db.rentals.forEach(x=>{income+=Number(x.amount)||0;expense+=Number(x.expenseAmount)||0;}); db.propertyExpenses.forEach(x=>{expense+=Number(x.amount)||0;cats[x.category||"عام"]=(cats[x.category||"عام"]||0)+(Number(x.amount)||0);}); db.personalExpenses.forEach(x=>{expense+=Number(x.amount)||0;cats["مصاريف شخصية"]=(cats["مصاريف شخصية"]||0)+(Number(x.amount)||0);});
 ["walletIncome","walletExpense","walletProfit","walletBalance"].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.innerHTML=money(i===0?income:i===1?expense:income-expense);});
 const box=document.getElementById("walletCategories");if(box)box.innerHTML=Object.keys(cats).length?`<table><thead><tr><th>التصنيف</th><th>المجموع</th></tr></thead><tbody>${Object.keys(cats).sort().map(c=>`<tr><td>${escapeHTML(c)}</td><td class="expense">${money(cats[c])}</td></tr>`).join("")}</tbody></table>`:`<div class="empty">لا توجد مصروفات</div>`;
 }
