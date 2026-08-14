@@ -1193,21 +1193,7 @@ placeholder="اكتب أو اختر خدمة">
 
 <div class="field">
 
-<label>الربح (SAR)</label>
-
-<input
-id="srvProfit"
-type="number"
-min="0"
-step="0.01"
-placeholder="0">
-
-</div>
-
-
-<div class="field">
-
-<label>المبلغ المحصل (SAR)</label>
+<label>الدخل / المبلغ المحصل (SAR)</label>
 
 <input
 id="srvCollectedAmount"
@@ -1217,6 +1203,9 @@ step="0.01"
 placeholder="0">
 
 </div>
+
+
+
 
 <div class="field">
 
@@ -3939,8 +3928,6 @@ const date=document.getElementById("srvDate").value;
 
 const category=document.getElementById("srvCategory").value.trim();
 
-const profit=Number(document.getElementById("srvProfit").value);
-
 const collectedAmount=Number(document.getElementById("srvCollectedAmount").value);
 
 const expense=Number(document.getElementById("srvExpense").value)||0;
@@ -3950,6 +3937,8 @@ const note=document.getElementById("srvNote").value.trim();
 if(!date){ alert("اختر التاريخ."); return; }
 
 if(!category){ alert("أدخل أو اختر اسم الخدمة."); return; }
+
+if(!(collectedAmount>0)){ alert("أدخل مبلغ دخل صحيح."); return; }
 
 if(expense<0){ alert("أدخل مصروف صحيح."); return; }
 
@@ -3965,7 +3954,6 @@ date, category, profit:collectedAmount-expense, collectedAmount, expense, note, 
 
 document.getElementById("srvCategory").value="";
 
-document.getElementById("srvProfit").value="";
 
 document.getElementById("srvCollectedAmount").value="";
 document.getElementById("srvExpense").value="";
