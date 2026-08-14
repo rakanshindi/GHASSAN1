@@ -7,7 +7,7 @@
 
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>إدارة المكتب والمشاريع والعقارات</title>
+<title>إدارة المكتب والمشاريع والعقارات والمصاريف</title>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -57,7 +57,11 @@ padding:11px 15px;
 font-weight:800;
 cursor:pointer;
 background:#0f172a;
-color:white
+color:white;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:6px
 }
 
 button:disabled{
@@ -115,7 +119,9 @@ color:#667085
 .stat strong{
 display:block;
 font-size:23px;
-margin-top:7px
+margin-top:7px;
+direction:ltr;
+text-align:right
 }
 
 .grid{
@@ -149,7 +155,8 @@ grid-column:1/-1
 .tabs{
 display:flex;
 gap:8px;
-overflow:auto;
+overflow-x:auto;
+padding-bottom:5px;
 margin-bottom:15px
 }
 
@@ -166,13 +173,15 @@ color:#fff
 }
 
 .table-wrap{
-overflow:auto
+overflow-x:auto;
+width:100%;
+-webkit-overflow-scrolling:touch
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-min-width:760px
+min-width:650px
 }
 
 th,td{
@@ -184,6 +193,12 @@ font-size:13px
 
 th{
 background:#f8fafc
+}
+
+.num-val{
+direction:ltr;
+unicode-bidi:bidi-override;
+display:inline-block
 }
 
 .income{
@@ -284,7 +299,7 @@ flex-wrap:wrap
 
 .portal-selection{
 display:grid;
-grid-template-columns:repeat(4,1fr);
+grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
 gap:15px;
 margin-top:30px
 }
@@ -293,7 +308,7 @@ margin-top:30px
 background:#fff;
 border:2px solid #e6e9ee;
 border-radius:18px;
-padding:30px 15px;
+padding:25px 15px;
 text-align:center;
 cursor:pointer;
 transition:all .2s ease;
@@ -308,7 +323,7 @@ box-shadow:0 8px 24px rgba(0,0,0,.08)
 
 .portal-card h2{
 margin:10px 0 5px 0;
-font-size:20px
+font-size:19px
 }
 
 .portal-card p{
@@ -318,7 +333,7 @@ font-size:13px
 }
 
 .portal-icon{
-font-size:40px;
+font-size:38px;
 display:block;
 margin-bottom:10px
 }
@@ -346,60 +361,78 @@ color:#b91c1c;
 border:1px solid #fecaca
 }
 
-.section-title{
+.section-nav{
 display:flex;
-justify-content:space-between;
-align-items:center;
 gap:10px;
+margin-bottom:15px;
 flex-wrap:wrap
 }
 
-@media(max-width:900px){
+.month-group-card{
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:15px;
+margin-bottom:15px
+}
 
+.month-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:2px solid #cbd5e1;
+padding-bottom:8px;
+margin-bottom:12px
+}
+
+.month-header h4{
+margin:0;
+font-size:16px;
+color:#0f172a
+}
+
+.month-header span{
+font-size:15px;
+font-weight:800
+}
+
+@media(max-width:900px){
 .portal-selection{
 grid-template-columns:repeat(2,1fr)
 }
-
 }
 
 @media(max-width:800px){
-
 .stats{
 grid-template-columns:repeat(2,1fr)
 }
-
 }
 
 @media(max-width:560px){
-
 .grid{
 grid-template-columns:1fr
 }
-
 .full{
 grid-column:auto
 }
-
 .wrap{
-padding:12px
+padding:10px
 }
-
 .top{
 align-items:flex-start
 }
-
 .stats{
 gap:8px
 }
-
 .stat strong{
-font-size:19px
+font-size:18px
 }
-
 .portal-selection{
 grid-template-columns:1fr
 }
-
+.brand h1{
+font-size:20px
+}
 }
 
 </style>
@@ -475,7 +508,7 @@ style="width:100%">
 <h1>📊 نظام الإدارة الشامل</h1>
 
 <p>
-المكتب والمشاريع ودخل الخدمات وإيجارات العقارات
+المكتب والمشاريع ودخل الخدمات وإيجارات العقارات والمصاريف الشخصية
 </p>
 
 </div>
@@ -495,7 +528,7 @@ class="btn secondary"
 id="homeBtn"
 style="display:none">
 
-الرئيسية 🏠
+🏠 الرئيسية
 
 </button>
 
@@ -580,6 +613,137 @@ id="logoutBtn">
 </div>
 
 
+<div class="portal-card" id="selectPersonal">
+
+<span class="portal-icon">💳</span>
+
+<h2>المصاريف الشخصية</h2>
+
+<p>
+متابعة المصاريف الشخصية والشهرية
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- ================= المصاريف الشخصية ================= -->
+
+<div id="personalSection" style="display:none">
+
+<div class="card">
+
+<div class="section-nav">
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
+</div>
+
+<h2>💳 المصاريف الشخصية</h2>
+
+
+<div class="stats" style="margin-bottom:20px">
+
+<div class="stat">
+
+<small>
+إجمالي المصاريف الشخصية
+</small>
+
+<strong
+id="personalTotalExpense"
+class="expense">
+
+0 SAR
+
+</strong>
+
+</div>
+
+<div class="stat">
+
+<small>
+عدد بنود المصاريف
+</small>
+
+<strong id="personalExpenseCount">
+0
+</strong>
+
+</div>
+
+</div>
+
+
+<div
+class="card"
+style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+
+<h3>
+➕ إضافة مصروف شخصي جديد
+</h3>
+
+<div class="grid">
+
+<div class="field">
+
+<label>التاريخ</label>
+
+<input
+id="perExpDate"
+type="date">
+
+</div>
+
+<div class="field">
+
+<label>المصروف (SAR)</label>
+
+<input
+id="perExpAmount"
+type="number"
+min="0"
+step="0.01"
+placeholder="0">
+
+</div>
+
+<div class="field full">
+
+<label>الملاحظة / البيان</label>
+
+<input
+id="perExpNote"
+placeholder="تفاصيل المصروف...">
+
+</div>
+
+<div class="full">
+
+<button
+class="btn red"
+id="savePersonalExpenseBtn">
+
+حفظ المصروف الشخصي
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<h3>
+📅 المصاريف الشهرية (مجمعة حسب الشهر الميلادي)
+</h3>
+
+<div id="personalMonthlyContainer"></div>
+
 </div>
 
 </div>
@@ -591,14 +755,10 @@ id="logoutBtn">
 
 <div class="card">
 
-<button
-class="btn secondary"
-onclick="showPortal()"
-style="margin-bottom:15px">
-
-← العودة للرئيسية
-
-</button>
+<div class="section-nav">
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
+</div>
 
 <h2>🏢 مصاريف المكتب</h2>
 
@@ -616,7 +776,7 @@ style="margin-bottom:15px">
 id="officeTotalExpense"
 class="expense">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -675,7 +835,7 @@ placeholder="مثال: إيجار المكتب، كهرباء، أدوات مك�
 
 <div class="field">
 
-<label>المبلغ (ر.س)</label>
+<label>المبلغ (SAR)</label>
 
 <input
 id="offExpAmount"
@@ -759,14 +919,10 @@ class="save-status">
 
 <div id="projectsSection" style="display:none">
 
-<button
-class="btn secondary"
-onclick="showPortal()"
-style="margin-bottom:15px">
-
-← العودة للرئيسية
-
-</button>
+<div class="section-nav">
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
+</div>
 
 
 <div
@@ -783,7 +939,7 @@ id="mainStats">
 id="totalIncome"
 class="income">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -800,7 +956,7 @@ class="income">
 id="totalExpense"
 class="expense">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -815,7 +971,7 @@ class="expense">
 
 <strong id="netProfit">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -885,14 +1041,10 @@ data-view="transactions">
 
 <div class="card">
 
-<button
-class="btn secondary"
-onclick="showPortal()"
-style="margin-bottom:15px">
-
-← العودة للرئيسية
-
-</button>
+<div class="section-nav">
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
+</div>
 
 
 <h2>🛠️ دخل الخدمات</h2>
@@ -913,7 +1065,7 @@ style="margin-bottom:20px">
 id="servicesTotalIncome"
 class="income">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -930,7 +1082,7 @@ class="income">
 id="servicesTotalExpense"
 class="expense">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -945,7 +1097,7 @@ class="expense">
 
 <strong id="servicesNetProfit">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -1007,7 +1159,7 @@ placeholder="اكتب أو اختر خدمة">
 
 <div class="field">
 
-<label>الربح (ر.س)</label>
+<label>الربح (SAR)</label>
 
 <input
 id="srvProfit"
@@ -1021,7 +1173,7 @@ placeholder="0">
 
 <div class="field">
 
-<label>المبلغ المحصل (ر.س)</label>
+<label>المبلغ المحصل (SAR)</label>
 
 <input
 id="srvCollectedAmount"
@@ -1136,14 +1288,10 @@ style="margin-bottom:25px">
 <div class="card">
 
 
-<button
-class="btn secondary"
-onclick="showPortal()"
-style="margin-bottom:15px">
-
-← العودة للرئيسية
-
-</button>
+<div class="section-nav">
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
+</div>
 
 
 <h2>🔑 إدارة إيجارات العقارات</h2>
@@ -1166,7 +1314,7 @@ style="margin-bottom:20px">
 id="allPropertiesRent"
 class="income">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -1183,7 +1331,7 @@ class="income">
 id="allPropertiesExpense"
 class="expense">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -1198,7 +1346,7 @@ class="expense">
 
 <strong id="allPropertiesNetProfit">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -1347,7 +1495,7 @@ style="margin-bottom:20px">
 id="propTotalRent"
 class="income">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -1364,7 +1512,7 @@ class="income">
 id="propRentalExpenses"
 class="expense">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -1381,7 +1529,7 @@ class="expense">
 id="propGeneralExpenses"
 class="expense">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -1396,7 +1544,7 @@ class="expense">
 
 <strong id="propNetProfit">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -1421,7 +1569,7 @@ style="margin-bottom:20px">
 id="propTotalRefunded"
 style="color:#2563eb">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -1438,7 +1586,7 @@ style="color:#2563eb">
 id="propTotalRetained"
 style="color:#d97706">
 
-0 ر.س
+0 SAR
 
 </strong>
 
@@ -1524,7 +1672,7 @@ placeholder="اسم المستأجر...">
 
 <div class="field">
 
-<label>مبلغ الإيجار (ر.س)</label>
+<label>مبلغ الإيجار (SAR)</label>
 
 <input
 id="rentAmount"
@@ -1648,7 +1796,7 @@ placeholder="مثال: صيانة العمارة، حارس، كهرباء، ن�
 
 <div class="field">
 
-<label>المبلغ (ر.س)</label>
+<label>المبلغ (SAR)</label>
 
 <input
 id="propertyExpenseAmount"
@@ -1852,7 +2000,8 @@ officeExpenses:[],
 services:[],
 properties:[],
 rentals:[],
-propertyExpenses:[]
+propertyExpenses:[],
+personalExpenses:[]
 
 };
 
@@ -1860,6 +2009,8 @@ propertyExpenses:[]
 let currentOpenedProjectId=null;
 
 let currentOpenedPropertyId=null;
+
+let pageHistory = ["portalScreen"];
 
 
 let unsubscribeProjects=null;
@@ -1869,6 +2020,7 @@ let unsubscribeServices=null;
 let unsubscribeProperties=null;
 let unsubscribeRentals=null;
 let unsubscribePropertyExpenses=null;
+let unsubscribePersonalExpenses=null;
 
 
 const categories=[
@@ -1888,15 +2040,20 @@ const categories=[
 
 function money(number){
 
-return new Intl.NumberFormat(
-"ar-SA",
+const formatted = new Intl.NumberFormat(
+"en-US",
 {
-maximumFractionDigits:2
+minimumFractionDigits: 0,
+maximumFractionDigits: 2
 }
-).format(Number(number)||0)
-+
-" ر.س";
+).format(Number(number)||0);
 
+return `<span class="num-val">${formatted} SAR</span>`;
+
+}
+
+function formatNum(number){
+return new Intl.NumberFormat("en-US").format(Number(number)||0);
 }
 
 
@@ -1943,7 +2100,48 @@ return Number(value)>=0
 }
 
 
-/* ================= الدخول ================= */
+/* ================= التنقل والدخول ================= */
+
+function navigateTo(screenId) {
+
+const screens = [
+"portalScreen", 
+"officeSection", 
+"projectsSection", 
+"servicesSection", 
+"rentalsSection", 
+"personalSection"
+];
+
+screens.forEach(s => {
+const el = document.getElementById(s);
+if (el) el.style.display = (s === screenId) ? "block" : "none";
+});
+
+if (pageHistory[pageHistory.length - 1] !== screenId) {
+pageHistory.push(screenId);
+}
+
+const homeBtn = document.getElementById("homeBtn");
+if (homeBtn) {
+homeBtn.style.display = (screenId === "portalScreen") ? "none" : "inline-flex";
+}
+
+}
+
+
+window.goBack = function() {
+
+if (pageHistory.length > 1) {
+pageHistory.pop();
+const previousScreen = pageHistory[pageHistory.length - 1];
+navigateTo(previousScreen);
+} else {
+showPortal();
+}
+
+};
+
 
 function showApp(user){
 
@@ -1971,58 +2169,16 @@ currentOpenedProjectId=null;
 
 currentOpenedPropertyId=null;
 
-document.getElementById(
-"portalScreen"
-).style.display="block";
+pageHistory = ["portalScreen"];
 
-document.getElementById(
-"officeSection"
-).style.display="none";
-
-document.getElementById(
-"projectsSection"
-).style.display="none";
-
-document.getElementById(
-"servicesSection"
-).style.display="none";
-
-document.getElementById(
-"rentalsSection"
-).style.display="none";
-
-document.getElementById(
-"homeBtn"
-).style.display="none";
+navigateTo("portalScreen");
 
 };
 
 
 window.openOffice=function(){
 
-document.getElementById(
-"portalScreen"
-).style.display="none";
-
-document.getElementById(
-"officeSection"
-).style.display="block";
-
-document.getElementById(
-"projectsSection"
-).style.display="none";
-
-document.getElementById(
-"servicesSection"
-).style.display="none";
-
-document.getElementById(
-"rentalsSection"
-).style.display="none";
-
-document.getElementById(
-"homeBtn"
-).style.display="inline-block";
+navigateTo("officeSection");
 
 document.getElementById(
 "offExpDate"
@@ -2035,29 +2191,7 @@ renderOffice();
 
 window.openProjects=function(){
 
-document.getElementById(
-"portalScreen"
-).style.display="none";
-
-document.getElementById(
-"officeSection"
-).style.display="none";
-
-document.getElementById(
-"projectsSection"
-).style.display="block";
-
-document.getElementById(
-"servicesSection"
-).style.display="none";
-
-document.getElementById(
-"rentalsSection"
-).style.display="none";
-
-document.getElementById(
-"homeBtn"
-).style.display="inline-block";
+navigateTo("projectsSection");
 
 render("projects");
 
@@ -2066,29 +2200,7 @@ render("projects");
 
 window.openServices=function(){
 
-document.getElementById(
-"portalScreen"
-).style.display="none";
-
-document.getElementById(
-"officeSection"
-).style.display="none";
-
-document.getElementById(
-"projectsSection"
-).style.display="none";
-
-document.getElementById(
-"servicesSection"
-).style.display="block";
-
-document.getElementById(
-"rentalsSection"
-).style.display="none";
-
-document.getElementById(
-"homeBtn"
-).style.display="inline-block";
+navigateTo("servicesSection");
 
 document.getElementById(
 "srvDate"
@@ -2101,58 +2213,32 @@ renderServices();
 
 window.openRentals=function(){
 
-document.getElementById(
-"portalScreen"
-).style.display="none";
-
-document.getElementById(
-"officeSection"
-).style.display="none";
-
-document.getElementById(
-"projectsSection"
-).style.display="none";
-
-document.getElementById(
-"servicesSection"
-).style.display="none";
-
-document.getElementById(
-"rentalsSection"
-).style.display="block";
-
-document.getElementById(
-"homeBtn"
-).style.display="inline-block";
+navigateTo("rentalsSection");
 
 renderRentals();
 
 };
 
+window.openPersonal=function(){
+
+navigateTo("personalSection");
 
 document.getElementById(
-"selectOffice"
-).onclick=openOffice;
+"perExpDate"
+).value=today();
+
+renderPersonal();
+
+};
 
 
-document.getElementById(
-"selectProjects"
-).onclick=openProjects;
+document.getElementById("selectOffice").onclick=openOffice;
+document.getElementById("selectProjects").onclick=openProjects;
+document.getElementById("selectServices").onclick=openServices;
+document.getElementById("selectRentals").onclick=openRentals;
+document.getElementById("selectPersonal").onclick=openPersonal;
 
-
-document.getElementById(
-"selectServices"
-).onclick=openServices;
-
-
-document.getElementById(
-"selectRentals"
-).onclick=openRentals;
-
-
-document.getElementById(
-"homeBtn"
-).onclick=showPortal;
+document.getElementById("homeBtn").onclick=showPortal;
 
 
 function showLogin(){
@@ -2275,26 +2361,14 @@ async function(){
 
 try{
 
-if(unsubscribeProjects)
-unsubscribeProjects();
-
-if(unsubscribeTransactions)
-unsubscribeTransactions();
-
-if(unsubscribeOffice)
-unsubscribeOffice();
-
-if(unsubscribeServices)
-unsubscribeServices();
-
-if(unsubscribeProperties)
-unsubscribeProperties();
-
-if(unsubscribeRentals)
-unsubscribeRentals();
-
-if(unsubscribePropertyExpenses)
-unsubscribePropertyExpenses();
+if(unsubscribeProjects) unsubscribeProjects();
+if(unsubscribeTransactions) unsubscribeTransactions();
+if(unsubscribeOffice) unsubscribeOffice();
+if(unsubscribeServices) unsubscribeServices();
+if(unsubscribeProperties) unsubscribeProperties();
+if(unsubscribeRentals) unsubscribeRentals();
+if(unsubscribePropertyExpenses) unsubscribePropertyExpenses();
+if(unsubscribePersonalExpenses) unsubscribePersonalExpenses();
 
 await signOut(auth);
 
@@ -2334,26 +2408,14 @@ showLogin();
 
 function startFirebaseListeners(){
 
-if(unsubscribeProjects)
-unsubscribeProjects();
-
-if(unsubscribeTransactions)
-unsubscribeTransactions();
-
-if(unsubscribeOffice)
-unsubscribeOffice();
-
-if(unsubscribeServices)
-unsubscribeServices();
-
-if(unsubscribeProperties)
-unsubscribeProperties();
-
-if(unsubscribeRentals)
-unsubscribeRentals();
-
-if(unsubscribePropertyExpenses)
-unsubscribePropertyExpenses();
+if(unsubscribeProjects) unsubscribeProjects();
+if(unsubscribeTransactions) unsubscribeTransactions();
+if(unsubscribeOffice) unsubscribeOffice();
+if(unsubscribeServices) unsubscribeServices();
+if(unsubscribeProperties) unsubscribeProperties();
+if(unsubscribeRentals) unsubscribeRentals();
+if(unsubscribePropertyExpenses) unsubscribePropertyExpenses();
+if(unsubscribePersonalExpenses) unsubscribePersonalExpenses();
 
 
 /* المشاريع */
@@ -2398,12 +2460,7 @@ activeTab.dataset.view
 },
 
 error=>{
-
-console.error(
-"Projects Firebase Error:",
-error
-);
-
+console.error("Projects Firebase Error:", error);
 }
 );
 
@@ -2458,12 +2515,7 @@ activeTab.dataset.view
 },
 
 error=>{
-
-console.error(
-"Transactions Firebase Error:",
-error
-);
-
+console.error("Transactions Firebase Error:", error);
 }
 );
 
@@ -2508,12 +2560,7 @@ renderOffice();
 },
 
 error=>{
-
-console.error(
-"Office Firebase Error:",
-error
-);
-
+console.error("Office Firebase Error:", error);
 }
 );
 
@@ -2558,12 +2605,7 @@ renderServices();
 },
 
 error=>{
-
-console.error(
-"Services Firebase Error:",
-error
-);
-
+console.error("Services Firebase Error:", error);
 }
 );
 
@@ -2600,12 +2642,7 @@ renderRentals();
 },
 
 error=>{
-
-console.error(
-"Properties Firebase Error:",
-error
-);
-
+console.error("Properties Firebase Error:", error);
 }
 );
 
@@ -2650,12 +2687,7 @@ renderRentals();
 },
 
 error=>{
-
-console.error(
-"Rentals Firebase Error:",
-error
-);
-
+console.error("Rentals Firebase Error:", error);
 }
 );
 
@@ -2700,12 +2732,52 @@ renderRentals();
 },
 
 error=>{
-
-console.error(
-"Property Expenses Firebase Error:",
-error
+console.error("Property Expenses Firebase Error:", error);
+}
 );
 
+
+/* المصاريف الشخصية */
+
+unsubscribePersonalExpenses=
+onSnapshot(
+collection(
+firestore,
+"personal_expenses"
+),
+
+snapshot=>{
+
+db.personalExpenses=
+snapshot.docs.map(
+item=>({
+id:item.id,
+...item.data()
+})
+);
+
+db.personalExpenses.sort(
+(a,b)=>
+String(b.date||"")
+.localeCompare(
+String(a.date||"")
+)
+);
+
+if(
+document.getElementById(
+"personalSection"
+).style.display==="block"
+){
+
+renderPersonal();
+
+}
+
+},
+
+error=>{
+console.error("Personal Expenses Firebase Error:", error);
 }
 );
 
@@ -2735,25 +2807,190 @@ exp+=amt;
 
 document.getElementById(
 "totalIncome"
-).textContent=
+).innerHTML=
 money(inc);
 
 document.getElementById(
 "totalExpense"
-).textContent=
+).innerHTML=
 money(exp);
 
 document.getElementById(
 "netProfit"
-).textContent=
+).innerHTML=
 money(inc-exp);
 
 document.getElementById(
 "projectCount"
 ).textContent=
-db.projects.length;
+formatNum(db.projects.length);
 
 }
+
+
+/* =====================================================
+   المصاريف الشخصية
+===================================================== */
+
+async function addPersonalExpenseToFirebase(data){
+
+if(!auth.currentUser)
+throw new Error(
+"لا يوجد مستخدم مسجل دخول حاليًا."
+);
+
+await addDoc(
+collection(
+firestore,
+"personal_expenses"
+),
+{
+date:data.date,
+amount:Number(data.amount)||0,
+note:data.note||"",
+createdAt:serverTimestamp(),
+createdBy:auth.currentUser.uid,
+userEmail:auth.currentUser.email||""
+}
+);
+
+}
+
+function renderPersonal(){
+
+let total=0;
+
+const grouped = {};
+
+db.personalExpenses.forEach(item => {
+
+const amt = Number(item.amount) || 0;
+total += amt;
+
+const monthKey = (item.date && item.date.length >= 7) 
+  ? item.date.substring(0, 7) 
+  : "غير محدد";
+
+if (!grouped[monthKey]) {
+  grouped[monthKey] = {
+    total: 0,
+    items: []
+  };
+}
+
+grouped[monthKey].total += amt;
+grouped[monthKey].items.push(item);
+
+});
+
+document.getElementById("personalTotalExpense").innerHTML = money(total);
+document.getElementById("personalExpenseCount").textContent = formatNum(db.personalExpenses.length);
+
+const container = document.getElementById("personalMonthlyContainer");
+
+const sortedMonths = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+
+if (sortedMonths.length === 0) {
+  container.innerHTML = `
+    <div class="empty">
+      لا توجد مصاريف شخصية مضافة حتى الآن.
+    </div>
+  `;
+  return;
+}
+
+container.innerHTML = sortedMonths.map(month => {
+
+  const group = grouped[month];
+
+  const rows = group.items.map(item => `
+    <tr>
+      <td><span class="num-val">${escapeHTML(item.date)}</span></td>
+      <td class="expense">${money(item.amount)}</td>
+      <td>${escapeHTML(item.note)}</td>
+      <td>
+        <button class="btn red" onclick="deletePersonalExpense('${item.id}')">
+          حذف
+        </button>
+      </td>
+    </tr>
+  `).join("");
+
+  return `
+    <div class="month-group-card">
+      <div class="month-header">
+        <h4>📅 شهر: <span class="num-val">${month}</span> الميلادي</h4>
+        <div class="expense">المجموع: ${money(group.total)}</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>التاريخ</th>
+              <th>المصروف</th>
+              <th>الملاحظة</th>
+              <th>إجراء</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+}).join("");
+
+}
+
+
+document.getElementById("savePersonalExpenseBtn").onclick = async function(){
+
+const btn = this;
+const date = document.getElementById("perExpDate").value;
+const amount = Number(document.getElementById("perExpAmount").value);
+const note = document.getElementById("perExpNote").value.trim();
+
+if(!date){
+alert("اختر التاريخ.");
+return;
+}
+
+if(!(amount > 0)){
+alert("أدخل مبلغ مصروف صحيح.");
+return;
+}
+
+btn.disabled = true;
+btn.textContent = "جاري الحفظ...";
+
+try {
+await addPersonalExpenseToFirebase({ date, amount, note });
+document.getElementById("perExpAmount").value = "";
+document.getElementById("perExpNote").value = "";
+} catch(e) {
+console.error(e);
+alert("حدث خطأ أثناء الحفظ:\n" + e.message);
+} finally {
+btn.disabled = false;
+btn.textContent = "حفظ المصروف الشخصي";
+}
+
+};
+
+
+window.deletePersonalExpense = async function(id){
+
+if(!confirm("هل تريد حذف هذا المصروف؟")) return;
+
+try {
+await deleteDoc(doc(firestore, "personal_expenses", id));
+} catch(e) {
+alert("حدث خطأ أثناء الحذف:\n" + e.message);
+}
+
+};
 
 
 /* =====================================================
@@ -2810,13 +3047,13 @@ Number(item.amount)||0;
 
 document.getElementById(
 "officeTotalExpense"
-).textContent=
+).innerHTML=
 money(total);
 
 document.getElementById(
 "officeExpenseCount"
 ).textContent=
-db.officeExpenses.length;
+formatNum(db.officeExpenses.length);
 
 
 const tbody=
@@ -2833,7 +3070,7 @@ item=>`
 
 <tr>
 
-<td>${escapeHTML(item.date)}</td>
+<td><span class="num-val">${escapeHTML(item.date)}</span></td>
 
 <td>
 <strong>
@@ -3039,9 +3276,7 @@ t.classList.remove("active")
 
 this.classList.add("active");
 
-render(
-this.dataset.view
-);
+render(this.dataset.view);
 
 };
 
@@ -3052,930 +3287,407 @@ this.dataset.view
 function render(view){
 
 const content=
-document.getElementById(
-"content"
-);
+document.getElementById("content");
 
 if(view==="projects"){
 
+renderProjectsView(content);
+
+}else if(view==="dashboard"){
+
+renderDashboardView(content);
+
+}else if(view==="transactions"){
+
+renderTransactionsView(content);
+
+}
+
+}
+
+
+function renderProjectsView(content){
+
 if(currentOpenedProjectId){
 
-renderProjectDetails(
-currentOpenedProjectId
-);
+renderSingleProjectView(content, currentOpenedProjectId);
+
+return;
+
+}
+
+let html=`
+<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+<h3>➕ إضافة مشروع جديد</h3>
+<div class="grid">
+<div class="field">
+<label>اسم المشروع</label>
+<input id="projName" placeholder="مثال: مشروع برج الرياض">
+</div>
+<div class="field">
+<label>التصنيف</label>
+<select id="projCategory">
+${categories.map(c=>`<option value="${c}">${c}</option>`).join("")}
+</select>
+</div>
+<div style="align-self:end">
+<button class="btn green" id="saveProjectBtn">إضافة المشروع</button>
+</div>
+</div>
+</div>
+<h3>📋 قائمة المشاريع</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>اسم المشروع</th>
+<th>التصنيف</th>
+<th>إجمالي الدخل</th>
+<th>إجمالي المصاريف</th>
+<th>الصافي</th>
+<th>إجراءات</th>
+</tr>
+</thead>
+<tbody>
+`;
+
+if(!db.projects.length){
+
+html+=`<tr><td colspan="6"><div class="empty">لا توجد مشاريع حتى الآن</div></td></tr>`;
 
 }else{
 
-renderProjectsList();
+db.projects.forEach(p=>{
 
-}
+let pInc=0, pExp=0;
 
-}
+db.transactions.filter(t=>t.projectId===p.id).forEach(t=>{
 
-else if(view==="dashboard"){
+if(t.type==="income") pInc+=Number(t.amount)||0;
 
-renderDashboard();
+else pExp+=Number(t.amount)||0;
 
-}
+});
 
-else if(view==="transactions"){
+const pNet=pInc-pExp;
 
-renderTransactionsList();
-
-}
-
-}
-
-
-function renderProjectsList(){
-
-const content=
-document.getElementById(
-"content"
-);
-
-content.innerHTML=`
-
-<div
-class="card"
-style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
-
-<h3>
-➕ إضافة مشروع جديد
-</h3>
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-اسم المشروع
-</label>
-
-<input
-id="projName"
-placeholder="مثال: مشروع بناء فيلا...">
-
-</div>
-
-<div style="align-self:end">
-
-<button
-class="btn green"
-id="addProjectBtn">
-
-إضافة المشروع
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<h3>
-📋 قائمة المشاريع
-</h3>
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
+html+=`
 <tr>
-
-<th>اسم المشروع</th>
-<th>إجمالي الدخل</th>
-<th>إجمالي المصاريف</th>
-<th>الربح الصافي</th>
-<th>إجراء</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-${
-db.projects.length
-?
-db.projects.map(p=>{
-
-let pInc=0;
-let pExp=0;
-
-db.transactions
-.filter(
-t=>t.projectId===p.id
-)
-.forEach(
-t=>{
-
-if(t.type==="income")
-pInc+=
-Number(t.amount)||0;
-else
-pExp+=
-Number(t.amount)||0;
-
-}
-);
-
-const net=pInc-pExp;
-
-return`
-
-<tr>
-
+<td><strong>${escapeHTML(p.name)}</strong></td>
+<td>${escapeHTML(p.category||"عام")}</td>
+<td class="income">${money(pInc)}</td>
+<td class="expense">${money(pExp)}</td>
+<td class="${profitClass(pNet)}">${money(pNet)}</td>
 <td>
-<strong>
-${escapeHTML(p.name)}
-</strong>
+<div class="actions">
+<button class="btn blue" onclick="openSingleProject('${p.id}')">التفاصيل</button>
+<button class="btn red" onclick="deleteProject('${p.id}')">حذف</button>
+</div>
 </td>
-
-<td class="income">
-${money(pInc)}
-</td>
-
-<td class="expense">
-${money(pExp)}
-</td>
-
-<td class="${profitClass(net)}">
-${money(net)}
-</td>
-
-<td>
-
-<button
-class="btn blue"
-onclick="openProject('${p.id}')">
-
-تفاصيل
-
-</button>
-
-<button
-class="btn red"
-onclick="deleteProject('${p.id}')">
-
-حذف
-
-</button>
-
-</td>
-
 </tr>
-
 `;
 
-}).join("")
-:
-`
-
-<tr>
-
-<td colspan="5">
-
-<div class="empty">
-لا توجد مشاريع مضافة
-</div>
-
-</td>
-
-</tr>
-
-`
+});
 
 }
 
-</tbody>
+html+=`</tbody></table></div>`;
 
-</table>
+content.innerHTML=html;
 
-</div>
+document.getElementById("saveProjectBtn").onclick=async function(){
 
-`;
+const name=document.getElementById("projName").value.trim();
 
+const category=document.getElementById("projCategory").value;
 
-document.getElementById(
-"addProjectBtn"
-).onclick=
-async function(){
+if(!name){ alert("أدخل اسم المشروع."); return; }
 
-const name=
-document.getElementById(
-"projName"
-).value.trim();
-
-if(!name){
-
-alert(
-"أدخل اسم المشروع"
-);
-
-return;
-
-}
+this.disabled=true;
 
 try{
 
-await addDoc(
-collection(
-firestore,
-"projects"
-),
-{
+await addDoc(collection(firestore,"projects"),{
+name, category, createdAt:serverTimestamp()
+});
 
-name,
+document.getElementById("projName").value="";
 
-createdAt:
-serverTimestamp(),
-
-createdBy:
-auth.currentUser.uid,
-
-userEmail:
-auth.currentUser.email||""
-
-}
-);
-
-document.getElementById(
-"projName"
-).value="";
-
-}catch(e){
-
-alert(
-"خطأ: "+
-e.message
-);
-
-}
+}catch(e){ alert(e.message); }
 
 };
 
 }
 
 
-window.openProject=
-function(id){
-
+window.openSingleProject=function(id){
 currentOpenedProjectId=id;
-
 render("projects");
+};
 
+window.closeSingleProject=function(){
+currentOpenedProjectId=null;
+render("projects");
 };
 
 
-function renderProjectDetails(id){
+function renderSingleProjectView(content, projId){
 
-const p=
-db.projects.find(
-item=>item.id===id
-);
+const proj=db.projects.find(p=>p.id===projId);
 
-if(!p){
+if(!proj){ currentOpenedProjectId=null; render("projects"); return; }
 
-currentOpenedProjectId=null;
+let pInc=0, pExp=0;
 
-renderProjectsList();
+const pTxs=db.transactions.filter(t=>t.projectId===projId);
 
-return;
+pTxs.forEach(t=>{
 
-}
+if(t.type==="income") pInc+=Number(t.amount)||0;
 
-const pTxs=
-db.transactions.filter(
-t=>t.projectId===id
-);
+else pExp+=Number(t.amount)||0;
 
-let inc=0;
-let exp=0;
+});
 
-pTxs.forEach(
-t=>{
+const pNet=pInc-pExp;
 
-if(t.type==="income")
-inc+=Number(t.amount)||0;
-else
-exp+=Number(t.amount)||0;
-
-}
-);
-
-const content=
-document.getElementById(
-"content"
-);
-
-content.innerHTML=`
-
-<div
-style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
-
-<h2>
-🏗️ ${escapeHTML(p.name)}
-</h2>
-
-<button
-class="btn secondary"
-onclick="currentOpenedProjectId=null;render('projects');">
-
-← العودة لقائمة المشاريع
-
-</button>
-
+let html=`
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:10px">
+<h2>🏗️ مشروع: ${escapeHTML(proj.name)}</h2>
+<button class="btn secondary" onclick="closeSingleProject()">← العودة للمشاريع</button>
 </div>
 
-
-<div
-class="stats"
-style="margin-bottom:20px">
-
-<div class="stat">
-
-<small>إجمالي الدفعات</small>
-
-<strong class="income">
-${money(inc)}
-</strong>
-
+<div class="stats" style="margin-bottom:20px">
+<div class="stat"><small>إجمالي الدخل</small><strong class="income">${money(pInc)}</strong></div>
+<div class="stat"><small>إجمالي المصاريف</small><strong class="expense">${money(pExp)}</strong></div>
+<div class="stat"><small>صافي الربح</small><strong class="${profitClass(pNet)}">${money(pNet)}</strong></div>
+<div class="stat"><small>عدد العمليات</small><strong>${formatNum(pTxs.length)}</strong></div>
 </div>
 
-<div class="stat">
-
-<small>إجمالي المصاريف</small>
-
-<strong class="expense">
-${money(exp)}
-</strong>
-
-</div>
-
-<div class="stat">
-
-<small>صافي الربح</small>
-
-<strong class="${profitClass(inc-exp)}">
-${money(inc-exp)}
-</strong>
-
-</div>
-
-<div class="stat">
-
-<small>عدد العمليات</small>
-
-<strong>
-${pTxs.length}
-</strong>
-
-</div>
-
-</div>
-
-
-<div
-class="card"
-style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
-
-<h3>
-➕ تسجيل عملية مالية للمشروع
-</h3>
-
+<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+<h3>➕ إضافة عملية للمشروع</h3>
 <div class="grid">
-
 <div class="field">
-
-<label>التاريخ</label>
-
-<input
-id="txDate"
-type="date"
-value="${today()}">
-
-</div>
-
-<div class="field">
-
 <label>نوع العملية</label>
-
 <select id="txType">
-
-<option value="income">
-دفعة (دخل)
-</option>
-
-<option value="expense">
-مصروف
-</option>
-
+<option value="income">دفعة مقبوضة (دخل)</option>
+<option value="expense">مصروف</option>
 </select>
-
 </div>
-
 <div class="field">
-
-<label>التصنيف</label>
-
-<select id="txCat">
-
-${categories.map(
-c=>`
-
-<option value="${escapeHTML(c)}">
-${escapeHTML(c)}
-</option>
-
-`
-).join("")}
-
-</select>
-
+<label>التاريخ</label>
+<input id="txDate" type="date" value="${today()}">
 </div>
-
 <div class="field">
-
-<label>المبلغ (ر.س)</label>
-
-<input
-id="txAmount"
-type="number"
-min="0"
-step="0.01"
-placeholder="0">
-
+<label>المبلغ (SAR)</label>
+<input id="txAmount" type="number" min="0" step="0.01" placeholder="0">
 </div>
-
+<div class="field">
+<label>التصنيف / البيان</label>
+<input id="txCategory" placeholder="مثال: دفعة أولى، مواد بناء...">
+</div>
 <div class="field full">
-
-<label>
-ملاحظة / البيان
-</label>
-
-<input
-id="txNote"
-placeholder="تفاصيل العملية...">
-
+<label>ملاحظات</label>
+<input id="txNote" placeholder="ملاحظات تفصيلية...">
 </div>
-
 <div class="full">
-
-<button
-class="btn green"
-id="saveTxBtn">
-
-تسجيل العملية
-
-</button>
-
+<button class="btn green" id="saveTxBtn">حفظ العملية</button>
+</div>
+</div>
 </div>
 
-</div>
-
-</div>
-
-
-<h3>
-📋 عمليات هذا المشروع
-</h3>
-
+<h3>📋 سجل عمليات المشروع</h3>
 <div class="table-wrap">
-
 <table>
-
 <thead>
-
 <tr>
-
 <th>التاريخ</th>
 <th>النوع</th>
 <th>التصنيف</th>
 <th>المبلغ</th>
-<th>البيان</th>
+<th>الملاحظات</th>
 <th>إجراء</th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
-${
-pTxs.length
-?
-pTxs.map(
-t=>`
-
-<tr>
-
-<td>
-${escapeHTML(t.date)}
-</td>
-
-<td class="${t.type==="income"?"income":"expense"}">
-
-${t.type==="income"?"دفعة":"مصروف"}
-
-</td>
-
-<td>
-${escapeHTML(t.category)}
-</td>
-
-<td class="${t.type==="income"?"income":"expense"}">
-
-${money(t.amount)}
-
-</td>
-
-<td>
-${escapeHTML(t.note)}
-</td>
-
-<td>
-
-<button
-class="btn red"
-onclick="deleteTx('${t.id}')">
-
-حذف
-
-</button>
-
-</td>
-
-</tr>
-
-`
-).join("")
-:
-`
-
-<tr>
-
-<td colspan="6">
-
-<div class="empty">
-لا توجد عمليات مضافة لهذا المشروع
-</div>
-
-</td>
-
-</tr>
-
-`
-
-}
-
-</tbody>
-
-</table>
-
-</div>
-
 `;
 
+if(!pTxs.length){
 
-document.getElementById(
-"saveTxBtn"
-).onclick=
-async function(){
+html+=`<tr><td colspan="6"><div class="empty">لا توجد عمليات لهذا المشروع</div></td></tr>`;
 
-const date=
-document.getElementById(
-"txDate"
-).value;
+}else{
 
-const type=
-document.getElementById(
-"txType"
-).value;
+pTxs.forEach(t=>{
 
-const category=
-document.getElementById(
-"txCat"
-).value;
+const isInc=t.type==="income";
 
-const amount=
-Number(
-document.getElementById(
-"txAmount"
-).value
-);
+html+=`
+<tr>
+<td><span class="num-val">${escapeHTML(t.date)}</span></td>
+<td><span class="${isInc?'income':'expense'}">${isInc?'دفعة':'مصروف'}</span></td>
+<td>${escapeHTML(t.category||"-")}</td>
+<td class="${isInc?'income':'expense'}">${money(t.amount)}</td>
+<td>${escapeHTML(t.note||"-")}</td>
+<td><button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button></td>
+</tr>
+`;
 
-const note=
-document.getElementById(
-"txNote"
-).value.trim();
-
-if(!date){
-
-alert(
-"اختر التاريخ"
-);
-
-return;
+});
 
 }
 
-if(!(amount>0)){
+html+=`</tbody></table></div>`;
 
-alert(
-"أدخل مبلغ صحيح"
-);
+content.innerHTML=html;
 
-return;
+document.getElementById("saveTxBtn").onclick=async function(){
 
-}
+const type=document.getElementById("txType").value;
+
+const date=document.getElementById("txDate").value;
+
+const amount=Number(document.getElementById("txAmount").value);
+
+const category=document.getElementById("txCategory").value.trim();
+
+const note=document.getElementById("txNote").value.trim();
+
+if(!date || !(amount>0)){ alert("أدخل تاريخ ومبلغ صحيح."); return; }
+
+this.disabled=true;
 
 try{
 
-await addDoc(
-collection(
-firestore,
-"transactions"
-),
-{
+await addDoc(collection(firestore,"transactions"),{
 
-projectId:id,
+projectId:projId, type, date, amount, category, note, createdAt:serverTimestamp()
 
-type,
+});
 
-date,
+document.getElementById("txAmount").value="";
 
-category,
+document.getElementById("txCategory").value="";
 
-amount,
+document.getElementById("txNote").value="";
 
-note,
-
-createdAt:
-serverTimestamp(),
-
-createdBy:
-auth.currentUser.uid,
-
-userEmail:
-auth.currentUser.email||""
-
-}
-);
-
-}catch(e){
-
-alert(
-"خطأ أثناء الحفظ: "+
-e.message
-);
-
-}
+}catch(e){ alert(e.message); }
 
 };
 
 }
 
 
-window.deleteTx=
-async function(id){
+window.deleteProject=async function(id){
 
-if(
-!confirm(
-"حذف هذه العملية؟"
-)
-)
-return;
+if(!confirm("هل أنت تأكد من حذف هذا المشروع وكافة عملياته؟")) return;
 
 try{
 
-await deleteDoc(
-doc(
-firestore,
-"transactions",
-id
-)
-);
+const batch=writeBatch(firestore);
 
-}catch(e){
+batch.delete(doc(firestore,"projects",id));
 
-alert(
-"خطأ: "+
-e.message
-);
+db.transactions.filter(t=>t.projectId===id).forEach(t=>{
 
-}
+batch.delete(doc(firestore,"transactions",t.id));
 
-};
-
-
-window.deleteProject=
-async function(id){
-
-if(
-!confirm(
-"حذف المشروع وجميع عملياته بشكل نهائي؟"
-)
-)
-return;
-
-try{
-
-const batch=
-writeBatch(
-firestore
-);
-
-batch.delete(
-doc(
-firestore,
-"projects",
-id
-)
-);
-
-db.transactions
-.filter(
-t=>t.projectId===id
-)
-.forEach(
-t=>
-batch.delete(
-doc(
-firestore,
-"transactions",
-t.id
-)
-)
-);
+});
 
 await batch.commit();
 
-}catch(e){
-
-alert(
-"خطأ أثناء حذف المشروع: "+
-e.message
-);
-
-}
+}catch(e){ alert(e.message); }
 
 };
 
 
-function renderDashboard(){
+window.deleteTransaction=async function(id){
 
-const content=
-document.getElementById(
-"content"
-);
+if(!confirm("هل تريد حذف هذه العملية؟")) return;
+
+try{ await deleteDoc(doc(firestore,"transactions",id)); }
+
+catch(e){ alert(e.message); }
+
+};
+
+
+function renderDashboardView(content){
+
+let inc=0, exp=0;
+
+db.transactions.forEach(t=>{
+
+if(t.type==="income") inc+=Number(t.amount)||0;
+
+else exp+=Number(t.amount)||0;
+
+});
 
 content.innerHTML=`
-
-<h3>
-📊 ملخص عام للمشاريع
-</h3>
-
-<p class="muted">
-يتم حساب الإحصائيات من واقع العمليات المسجلة.
-</p>
-
+<h3>📊 الملخص العام والمؤشرات</h3>
+<div class="stats">
+<div class="stat"><small>إجمالي الإيرادات المقبوضة</small><strong class="income">${money(inc)}</strong></div>
+<div class="stat"><small>إجمالي المصاريف المصروفة</small><strong class="expense">${money(exp)}</strong></div>
+<div class="stat"><small>صافي الربح العام</small><strong class="${profitClass(inc-exp)}">${money(inc-exp)}</strong></div>
+<div class="stat"><small>إجمالي عدد المشاريع</small><strong>${formatNum(db.projects.length)}</strong></div>
+</div>
 `;
 
 }
 
 
-function renderTransactionsList(){
+function renderTransactionsView(content){
 
-const content=
-document.getElementById(
-"content"
-);
-
-content.innerHTML=`
-
-<h3>
-📋 جميع عمليات المشاريع
-</h3>
-
+let html=`
+<h3>📋 جميع عمليات المشاريع المسجلة</h3>
 <div class="table-wrap">
-
 <table>
-
 <thead>
-
 <tr>
-
 <th>التاريخ</th>
 <th>المشروع</th>
 <th>النوع</th>
 <th>التصنيف</th>
 <th>المبلغ</th>
-<th>البيان</th>
+<th>الملاحظات</th>
 <th>إجراء</th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
-${
-db.transactions.length
-?
-db.transactions.map(
-t=>{
-
-const p=
-db.projects.find(
-item=>
-item.id===t.projectId
-);
-
-return`
-
-<tr>
-
-<td>
-${escapeHTML(t.date)}
-</td>
-
-<td>
-<strong>
-${escapeHTML(
-p?p.name:"غير معروف"
-)}
-</strong>
-</td>
-
-<td class="${t.type==="income"?"income":"expense"}">
-
-${t.type==="income"?"دفعة":"مصروف"}
-
-</td>
-
-<td>
-${escapeHTML(t.category)}
-</td>
-
-<td class="${t.type==="income"?"income":"expense"}">
-
-${money(t.amount)}
-
-</td>
-
-<td>
-${escapeHTML(t.note)}
-</td>
-
-<td>
-
-<button
-class="btn red"
-onclick="deleteTx('${t.id}')">
-
-حذف
-
-</button>
-
-</td>
-
-</tr>
-
 `;
 
-}
-).join("")
-:
-`
+if(!db.transactions.length){
 
+html+=`<tr><td colspan="7"><div class="empty">لا توجد عمليات مسجلة</div></td></tr>`;
+
+}else{
+
+db.transactions.forEach(t=>{
+
+const p=db.projects.find(proj=>proj.id===t.projectId);
+
+const isInc=t.type==="income";
+
+html+=`
 <tr>
-
-<td colspan="7">
-
-<div class="empty">
-لا توجد عمليات مسجلة بعد
-</div>
-
-</td>
-
+<td><span class="num-val">${escapeHTML(t.date)}</span></td>
+<td><strong>${escapeHTML(p?p.name:"غير محدد")}</strong></td>
+<td><span class="${isInc?'income':'expense'}">${isInc?'دفعة':'مصروف'}</span></td>
+<td>${escapeHTML(t.category||"-")}</td>
+<td class="${isInc?'income':'expense'}">${money(t.amount)}</td>
+<td>${escapeHTML(t.note||"-")}</td>
+<td><button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button></td>
 </tr>
+`;
 
-`
+});
 
 }
 
-</tbody>
+html+=`</tbody></table></div>`;
 
-</table>
-
-</div>
-
-`;
+content.innerHTML=html;
 
 }
 
@@ -3984,422 +3696,148 @@ onclick="deleteTx('${t.id}')">
    الخدمات
 ===================================================== */
 
-async function addServiceTxToFirebase(data){
+function updateServicesDataList() {
 
-await addDoc(
-collection(
-firestore,
-"services"
-),
-{
+const categoriesSet = new Set();
 
-date:data.date,
+db.services.forEach(item => {
+  if (item.category && item.category.trim()) {
+    categoriesSet.add(item.category.trim());
+  }
+});
 
-category:data.category,
-
-profit:
-Number(data.profit)||0,
-
-collectedAmount:
-Number(data.collectedAmount)||0,
-
-note:data.note||"",
-
-createdAt:
-serverTimestamp(),
-
-createdBy:auth.currentUser.uid,
-
-userEmail:
-auth.currentUser.email||""
-
+const dataList = document.getElementById("servicesList");
+if (dataList) {
+  dataList.innerHTML = Array.from(categoriesSet).map(cat => 
+    `<option value="${escapeHTML(cat)}">`
+  ).join("");
 }
-);
-
 
 }
 
 
 function renderServices(){
 
-let totalProfit=0;
+let totalInc=0, totalProfit=0;
 
-let totalCollected=0;
+const summary={};
 
-const categoriesMap={};
+db.services.forEach(s=>{
 
+const profit=Number(s.profit)||0;
 
-db.services.forEach(
-item=>{
-
-const profit=
-Number(item.profit)||0;
-
-const collectedAmount=
-Number(item.collectedAmount)||0;
-
-const cat=
-item.category||"عام";
-
-if(!categoriesMap[cat]){
-
-categoriesMap[cat]={
-profit:0,
-collectedAmount:0
-};
-
-}
+const collected=Number(s.collectedAmount)||0;
 
 totalProfit+=profit;
 
-totalCollected+=collectedAmount;
+totalInc+=collected;
 
-categoriesMap[cat].profit+=profit;
+const cat=s.category||"عام";
 
-categoriesMap[cat].collectedAmount+=collectedAmount;
+if(!summary[cat]){ summary[cat]={ collected:0, profit:0 }; }
 
-}
-);
+summary[cat].collected+=collected;
 
-
-document.getElementById(
-"servicesTotalIncome"
-).textContent=
-money(totalCollected);
-
-
-document.getElementById(
-"servicesTotalExpense"
-).textContent=
-money(totalCollected-totalProfit);
-
-
-document.getElementById(
-"servicesNetProfit"
-).textContent=
-money(totalProfit);
-
-
-document.getElementById(
-"servicesCategoryCount"
-).textContent=
-Object.keys(categoriesMap).length;
-
-
-const datalist=
-document.getElementById(
-"servicesList"
-);
-
-datalist.innerHTML=
-Object.keys(categoriesMap)
-.map(
-c=>
-`<option value="${escapeHTML(c)}">`
-)
-.join("");
-
-
-const summaryTbody=
-document.getElementById(
-"servicesSummaryBody"
-);
-
-const cats=
-Object.keys(categoriesMap);
-
-
-summaryTbody.innerHTML=
-cats.length
-?
-cats.map(
-c=>{
-
-const profit=
-categoriesMap[c].profit;
-
-const collectedAmount=
-categoriesMap[c].collectedAmount;
-
-return`
-
-<tr>
-
-<td>
-<strong>
-${escapeHTML(c)}
-</strong>
-</td>
-
-<td class="income">
-${money(collectedAmount)}
-</td>
-
-<td class="profit-positive">
-${money(profit)}
-</td>
-
-</tr>
-
-`;
-
-}
-).join("")
-:
-`
-
-<tr>
-
-<td colspan="3">
-
-<div class="empty">
-لا توجد خدمات مسجلة بعد
-</div>
-
-</td>
-
-</tr>
-
-`;
-
-
-const body=
-document.getElementById(
-"servicesBody"
-);
-
-
-body.innerHTML=
-db.services.length
-?
-db.services.map(
-item=>`
-
-<tr>
-
-<td>
-${escapeHTML(item.date)}
-</td>
-
-<td>
-<strong>
-${escapeHTML(item.category)}
-</strong>
-</td>
-
-<td class="profit-positive">
-
-${money(item.profit)}
-
-</td>
-
-<td class="income">
-
-${money(item.collectedAmount)}
-
-</td>
-
-<td>
-${escapeHTML(item.note)}
-</td>
-
-<td>
-
-<button
-class="btn red"
-onclick="deleteServiceTx('${item.id}')">
-
-حذف
-
-</button>
-
-</td>
-
-</tr>
-
-`
-).join("")
-:
-`
-
-<tr>
-
-<td colspan="6">
-
-<div class="empty">
-لا توجد عمليات خدمات مضافة
-</div>
-
-</td>
-
-</tr>
-
-`;
-
-}
-
-
-document.getElementById(
-"saveServiceTxBtn"
-).onclick=
-async function(){
-
-const date=
-document.getElementById(
-"srvDate"
-).value;
-
-const category=
-document.getElementById(
-"srvCategory"
-).value.trim();
-
-const profit=
-Number(
-document.getElementById(
-"srvProfit"
-).value
-);
-
-const collectedAmount=
-Number(
-document.getElementById(
-"srvCollectedAmount"
-).value
-);
-
-const note=
-document.getElementById(
-"srvNote"
-).value.trim();
-
-
-if(!date){
-
-alert(
-"اختر التاريخ"
-);
-
-return;
-
-}
-
-if(!category){
-
-alert(
-"أدخل اسم الخدمة / التصنيف"
-);
-
-return;
-
-}
-
-if(!(profit>0)){
-
-alert(
-"أدخل الربح"
-);
-
-return;
-
-}
-
-if(!(collectedAmount>0)){
-
-alert(
-"أدخل المبلغ المحصل"
-);
-
-return;
-
-}
-
-
-const btn=this;
-
-btn.disabled=true;
-
-btn.textContent=
-"جاري الحفظ...";
-
-
-try{
-
-await addServiceTxToFirebase({
-
-date,
-
-category,
-
-profit,
-
-collectedAmount,
-
-note
+summary[cat].profit+=profit;
 
 });
 
+updateServicesDataList();
 
-document.getElementById(
-"srvProfit"
-).value="";
+document.getElementById("servicesTotalIncome").innerHTML=money(totalInc);
 
-document.getElementById(
-"srvCollectedAmount"
-).value="";
+document.getElementById("servicesTotalExpense").innerHTML=money(totalInc-totalProfit);
 
-document.getElementById(
-"srvNote"
-).value="";
+document.getElementById("servicesNetProfit").innerHTML=money(totalProfit);
+
+document.getElementById("servicesCategoryCount").textContent=formatNum(Object.keys(summary).length);
 
 
-}catch(e){
+const sumBody=document.getElementById("servicesSummaryBody");
 
-alert(
-"حدث خطأ أثناء الحفظ: "+
-e.message
-);
+sumBody.innerHTML=Object.keys(summary).length?
 
-}finally{
+Object.keys(summary).map(cat=>`
+<tr>
+<td><strong>${escapeHTML(cat)}</strong></td>
+<td class="income">${money(summary[cat].collected)}</td>
+<td class="profit-positive">${money(summary[cat].profit)}</td>
+</tr>
+`).join(""):
 
-btn.disabled=false;
+`<tr><td colspan="3"><div class="empty">لا توجد بيانات للخدمات</div></td></tr>`;
 
-btn.textContent=
-"حفظ العملية";
+
+const srvBody=document.getElementById("servicesBody");
+
+srvBody.innerHTML=db.services.length?
+
+db.services.map(s=>`
+<tr>
+<td><span class="num-val">${escapeHTML(s.date)}</span></td>
+<td><strong>${escapeHTML(s.category||"عام")}</strong></td>
+<td class="profit-positive">${money(s.profit)}</td>
+<td class="income">${money(s.collectedAmount)}</td>
+<td>${escapeHTML(s.note||"-")}</td>
+<td><button class="btn red" onclick="deleteService('${s.id}')">حذف</button></td>
+</tr>
+`).join(""):
+
+`<tr><td colspan="6"><div class="empty">لا توجد عمليات خدمات مضافة</div></td></tr>`;
 
 }
+
+
+document.getElementById("saveServiceTxBtn").onclick=async function(){
+
+const btn=this;
+
+const date=document.getElementById("srvDate").value;
+
+const category=document.getElementById("srvCategory").value.trim();
+
+const profit=Number(document.getElementById("srvProfit").value);
+
+const collectedAmount=Number(document.getElementById("srvCollectedAmount").value);
+
+const note=document.getElementById("srvNote").value.trim();
+
+if(!date){ alert("اختر التاريخ."); return; }
+
+if(!category){ alert("أدخل أو اختر اسم الخدمة."); return; }
+
+btn.disabled=true;
+
+try{
+
+await addDoc(collection(firestore,"services"),{
+
+date, category, profit, collectedAmount, note, createdAt:serverTimestamp()
+
+});
+
+document.getElementById("srvCategory").value="";
+
+document.getElementById("srvProfit").value="";
+
+document.getElementById("srvCollectedAmount").value="";
+
+document.getElementById("srvNote").value="";
+
+}catch(e){ alert(e.message); }
+
+finally{ btn.disabled=false; }
 
 };
 
 
-window.deleteServiceTx=
-async function(id){
+window.deleteService=async function(id){
 
-if(
-!confirm(
-"هل تريد حذف هذه العملية؟"
-)
-)
-return;
+if(!confirm("هل تريد حذف هذه العملية؟")) return;
 
-try{
+try{ await deleteDoc(doc(firestore,"services",id)); }
 
-await deleteDoc(
-doc(
-firestore,
-"services",
-id
-)
-);
-
-}catch(e){
-
-alert(
-"خطأ في الحذف: "+
-e.message
-);
-
-}
+catch(e){ alert(e.message); }
 
 };
 
@@ -4408,1279 +3846,405 @@ e.message
    العقارات
 ===================================================== */
 
-
-/* إضافة عقار */
-
-document.getElementById(
-"savePropertyBtn"
-).onclick=
-async function(){
-
-const title=
-document.getElementById(
-"propertyTitle"
-).value.trim();
-
-
-if(!title){
-
-alert(
-"أدخل اسم العقار"
-);
-
-return;
-
-}
-
-
-try{
-
-await addDoc(
-collection(
-firestore,
-"properties"
-),
-{
-
-title,
-
-createdAt:
-serverTimestamp(),
-
-createdBy:
-auth.currentUser.uid,
-
-userEmail:
-auth.currentUser.email||""
-
-}
-);
-
-
-document.getElementById(
-"propertyTitle"
-).value="";
-
-
-}catch(e){
-
-alert(
-"خطأ في الإضافة: "+
-e.message
-);
-
-}
-
-};
-
-
-/* فتح العقار */
-
-window.openPropertyDetails=
-function(id,title){
-
-currentOpenedPropertyId=id;
-
-document.getElementById(
-"currentPropertyName"
-).textContent=title;
-
-document.getElementById(
-"rentDate"
-).value=today();
-
-document.getElementById(
-"propertyExpenseDate"
-).value=today();
-
-renderRentals();
-
-};
-
-
-/* إغلاق العقار */
-
-window.closePropertyDetails=
-function(){
-
-currentOpenedPropertyId=null;
-
-renderRentals();
-
-};
-
-
-/* =====================================================
-   تسجيل عقد إيجار
-===================================================== */
-
-document.getElementById(
-"saveRentContractBtn"
-).onclick=
-async function(){
-
-if(!currentOpenedPropertyId){
-
-alert(
-"اختر العقار أولاً."
-);
-
-return;
-
-}
-
-
-const date=
-document.getElementById(
-"rentDate"
-).value;
-
-const unit=
-document.getElementById(
-"rentUnit"
-).value.trim();
-
-const tenant=
-document.getElementById(
-"rentTenant"
-).value.trim();
-
-const rentAmount=
-Number(
-document.getElementById(
-"rentAmount"
-).value
-)||0;
-
-const depositAmount=
-Number(
-document.getElementById(
-"rentDeposit"
-).value
-)||0;
-
-const rentExpenseCategory=
-document.getElementById(
-"rentExpenseCategory"
-).value.trim();
-
-const rentExpenseAmount=
-Number(
-document.getElementById(
-"rentExpenseAmount"
-).value
-)||0;
-
-const note=
-document.getElementById(
-"rentNote"
-).value.trim();
-
-
-if(!date){
-
-alert(
-"اختر تاريخ عملية الإيجار."
-);
-
-return;
-
-}
-
-if(!unit){
-
-alert(
-"أدخل المسمى/الوحدة."
-);
-
-return;
-
-}
-
-if(!(rentAmount>0)){
-
-alert(
-"أدخل مبلغ الإيجار."
-);
-
-return;
-
-}
-
-
-/* إذا يوجد مبلغ مصروف لازم يكون له تصنيف */
-
-if(
-rentExpenseAmount>0 &&
-!rentExpenseCategory
-){
-
-alert(
-"اكتب تصنيف مصروف عملية الإيجار."
-);
-
-return;
-
-}
-
-
-const btn=this;
-
-btn.disabled=true;
-
-btn.textContent=
-"جاري الحفظ...";
-
-
-try{
-
-await addDoc(
-collection(
-firestore,
-"rentals"
-),
-{
-
-propertyId:
-currentOpenedPropertyId,
-
-date,
-
-unit,
-
-tenant,
-
-rentAmount,
-
-depositAmount,
-
-rentExpenseCategory,
-
-rentExpenseAmount,
-
-isDepositRefunded:false,
-
-note,
-
-createdAt:
-serverTimestamp(),
-
-createdBy:
-auth.currentUser.uid,
-
-userEmail:
-auth.currentUser.email||""
-
-}
-);
-
-
-/* تنظيف الحقول */
-
-document.getElementById(
-"rentUnit"
-).value="";
-
-document.getElementById(
-"rentTenant"
-).value="";
-
-document.getElementById(
-"rentAmount"
-).value="";
-
-document.getElementById(
-"rentDeposit"
-).value="";
-
-document.getElementById(
-"rentExpenseCategory"
-).value="";
-
-document.getElementById(
-"rentExpenseAmount"
-).value="";
-
-document.getElementById(
-"rentNote"
-).value="";
-
-
-}catch(e){
-
-console.error(e);
-
-alert(
-"خطأ في تسجيل العقد: "+
-e.message
-);
-
-}finally{
-
-btn.disabled=false;
-
-btn.textContent=
-"تسجيل العقد";
-
-}
-
-};
-
-
-/* =====================================================
-   المصروف الشامل للعقار
-===================================================== */
-
-document.getElementById(
-"savePropertyExpenseBtn"
-).onclick=
-async function(){
-
-if(!currentOpenedPropertyId){
-
-alert(
-"اختر العقار أولاً."
-);
-
-return;
-
-}
-
-
-const date=
-document.getElementById(
-"propertyExpenseDate"
-).value;
-
-const category=
-document.getElementById(
-"propertyExpenseCategory"
-).value.trim();
-
-const amount=
-Number(
-document.getElementById(
-"propertyExpenseAmount"
-).value
-);
-
-const note=
-document.getElementById(
-"propertyExpenseNote"
-).value.trim();
-
-
-if(!date){
-
-alert(
-"اختر التاريخ."
-);
-
-return;
-
-}
-
-if(!category){
-
-alert(
-"اكتب نوع / تصنيف المصروف."
-);
-
-return;
-
-}
-
-if(!(amount>0)){
-
-alert(
-"أدخل مبلغ صحيح."
-);
-
-return;
-
-}
-
-
-const btn=this;
-
-btn.disabled=true;
-
-btn.textContent=
-"جاري الحفظ...";
-
-
-try{
-
-await addDoc(
-collection(
-firestore,
-"property_expenses"
-),
-{
-
-propertyId:
-currentOpenedPropertyId,
-
-date,
-
-category,
-
-amount,
-
-note,
-
-createdAt:
-serverTimestamp(),
-
-createdBy:
-auth.currentUser.uid,
-
-userEmail:
-auth.currentUser.email||""
-
-}
-);
-
-
-document.getElementById(
-"propertyExpenseCategory"
-).value="";
-
-document.getElementById(
-"propertyExpenseAmount"
-).value="";
-
-document.getElementById(
-"propertyExpenseNote"
-).value="";
-
-
-}catch(e){
-
-console.error(e);
-
-alert(
-"خطأ أثناء حفظ مصروف العقار: "+
-e.message
-);
-
-}finally{
-
-btn.disabled=false;
-
-btn.textContent=
-"حفظ مصروف العقار";
-
-}
-
-};
-
-
-/* =====================================================
-   حالة التأمين
-===================================================== */
-
-window.toggleDepositRefundStatus=
-async function(
-id,
-currentStatus
-){
-
-try{
-
-await updateDoc(
-doc(
-firestore,
-"rentals",
-id
-),
-{
-
-isDepositRefunded:
-!currentStatus
-
-}
-);
-
-}catch(e){
-
-alert(
-"خطأ في التحديث: "+
-e.message
-);
-
-}
-
-};
-
-
-/* =====================================================
-   حذف عملية إيجار
-===================================================== */
-
-window.deleteRentalContract=
-async function(id){
-
-if(
-!confirm(
-"هل تريد حذف عملية الإيجار هذه؟"
-)
-)
-return;
-
-
-try{
-
-await deleteDoc(
-doc(
-firestore,
-"rentals",
-id
-)
-);
-
-}catch(e){
-
-alert(
-"خطأ في الحذف: "+
-e.message
-);
-
-}
-
-};
-
-
-/* =====================================================
-   حذف مصروف شامل
-===================================================== */
-
-window.deletePropertyExpense=
-async function(id){
-
-if(
-!confirm(
-"هل تريد حذف مصروف العقار هذا؟"
-)
-)
-return;
-
-
-try{
-
-await deleteDoc(
-doc(
-firestore,
-"property_expenses",
-id
-)
-);
-
-}catch(e){
-
-alert(
-"خطأ في الحذف: "+
-e.message
-);
-
-}
-
-};
-
-
-/* =====================================================
-   حذف العقار
-===================================================== */
-
-window.deleteProperty=
-async function(id){
-
-if(
-!confirm(
-"هل تريد حذف العقار وجميع العقود والمصاريف المرتبطة به؟"
-)
-)
-return;
-
-
-try{
-
-const batch=
-writeBatch(
-firestore
-);
-
-
-/* حذف العقار */
-
-batch.delete(
-doc(
-firestore,
-"properties",
-id
-)
-);
-
-
-/* حذف عمليات الإيجار */
-
-db.rentals
-.filter(
-r=>r.propertyId===id
-)
-.forEach(
-r=>{
-
-batch.delete(
-doc(
-firestore,
-"rentals",
-r.id
-)
-);
-
-}
-);
-
-
-/* حذف المصاريف الشاملة */
-
-db.propertyExpenses
-.filter(
-e=>e.propertyId===id
-)
-.forEach(
-e=>{
-
-batch.delete(
-doc(
-firestore,
-"property_expenses",
-e.id
-)
-);
-
-}
-);
-
-
-await batch.commit();
-
-
-if(
-currentOpenedPropertyId===id
-){
-
-currentOpenedPropertyId=null;
-
-}
-
-}catch(e){
-
-alert(
-"خطأ أثناء حذف العقار: "+
-e.message
-);
-
-}
-
-};
-
-
-/* =====================================================
-   حساب بيانات العقار
-===================================================== */
-
-function getPropertyFinancials(propertyId){
-
-const propRentals=
-db.rentals.filter(
-r=>
-r.propertyId===propertyId
-);
-
-const propExpenses=
-db.propertyExpenses.filter(
-e=>
-e.propertyId===propertyId
-);
-
-
-let totalRent=0;
-
-let rentalExpenses=0;
-
-let generalExpenses=0;
-
-let totalRefunded=0;
-
-let totalRetained=0;
-
-
-propRentals.forEach(
-r=>{
-
-totalRent+=
-Number(r.rentAmount)||0;
-
-rentalExpenses+=
-Number(r.rentExpenseAmount)||0;
-
-const deposit=
-Number(r.depositAmount)||0;
-
-if(r.isDepositRefunded){
-
-totalRefunded+=deposit;
-
-}else{
-
-totalRetained+=deposit;
-
-}
-
-}
-);
-
-
-propExpenses.forEach(
-e=>{
-
-generalExpenses+=
-Number(e.amount)||0;
-
-}
-);
-
-
-const totalExpenses=
-rentalExpenses+
-generalExpenses;
-
-const netProfit=
-totalRent-
-totalExpenses;
-
-
-return{
-
-propRentals,
-
-propExpenses,
-
-totalRent,
-
-rentalExpenses,
-
-generalExpenses,
-
-totalExpenses,
-
-netProfit,
-
-totalRefunded,
-
-totalRetained
-
-};
-
-}
-
-
-/* =====================================================
-   عرض العقارات
-===================================================== */
-
 function renderRentals(){
 
-/* ================= إجمالي العقارات ================= */
+let allRent=0, allRentExp=0, allPropExp=0;
 
-let allRent=0;
+db.rentals.forEach(r=>{
 
-let allExpense=0;
+allRent+=Number(r.amount)||0;
 
+allRentExp+=Number(r.expenseAmount)||0;
 
-db.properties.forEach(
-prop=>{
+});
 
-const data=
-getPropertyFinancials(
-prop.id
-);
+db.propertyExpenses.forEach(pe=>{
 
-allRent+=
-data.totalRent;
+allPropExp+=Number(pe.amount)||0;
 
-allExpense+=
-data.totalExpenses;
+});
 
-}
-);
+document.getElementById("allPropertiesRent").innerHTML=money(allRent);
 
+document.getElementById("allPropertiesExpense").innerHTML=money(allRentExp+allPropExp);
 
-const allNet=
-allRent-allExpense;
+document.getElementById("allPropertiesNetProfit").innerHTML=money(allRent-(allRentExp+allPropExp));
 
+document.getElementById("allPropertiesCount").textContent=formatNum(db.properties.length);
 
-document.getElementById(
-"allPropertiesRent"
-).textContent=
-money(allRent);
-
-
-document.getElementById(
-"allPropertiesExpense"
-).textContent=
-money(allExpense);
-
-
-document.getElementById(
-"allPropertiesNetProfit"
-).textContent=
-money(allNet);
-
-
-document.getElementById(
-"allPropertiesNetProfit"
-).className=
-profitClass(allNet);
-
-
-document.getElementById(
-"allPropertiesCount"
-).textContent=
-db.properties.length;
-
-
-/* ================= تفاصيل عقار ================= */
 
 if(currentOpenedPropertyId){
 
-document.getElementById(
-"rentalMainView"
-).style.display="none";
+renderPropertyDetails(currentOpenedPropertyId);
+
+}else{
+
+document.getElementById("rentalMainView").style.display="block";
+
+document.getElementById("rentalDetailView").style.display="none";
+
+renderPropertiesList();
+
+}
+
+}
 
 
-document.getElementById(
-"rentalDetailView"
-).style.display="block";
+function renderPropertiesList(){
+
+const tbody=document.getElementById("propertiesListBody");
+
+if(!db.properties.length){
+
+tbody.innerHTML=`<tr><td colspan="8"><div class="empty">لا توجد عقارات مضافة حتى الآن</div></td></tr>`;
+
+return;
+
+}
+
+tbody.innerHTML=db.properties.map(p=>{
+
+let pRent=0, pRentExp=0, pPropExp=0, pRef=0, pRet=0;
+
+db.rentals.filter(r=>r.propertyId===p.id).forEach(r=>{
+
+pRent+=Number(r.amount)||0;
+
+pRentExp+=Number(r.expenseAmount)||0;
+
+if(r.depositStatus==="refunded") pRef+=Number(r.depositAmount)||0;
+
+else pRet+=Number(r.depositAmount)||0;
+
+});
+
+db.propertyExpenses.filter(pe=>pe.propertyId===p.id).forEach(pe=>{
+
+pPropExp+=Number(pe.amount)||0;
+
+});
+
+const pNet=pRent-(pRentExp+pPropExp);
+
+return `
+<tr>
+<td><strong>${escapeHTML(p.title)}</strong></td>
+<td class="income">${money(pRent)}</td>
+<td class="expense">${money(pRentExp)}</td>
+<td class="expense">${money(pPropExp)}</td>
+<td class="${profitClass(pNet)}">${money(pNet)}</td>
+<td style="color:#2563eb">${money(pRef)}</td>
+<td style="color:#d97706">${money(pRet)}</td>
+<td>
+<div class="actions">
+<button class="btn blue" onclick="openPropertyDetails('${p.id}')">إدارة العقار</button>
+<button class="btn red" onclick="deleteProperty('${p.id}')">حذف</button>
+</div>
+</td>
+</tr>
+`;
+
+}).join("");
+
+}
 
 
-const prop=
-db.properties.find(
-p=>
-p.id===currentOpenedPropertyId
-);
+document.getElementById("savePropertyBtn").onclick=async function(){
+
+const title=document.getElementById("propertyTitle").value.trim();
+
+if(!title){ alert("أدخل اسم العقار."); return; }
+
+this.disabled=true;
+
+try{
+
+await addDoc(collection(firestore,"properties"),{ title, createdAt:serverTimestamp() });
+
+document.getElementById("propertyTitle").value="";
+
+}catch(e){ alert(e.message); }
+
+finally{ this.disabled=false; }
+
+};
 
 
-if(!prop){
+window.deleteProperty=async function(id){
 
-currentOpenedPropertyId=null;
+if(!confirm("هل تريد حذف هذا العقار وجميع عقوده ومصاريفه؟")) return;
+
+try{
+
+const batch=writeBatch(firestore);
+
+batch.delete(doc(firestore,"properties",id));
+
+db.rentals.filter(r=>r.propertyId===id).forEach(r=>batch.delete(doc(firestore,"rentals",r.id)));
+
+db.propertyExpenses.filter(pe=>pe.propertyId===id).forEach(pe=>batch.delete(doc(firestore,"property_expenses",pe.id)));
+
+await batch.commit();
+
+}catch(e){ alert(e.message); }
+
+};
+
+
+window.openPropertyDetails=function(id){
+
+currentOpenedPropertyId=id;
+
+document.getElementById("rentalMainView").style.display="none";
+
+document.getElementById("rentalDetailView").style.display="block";
 
 renderRentals();
 
-return;
-
-}
+};
 
 
-document.getElementById(
-"currentPropertyName"
-).textContent=
-prop.title;
+window.closePropertyDetails=function(){
+
+currentOpenedPropertyId=null;
+
+document.getElementById("rentalMainView").style.display="block";
+
+document.getElementById("rentalDetailView").style.display="none";
+
+renderRentals();
+
+};
 
 
-const data=
-getPropertyFinancials(
-currentOpenedPropertyId
-);
+function renderPropertyDetails(propId){
+
+const prop=db.properties.find(p=>p.id===propId);
+
+if(!prop){ closePropertyDetails(); return; }
+
+document.getElementById("currentPropertyName").textContent="🏢 "+prop.title;
+
+document.getElementById("rentDate").value=today();
+
+document.getElementById("propertyExpenseDate").value=today();
+
+let pRent=0, pRentExp=0, pPropExp=0, pRef=0, pRet=0;
+
+const pContracts=db.rentals.filter(r=>r.propertyId===propId);
+
+const pExpenses=db.propertyExpenses.filter(pe=>pe.propertyId===propId);
+
+pContracts.forEach(r=>{
+
+pRent+=Number(r.amount)||0;
+
+pRentExp+=Number(r.expenseAmount)||0;
+
+if(r.depositStatus==="refunded") pRef+=Number(r.depositAmount)||0;
+
+else pRet+=Number(r.depositAmount)||0;
+
+});
+
+pExpenses.forEach(pe=>{ pPropExp+=Number(pe.amount)||0; });
+
+const pNet=pRent-(pRentExp+pPropExp);
+
+document.getElementById("propTotalRent").innerHTML=money(pRent);
+
+document.getElementById("propRentalExpenses").innerHTML=money(pRentExp);
+
+document.getElementById("propGeneralExpenses").innerHTML=money(pPropExp);
+
+document.getElementById("propNetProfit").innerHTML=money(pNet);
+
+document.getElementById("propTotalRefunded").innerHTML=money(pRef);
+
+document.getElementById("propTotalRetained").innerHTML=money(pRet);
+
+document.getElementById("propContractsCount").textContent=formatNum(pContracts.length);
+
+document.getElementById("propGeneralExpenseCount").textContent=formatNum(pExpenses.length);
 
 
-document.getElementById(
-"propTotalRent"
-).textContent=
-money(data.totalRent);
+const contractsBody=document.getElementById("rentContractsBody");
 
+contractsBody.innerHTML=pContracts.length?
 
-document.getElementById(
-"propRentalExpenses"
-).textContent=
-money(data.rentalExpenses);
+pContracts.map(r=>{
 
+const net=Number(r.amount||0)-Number(r.expenseAmount||0);
 
-document.getElementById(
-"propGeneralExpenses"
-).textContent=
-money(data.generalExpenses);
+const isRef=r.depositStatus==="refunded";
 
-
-document.getElementById(
-"propNetProfit"
-).textContent=
-money(data.netProfit);
-
-
-document.getElementById(
-"propNetProfit"
-).className=
-profitClass(data.netProfit);
-
-
-document.getElementById(
-"propTotalRefunded"
-).textContent=
-money(data.totalRefunded);
-
-
-document.getElementById(
-"propTotalRetained"
-).textContent=
-money(data.totalRetained);
-
-
-document.getElementById(
-"propContractsCount"
-).textContent=
-data.propRentals.length;
-
-
-document.getElementById(
-"propGeneralExpenseCount"
-).textContent=
-data.propExpenses.length;
-
-
-/* ================= جدول الإيجارات ================= */
-
-const tbody=
-document.getElementById(
-"rentContractsBody"
-);
-
-
-tbody.innerHTML=
-data.propRentals.length
-?
-data.propRentals.map(
-r=>{
-
-const rent=
-Number(r.rentAmount)||0;
-
-const expense=
-Number(r.rentExpenseAmount)||0;
-
-const net=
-rent-expense;
-
-
-return`
-
+return `
 <tr>
-
+<td><span class="num-val">${escapeHTML(r.date)}</span></td>
+<td>${escapeHTML(r.unit||"-")}</td>
+<td>${escapeHTML(r.tenant||"-")}</td>
+<td class="income">${money(r.amount)}</td>
+<td>${money(r.depositAmount)}</td>
+<td>${escapeHTML(r.expenseCategory||"-")}</td>
+<td class="expense">${money(r.expenseAmount)}</td>
+<td class="${profitClass(net)}">${money(net)}</td>
 <td>
-${escapeHTML(r.date)}
-</td>
-
-<td>
-<strong>
-${escapeHTML(r.unit)}
-</strong>
-</td>
-
-<td>
-${escapeHTML(r.tenant)}
-</td>
-
-<td class="income">
-${money(rent)}
-</td>
-
-<td>
-${money(r.depositAmount)}
-</td>
-
-<td>
-${escapeHTML(r.rentExpenseCategory)}
-</td>
-
-<td class="expense">
-${money(expense)}
-</td>
-
-<td class="${profitClass(net)}">
-${money(net)}
-</td>
-
-<td>
-
-<button
-class="btn ${r.isDepositRefunded?'secondary':'blue'}"
-onclick="toggleDepositRefundStatus('${r.id}',${r.isDepositRefunded})">
-
-${
-r.isDepositRefunded
-?
-"تم الاسترداد ✅"
-:
-"استرداد التأمين 🔄"
-}
-
+<button class="btn ${isRef?'blue':'orange'}" onclick="toggleDeposit('${r.id}','${isRef?'active':'refunded'}')">
+${isRef?'تم الاسترداد':'مستمر (نشط)'}
 </button>
-
 </td>
-
-<td>
-${escapeHTML(r.note)}
-</td>
-
-<td>
-
-<button
-class="btn red"
-onclick="deleteRentalContract('${r.id}')">
-
-حذف
-
-</button>
-
-</td>
-
+<td>${escapeHTML(r.note||"-")}</td>
+<td><button class="btn red" onclick="deleteRentContract('${r.id}')">حذف</button></td>
 </tr>
-
 `;
 
-}
-).join("")
-:
-`
+}).join(""):
 
+`<tr><td colspan="11"><div class="empty">لا توجد عقود إيجار مسجلة لهذا العقار</div></td></tr>`;
+
+
+const expensesBody=document.getElementById("propertyExpensesBody");
+
+expensesBody.innerHTML=pExpenses.length?
+
+pExpenses.map(pe=>`
 <tr>
-
-<td colspan="11">
-
-<div class="empty">
-لا توجد عمليات إيجار مسجلة لهذا العقار
-</div>
-
-</td>
-
+<td><span class="num-val">${escapeHTML(pe.date)}</span></td>
+<td>${escapeHTML(pe.category||"عام")}</td>
+<td class="expense">${money(pe.amount)}</td>
+<td>${escapeHTML(pe.note||"-")}</td>
+<td><button class="btn red" onclick="deletePropertyExpense('${pe.id}')">حذف</button></td>
 </tr>
+`).join(""):
 
-`;
-
-
-/* ================= جدول المصاريف الشاملة ================= */
-
-const expenseBody=
-document.getElementById(
-"propertyExpensesBody"
-);
-
-
-expenseBody.innerHTML=
-data.propExpenses.length
-?
-data.propExpenses.map(
-e=>`
-
-<tr>
-
-<td>
-${escapeHTML(e.date)}
-</td>
-
-<td>
-<strong>
-${escapeHTML(e.category)}
-</strong>
-</td>
-
-<td class="expense">
-${money(e.amount)}
-</td>
-
-<td>
-${escapeHTML(e.note)}
-</td>
-
-<td>
-
-<button
-class="btn red"
-onclick="deletePropertyExpense('${e.id}')">
-
-حذف
-
-</button>
-
-</td>
-
-</tr>
-
-`
-).join("")
-:
-`
-
-<tr>
-
-<td colspan="5">
-
-<div class="empty">
-لا توجد مصاريف شاملة لهذا العقار
-</div>
-
-</td>
-
-</tr>
-
-`;
-
-
-return;
+`<tr><td colspan="5"><div class="empty">لا توجد مصاريف شاملة مسجلة لهذا العقار</div></td></tr>`;
 
 }
 
 
-/* =====================================================
-   قائمة العقارات
-===================================================== */
+document.getElementById("saveRentContractBtn").onclick=async function(){
 
-document.getElementById(
-"rentalMainView"
-).style.display="block";
+if(!currentOpenedPropertyId) return;
 
+const date=document.getElementById("rentDate").value;
 
-document.getElementById(
-"rentalDetailView"
-).style.display="none";
+const unit=document.getElementById("rentUnit").value.trim();
 
+const tenant=document.getElementById("rentTenant").value.trim();
 
-const tbody=
-document.getElementById(
-"propertiesListBody"
-);
+const amount=Number(document.getElementById("rentAmount").value);
 
+const depositAmount=Number(document.getElementById("rentDeposit").value);
 
-tbody.innerHTML=
-db.properties.length
-?
-db.properties.map(
-prop=>{
+const expenseCategory=document.getElementById("rentExpenseCategory").value.trim();
 
-const data=
-getPropertyFinancials(
-prop.id
-);
+const expenseAmount=Number(document.getElementById("rentExpenseAmount").value);
 
+const note=document.getElementById("rentNote").value.trim();
 
-return`
+if(!date){ alert("اختر التاريخ."); return; }
 
-<tr>
+this.disabled=true;
 
-<td>
+try{
 
-<strong>
-${escapeHTML(prop.title)}
-</strong>
+await addDoc(collection(firestore,"rentals"),{
 
-</td>
+propertyId:currentOpenedPropertyId, date, unit, tenant, amount, depositAmount, depositStatus:"active", expenseCategory, expenseAmount, note, createdAt:serverTimestamp()
 
+});
 
-<td class="income">
+document.getElementById("rentUnit").value="";
 
-${money(data.totalRent)}
+document.getElementById("rentTenant").value="";
 
-</td>
+document.getElementById("rentAmount").value="";
 
+document.getElementById("rentDeposit").value="";
 
-<td class="expense">
+document.getElementById("rentExpenseCategory").value="";
 
-${money(data.rentalExpenses)}
+document.getElementById("rentExpenseAmount").value="";
 
-</td>
+document.getElementById("rentNote").value="";
+
+}catch(e){ alert(e.message); }
+
+finally{ this.disabled=false; }
+
+};
 
 
-<td class="expense">
+document.getElementById("savePropertyExpenseBtn").onclick=async function(){
 
-${money(data.generalExpenses)}
+if(!currentOpenedPropertyId) return;
 
-</td>
+const date=document.getElementById("propertyExpenseDate").value;
 
+const category=document.getElementById("propertyExpenseCategory").value.trim();
 
-<td class="${profitClass(data.netProfit)}">
+const amount=Number(document.getElementById("propertyExpenseAmount").value);
 
-${money(data.netProfit)}
+const note=document.getElementById("propertyExpenseNote").value.trim();
 
-</td>
+if(!date || !(amount>0)){ alert("أدخل تاريخ ومبلغ صحيح."); return; }
 
+this.disabled=true;
 
-<td
-style="color:#2563eb;font-weight:bold">
+try{
 
-${money(data.totalRefunded)}
+await addDoc(collection(firestore,"property_expenses"),{
 
-</td>
+propertyId:currentOpenedPropertyId, date, category, amount, note, createdAt:serverTimestamp()
 
+});
 
-<td
-style="color:#d97706;font-weight:bold">
+document.getElementById("propertyExpenseCategory").value="";
 
-${money(data.totalRetained)}
+document.getElementById("propertyExpenseAmount").value="";
 
-</td>
+document.getElementById("propertyExpenseNote").value="";
 
+}catch(e){ alert(e.message); }
 
-<td>
+finally{ this.disabled=false; }
 
-<button
-class="btn blue"
-onclick="openPropertyDetails('${prop.id}','${escapeHTML(prop.title)}')">
-
-عرض التفاصيل
-
-</button>
+};
 
 
-<button
-class="btn red"
-onclick="deleteProperty('${prop.id}')">
+window.toggleDeposit=async function(id, newStatus){
 
-حذف
+try{ await updateDoc(doc(firestore,"rentals",id),{ depositStatus:newStatus }); }
 
-</button>
+catch(e){ alert(e.message); }
 
-</td>
+};
 
-</tr>
 
-`;
+window.deleteRentContract=async function(id){
 
-}
-).join("")
-:
-`
+if(!confirm("هل تريد حذف هذا العقد؟")) return;
 
-<tr>
+try{ await deleteDoc(doc(firestore,"rentals",id)); }
 
-<td colspan="8">
+catch(e){ alert(e.message); }
 
-<div class="empty">
+};
 
-لا توجد عقارات مسجلة بعد
 
-</div>
+window.deletePropertyExpense=async function(id){
 
-</td>
+if(!confirm("هل تريد حذف هذا المصروف؟")) return;
 
-</tr>
+try{ await deleteDoc(doc(firestore,"property_expenses",id)); }
 
-`;
+catch(e){ alert(e.message); }
 
-}
+};
+
 
 </script>
 
 </body>
+
 </html>
