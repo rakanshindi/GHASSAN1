@@ -67,6 +67,10 @@ background:#16a34a
 background:#dc2626
 }
 
+.btn.blue{
+background:#2563eb
+}
+
 .card{
 background:#fff;
 border:1px solid #e6e9ee;
@@ -256,6 +260,48 @@ gap:8px;
 flex-wrap:wrap
 }
 
+/* بطاقات الاختيار في الصفحة الأولى */
+.portal-selection {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 20px;
+margin-top: 30px;
+}
+
+.portal-card {
+background: #fff;
+border: 2px solid #e6e9ee;
+border-radius: 18px;
+padding: 40px 20px;
+text-align: center;
+cursor: pointer;
+transition: all 0.2s ease;
+box-shadow: 0 4px 16px rgba(0,0,0,.04);
+}
+
+.portal-card:hover {
+border-color: #0f172a;
+transform: translateY(-3px);
+box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+
+.portal-card h2 {
+margin: 10px 0 5px 0;
+font-size: 22px;
+}
+
+.portal-card p {
+color: #667085;
+margin: 0;
+font-size: 14px;
+}
+
+.portal-icon {
+font-size: 48px;
+display: block;
+margin-bottom: 10px;
+}
+
 @media(max-width:800px){
 .stats{
 grid-template-columns:repeat(2,1fr)
@@ -285,6 +331,10 @@ gap:8px
 
 .stat strong{
 font-size:19px
+}
+
+.portal-selection {
+grid-template-columns: 1fr;
 }
 }
 </style>
@@ -363,10 +413,10 @@ style="width:100%"
 
 <div class="brand">
 
-<h1>📊 إدارة المشاريع</h1>
+<h1>📊 نظام الإدارة</h1>
 
 <p>
-الدخل والمصاريف وصافي كل مشروع
+المشاريع والعقارات والدخل والمصاريف
 </p>
 
 </div>
@@ -380,6 +430,14 @@ id="currentUser"
 class="muted"
 style="font-size:12px"
 ></span>
+
+<button
+class="btn secondary"
+id="homeBtn"
+style="display:none"
+>
+الرئيسية 🏠
+</button>
 
 <button
 class="btn secondary"
@@ -421,12 +479,42 @@ hidden
 </div>
 
 
-<div class="stats">
+<!-- الصفحة الأولى: الخيارات الرئيسية -->
+<div id="portalScreen" style="display:block">
+<div class="portal-selection">
+<div class="portal-card" id="selectRealEstate">
+<span class="portal-icon">🏢</span>
+<h2>العقار</h2>
+<p>إدارة العقارات والوحدات السكنية</p>
+</div>
+<div class="portal-card" id="selectProjects">
+<span class="portal-icon">🏗️</span>
+<h2>المشاريع</h2>
+<p>متابعة مصاريف ودفعات المشاريع</p>
+</div>
+</div>
+</div>
+
+
+<!-- قسم العقارات -->
+<div id="realEstateSection" style="display:none">
+<div class="card">
+<button class="btn secondary" onclick="showPortal()" style="margin-bottom:15px">← العودة للرئيسية</button>
+<h2>🏢 قسم العقارات</h2>
+<p class="muted">قريباً.. يمكنك إضافة وإدارة العقارات هنا.</p>
+</div>
+</div>
+
+
+<!-- قسم المشاريع -->
+<div id="projectsSection" style="display:none">
+
+<div class="stats" id="mainStats">
 
 <div class="stat">
 
 <small>
-إجمالي الدخل
+إجمالي الدخل (الدفعات)
 </small>
 
 <strong id="totalIncome">
@@ -452,7 +540,7 @@ hidden
 <div class="stat">
 
 <small>
-صافي الربح
+المتبقي (صافي الربح)
 </small>
 
 <strong id="netProfit">
@@ -477,19 +565,12 @@ hidden
 </div>
 
 
-<div class="card">
+<div class="card" style="margin-top:15px">
 
 <div class="tabs" id="tabs">
 
 <button
 class="tab active"
-data-view="dashboard"
->
-الرئيسية
-</button>
-
-<button
-class="tab"
 data-view="projects"
 >
 المشاريع
@@ -497,14 +578,23 @@ data-view="projects"
 
 <button
 class="tab"
+data-view="dashboard"
+>
+ملخص عام
+</button>
+
+<button
+class="tab"
 data-view="transactions"
 >
-الدخل والمصاريف
+جميع العمليات
 </button>
 
 </div>
 
 <div id="content"></div>
+
+</div>
 
 </div>
 
@@ -600,28 +690,25 @@ transactions:[]
 
 };
 
+let currentOpenedProjectId = null;
+
 let unsubscribeProjects = null;
 
 let unsubscribeTransactions = null;
 
 
 /* =========================
-التصنيفات
+التصنيفات الخاصة بالمصاريف
 ========================= */
 
 const categories=[
 
-"عامة",
+"عام",
 "مقاولات",
 "حكومي",
 "استشاري",
 "مواد",
 "أجور",
-"معدات",
-"نقل",
-"مشتريات",
-"إيجار",
-"رواتب",
 "أخرى"
 
 ];
@@ -694,7 +781,41 @@ document.getElementById(
 ).textContent=
 user.email || "";
 
+showPortal();
+
 }
+
+
+/* =========================
+تنقل الشاشات الأساسية
+========================= */
+
+window.showPortal = function(){
+currentOpenedProjectId = null;
+document.getElementById("portalScreen").style.display = "block";
+document.getElementById("realEstateSection").style.display = "none";
+document.getElementById("projectsSection").style.display = "none";
+document.getElementById("homeBtn").style.display = "none";
+};
+
+window.openRealEstate = function(){
+document.getElementById("portalScreen").style.display = "none";
+document.getElementById("realEstateSection").style.display = "block";
+document.getElementById("projectsSection").style.display = "none";
+document.getElementById("homeBtn").style.display = "inline-block";
+};
+
+window.openProjects = function(){
+document.getElementById("portalScreen").style.display = "none";
+document.getElementById("realEstateSection").style.display = "none";
+document.getElementById("projectsSection").style.display = "block";
+document.getElementById("homeBtn").style.display = "inline-block";
+render("projects");
+};
+
+document.getElementById("selectRealEstate").onclick = window.openRealEstate;
+document.getElementById("selectProjects").onclick = window.openProjects;
+document.getElementById("homeBtn").onclick = window.showPortal;
 
 
 /* =========================
@@ -896,8 +1017,6 @@ showApp(user);
 
 startFirebaseListeners();
 
-render("dashboard");
-
 }else{
 
 showLogin();
@@ -909,7 +1028,7 @@ showLogin();
 
 
 /* =========================
-الاستماع للمشاريع من Firestore
+الاستماع للمشاريع من Firebase
 ========================= */
 
 function startFirebaseListeners(){
@@ -962,7 +1081,7 @@ document.querySelector(
 ".tab.active"
 );
 
-if(activeTab){
+if(activeTab && document.getElementById("projectsSection").style.display === "block"){
 
 render(
 activeTab.dataset.view
@@ -1034,7 +1153,7 @@ document.querySelector(
 ".tab.active"
 );
 
-if(activeTab){
+if(activeTab && document.getElementById("projectsSection").style.display === "block"){
 
 render(
 activeTab.dataset.view
@@ -1068,7 +1187,7 @@ alert(
 
 async function addProjectToFirebase(name){
 
-await addDoc(
+const docRef = await addDoc(
 
 collection(
 firestore,
@@ -1088,6 +1207,8 @@ auth.currentUser.uid
 }
 
 );
+
+return docRef.id;
 
 }
 
@@ -1311,7 +1432,7 @@ db.projects.length;
 الرندر
 ========================= */
 
-function render(view="dashboard"){
+function render(view="projects"){
 
 document.querySelectorAll(
 ".tab"
@@ -1332,15 +1453,23 @@ document.getElementById(
 );
 
 
-if(view==="dashboard"){
+if(view==="projects"){
 
-dashboard(content);
+if(currentOpenedProjectId){
+
+projectDetailView(content, currentOpenedProjectId);
+
+}else{
+
+projects(content);
 
 }
 
-if(view==="projects"){
+}
 
-projects(content);
+if(view==="dashboard"){
+
+dashboard(content);
 
 }
 
@@ -1356,7 +1485,7 @@ updateStats();
 
 
 /* =========================
-الرئيسية
+عرض ملخص المشاريع
 ========================= */
 
 function dashboard(content){
@@ -1403,6 +1532,8 @@ Number(t.amount)||0;
 
 rows.push({
 
+id:project.id,
+
 name:project.name,
 
 income:income,
@@ -1430,11 +1561,13 @@ content.innerHTML=`
 
 <th>المشروع</th>
 
-<th>الدخل</th>
+<th>إجمالي الدفعات</th>
 
-<th>المصاريف</th>
+<th>إجمالي المصاريف</th>
 
-<th>الصافي</th>
+<th>المتبقي</th>
+
+<th>إجراء</th>
 
 </tr>
 
@@ -1470,6 +1603,10 @@ ${money(row.expense)}
 ${money(row.net)}
 </td>
 
+<td>
+<button class="btn blue" onclick="openProjectDetails('${row.id}')">فتح</button>
+</td>
+
 </tr>
 
 `;
@@ -1483,7 +1620,7 @@ ${money(row.net)}
 
 <tr>
 
-<td colspan="4">
+<td colspan="5">
 
 <div class="empty">
 لا توجد مشاريع حتى الآن
@@ -1509,7 +1646,7 @@ ${money(row.net)}
 
 
 /* =========================
-المشاريع
+قائمة المشاريع الرئيسية
 ========================= */
 
 function projects(content){
@@ -1563,11 +1700,11 @@ id="addProjectButton"
 
 <th>المشروع</th>
 
-<th>الدخل</th>
+<th>إجمالي الدفعات</th>
 
-<th>المصاريف</th>
+<th>إجمالي المصاريف</th>
 
-<th>الصافي</th>
+<th>المتبقي</th>
 
 <th>إجراء</th>
 
@@ -1641,12 +1778,21 @@ ${money(income-expense)}
 
 <td>
 
+<div class="actions">
+<button
+class="btn blue"
+onclick="openProjectDetails('${project.id}')"
+>
+فتح 📂
+</button>
+
 <button
 class="btn red"
 onclick="deleteProject('${project.id}')"
 >
 حذف
 </button>
+</div>
 
 </td>
 
@@ -1750,6 +1896,273 @@ button.textContent=
 
 
 /* =========================
+فتح تفاصيل مشروع
+========================= */
+
+window.openProjectDetails = function(id){
+currentOpenedProjectId = id;
+render("projects");
+};
+
+window.closeProjectDetails = function(){
+currentOpenedProjectId = null;
+render("projects");
+};
+
+
+/* =========================
+صفحة تفاصيل المشروع
+========================= */
+
+function projectDetailView(content, projectId){
+
+const project = db.projects.find(p => p.id === projectId);
+
+if(!project){
+currentOpenedProjectId = null;
+projects(content);
+return;
+}
+
+const projectTransactions = db.transactions.filter(t => t.projectId === projectId);
+
+let totalIncome = 0;
+let totalExpense = 0;
+
+const expensesList = [];
+const incomeList = [];
+
+projectTransactions.forEach(t => {
+if(t.type === "income"){
+totalIncome += Number(t.amount) || 0;
+incomeList.push(t);
+}else{
+totalExpense += Number(t.amount) || 0;
+expensesList.push(t);
+}
+});
+
+const remaining = totalIncome - totalExpense;
+
+content.innerHTML = `
+
+<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px">
+<h2>📌 تفاصيل المشروع: ${escapeHTML(project.name)}</h2>
+<button class="btn secondary" onclick="closeProjectDetails()">← العودة للمشاريع</button>
+</div>
+
+<!-- ملخص حسابات هذا المشروع -->
+<div class="stats" style="margin-bottom:20px">
+<div class="stat">
+<small>إجمالي الدفعات</small>
+<strong class="income">${money(totalIncome)}</strong>
+</div>
+<div class="stat">
+<small>إجمالي المصاريف</small>
+<strong class="expense">${money(totalExpense)}</strong>
+</div>
+<div class="stat">
+<small>المتبقي من الدفعات</small>
+<strong style="color:${remaining >= 0 ? '#15803d' : '#b91c1c'}">${money(remaining)}</strong>
+</div>
+<div class="stat">
+<small>إجمالي العمليات</small>
+<strong>${projectTransactions.length}</strong>
+</div>
+</div>
+
+
+<!-- إضافة مصروف جديد -->
+<div class="card" style="background:#fff5f5; border:1px solid #fecaca; margin-bottom:20px">
+<h3 style="margin-top:0; color:#991b1b">➕ إضافة مصروف للمشروع</h3>
+<div class="grid">
+
+<div class="field">
+<label>التاريخ</label>
+<input id="expDate" type="date" value="${new Date().toISOString().slice(0,10)}">
+</div>
+
+<div class="field">
+<label>التصنيف</label>
+<select id="expCategory">
+${categories.map(c => `<option value="${c}">${c}</option>`).join("")}
+</select>
+</div>
+
+<div class="field">
+<label>المبلغ (ر.س)</label>
+<input id="expAmount" type="number" min="0" step="0.01" placeholder="0">
+</div>
+
+<div class="field">
+<label>الملاحظة / البيان</label>
+<input id="expNote" placeholder="بيان المصروف...">
+</div>
+
+<div class="full">
+<button class="btn red" id="saveExpenseBtn">حفظ المصروف</button>
+</div>
+
+</div>
+</div>
+
+
+<!-- إضافة دفعة جديدة -->
+<div class="card" style="background:#f0fdf4; border:1px solid #bbf7d0; margin-bottom:25px">
+<h3 style="margin-top:0; color:#166534">➕ إضافة دفعة للمشروع</h3>
+<div class="grid">
+
+<div class="field">
+<label>التاريخ</label>
+<input id="incDate" type="date" value="${new Date().toISOString().slice(0,10)}">
+</div>
+
+<div class="field">
+<label>المبلغ (ر.س)</label>
+<input id="incAmount" type="number" min="0" step="0.01" placeholder="0">
+</div>
+
+<div class="field full">
+<label>الملاحظة / البيان</label>
+<input id="incNote" placeholder="بيان الدفعة...">
+</div>
+
+<div class="full">
+<button class="btn green" id="saveIncomeBtn">حفظ الدفعة</button>
+</div>
+
+</div>
+</div>
+
+
+<!-- جدول المصاريف -->
+<h3 style="color:#b91c1c">📋 قائمة المصاريف</h3>
+<div class="table-wrap" style="margin-bottom:25px">
+<table>
+<thead>
+<tr>
+<th>التاريخ</th>
+<th>التصنيف</th>
+<th>المبلغ</th>
+<th>الملاحظة / البيان</th>
+<th>إجراء</th>
+</tr>
+</thead>
+<tbody>
+${expensesList.length ? expensesList.map(t => `
+<tr>
+<td>${escapeHTML(t.date)}</td>
+<td>${escapeHTML(t.category)}</td>
+<td class="expense">${money(t.amount)}</td>
+<td>${escapeHTML(t.note)}</td>
+<td><button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button></td>
+</tr>
+`).join("") : `<tr><td colspan="5"><div class="empty">لا توجد مصاريف مضافة لهذا المشروع</div></td></tr>`}
+</tbody>
+</table>
+</div>
+
+
+<!-- جدول الدفعات -->
+<h3 style="color:#15803d">📋 قائمة الدفعات</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>التاريخ</th>
+<th>المبلغ</th>
+<th>الملاحظة / البيان</th>
+<th>إجراء</th>
+</tr>
+</thead>
+<tbody>
+${incomeList.length ? incomeList.map(t => `
+<tr>
+<td>${escapeHTML(t.date)}</td>
+<td class="income">${money(t.amount)}</td>
+<td>${escapeHTML(t.note)}</td>
+<td><button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button></td>
+</tr>
+`).join("") : `<tr><td colspan="4"><div class="empty">لا توجد دفعات مضافة لهذا المشروع</div></td></tr>`}
+</tbody>
+</table>
+</div>
+
+`;
+
+
+/* حفظ مصروف */
+document.getElementById("saveExpenseBtn").onclick = async function(){
+const date = document.getElementById("expDate").value;
+const category = document.getElementById("expCategory").value;
+const amount = Number(document.getElementById("expAmount").value);
+const note = document.getElementById("expNote").value.trim();
+
+if(!(amount > 0)){
+alert("أدخل مبلغًا صحيحًا للمصروف.");
+return;
+}
+
+const btn = this;
+btn.disabled = true;
+btn.textContent = "جاري الحفظ...";
+
+try {
+await addTransactionToFirebase({
+projectId: projectId,
+type: "expense",
+date: date,
+category: category,
+amount: amount,
+note: note
+});
+} catch(e) {
+console.error(e);
+alert("حدث خطأ أثناء حفظ المصروف.");
+} finally {
+btn.disabled = false;
+btn.textContent = "حفظ المصروف";
+}
+};
+
+
+/* حفظ دفعة */
+document.getElementById("saveIncomeBtn").onclick = async function(){
+const date = document.getElementById("incDate").value;
+const amount = Number(document.getElementById("incAmount").value);
+const note = document.getElementById("incNote").value.trim();
+
+if(!(amount > 0)){
+alert("أدخل مبلغًا صحيحًا للدفعة.");
+return;
+}
+
+const btn = this;
+btn.disabled = true;
+btn.textContent = "جاري الحفظ...";
+
+try {
+await addTransactionToFirebase({
+projectId: projectId,
+type: "income",
+date: date,
+category: "دخل",
+amount: amount,
+note: note
+});
+} catch(e) {
+console.error(e);
+alert("حدث خطأ أثناء حفظ الدفعة.");
+} finally {
+btn.disabled = false;
+btn.textContent = "حفظ الدفعة";
+}
+};
+
+}
+
+
+/* =========================
 حذف مشروع
 ========================= */
 
@@ -1788,6 +2201,10 @@ try{
 
 await deleteProjectFromFirebase(id);
 
+if(currentOpenedProjectId === id){
+currentOpenedProjectId = null;
+}
+
 }catch(error){
 
 console.error(error);
@@ -1802,173 +2219,19 @@ alert(
 
 
 /* =========================
-الدخل والمصاريف
+جميع العمليات (البحث العام)
 ========================= */
 
 function transactions(content){
 
 content.innerHTML=`
 
-<h2>إضافة عملية جديدة</h2>
-
-<div class="grid">
-
-
-<div class="field">
-
-<label>
-نوع العملية
-</label>
-
-<select id="transactionType">
-
-<option value="expense">
-مصروف
-</option>
-
-<option value="income">
-دخل
-</option>
-
-</select>
-
-</div>
-
-
-<div class="field">
-
-<label>
-المشروع
-</label>
-
-<select id="transactionProject">
-
-<option value="">
-اختر المشروع
-</option>
-
-${
-db.projects.map(
-function(project){
-
-return `
-
-<option value="${project.id}">
-
-${escapeHTML(project.name)}
-
-</option>
-
-`;
-
-}
-).join("")
-}
-
-</select>
-
-</div>
-
-
-<div class="field">
-
-<label>
-التاريخ
-</label>
-
-<input
-id="transactionDate"
-type="date"
-value="${new Date().toISOString().slice(0,10)}"
->
-
-</div>
-
-
-<div class="field">
-
-<label>
-التصنيف
-</label>
-
-<select id="transactionCategory">
-
-${
-categories.map(
-function(category){
-
-return `
-
-<option>
-${category}
-</option>
-
-`;
-
-}
-).join("")
-}
-
-</select>
-
-</div>
-
-
-<div class="field">
-
-<label>
-المبلغ
-</label>
-
-<input
-id="transactionAmount"
-type="number"
-min="0"
-step="0.01"
-placeholder="0"
->
-
-</div>
-
-
-<div class="field">
-
-<label>
-البيان / اسم الشخص
-</label>
-
-<input
-id="transactionNote"
-placeholder="مثال: محمد - مواد"
->
-
-</div>
-
-
-<div class="full">
-
-<button
-class="btn green"
-id="saveTransactionButton"
->
-حفظ العملية
-</button>
-
-</div>
-
-
-</div>
-
-
-<h2 style="margin-top:25px">
-البحث
-</h2>
-
+<h2>البحث في كافة العمليات</h2>
 
 <input
 id="transactionSearch"
 class="search"
-placeholder="اكتب اسم محمد أو اسم المشروع أو البيان..."
+placeholder="ابحث عن مشروع أو بيان أو مبلغ..."
 >
 
 
@@ -2010,119 +2273,6 @@ style="margin-top:15px"
 </div>
 
 `;
-
-
-document.getElementById(
-"saveTransactionButton"
-).onclick=async function(){
-
-const type=
-document.getElementById(
-"transactionType"
-).value;
-
-
-const projectId=
-document.getElementById(
-"transactionProject"
-).value;
-
-
-const date=
-document.getElementById(
-"transactionDate"
-).value;
-
-
-const category=
-document.getElementById(
-"transactionCategory"
-).value;
-
-
-const amount=
-Number(
-document.getElementById(
-"transactionAmount"
-).value
-);
-
-
-const note=
-document.getElementById(
-"transactionNote"
-).value.trim();
-
-
-if(!projectId){
-
-alert(
-"اختر المشروع"
-);
-
-return;
-
-}
-
-
-if(!(amount>0)){
-
-alert(
-"أدخل مبلغًا صحيحًا"
-);
-
-return;
-
-}
-
-
-const button=
-document.getElementById(
-"saveTransactionButton"
-);
-
-button.disabled=true;
-
-button.textContent=
-"جاري الحفظ...";
-
-
-try{
-
-await addTransactionToFirebase({
-
-projectId:projectId,
-
-type:type,
-
-date:date,
-
-category:category,
-
-amount:amount,
-
-note:note
-
-});
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"حدث خطأ أثناء حفظ العملية في Firebase."
-);
-
-}finally{
-
-button.disabled=false;
-
-button.textContent=
-"حفظ العملية";
-
-}
-
-};
 
 
 document.getElementById(
@@ -2217,7 +2367,7 @@ transaction.type==="income"
 ${
 transaction.type==="income"
 ?
-"دخل"
+"دفعة"
 :
 "مصروف"
 }
@@ -2313,7 +2463,7 @@ alert(
 
 
 /* =========================
-التنقل
+التنقل بين التبويبات
 ========================= */
 
 document.getElementById(
@@ -2330,6 +2480,9 @@ return;
 
 }
 
+if(button.dataset.view !== "projects"){
+currentOpenedProjectId = null;
+}
 
 render(
 button.dataset.view
@@ -2424,16 +2577,16 @@ sheetName;
 }
 );
 
+let projectId = project ? project.id : null;
 
-if(!project){
 
-await addProjectToFirebase(
+if(!projectId){
+
+projectId = await addProjectToFirebase(
 sheetName
 );
 
 importedProjects++;
-
-continue;
 
 }
 
@@ -2589,7 +2742,7 @@ headerLower.includes("دفعة");
 await addTransactionToFirebase({
 
 projectId:
-project.id,
+projectId,
 
 type:
 isIncome
@@ -2690,7 +2843,7 @@ transaction.date,
 
 transaction.type==="income"
 ?
-"دخل"
+"دفعة"
 :
 "مصروف",
 
@@ -2728,11 +2881,6 @@ workbook,
 );
 
 };
-
-
-/* =========================
-تشغيل الموقع
-========================= */
 
 </script>
 
