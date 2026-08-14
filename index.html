@@ -190,10 +190,6 @@ gap:7px;
 flex-wrap:wrap
 }
 
-.search{
-max-width:350px
-}
-
 .notice{
 padding:11px;
 border-radius:10px;
@@ -378,9 +374,6 @@ grid-template-columns: 1fr;
 <span id="currentUser" class="muted" style="font-size:12px"></span>
 <button class="btn secondary" id="homeBtn" style="display:none">الرئيسية 🏠</button>
 <button class="btn secondary" id="logoutBtn">تسجيل خروج</button>
-<button class="btn secondary" id="importBtn">استيراد Excel</button>
-<button class="btn secondary" id="exportBtn">تصدير Excel</button>
-<input id="fileInput" type="file" accept=".xlsx,.xls" hidden>
 </div>
 </div>
 </div>
@@ -474,32 +467,35 @@ grid-template-columns: 1fr;
 
 <!-- 2. قسم المشاريع -->
 <div id="projectsSection" style="display:none">
-<div class="stats" id="mainStats">
-<div class="stat">
-<small>إجمالي الدخل (الدفعات)</small>
-<strong id="totalIncome">0 ر.س</strong>
+<button class="btn secondary" onclick="showPortal()" style="margin-bottom:15px">← العودة للرئيسية</button>
+<h2>🏗️ إدارة المشاريع</h2>
+<div class="card">
+<div class="card" style="background:#f8fafc; border:1px solid #e2e8f0; margin-bottom:20px">
+<h3>➕ إضافة مشروع جديد</h3>
+<div class="grid">
+<div class="field">
+<label>اسم المشروع</label>
+<input id="newProjectName" placeholder="مثال: مشروع بناء فيلا...">
 </div>
-<div class="stat">
-<small>إجمالي المصاريف</small>
-<strong id="totalExpense">0 ر.س</strong>
+<div style="align-self:end">
+<button class="btn green" id="saveProjectBtn">إضافة المشروع</button>
 </div>
-<div class="stat">
-<small>المتبقي (صافي الربح)</small>
-<strong id="netProfit">0 ر.س</strong>
-</div>
-<div class="stat">
-<small>عدد المشاريع</small>
-<strong id="projectCount">0</strong>
 </div>
 </div>
 
-<div class="card" style="margin-top:15px">
-<div class="tabs" id="tabs">
-<button class="tab active" data-view="projects">المشاريع</button>
-<button class="tab" data-view="dashboard">ملخص عام</button>
-<button class="tab" data-view="transactions">جميع العمليات</button>
+<h3>📋 قائمة المشاريع</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>اسم المشروع</th>
+<th>تاريخ الإنشاء</th>
+<th>إجراء</th>
+</tr>
+</thead>
+<tbody id="projectsBody"></tbody>
+</table>
 </div>
-<div id="content"></div>
 </div>
 </div>
 
@@ -665,8 +661,7 @@ grid-template-columns: 1fr;
 </div>
 <div class="field">
 <label>المسمى / رقم الوحدة (العمارة)</label>
-<input id="rentUnit" list="unitsList" placeholder="اكتب أو اختر وحدة (مثال: شقة 101)">
-<datalist id="unitsList"></datalist>
+<input id="rentUnit" placeholder="مثال: شقة 101">
 </div>
 <div class="field">
 <label>اسم المستأجر</label>
@@ -737,24 +732,19 @@ const firestore = getFirestore(firebaseApp);
 
 let db = {
 projects:[],
-transactions:[],
 officeExpenses:[],
 services:[],
 properties:[],
 rentals:[]
 };
 
-let currentOpenedProjectId = null;
 let currentOpenedPropertyId = null;
 
 let unsubscribeProjects = null;
-let unsubscribeTransactions = null;
 let unsubscribeOffice = null;
 let unsubscribeServices = null;
 let unsubscribeProperties = null;
 let unsubscribeRentals = null;
-
-const categories = ["عام", "مقاولات", "حكومي", "استشاري", "مواد", "أجور", "أخرى"];
 
 const money = function(number){
 return new Intl.NumberFormat("ar-SA", { maximumFractionDigits: 2 }).format(Number(number)||0) + " ر.س";
@@ -774,7 +764,6 @@ showPortal();
 }
 
 window.showPortal = function(){
-currentOpenedProjectId = null;
 currentOpenedPropertyId = null;
 document.getElementById("portalScreen").style.display = "block";
 document.getElementById("officeSection").style.display = "none";
@@ -802,7 +791,7 @@ document.getElementById("projectsSection").style.display = "block";
 document.getElementById("servicesSection").style.display = "none";
 document.getElementById("rentalsSection").style.display = "none";
 document.getElementById("homeBtn").style.display = "inline-block";
-render("projects");
+renderProjects();
 };
 
 window.openServices = function(){
@@ -871,7 +860,6 @@ button.textContent = "دخول";
 document.getElementById("logoutBtn").onclick = async function(){
 try {
 if(unsubscribeProjects) unsubscribeProjects();
-if(unsubscribeTransactions) unsubscribeTransactions();
 if(unsubscribeOffice) unsubscribeOffice();
 if(unsubscribeServices) unsubscribeServices();
 if(unsubscribeProperties) unsubscribeProperties();
@@ -891,7 +879,6 @@ showLogin();
 
 function startFirebaseListeners(){
 if(unsubscribeProjects) unsubscribeProjects();
-if(unsubscribeTransactions) unsubscribeTransactions();
 if(unsubscribeOffice) unsubscribeOffice();
 if(unsubscribeServices) unsubscribeServices();
 if(unsubscribeProperties) unsubscribeProperties();
@@ -899,21 +886,7 @@ if(unsubscribeRentals) unsubscribeRentals();
 
 unsubscribeProjects = onSnapshot(collection(firestore, "projects"), snapshot => {
 db.projects = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-updateStats();
-const activeTab = document.querySelector(".tab.active");
-if(activeTab && document.getElementById("projectsSection").style.display === "block"){
-render(activeTab.dataset.view);
-}
-});
-
-unsubscribeTransactions = onSnapshot(collection(firestore, "transactions"), snapshot => {
-db.transactions = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-db.transactions.sort((a,b) => String(b.date||"").localeCompare(String(a.date||"")));
-updateStats();
-const activeTab = document.querySelector(".tab.active");
-if(activeTab && document.getElementById("projectsSection").style.display === "block"){
-render(activeTab.dataset.view);
-}
+if(document.getElementById("projectsSection").style.display === "block"){ renderProjects(); }
 });
 
 unsubscribeOffice = onSnapshot(collection(firestore, "office_expenses"), snapshot => {
@@ -940,40 +913,12 @@ if(document.getElementById("rentalsSection").style.display === "block"){ renderR
 });
 }
 
-async function addProjectToFirebase(name){
-const docRef = await addDoc(collection(firestore, "projects"), {
-name: name, createdAt: Date.now(), createdBy: auth.currentUser.uid
-});
-return docRef.id;
-}
-
-async function addTransactionToFirebase(data){
-await addDoc(collection(firestore, "transactions"), {
-projectId: data.projectId, type: data.type, date: data.date,
-category: data.category, amount: Number(data.amount)||0, note: data.note || "",
-createdAt: Date.now(), createdBy: auth.currentUser.uid
-});
-}
-
-async function deleteProjectFromFirebase(id){
-const batch = writeBatch(firestore);
-batch.delete(doc(firestore, "projects", id));
-const transactionQuery = query(collection(firestore, "transactions"));
-const transactionSnapshot = await getDocs(transactionQuery);
-transactionSnapshot.forEach(item => {
-if(item.data().projectId === id){ batch.delete(item.ref); }
-});
-await batch.commit();
-}
-
-async function deleteTransactionFromFirebase(id){
-await deleteDoc(doc(firestore, "transactions", id));
-}
-
+/* 🏢 مصاريف المكتب */
 async function addOfficeExpenseToFirebase(data){
+const uid = auth.currentUser ? auth.currentUser.uid : "unknown";
 await addDoc(collection(firestore, "office_expenses"), {
 date: data.date, name: data.name, amount: Number(data.amount) || 0,
-note: data.note || "", createdAt: Date.now(), createdBy: auth.currentUser.uid
+note: data.note || "", createdAt: Date.now(), createdBy: uid
 });
 }
 
@@ -1008,6 +953,11 @@ const note = document.getElementById("offExpNote").value.trim();
 if(!name){ alert("أدخل اسم البند"); return; }
 if(!(amount > 0)){ alert("أدخل مبلغ صحيح"); return; }
 
+if(!auth.currentUser){
+alert("انتهت جلسة تسجيل الدخول، يرجى إعادة الدخول للحساب.");
+return;
+}
+
 const btn = this;
 btn.disabled = true;
 btn.textContent = "جاري الحفظ...";
@@ -1017,26 +967,56 @@ await addOfficeExpenseToFirebase({ date, name, amount, note });
 document.getElementById("offExpName").value = "";
 document.getElementById("offExpAmount").value = "";
 document.getElementById("offExpNote").value = "";
-} catch(e) { console.error(e); alert("حدث خطأ أثناء الحفظ."); }
+} catch(e) { 
+console.error("Firebase Error Details:", e); 
+alert("حدث خطأ أثناء الحفظ: " + e.message); 
+}
 finally { btn.disabled = false; btn.textContent = "حفظ المصروف"; }
 };
 
 window.deleteOfficeExpense = async function(id){
 if(!confirm("هل تريد حذف هذا المصروف؟")) return;
 try { await deleteOfficeExpenseFromFirebase(id); }
-catch(e){ console.error(e); alert("حدث خطأ أثناء الحذف."); }
+catch(e){ console.error(e); alert("حدث خطأ أثناء الحذف: " + e.message); }
 };
 
+/* 🏗️ المشاريع */
+function renderProjects(){
+const tbody = document.getElementById("projectsBody");
+tbody.innerHTML = db.projects.length ? db.projects.map(p => `
+<tr>
+<td><strong>${escapeHTML(p.name)}</strong></td>
+<td>${p.createdAt ? new Date(p.createdAt).toLocaleDateString('ar-SA') : '-'}</td>
+<td><button class="btn red" onclick="deleteProject('${p.id}')">حذف</button></td>
+</tr>
+`).join("") : `<tr><td colspan="3"><div class="empty">لا توجد مشاريع مضافة</div></td></tr>`;
+}
+
+document.getElementById("saveProjectBtn").onclick = async function(){
+const name = document.getElementById("newProjectName").value.trim();
+if(!name){ alert("أدخل اسم المشروع"); return; }
+
+const uid = auth.currentUser ? auth.currentUser.uid : "unknown";
+try {
+await addDoc(collection(firestore, "projects"), { name, createdAt: Date.now(), createdBy: uid });
+document.getElementById("newProjectName").value = "";
+} catch(e){ alert("خطأ أثناء حفظ المشروع: " + e.message); }
+};
+
+window.deleteProject = async function(id){
+if(!confirm("هل أنت تأكد من حذف هذا المشروع؟")) return;
+try { await deleteDoc(doc(firestore, "projects", id)); }
+catch(e){ alert("خطأ في الحذف: " + e.message); }
+};
+
+/* 🛠️ دخل الخدمات */
 async function addServiceTxToFirebase(data){
+const uid = auth.currentUser ? auth.currentUser.uid : "unknown";
 await addDoc(collection(firestore, "services"), {
 date: data.date, category: data.category, type: data.type,
 amount: Number(data.amount) || 0, note: data.note || "",
-createdAt: Date.now(), createdBy: auth.currentUser.uid
+createdAt: Date.now(), createdBy: uid
 });
-}
-
-async function deleteServiceTxFromFirebase(id){
-await deleteDoc(doc(firestore, "services", id));
 }
 
 function renderServices(){
@@ -1106,56 +1086,124 @@ try {
 await addServiceTxToFirebase({ date, category, type, amount, note });
 document.getElementById("srvAmount").value = "";
 document.getElementById("srvNote").value = "";
-} catch(e){ console.error(e); alert("حدث خطأ أثناء الحفظ."); }
+} catch(e){ console.error(e); alert("حدث خطأ أثناء الحفظ: " + e.message); }
 finally { btn.disabled = false; btn.textContent = "حفظ العملية"; }
 };
 
 window.deleteServiceTx = async function(id){
 if(!confirm("هل تريد حذف هذه العملية؟")) return;
-try { await deleteServiceTxFromFirebase(id); }
-catch(e){ console.error(e); alert("حدث خطأ أثناء الحذف."); }
+try { await deleteDoc(doc(firestore, "services", id)); }
+catch(e){ alert("خطأ في الحذف: " + e.message); }
 };
 
-async function addPropertyToFirebase(title){
-const docRef = await addDoc(collection(firestore, "properties"), {
-title: title, createdAt: Date.now(), createdBy: auth.currentUser.uid
-});
-return docRef.id;
-}
+/* 🔑 العقارات والإيجارات */
+document.getElementById("savePropertyBtn").onclick = async function(){
+const title = document.getElementById("propertyTitle").value.trim();
+if(!title){ alert("أدخل اسم العقار"); return; }
+const uid = auth.currentUser ? auth.currentUser.uid : "unknown";
+try {
+await addDoc(collection(firestore, "properties"), { title, createdAt: Date.now(), createdBy: uid });
+document.getElementById("propertyTitle").value = "";
+} catch(e){ alert("خطأ في الإضافة: " + e.message); }
+};
 
-async function deletePropertyFromFirebase(id){
+window.openPropertyDetails = function(id, title){
+currentOpenedPropertyId = id;
+document.getElementById("currentPropertyName").textContent = title;
+document.getElementById("rentDate").value = new Date().toISOString().slice(0,10);
+renderRentals();
+};
+
+window.closePropertyDetails = function(){
+currentOpenedPropertyId = null;
+renderRentals();
+};
+
+document.getElementById("saveRentContractBtn").onclick = async function(){
+if(!currentOpenedPropertyId) return;
+const date = document.getElementById("rentDate").value;
+const unit = document.getElementById("rentUnit").value.trim();
+const tenant = document.getElementById("rentTenant").value.trim();
+const rentAmount = Number(document.getElementById("rentAmount").value) || 0;
+const depositAmount = Number(document.getElementById("rentDeposit").value) || 0;
+const note = document.getElementById("rentNote").value.trim();
+
+if(!unit){ alert("أدخل المسمى/الوحدة"); return; }
+
+const uid = auth.currentUser ? auth.currentUser.uid : "unknown";
+try {
+await addDoc(collection(firestore, "rentals"), {
+propertyId: currentOpenedPropertyId, date, unit, tenant, rentAmount,
+depositAmount, isDepositRefunded: false, note, createdAt: Date.now(), createdBy: uid
+});
+document.getElementById("rentUnit").value = "";
+document.getElementById("rentTenant").value = "";
+document.getElementById("rentAmount").value = "";
+document.getElementById("rentDeposit").value = "";
+document.getElementById("rentNote").value = "";
+} catch(e){ alert("خطأ في تسجيل العقد: " + e.message); }
+};
+
+window.toggleDepositRefundStatus = async function(id, currentStatus){
+try {
+await updateDoc(doc(firestore, "rentals", id), { isDepositRefunded: !currentStatus });
+} catch(e){ alert("خطأ في التحديث: " + e.message); }
+};
+
+window.deleteRentalContract = async function(id){
+if(!confirm("هل تريد حذف هذا العقد؟")) return;
+try { await deleteDoc(doc(firestore, "rentals", id)); }
+catch(e){ alert("خطأ في الحذف: " + e.message); }
+};
+
+window.deleteProperty = async function(id){
+if(!confirm("هل تريد حذف العقار وجميع العقود المرتبطة به؟")) return;
+try {
 const batch = writeBatch(firestore);
 batch.delete(doc(firestore, "properties", id));
-const rentalQuery = query(collection(firestore, "rentals"));
-const snapshot = await getDocs(rentalQuery);
-snapshot.forEach(item => {
-if(item.data().propertyId === id){ batch.delete(item.ref); }
-});
+db.rentals.filter(r => r.propertyId === id).forEach(r => batch.delete(doc(firestore, "rentals", r.id)));
 await batch.commit();
-}
-
-async function addRentalContractToFirebase(data){
-await addDoc(collection(firestore, "rentals"), {
-propertyId: data.propertyId, date: data.date, unit: data.unit,
-tenant: data.tenant, rentAmount: Number(data.rentAmount) || 0,
-depositAmount: Number(data.depositAmount) || 0, isDepositRefunded: false,
-note: data.note || "", createdAt: Date.now(), createdBy: auth.currentUser.uid
-});
-}
-
-async function toggleDepositRefundStatus(id, currentStatus){
-await updateDoc(doc(firestore, "rentals", id), { isDepositRefunded: !currentStatus });
-}
-
-async function deleteRentalContractFromFirebase(id){
-await deleteDoc(doc(firestore, "rentals", id));
-}
+} catch(e){ alert("خطأ أثناء حذف العقار: " + e.message); }
+};
 
 function renderRentals(){
 if(currentOpenedPropertyId){
 document.getElementById("rentalMainView").style.display = "none";
 document.getElementById("rentalDetailView").style.display = "block";
-renderPropertyDetailView();
+
+const propRentals = db.rentals.filter(r => r.propertyId === currentOpenedPropertyId);
+let totalRent = 0; let totalRefunded = 0; let totalRetained = 0;
+
+propRentals.forEach(r => {
+totalRent += Number(r.rentAmount) || 0;
+const dep = Number(r.depositAmount) || 0;
+if(r.isDepositRefunded) totalRefunded += dep;
+else totalRetained += dep;
+});
+
+document.getElementById("propTotalRent").textContent = money(totalRent);
+document.getElementById("propTotalRefunded").textContent = money(totalRefunded);
+document.getElementById("propTotalRetained").textContent = money(totalRetained);
+document.getElementById("propContractsCount").textContent = propRentals.length;
+
+const tbody = document.getElementById("rentContractsBody");
+tbody.innerHTML = propRentals.length ? propRentals.map(r => `
+<tr>
+<td>${escapeHTML(r.date)}</td>
+<td><strong>${escapeHTML(r.unit)}</strong></td>
+<td>${escapeHTML(r.tenant)}</td>
+<td class="income">${money(r.rentAmount)}</td>
+<td>${money(r.depositAmount)}</td>
+<td>
+<button class="btn ${r.isDepositRefunded ? 'secondary' : 'blue'}" onclick="toggleDepositRefundStatus('${r.id}', ${r.isDepositRefunded})">
+${r.isDepositRefunded ? 'تم الاسترداد ✅' : 'استرداد التأمين 🔄'}
+</button>
+</td>
+<td>${escapeHTML(r.note)}</td>
+<td><button class="btn red" onclick="deleteRentalContract('${r.id}')">حذف</button></td>
+</tr>
+`).join("") : `<tr><td colspan="8"><div class="empty">لا توجد عقود مسجلة لهذا العقار</div></td></tr>`;
+
 } else {
 document.getElementById("rentalMainView").style.display = "block";
 document.getElementById("rentalDetailView").style.display = "none";
@@ -1179,559 +1227,14 @@ return `
 <td style="color:#2563eb; font-weight:bold">${money(totalRefundedDep)}</td>
 <td style="color:#d97706; font-weight:bold">${money(totalRetainedDep)}</td>
 <td>
-<div class="actions">
-<button class="btn blue" onclick="openPropertyDetails('${prop.id}')">فتح العقار 📂</button>
+<button class="btn blue" onclick="openPropertyDetails('${prop.id}', '${escapeHTML(prop.title)}')">عرض التفاصيل</button>
 <button class="btn red" onclick="deleteProperty('${prop.id}')">حذف</button>
-</div>
 </td>
 </tr>
 `;
-}).join("") : `<tr><td colspan="5"><div class="empty">لا توجد عقارات مضافة حتى الآن</div></td></tr>`;
+}).join("") : `<tr><td colspan="5"><div class="empty">لا توجد عقارات مسجلة بعد</div></td></tr>`;
 }
 }
-
-document.getElementById("savePropertyBtn").onclick = async function(){
-const title = document.getElementById("propertyTitle").value.trim();
-if(!title){ alert("أدخل اسم العقار"); return; }
-
-const btn = this;
-btn.disabled = true;
-btn.textContent = "جاري الحفظ...";
-
-try {
-await addPropertyToFirebase(title);
-document.getElementById("propertyTitle").value = "";
-} catch(e){ console.error(e); alert("حدث خطأ أثناء حفظ العقار."); }
-finally { btn.disabled = false; btn.textContent = "إضافة العقار"; }
-};
-
-window.deleteProperty = async function(id){
-if(!confirm("هل تريد حذف هذا العقار وكافة عقوده؟")) return;
-try {
-await deletePropertyFromFirebase(id);
-if(currentOpenedPropertyId === id) currentOpenedPropertyId = null;
-} catch(e){ console.error(e); alert("حدث خطأ أثناء الحذف."); }
-};
-
-window.openPropertyDetails = function(id){
-currentOpenedPropertyId = id;
-renderRentals();
-};
-
-window.closePropertyDetails = function(){
-currentOpenedPropertyId = null;
-renderRentals();
-};
-
-function renderPropertyDetailView(){
-const prop = db.properties.find(p => p.id === currentOpenedPropertyId);
-if(!prop){ closePropertyDetails(); return; }
-
-document.getElementById("currentPropertyName").textContent = "📌 عقار: " + prop.title;
-const propRentals = db.rentals.filter(r => r.propertyId === currentOpenedPropertyId);
-
-let totalRent = 0; let totalRefundedDep = 0; let totalRetainedDep = 0;
-const unitsSet = new Set();
-
-propRentals.forEach(r => {
-totalRent += Number(r.rentAmount) || 0;
-const dep = Number(r.depositAmount) || 0;
-if(r.isDepositRefunded) totalRefundedDep += dep;
-else totalRetainedDep += dep;
-if(r.unit) unitsSet.add(r.unit);
-});
-
-document.getElementById("propTotalRent").textContent = money(totalRent);
-document.getElementById("propTotalRefunded").textContent = money(totalRefundedDep);
-document.getElementById("propTotalRetained").textContent = money(totalRetainedDep);
-document.getElementById("propContractsCount").textContent = propRentals.length;
-
-const unitsList = document.getElementById("unitsList");
-unitsList.innerHTML = Array.from(unitsSet).map(u => `<option value="${escapeHTML(u)}">`).join("");
-
-const tbody = document.getElementById("rentContractsBody");
-tbody.innerHTML = propRentals.length ? propRentals.map(r => {
-const dep = Number(r.depositAmount) || 0;
-return `
-<tr>
-<td>${escapeHTML(r.date)}</td>
-<td><strong>${escapeHTML(r.unit)}</strong></td>
-<td>${escapeHTML(r.tenant)}</td>
-<td class="income">${money(r.rentAmount)}</td>
-<td>${money(dep)}</td>
-<td>
-${dep > 0 ? `
-<button class="btn ${r.isDepositRefunded ? 'green' : 'red'}" style="padding:6px 10px; font-size:12px;" onclick="toggleDeposit('${r.id}', ${r.isDepositRefunded})">
-${r.isDepositRefunded ? '✔ تم استرداد التأمين' : '✖ لم يسترد التأمين'}
-</button>
-` : '<span class="muted">بدون تأمين</span>'}
-</td>
-<td>${escapeHTML(r.note)}</td>
-<td><button class="btn red" onclick="deleteRentalContract('${r.id}')">حذف</button></td>
-</tr>
-`;
-}).join("") : `<tr><td colspan="8"><div class="empty">لا توجد عمليات إيجار مضافة لهذا العقار</div></td></tr>`;
-
-document.getElementById("rentDate").value = new Date().toISOString().slice(0,10);
-}
-
-document.getElementById("saveRentContractBtn").onclick = async function(){
-const date = document.getElementById("rentDate").value;
-const unit = document.getElementById("rentUnit").value.trim();
-const tenant = document.getElementById("rentTenant").value.trim();
-const rentAmount = Number(document.getElementById("rentAmount").value);
-const depositAmount = Number(document.getElementById("rentDeposit").value) || 0;
-const note = document.getElementById("rentNote").value.trim();
-
-if(!unit){ alert("أدخل رقم / مسمى الوحدة"); return; }
-if(!tenant){ alert("أدخل اسم المستأجر"); return; }
-if(!(rentAmount > 0)){ alert("أدخل مبلغ الإيجار الصحيح"); return; }
-
-const btn = this;
-btn.disabled = true;
-btn.textContent = "جاري الحفظ...";
-
-try {
-await addRentalContractToFirebase({
-propertyId: currentOpenedPropertyId, date, unit, tenant, rentAmount, depositAmount, note
-});
-document.getElementById("rentTenant").value = "";
-document.getElementById("rentAmount").value = "";
-document.getElementById("rentDeposit").value = "";
-document.getElementById("rentNote").value = "";
-} catch(e){ console.error(e); alert("حدث خطأ أثناء حفظ العقد."); }
-finally { btn.disabled = false; btn.textContent = "تسجيل العقد"; }
-};
-
-window.toggleDeposit = async function(id, status){
-try { await toggleDepositRefundStatus(id, status); }
-catch(e){ console.error(e); alert("حدث خطأ أثناء تغيير حالة التأمين."); }
-};
-
-window.deleteRentalContract = async function(id){
-if(!confirm("هل تريد حذف هذا العقد؟")) return;
-try { await deleteRentalContractFromFirebase(id); }
-catch(e){ console.error(e); alert("حدث خطأ أثناء الحذف."); }
-};
-
-function projectName(id){
-const project = db.projects.find(p => p.id === id);
-return project ? project.name : "غير محدد";
-}
-
-function totals(){
-let income = 0; let expense = 0;
-db.transactions.forEach(t => {
-if(t.type === "income") income += Number(t.amount)||0;
-else expense += Number(t.amount)||0;
-});
-return { income, expense };
-}
-
-function updateStats(){
-const total = totals();
-document.getElementById("totalIncome").textContent = money(total.income);
-document.getElementById("totalExpense").textContent = money(total.expense);
-document.getElementById("netProfit").textContent = money(total.income - total.expense);
-document.getElementById("projectCount").textContent = db.projects.length;
-}
-
-function render(view="projects"){
-document.querySelectorAll(".tab").forEach(button => {
-button.classList.toggle("active", button.dataset.view === view);
-});
-const content = document.getElementById("content");
-if(view === "projects"){
-if(currentOpenedProjectId) projectDetailView(content, currentOpenedProjectId);
-else projects(content);
-}
-if(view === "dashboard") dashboard(content);
-if(view === "transactions") transactions(content);
-updateStats();
-}
-
-function dashboard(content){
-let rows = [];
-db.projects.forEach(project => {
-const transactions = db.transactions.filter(t => t.projectId === project.id);
-let income = 0; let expense = 0;
-transactions.forEach(t => {
-if(t.type === "income") income += Number(t.amount)||0;
-else expense += Number(t.amount)||0;
-});
-rows.push({ id: project.id, name: project.name, income, expense, net: income - expense });
-});
-
-content.innerHTML = `
-<h2>ملخص المشاريع</h2>
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th>المشروع</th><th>إجمالي الدفعات</th><th>إجمالي المصاريف</th><th>المتبقي</th><th>إجراء</th>
-</tr>
-</thead>
-<tbody>
-${rows.length ? rows.map(row => `
-<tr>
-<td>${escapeHTML(row.name)}</td>
-<td class="income">${money(row.income)}</td>
-<td class="expense">${money(row.expense)}</td>
-<td>${money(row.net)}</td>
-<td><button class="btn blue" onclick="openProjectDetails('${row.id}')">فتح</button></td>
-</tr>
-`).join("") : `<tr><td colspan="5"><div class="empty">لا توجد مشاريع حتى الآن</div></td></tr>`}
-</tbody>
-</table>
-</div>
-`;
-}
-
-function projects(content){
-content.innerHTML = `
-<h2>إضافة مشروع جديد</h2>
-<div class="grid">
-<div class="field">
-<label>اسم المشروع</label>
-<input id="projectNameInput" placeholder="مثال: مشروع عمارة عبدالرحمن نغيمش">
-</div>
-<div style="align-self:end">
-<button class="btn green" id="addProjectButton">إضافة مشروع</button>
-</div>
-</div>
-
-<h2 style="margin-top:25px">المشاريع الحالية</h2>
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th>المشروع</th><th>إجمالي الدفعات</th><th>إجمالي المصاريف</th><th>المتبقي</th><th>إجراء</th>
-</tr>
-</thead>
-<tbody>
-${db.projects.length ? db.projects.map(project => {
-const transactions = db.transactions.filter(t => t.projectId === project.id);
-let income = 0; let expense = 0;
-transactions.forEach(t => {
-if(t.type === "income") income += Number(t.amount)||0;
-else expense += Number(t.amount)||0;
-});
-return `
-<tr>
-<td>${escapeHTML(project.name)}</td>
-<td class="income">${money(income)}</td>
-<td class="expense">${money(expense)}</td>
-<td>${money(income - expense)}</td>
-<td>
-<div class="actions">
-<button class="btn blue" onclick="openProjectDetails('${project.id}')">فتح 📂</button>
-<button class="btn red" onclick="deleteProject('${project.id}')">حذف</button>
-</div>
-</td>
-</tr>
-`;
-}).join("") : `<tr><td colspan="5"><div class="empty">لا توجد مشاريع</div></td></tr>`}
-</tbody>
-</table>
-</div>
-`;
-
-document.getElementById("addProjectButton").onclick = async function(){
-const input = document.getElementById("projectNameInput");
-const name = input.value.trim();
-if(!name){ alert("اكتب اسم المشروع"); return; }
-
-const button = this;
-button.disabled = true;
-button.textContent = "جاري الحفظ...";
-
-try {
-await addProjectToFirebase(name);
-input.value = "";
-} catch(error){ console.error(error); alert("حدث خطأ أثناء حفظ المشروع في Firebase."); }
-finally { button.disabled = false; button.textContent = "إضافة مشروع"; }
-};
-}
-
-window.openProjectDetails = function(id){
-currentOpenedProjectId = id;
-render("projects");
-};
-
-window.closeProjectDetails = function(){
-currentOpenedProjectId = null;
-render("projects");
-};
-
-function projectDetailView(content, projectId){
-const project = db.projects.find(p => p.id === projectId);
-if(!project){ currentOpenedProjectId = null; projects(content); return; }
-
-const projectTransactions = db.transactions.filter(t => t.projectId === projectId);
-let totalIncome = 0; let totalExpense = 0;
-const expensesList = []; const incomeList = [];
-
-projectTransactions.forEach(t => {
-if(t.type === "income"){ totalIncome += Number(t.amount) || 0; incomeList.push(t); }
-else { totalExpense += Number(t.amount) || 0; expensesList.push(t); }
-});
-
-const remaining = totalIncome - totalExpense;
-
-content.innerHTML = `
-<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px">
-<h2>📌 تفاصيل المشروع: ${escapeHTML(project.name)}</h2>
-<button class="btn secondary" onclick="closeProjectDetails()">← العودة للمشاريع</button>
-</div>
-
-<div class="stats" style="margin-bottom:20px">
-<div class="stat"><small>إجمالي الدفعات</small><strong class="income">${money(totalIncome)}</strong></div>
-<div class="stat"><small>إجمالي المصاريف</small><strong class="expense">${money(totalExpense)}</strong></div>
-<div class="stat"><small>المتبقي من الدفعات</small><strong style="color:${remaining >= 0 ? '#15803d' : '#b91c1c'}">${money(remaining)}</strong></div>
-<div class="stat"><small>إجمالي العمليات</small><strong>${projectTransactions.length}</strong></div>
-</div>
-
-<div class="card" style="background:#fff5f5; border:1px solid #fecaca; margin-bottom:20px">
-<h3 style="margin-top:0; color:#991b1b">➕ إضافة مصروف للمشروع</h3>
-<div class="grid">
-<div class="field"><label>التاريخ</label><input id="expDate" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
-<div class="field"><label>التصنيف</label><select id="expCategory">${categories.map(c => `<option value="${c}">${c}</option>`).join("")}</select></div>
-<div class="field"><label>المبلغ (ر.س)</label><input id="expAmount" type="number" min="0" step="0.01" placeholder="0"></div>
-<div class="field"><label>الملاحظة / البيان</label><input id="expNote" placeholder="بيان المصروف..."></div>
-<div class="full"><button class="btn red" id="saveExpenseBtn">حفظ المصروف</button></div>
-</div>
-</div>
-
-<div class="card" style="background:#f0fdf4; border:1px solid #bbf7d0; margin-bottom:25px">
-<h3 style="margin-top:0; color:#166534">➕ إضافة دفعة للمشروع</h3>
-<div class="grid">
-<div class="field"><label>التاريخ</label><input id="incDate" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
-<div class="field"><label>المبلغ (ر.س)</label><input id="incAmount" type="number" min="0" step="0.01" placeholder="0"></div>
-<div class="field full"><label>الملاحظة / البيان</label><input id="incNote" placeholder="بيان الدفعة..."></div>
-<div class="full"><button class="btn green" id="saveIncomeBtn">حفظ الدفعة</button></div>
-</div>
-</div>
-
-<h3 style="color:#b91c1c">📋 قائمة المصاريف</h3>
-<div class="table-wrap" style="margin-bottom:25px">
-<table>
-<thead><tr><th>التاريخ</th><th>التصنيف</th><th>المبلغ</th><th>الملاحظة / البيان</th><th>إجراء</th></tr></thead>
-<tbody>
-${expensesList.length ? expensesList.map(t => `
-<tr>
-<td>${escapeHTML(t.date)}</td>
-<td>${escapeHTML(t.category)}</td>
-<td class="expense">${money(t.amount)}</td>
-<td>${escapeHTML(t.note)}</td>
-<td><button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button></td>
-</tr>
-`).join("") : `<tr><td colspan="5"><div class="empty">لا توجد مصاريف مضافة لهذا المشروع</div></td></tr>`}
-</tbody>
-</table>
-</div>
-
-<h3 style="color:#15803d">📋 قائمة الدفعات</h3>
-<div class="table-wrap">
-<table>
-<thead><tr><th>التاريخ</th><th>المبلغ</th><th>الملاحظة / البيان</th><th>إجراء</th></tr></thead>
-<tbody>
-${incomeList.length ? incomeList.map(t => `
-<tr>
-<td>${escapeHTML(t.date)}</td>
-<td class="income">${money(t.amount)}</td>
-<td>${escapeHTML(t.note)}</td>
-<td><button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button></td>
-</tr>
-`).join("") : `<tr><td colspan="4"><div class="empty">لا توجد دفعات مضافة لهذا المشروع</div></td></tr>`}
-</tbody>
-</table>
-</div>
-`;
-
-document.getElementById("saveExpenseBtn").onclick = async function(){
-const date = document.getElementById("expDate").value;
-const category = document.getElementById("expCategory").value;
-const amount = Number(document.getElementById("expAmount").value);
-const note = document.getElementById("expNote").value.trim();
-
-if(!(amount > 0)){ alert("أدخل مبلغًا صحيحًا للمصروف."); return; }
-
-const btn = this;
-btn.disabled = true;
-btn.textContent = "جاري الحفظ...";
-
-try {
-await addTransactionToFirebase({ projectId, type: "expense", date, category, amount, note });
-} catch(e){ console.error(e); alert("حدث خطأ أثناء حفظ المصروف."); }
-finally { btn.disabled = false; btn.textContent = "حفظ المصروف"; }
-};
-
-document.getElementById("saveIncomeBtn").onclick = async function(){
-const date = document.getElementById("incDate").value;
-const amount = Number(document.getElementById("incAmount").value);
-const note = document.getElementById("incNote").value.trim();
-
-if(!(amount > 0)){ alert("أدخل مبلغًا صحيحًا للدفعة."); return; }
-
-const btn = this;
-btn.disabled = true;
-btn.textContent = "جاري الحفظ...";
-
-try {
-await addTransactionToFirebase({ projectId, type: "income", date, category: "دخل", amount, note });
-} catch(e){ console.error(e); alert("حدث خطأ أثناء حفظ الدفعة."); }
-finally { btn.disabled = false; btn.textContent = "حفظ الدفعة"; }
-};
-}
-
-window.deleteProject = async function(id){
-const project = db.projects.find(p => p.id === id);
-if(!project) return;
-if(!confirm("هل تريد حذف المشروع وجميع العمليات المرتبطة به؟")) return;
-
-try {
-await deleteProjectFromFirebase(id);
-if(currentOpenedProjectId === id) currentOpenedProjectId = null;
-} catch(error){ console.error(error); alert("حدث خطأ أثناء حذف المشروع."); }
-};
-
-function transactions(content){
-content.innerHTML = `
-<h2>البحث في كافة العمليات</h2>
-<input id="transactionSearch" class="search" placeholder="ابحث عن مشروع أو بيان أو مبلغ...">
-<div class="table-wrap" style="margin-top:15px">
-<table>
-<thead><tr><th>التاريخ</th><th>المشروع</th><th>النوع</th><th>التصنيف</th><th>المبلغ</th><th>البيان</th><th>إجراء</th></tr></thead>
-<tbody id="transactionsBody"></tbody>
-</table>
-</div>
-`;
-
-document.getElementById("transactionSearch").oninput = drawTransactions;
-drawTransactions();
-
-function drawTransactions(){
-const search = document.getElementById("transactionSearch").value.trim().toLowerCase();
-const filtered = db.transactions.filter(transaction => {
-const text = projectName(transaction.projectId) + " " + transaction.note + " " + transaction.category + " " + transaction.amount + " " + transaction.date;
-return text.toLowerCase().includes(search);
-});
-
-document.getElementById("transactionsBody").innerHTML = filtered.length ? filtered.map(transaction => `
-<tr>
-<td>${escapeHTML(transaction.date)}</td>
-<td>${escapeHTML(projectName(transaction.projectId))}</td>
-<td class="${transaction.type === 'income' ? 'income' : 'expense'}">${transaction.type === 'income' ? 'دفعة' : 'مصروف'}</td>
-<td>${escapeHTML(transaction.category)}</td>
-<td>${money(transaction.amount)}</td>
-<td>${escapeHTML(transaction.note)}</td>
-<td><button class="btn red" onclick="deleteTransaction('${transaction.id}')">حذف</button></td>
-</tr>
-`).join("") : `<tr><td colspan="7"><div class="empty">لا توجد عمليات</div></td></tr>`;
-}
-}
-
-window.deleteTransaction = async function(id){
-if(!confirm("هل تريد حذف هذه العملية؟")) return;
-try { await deleteTransactionFromFirebase(id); }
-catch(error){ console.error(error); alert("حدث خطأ أثناء حذف العملية."); }
-};
-
-document.getElementById("tabs").onclick = function(event){
-const button = event.target.closest(".tab");
-if(!button) return;
-if(button.dataset.view !== "projects") currentOpenedProjectId = null;
-render(button.dataset.view);
-};
-
-document.getElementById("exportBtn").onclick = function(){
-const wb = XLSX.utils.book_new();
-
-const projData = [["المشروع", "إجمالي الدفعات", "إجمالي المصاريف", "المتبقي"]];
-db.projects.forEach(p => {
-let inc = 0, exp = 0;
-db.transactions.filter(t => t.projectId === p.id).forEach(t => {
-if(t.type === "income") inc += Number(t.amount)||0;
-else exp += Number(t.amount)||0;
-});
-projData.push([p.name, inc, exp, inc - exp]);
-});
-XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(projData), "المشاريع");
-
-const offData = [["التاريخ", "اسم البند", "المبلغ", "الملاحظات"]];
-db.officeExpenses.forEach(o => offData.push([o.date, o.name, o.amount, o.note]));
-XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(offData), "مصاريف المكتب");
-
-const srvData = [["التاريخ", "الخدمة", "النوع", "المبلغ", "البيان"]];
-db.services.forEach(s => srvData.push([s.date, s.category, s.type === "income" ? "دخل" : "مصروف", s.amount, s.note]));
-XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(srvData), "دخل الخدمات");
-
-const rentData = [["التاريخ", "العقار", "الوحدة", "المستأجر", "مبلغ الإيجار", "مبلغ التأمين", "حالة التأمين", "الملاحظات"]];
-db.rentals.forEach(r => {
-const p = db.properties.find(prop => prop.id === r.propertyId);
-rentData.push([r.date, p ? p.title : "", r.unit, r.tenant, r.rentAmount, r.depositAmount, r.isDepositRefunded ? "مسترد" : "لم يسترد", r.note]);
-});
-XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rentData), "إيجارات العقارات");
-
-XLSX.writeFile(wb, "نظام_الإدارة_الشامل.xlsx");
-};
-
-document.getElementById("importBtn").onclick = function(){
-document.getElementById("fileInput").click();
-};
-
-document.getElementById("fileInput").onchange = async function(event){
-const file = event.target.files[0];
-if(!file) return;
-
-try {
-const data = await file.arrayBuffer();
-const workbook = XLSX.read(data, { type:"array", cellDates:true });
-
-for(const sheetName of workbook.SheetNames){
-const sheet = workbook.Sheets[sheetName];
-const rows = XLSX.utils.sheet_to_json(sheet, { header:1, defval:"" });
-if(!rows.length) continue;
-
-let project = db.projects.find(p => p.name === sheetName);
-let projectId = project ? project.id : null;
-if(!projectId) projectId = await addProjectToFirebase(sheetName);
-
-const headers = rows[0].map(v => String(v).trim());
-
-for(let rowIndex=1; rowIndex<rows.length; rowIndex++){
-const row = rows[rowIndex];
-if(!row.length) continue;
-
-let dateValue = row[0];
-let date = dateValue instanceof Date ? dateValue.toISOString().slice(0,10) : String(dateValue||"").trim();
-if(!date) date = new Date().toISOString().slice(0,10);
-
-let note = row[5] ? String(row[5]).trim() : (row[11] ? String(row[11]).trim() : "");
-
-for(let column=1; column<row.length; column++){
-const raw = row[column];
-if(raw === "" || raw === null || raw === undefined) continue;
-
-const number = Number(String(raw).replace(/,/g,""));
-if(!Number.isFinite(number) || number === 0) continue;
-
-const header = headers[column] || "أخرى";
-const headerLower = header.toLowerCase();
-const isIncome = header === "دخل" || header === "الدفعات" || header === "دفعات" || headerLower.includes("دخل") || headerLower.includes("دفعة");
-
-await addTransactionToFirebase({ projectId, type: isIncome ? "income" : "expense", date, category: isIncome ? "دخل" : header, amount: number, note });
-}
-}
-}
-alert("تم استيراد البيانات بنجاح!");
-} catch(error){
-console.error(error);
-alert("حدث خطأ أثناء استيراد ملف Excel.");
-} finally {
-event.target.value = "";
-}
-};
 </script>
 </body>
 </html>
