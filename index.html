@@ -1007,29 +1007,24 @@ placeholder="اكتب أو اختر خدمة">
 
 <div class="field">
 
-<label>نوع العملية</label>
+<label>الربح (ر.س)</label>
 
-<select id="srvType">
-
-<option value="income">
-دخل (تحصيل)
-</option>
-
-<option value="expense">
-مصروف
-</option>
-
-</select>
+<input
+id="srvProfit"
+type="number"
+min="0"
+step="0.01"
+placeholder="0">
 
 </div>
 
 
 <div class="field">
 
-<label>المبلغ (ر.س)</label>
+<label>المبلغ المحصل (ر.س)</label>
 
 <input
-id="srvAmount"
+id="srvCollectedAmount"
 type="number"
 min="0"
 step="0.01"
@@ -1085,9 +1080,8 @@ style="margin-bottom:25px">
 <tr>
 
 <th>الخدمة</th>
-<th>إجمالي الدخل</th>
-<th>إجمالي المصاريف</th>
-<th>صافي الربح</th>
+<th>إجمالي المبلغ المحصل</th>
+<th>إجمالي الربح</th>
 
 </tr>
 
@@ -1115,8 +1109,8 @@ style="margin-bottom:25px">
 
 <th>التاريخ</th>
 <th>الخدمة</th>
-<th>النوع</th>
-<th>المبلغ</th>
+<th>الربح</th>
+<th>المبلغ المحصل</th>
 <th>البيان</th>
 <th>إجراء</th>
 
@@ -1267,7 +1261,6 @@ id="savePropertyBtn">
 </button>
 
 </div>
-
 
 </div>
 
@@ -4004,18 +3997,18 @@ date:data.date,
 
 category:data.category,
 
-type:data.type,
+profit:
+Number(data.profit)||0,
 
-amount:
-Number(data.amount)||0,
+collectedAmount:
+Number(data.collectedAmount)||0,
 
 note:data.note||"",
 
 createdAt:
 serverTimestamp(),
 
-createdBy:
-auth.currentUser.uid,
+createdBy:auth.currentUser.uid,
 
 userEmail:
 auth.currentUser.email||""
@@ -4029,9 +4022,9 @@ auth.currentUser.email||""
 
 function renderServices(){
 
-let totalInc=0;
+let totalProfit=0;
 
-let totalExp=0;
+let totalCollected=0;
 
 const categoriesMap={};
 
@@ -4039,8 +4032,11 @@ const categoriesMap={};
 db.services.forEach(
 item=>{
 
-const amt=
-Number(item.amount)||0;
+const profit=
+Number(item.profit)||0;
+
+const collectedAmount=
+Number(item.collectedAmount)||0;
 
 const cat=
 item.category||"عام";
@@ -4048,25 +4044,19 @@ item.category||"عام";
 if(!categoriesMap[cat]){
 
 categoriesMap[cat]={
-income:0,
-expense:0
+profit:0,
+collectedAmount:0
 };
 
 }
 
-if(item.type==="income"){
+totalProfit+=profit;
 
-totalInc+=amt;
+totalCollected+=collectedAmount;
 
-categoriesMap[cat].income+=amt;
+categoriesMap[cat].profit+=profit;
 
-}else{
-
-totalExp+=amt;
-
-categoriesMap[cat].expense+=amt;
-
-}
+categoriesMap[cat].collectedAmount+=collectedAmount;
 
 }
 );
@@ -4075,19 +4065,19 @@ categoriesMap[cat].expense+=amt;
 document.getElementById(
 "servicesTotalIncome"
 ).textContent=
-money(totalInc);
+money(totalCollected);
 
 
 document.getElementById(
 "servicesTotalExpense"
 ).textContent=
-money(totalExp);
+money(totalCollected-totalProfit);
 
 
 document.getElementById(
 "servicesNetProfit"
 ).textContent=
-money(totalInc-totalExp);
+money(totalProfit);
 
 
 document.getElementById(
@@ -4125,13 +4115,11 @@ cats.length
 cats.map(
 c=>{
 
-const inc=
-categoriesMap[c].income;
+const profit=
+categoriesMap[c].profit;
 
-const exp=
-categoriesMap[c].expense;
-
-const net=inc-exp;
+const collectedAmount=
+categoriesMap[c].collectedAmount;
 
 return`
 
@@ -4144,15 +4132,11 @@ ${escapeHTML(c)}
 </td>
 
 <td class="income">
-${money(inc)}
+${money(collectedAmount)}
 </td>
 
-<td class="expense">
-${money(exp)}
-</td>
-
-<td class="${profitClass(net)}">
-${money(net)}
+<td class="profit-positive">
+${money(profit)}
 </td>
 
 </tr>
@@ -4166,7 +4150,7 @@ ${money(net)}
 
 <tr>
 
-<td colspan="4">
+<td colspan="3">
 
 <div class="empty">
 لا توجد خدمات مسجلة بعد
@@ -4203,15 +4187,15 @@ ${escapeHTML(item.category)}
 </strong>
 </td>
 
-<td class="${item.type==="income"?"income":"expense"}">
+<td class="profit-positive">
 
-${item.type==="income"?"دخل":"مصروف"}
+${money(item.profit)}
 
 </td>
 
-<td class="${item.type==="income"?"income":"expense"}">
+<td class="income">
 
-${money(item.amount)}
+${money(item.collectedAmount)}
 
 </td>
 
@@ -4270,15 +4254,17 @@ document.getElementById(
 "srvCategory"
 ).value.trim();
 
-const type=
-document.getElementById(
-"srvType"
-).value;
-
-const amount=
+const profit=
 Number(
 document.getElementById(
-"srvAmount"
+"srvProfit"
+).value
+);
+
+const collectedAmount=
+Number(
+document.getElementById(
+"srvCollectedAmount"
 ).value
 );
 
@@ -4308,10 +4294,20 @@ return;
 
 }
 
-if(!(amount>0)){
+if(!(profit>0)){
 
 alert(
-"أدخل مبلغ صحيح"
+"أدخل الربح"
+);
+
+return;
+
+}
+
+if(!(collectedAmount>0)){
+
+alert(
+"أدخل المبلغ المحصل"
 );
 
 return;
@@ -4332,16 +4328,24 @@ try{
 await addServiceTxToFirebase({
 
 date,
+
 category,
-type,
-amount,
+
+profit,
+
+collectedAmount,
+
 note
 
 });
 
 
 document.getElementById(
-"srvAmount"
+"srvProfit"
+).value="";
+
+document.getElementById(
+"srvCollectedAmount"
 ).value="";
 
 document.getElementById(
@@ -4975,7 +4979,7 @@ id
 }catch(e){
 
 alert(
-"خطأ في حذف المصروف: "+
+"خطأ في الحذف: "+
 e.message
 );
 
