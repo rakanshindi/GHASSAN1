@@ -568,14 +568,14 @@ id="logoutBtn">
 <h2>المكتب</h2>
 
 <p>
-إدارة بنود مصاريف المكتب
+إدارة دخل ومصاريف المكتب
 </p>
 
 </div>
 
 
 <div class="portal-card" id="selectContracting">
-<span class="portal-icon">🏗️</span>
+<span class="portal-icon">🏢</span>
 <h2>المقاولات</h2>
 <p>إدارة دخل ومصروف وربح المقاولات</p>
 </div>
@@ -637,6 +637,28 @@ id="logoutBtn">
 </div>
 
 
+<!-- ================= المقاولات ================= -->
+<div id="contractingSection" style="display:none">
+<div class="card">
+<div class="section-nav"><button class="btn secondary" onclick="goBack()">← رجوع</button><button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button></div>
+<h2>🏢 المقاولات</h2>
+<div class="stats" style="margin-bottom:20px">
+<div class="stat"><small>إجمالي الدخل</small><strong id="contractingIncome" class="income">0 SAR</strong></div>
+<div class="stat"><small>إجمالي المصروف</small><strong id="contractingExpense" class="expense">0 SAR</strong></div>
+<div class="stat"><small>صافي الربح</small><strong id="contractingProfit">0 SAR</strong></div>
+</div>
+<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+<h3>➕ إضافة عملية مقاولات</h3><div class="grid">
+<div class="field"><label>النوع</label><select id="conType"><option value="income">دخل</option><option value="expense">مصروف</option></select></div>
+<div class="field"><label>التاريخ</label><input id="conDate" type="date"></div>
+<div class="field"><label>التصنيف</label><input id="conCategory" placeholder="مواد، أجور، دفعة..." ></div>
+<div class="field"><label>المبلغ (SAR)</label><input id="conAmount" type="number" min="0" step="0.01"></div>
+<div class="field full"><label>البيان</label><input id="conNote"></div>
+<div class="full"><button class="btn green" id="saveContractingBtn">حفظ العملية</button></div>
+</div></div>
+<h3>📋 عمليات المقاولات</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>النوع</th><th>التصنيف</th><th>المبلغ</th><th>البيان</th><th>إجراء</th></tr></thead><tbody id="contractingBody"></tbody></table></div>
+</div></div>
+
 <!-- ================= المصاريف الشخصية ================= -->
 
 <div id="personalSection" style="display:none">
@@ -668,6 +690,8 @@ class="expense">
 </strong>
 
 </div>
+
+<div class="stat"><small>إجمالي دخل المكتب</small><strong id="officeTotalIncome" class="income">0 SAR</strong></div>
 
 <div class="stat">
 
@@ -887,18 +911,6 @@ class="save-status">
 </div>
 
 
-<div class="card" style="background:#f0fdf4;border:1px solid #bbf7d0;margin-bottom:20px">
-<h3>➕ إضافة دخل المكتب</h3>
-<div class="grid">
-<div class="field"><label>التاريخ</label><input id="offIncDate" type="date"></div>
-<div class="field"><label>اسم الدخل / البيان</label><input id="offIncName"></div>
-<div class="field"><label>المبلغ (SAR)</label><input id="offIncAmount" type="number" min="0" step="0.01"></div>
-<div class="field"><label>ملاحظات</label><input id="offIncNote"></div>
-<div class="full"><button class="btn green" id="saveOfficeIncomeBtn">حفظ الدخل</button></div>
-</div></div>
-
-<h3>📋 قائمة دخل المكتب</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>البيان</th><th>المبلغ</th><th>ملاحظات</th><th>إجراء</th></tr></thead><tbody id="officeIncomeBody"></tbody></table></div>
-
 <h3>
 📋 قائمة مصاريف المكتب
 </h3>
@@ -923,15 +935,10 @@ class="save-status">
 </thead>
 
 <tbody id="officeExpensesBody"></tbody>
-
-</table>
-
+</table></div>
+<h3>📋 قائمة دخل المكتب</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>الاسم</th><th>المبلغ</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody id="officeIncomeBody"></tbody></table></div>
 </div>
-
 </div>
-
-</div>
-
 
 <!-- ================= المشاريع ================= -->
 
@@ -1298,31 +1305,6 @@ style="margin-bottom:25px">
 
 </div>
 
-
-<!-- ================= المقاولات ================= -->
-<div id="contractingSection" style="display:none">
-<div class="card">
-<div class="section-nav"><button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button><button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button></div>
-<h2>🏗️ المقاولات</h2>
-<div class="stats" style="margin-bottom:20px">
-<div class="stat"><small>إجمالي الدخل</small><strong id="contractingIncome" class="income">0 SAR</strong></div>
-<div class="stat"><small>إجمالي المصروف</small><strong id="contractingExpense" class="expense">0 SAR</strong></div>
-<div class="stat"><small>صافي الربح</small><strong id="contractingProfit">0 SAR</strong></div>
-<div class="stat"><small>عدد العمليات</small><strong id="contractingCount">0</strong></div>
-</div>
-<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0">
-<h3>➕ إضافة عملية مقاولات</h3>
-<div class="grid">
-<div class="field"><label>نوع العملية</label><select id="conType"><option value="income">دخل</option><option value="expense">مصروف</option></select></div>
-<div class="field"><label>التاريخ</label><input id="conDate" type="date"></div>
-<div class="field"><label>التصنيف</label><input id="conCategory" placeholder="مثال: مشروع، مواد، أجور..."></div>
-<div class="field"><label>المبلغ (SAR)</label><input id="conAmount" type="number" min="0" step="0.01"></div>
-<div class="field full"><label>البيان</label><input id="conNote"></div>
-<div class="full"><button class="btn green" id="saveContractingBtn">حفظ العملية</button></div>
-</div></div>
-<h3>📋 سجل عمليات المقاولات</h3>
-<div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>النوع</th><th>التصنيف</th><th>المبلغ</th><th>البيان</th><th>إجراء</th></tr></thead><tbody id="contractingBody"></tbody></table></div>
-</div></div>
 
 <!-- ================= العقارات ================= -->
 
@@ -2041,8 +2023,8 @@ projects:[],
 transactions:[],
 officeExpenses:[],
 officeIncome:[],
-services:[],
 contracting:[],
+services:[],
 properties:[],
 rentals:[],
 propertyExpenses:[],
@@ -2062,8 +2044,8 @@ let unsubscribeProjects=null;
 let unsubscribeTransactions=null;
 let unsubscribeOffice=null;
 let unsubscribeOfficeIncome=null;
-let unsubscribeServices=null;
 let unsubscribeContracting=null;
+let unsubscribeServices=null;
 let unsubscribeProperties=null;
 let unsubscribeRentals=null;
 let unsubscribePropertyExpenses=null;
@@ -2154,11 +2136,11 @@ function navigateTo(screenId) {
 const screens = [
 "portalScreen", 
 "officeSection", 
-"projectsSection", 
+"projectsSection",
+"contractingSection", 
 "servicesSection", 
 "rentalsSection", 
-"personalSection",
-"contractingSection"
+"personalSection"
 ];
 
 screens.forEach(s => {
@@ -2220,7 +2202,6 @@ currentOpenedPropertyId=null;
 pageHistory = ["portalScreen"];
 
 navigateTo("portalScreen");
-renderHomeWallet();
 
 };
 
@@ -2229,13 +2210,14 @@ window.openOffice=function(){
 
 navigateTo("officeSection");
 
-document.getElementById("offExpDate").value=today();
-document.getElementById("offIncDate").value=today();
+document.getElementById("offExpDate").value=today(); document.getElementById("offIncDate").value=today();
 
 renderOffice();
 
 };
 
+
+window.openContracting=function(){ navigateTo("contractingSection"); document.getElementById("conDate").value=today(); renderContracting(); };
 
 window.openProjects=function(){
 
@@ -2267,12 +2249,6 @@ renderRentals();
 
 };
 
-window.openContracting=function(){
-navigateTo("contractingSection");
-document.getElementById("conDate").value=today();
-renderContracting();
-};
-
 window.openPersonal=function(){
 
 navigateTo("personalSection");
@@ -2288,10 +2264,10 @@ renderPersonal();
 
 document.getElementById("selectOffice").onclick=openOffice;
 document.getElementById("selectProjects").onclick=openProjects;
+document.getElementById("selectContracting").onclick=openContracting;
 document.getElementById("selectServices").onclick=openServices;
 document.getElementById("selectRentals").onclick=openRentals;
 document.getElementById("selectPersonal").onclick=openPersonal;
-document.getElementById("selectContracting").onclick=openContracting;
 
 document.getElementById("homeBtn").onclick=showPortal;
 
@@ -2440,8 +2416,6 @@ error
 
 };
 
-
-setInterval(()=>{if(auth.currentUser && document.getElementById("portalScreen").style.display==="block") renderHomeWallet();},2000);
 
 onAuthStateChanged(
 auth,
@@ -2629,16 +2603,16 @@ console.error("Office Firebase Error:", error);
 /* دخل المكتب */
 unsubscribeOfficeIncome=onSnapshot(collection(firestore,"office_income"),snapshot=>{
 db.officeIncome=snapshot.docs.map(item=>({id:item.id,...item.data()}));
-db.officeIncome.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
 if(document.getElementById("officeSection").style.display==="block") renderOffice();
-});
+updateWallet();
+},error=>console.error("Office Income Firebase Error:",error));
 
 /* المقاولات */
 unsubscribeContracting=onSnapshot(collection(firestore,"contracting"),snapshot=>{
 db.contracting=snapshot.docs.map(item=>({id:item.id,...item.data()}));
-db.contracting.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
 if(document.getElementById("contractingSection").style.display==="block") renderContracting();
-});
+updateWallet();
+},error=>console.error("Contracting Firebase Error:",error));
 
 /* الخدمات */
 
@@ -2667,15 +2641,8 @@ String(a.date||"")
 )
 );
 
-if(
-document.getElementById(
-"servicesSection"
-).style.display==="block"
-){
-
-renderServices();
-
-}
+if(document.getElementById("servicesSection").style.display==="block"){renderServices();}
+updateWallet();
 
 },
 
@@ -2704,15 +2671,8 @@ id:item.id,
 })
 );
 
-if(
-document.getElementById(
-"rentalsSection"
-).style.display==="block"
-){
-
-renderRentals();
-
-}
+if(document.getElementById("rentalsSection").style.display==="block"){renderRentals();}
+updateWallet();
 
 },
 
@@ -2839,15 +2799,8 @@ String(a.date||"")
 )
 );
 
-if(
-document.getElementById(
-"personalSection"
-).style.display==="block"
-){
-
-renderPersonal();
-
-}
+if(document.getElementById("personalSection").style.display==="block"){renderPersonal();}
+updateWallet();
 
 },
 
@@ -2859,9 +2812,20 @@ console.error("Personal Expenses Firebase Error:", error);
 }
 
 
-/* ================= إحصائيات المشاريع ================= */
+function updateWallet(){
+let income=0, expense=0; const cats={};
+const add=(type,amount,cat)=>{amount=Number(amount)||0;if(type==="income")income+=amount;else{expense+=amount;const c=cat||"عام";cats[c]=(cats[c]||0)+amount;}};
+db.transactions.forEach(t=>add(t.type,t.amount,t.category)); db.officeIncome.forEach(x=>add("income",x.amount,"دخل المكتب")); db.officeExpenses.forEach(x=>add("expense",x.amount,x.name)); db.contracting.forEach(x=>add(x.type,x.amount,x.category)); db.services.forEach(x=>{income+=Number(x.collectedAmount)||0; expense+=Math.max(0,(Number(x.collectedAmount)||0)-(Number(x.profit)||0));}); db.rentals.forEach(x=>{income+=Number(x.amount)||0;expense+=Number(x.expenseAmount)||0;}); db.propertyExpenses.forEach(x=>{expense+=Number(x.amount)||0;cats[x.category||"عام"]=(cats[x.category||"عام"]||0)+(Number(x.amount)||0);}); db.personalExpenses.forEach(x=>{expense+=Number(x.amount)||0;cats["مصاريف شخصية"]=(cats["مصاريف شخصية"]||0)+(Number(x.amount)||0);});
+["walletIncome","walletExpense","walletProfit","walletBalance"].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.innerHTML=money(i===0?income:i===1?expense:income-expense);});
+const box=document.getElementById("walletCategories");if(box)box.innerHTML=Object.keys(cats).length?`<table><thead><tr><th>التصنيف</th><th>المجموع</th></tr></thead><tbody>${Object.keys(cats).sort().map(c=>`<tr><td>${escapeHTML(c)}</td><td class="expense">${money(cats[c])}</td></tr>`).join("")}</tbody></table>`:`<div class="empty">لا توجد مصروفات</div>`;
+}
 
-function renderHomeWallet(){let inc=0,exp=0;db.officeIncome.forEach(x=>inc+=Number(x.amount)||0);db.services.forEach(x=>inc+=Number(x.collectedAmount)||0);db.contracting.forEach(x=>{if(x.type==="income")inc+=Number(x.amount)||0;else exp+=Number(x.amount)||0;});db.transactions.forEach(x=>{if(x.type==="income")inc+=Number(x.amount)||0;else exp+=Number(x.amount)||0;});db.rentals.forEach(x=>{inc+=Number(x.amount)||0;exp+=Number(x.expenseAmount)||0;});db.propertyExpenses.forEach(x=>exp+=Number(x.amount)||0);db.officeExpenses.forEach(x=>exp+=Number(x.amount)||0);db.personalExpenses.forEach(x=>exp+=Number(x.amount)||0);db.services.forEach(x=>exp+=Math.max(0,(Number(x.collectedAmount)||0)-(Number(x.profit)||0)));document.getElementById("walletIncome").innerHTML=money(inc);document.getElementById("walletExpense").innerHTML=money(exp);document.getElementById("walletBalance").innerHTML=money(inc-exp);document.getElementById("walletProfit").innerHTML=money(inc-exp);const cats={};db.transactions.filter(x=>x.type!=="income").forEach(x=>cats[x.category||"عام"]=(cats[x.category||"عام"]||0)+(Number(x.amount)||0));db.officeExpenses.forEach(x=>cats[x.name||"مكتب"]=(cats[x.name||"مكتب"]||0)+(Number(x.amount)||0));db.propertyExpenses.forEach(x=>cats[x.category||"عقار"]=(cats[x.category||"عقار"]||0)+(Number(x.amount)||0));db.rentals.forEach(x=>cats[x.expenseCategory||"إيجار"]=(cats[x.expenseCategory||"إيجار"]||0)+(Number(x.expenseAmount)||0));db.contracting.filter(x=>x.type!=="income").forEach(x=>cats[x.category||"مقاولات"]=(cats[x.category||"مقاولات"]||0)+(Number(x.amount)||0));document.getElementById("homeExpenseCategories").innerHTML=Object.keys(cats).length?`<div class="table-wrap"><table><thead><tr><th>التصنيف</th><th>المجموع</th></tr></thead><tbody>${Object.entries(cats).map(([c,v])=>`<tr><td>${escapeHTML(c)}</td><td class="expense">${money(v)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">لا توجد مصروفات</div>`;}
+function renderContracting(){let inc=0,exp=0;db.contracting.forEach(x=>x.type==="income"?inc+=Number(x.amount)||0:exp+=Number(x.amount)||0);document.getElementById("contractingIncome").innerHTML=money(inc);document.getElementById("contractingExpense").innerHTML=money(exp);document.getElementById("contractingProfit").innerHTML=money(inc-exp);const body=document.getElementById("contractingBody");body.innerHTML=db.contracting.length?db.contracting.map(x=>`<tr><td>${escapeHTML(x.date)}</td><td class="${x.type==="income"?'income':'expense'}">${x.type==="income"?'دخل':'مصروف'}</td><td>${escapeHTML(x.category||"-")}</td><td class="${x.type==="income"?'income':'expense'}">${money(x.amount)}</td><td>${escapeHTML(x.note||"-")}</td><td><button class="btn red" onclick="deleteContracting('${x.id}')">حذف</button></td></tr>`).join(""):`<tr><td colspan="6"><div class="empty">لا توجد عمليات</div></td></tr>`;}
+
+document.getElementById("saveContractingBtn").onclick=async function(){const date=document.getElementById("conDate").value,type=document.getElementById("conType").value,category=document.getElementById("conCategory").value.trim(),amount=Number(document.getElementById("conAmount").value),note=document.getElementById("conNote").value.trim();if(!date||!(amount>0)){alert("أدخل التاريخ والمبلغ الصحيح.");return;}this.disabled=true;try{await addDoc(collection(firestore,"contracting"),{date,type,category,amount,note,createdAt:serverTimestamp()});document.getElementById("conCategory").value="";document.getElementById("conAmount").value="";document.getElementById("conNote").value="";}catch(e){alert(e.message)}finally{this.disabled=false;}};
+window.deleteContracting=async function(id){if(!confirm("هل تريد حذف العملية؟"))return;try{await deleteDoc(doc(firestore,"contracting",id));}catch(e){alert(e.message)}};
+
+/* ================= إحصائيات المشاريع ================= */
 
 function updateStats(){
 
@@ -2897,10 +2861,8 @@ document.getElementById(
 ).innerHTML=
 money(inc-exp);
 
-document.getElementById(
-"projectCount"
-).textContent=
-formatNum(db.projects.length);
+document.getElementById("projectCount").textContent=formatNum(db.projects.length);
+updateWallet();
 
 }
 
@@ -2986,6 +2948,7 @@ container.innerHTML = sortedMonths.map(month => {
       <td class="expense">${money(item.amount)}</td>
       <td>${escapeHTML(item.note)}</td>
       <td>
+        <button class="btn blue" onclick="editRecord('personal_expenses','${item.id}', 'date,note')">تعديل</button>
         <button class="btn red" onclick="deletePersonalExpense('${item.id}')">
           حذف
         </button>
@@ -3111,9 +3074,9 @@ auth.currentUser.email||""
 
 function renderOffice(){
 
-let total=0;
-let income=0;
-db.officeIncome.forEach(item=>income+=Number(item.amount)||0);
+let total=0, incomeTotal=0;
+db.officeIncome.forEach(x=>incomeTotal+=Number(x.amount)||0);
+
 db.officeExpenses.forEach(
 item=>{
 
@@ -3124,17 +3087,14 @@ Number(item.amount)||0;
 );
 
 document.getElementById("officeTotalExpense").innerHTML=money(total);
-let incomeEl=document.getElementById("officeTotalIncome");
-if(incomeEl) incomeEl.innerHTML=money(income);
-
+const officeIncomeEl=document.getElementById("officeTotalIncome");
+if(officeIncomeEl) officeIncomeEl.innerHTML=money(incomeTotal);
 
 document.getElementById(
 "officeExpenseCount"
 ).textContent=
 formatNum(db.officeExpenses.length);
 
-
-renderOfficeIncome();
 
 const tbody=
 document.getElementById(
@@ -3306,12 +3266,10 @@ btn.textContent=
 
 document.getElementById("saveOfficeIncomeBtn").onclick=async function(){
 const date=document.getElementById("offIncDate").value, name=document.getElementById("offIncName").value.trim(), amount=Number(document.getElementById("offIncAmount").value), note=document.getElementById("offIncNote").value.trim();
-if(!date||!name||!(amount>0)){alert("أدخل التاريخ والبيان والمبلغ الصحيح.");return;}
-try{await addDoc(collection(firestore,"office_income"),{date,name,amount,note,createdAt:serverTimestamp()});document.getElementById("offIncName").value="";document.getElementById("offIncAmount").value="";document.getElementById("offIncNote").value="";}catch(e){alert(e.message);}};
+if(!date||!name||!(amount>0)){alert("أدخل التاريخ والاسم والمبلغ الصحيح.");return;}
+this.disabled=true; try{await addDoc(collection(firestore,"office_income"),{date,name,amount,note,createdAt:serverTimestamp()}); document.getElementById("offIncName").value="";document.getElementById("offIncAmount").value="";document.getElementById("offIncNote").value="";}catch(e){alert(e.message);}finally{this.disabled=false;}};
 
-function renderOfficeIncome(){const b=document.getElementById("officeIncomeBody");if(!b)return;b.innerHTML=db.officeIncome.length?db.officeIncome.map(i=>`<tr><td>${escapeHTML(i.date)}</td><td>${escapeHTML(i.name)}</td><td class="income">${money(i.amount)}</td><td>${escapeHTML(i.note||"")}</td><td><button class="btn blue" onclick="editRecord('office_income','${i.id}',${JSON.stringify({date:i.date,name:i.name,amount:i.amount,note:i.note||''})})">تعديل</button><button class="btn red" onclick="deleteOfficeIncome('${i.id}')">حذف</button></td></tr>`).join(""):`<tr><td colspan="5"><div class="empty">لا توجد بيانات</div></td></tr>`;}
-
-window.deleteOfficeIncome=async function(id){if(!confirm("هل تريد حذف هذا الدخل؟"))return;await deleteDoc(doc(firestore,"office_income",id));};
+window.deleteOfficeIncome=async function(id){if(!confirm("هل تريد حذف هذا الدخل؟"))return;try{await deleteDoc(doc(firestore,"office_income",id));}catch(e){alert(e.message);}};
 
 window.deleteOfficeExpense=
 async function(id){
@@ -3434,8 +3392,7 @@ ${categories.map(c=>`<option value="${c}">${c}</option>`).join("")}
 <th>إجمالي الدخل</th>
 <th>إجمالي المصاريف</th>
 <th>الصافي</th>
-<th>الحالة</th>
-<th>إجراءات</th>
+<th>الحالة</th><th>إجراءات</th>
 </tr>
 </thead>
 <tbody>
@@ -3468,11 +3425,11 @@ html+=`
 <td class="income">${money(pInc)}</td>
 <td class="expense">${money(pExp)}</td>
 <td class="${profitClass(pNet)}">${money(pNet)}</td>
-<td>${p.closed?"مغلق":"مفتوح"}</td>
+<td>${p.status==="closed"?'<span class="expense">مغلق</span>':'<span class="income">مفتوح</span>'}</td>
 <td>
 <div class="actions">
-<button class="btn blue" onclick="openSingleProject('${p.id}')">التفاصيل</button>
-<button class="btn orange" onclick="toggleProjectClosed('${p.id}',${!p.closed})">${p.closed?"فتح المشروع":"إغلاق المشروع"}</button>
+<button class="btn blue" onclick="openSingleProject('${p.id}')">التفاصيل</button><button class="btn blue" onclick="editRecord('projects','${p.id}', 'name,category')">تعديل</button>
+<button class="btn orange" onclick="toggleProjectStatus('${p.id}')">${p.status==="closed"?'فتح المشروع':'إغلاق المشروع'}</button>
 <button class="btn red" onclick="deleteProject('${p.id}')">حذف</button>
 </div>
 </td>
@@ -3500,7 +3457,7 @@ this.disabled=true;
 try{
 
 await addDoc(collection(firestore,"projects"),{
-name, category, createdAt:serverTimestamp()
+name, category, status:"open", createdAt:serverTimestamp()
 });
 
 document.getElementById("projName").value="";
@@ -3517,10 +3474,8 @@ currentOpenedProjectId=id;
 render("projects");
 };
 
-window.closeSingleProject=function(){
-currentOpenedProjectId=null;
-render("projects");
-};
+window.closeSingleProject=function(){currentOpenedProjectId=null;render("projects");};
+window.toggleProjectStatus=async function(id){const p=db.projects.find(x=>x.id===id);if(!p)return;try{await updateDoc(doc(firestore,"projects",id),{status:p.status==="closed"?"open":"closed"});}catch(e){alert(e.message);}};
 
 
 function renderSingleProjectView(content, projId){
@@ -3542,6 +3497,7 @@ else pExp+=Number(t.amount)||0;
 });
 
 const pNet=pInc-pExp;
+const catTotals={}; pTxs.filter(t=>t.type!=="income").forEach(t=>{const c=t.category||"عام";catTotals[c]=(catTotals[c]||0)+(Number(t.amount)||0);});
 
 let html=`
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:10px">
@@ -3556,6 +3512,7 @@ let html=`
 <div class="stat"><small>عدد العمليات</small><strong>${formatNum(pTxs.length)}</strong></div>
 </div>
 
+<div class="card" style="margin-bottom:20px"><h3>📊 مصروفات المشروع حسب التصنيف</h3><div class="table-wrap"><table><thead><tr><th>التصنيف</th><th>المجموع</th></tr></thead><tbody>${Object.keys(catTotals).length?Object.keys(catTotals).map(c=>`<tr><td>${escapeHTML(c)}</td><td class="expense">${money(catTotals[c])}</td></tr>`).join(""):`<tr><td colspan="2"><div class="empty">لا توجد مصروفات</div></td></tr>`}</tbody></table></div></div>
 <div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 <h3>➕ إضافة عملية للمشروع</h3>
 <div class="grid">
@@ -3587,9 +3544,6 @@ let html=`
 </div>
 </div>
 </div>
-
-<h3>📊 المصروفات حسب التصنيف</h3>
-<div class="table-wrap"><table><thead><tr><th>التصنيف</th><th>إجمالي المصروف</th></tr></thead><tbody>${Object.entries(pTxs.filter(t=>t.type!=="income").reduce((a,t)=>{const c=t.category||"عام";a[c]=(a[c]||0)+(Number(t.amount)||0);return a;},{})).map(([c,v])=>`<tr><td>${escapeHTML(c)}</td><td class="expense">${money(v)}</td></tr>`).join("")||`<tr><td colspan="2"><div class="empty">لا توجد مصروفات</div></td></tr>`}</tbody></table></div>
 
 <h3>📋 سجل عمليات المشروع</h3>
 <div class="table-wrap">
@@ -3624,7 +3578,7 @@ html+=`
 <td>${escapeHTML(t.category||"-")}</td>
 <td class="${isInc?'income':'expense'}">${money(t.amount)}</td>
 <td>${escapeHTML(t.note||"-")}</td>
-<td><button class="btn blue" onclick="editRecord('transactions','${t.id}',${JSON.stringify({date:t.date,category:t.category||'',amount:t.amount,note:t.note||''})})">تعديل</button><button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button></td>
+<td><button class="btn blue" onclick="editRecord('transactions','${t.id}', 'date,category,note')">تعديل</button><button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button></td>
 </tr>
 `;
 
@@ -3672,8 +3626,6 @@ document.getElementById("txNote").value="";
 
 }
 
-
-window.toggleProjectClosed=async function(id,closed){try{await updateDoc(doc(firestore,"projects",id),{closed:!!closed});}catch(e){alert(e.message);}};
 
 window.deleteProject=async function(id){
 
@@ -3774,7 +3726,7 @@ html+=`
 <td>${escapeHTML(t.category||"-")}</td>
 <td class="${isInc?'income':'expense'}">${money(t.amount)}</td>
 <td>${escapeHTML(t.note||"-")}</td>
-<td><button class="btn blue" onclick="editRecord('transactions','${t.id}',${JSON.stringify({date:t.date,category:t.category||'',amount:t.amount,note:t.note||''})})">تعديل</button><button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button></td>
+<td><button class="btn blue" onclick="editRecord('transactions','${t.id}', 'date,category,note')">تعديل</button><button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button></td>
 </tr>
 `;
 
@@ -3876,7 +3828,7 @@ db.services.map(s=>`
 <td class="profit-positive">${money(s.profit)}</td>
 <td class="income">${money(s.collectedAmount)}</td>
 <td>${escapeHTML(s.note||"-")}</td>
-<td><button class="btn blue" onclick="editRecord('services','${s.id}',${JSON.stringify({date:s.date,category:s.category||'',profit:s.profit,collectedAmount:s.collectedAmount,note:s.note||''})})">تعديل</button><button class="btn red" onclick="deleteService('${s.id}')">حذف</button></td>
+<td><button class="btn blue" onclick="editRecord('services','${s.id}', 'date,category,note')">تعديل</button><button class="btn red" onclick="deleteService('${s.id}')">حذف</button></td>
 </tr>
 `).join(""):
 
@@ -3938,13 +3890,6 @@ catch(e){ alert(e.message); }
 
 };
 
-
-/* =====================================================
-   المقاولات
-===================================================== */
-function renderContracting(){let inc=0,exp=0;db.contracting.forEach(x=>{if(x.type==="income")inc+=Number(x.amount)||0;else exp+=Number(x.amount)||0;});document.getElementById("contractingIncome").innerHTML=money(inc);document.getElementById("contractingExpense").innerHTML=money(exp);document.getElementById("contractingProfit").innerHTML=money(inc-exp);document.getElementById("contractingCount").textContent=formatNum(db.contracting.length);const b=document.getElementById("contractingBody");b.innerHTML=db.contracting.length?db.contracting.map(x=>`<tr><td>${escapeHTML(x.date)}</td><td class="${x.type==="income"?"income":"expense"}">${x.type==="income"?"دخل":"مصروف"}</td><td>${escapeHTML(x.category||"")}</td><td class="${x.type==="income"?"income":"expense"}">${money(x.amount)}</td><td>${escapeHTML(x.note||"")}</td><td><button class="btn blue" onclick="editRecord('contracting','${x.id}',${JSON.stringify({date:x.date,type:x.type,category:x.category||'',amount:x.amount,note:x.note||''})})">تعديل</button><button class="btn red" onclick="deleteContracting('${x.id}')">حذف</button></td></tr>`).join(""):`<tr><td colspan="6"><div class="empty">لا توجد عمليات</div></td></tr>`;}
-document.getElementById("saveContractingBtn").onclick=async function(){const type=document.getElementById("conType").value,date=document.getElementById("conDate").value,category=document.getElementById("conCategory").value.trim(),amount=Number(document.getElementById("conAmount").value),note=document.getElementById("conNote").value.trim();if(!date||!(amount>0)){alert("أدخل تاريخ ومبلغ صحيح.");return;}try{await addDoc(collection(firestore,"contracting"),{type,date,category,amount,note,createdAt:serverTimestamp()});document.getElementById("conCategory").value="";document.getElementById("conAmount").value="";document.getElementById("conNote").value="";}catch(e){alert(e.message);}};
-window.deleteContracting=async function(id){if(!confirm("هل تريد حذف هذه العملية؟"))return;await deleteDoc(doc(firestore,"contracting",id));};
 
 /* =====================================================
    العقارات
@@ -4041,8 +3986,8 @@ return `
 <td style="color:#d97706">${money(pRet)}</td>
 <td>
 <div class="actions">
-<button class="btn blue" onclick="openPropertyDetails('${p.id}')">إدارة العقار</button>
-<button class="btn blue" onclick="editRecord('properties','${p.id}',${JSON.stringify({title:p.title})})">تعديل</button><button class="btn red" onclick="deleteProperty('${p.id}')">حذف</button>
+<button class="btn blue" onclick="openPropertyDetails('${p.id}')">إدارة العقار</button><button class="btn blue" onclick="editRecord('properties','${p.id}', 'title')">تعديل</button>
+<button class="btn red" onclick="deleteProperty('${p.id}')">حذف</button>
 </div>
 </td>
 </tr>
@@ -4198,7 +4143,7 @@ ${isRef?'تم الاسترداد':'مستمر (نشط)'}
 </button>
 </td>
 <td>${escapeHTML(r.note||"-")}</td>
-<td><button class="btn blue" onclick="editRecord('rentals','${r.id}',${JSON.stringify({date:r.date,unit:r.unit||'',tenant:r.tenant||'',amount:r.amount,depositAmount:r.depositAmount,expenseCategory:r.expenseCategory||'',expenseAmount:r.expenseAmount,note:r.note||''})})">تعديل</button><button class="btn red" onclick="deleteRentContract('${r.id}')">حذف</button></td>
+<td><button class="btn blue" onclick="editRecord('rentals','${r.id}', 'date,unit,tenant,expenseCategory,note')">تعديل</button><button class="btn red" onclick="deleteRentContract('${r.id}')">حذف</button></td>
 </tr>
 `;
 
@@ -4217,7 +4162,7 @@ pExpenses.map(pe=>`
 <td>${escapeHTML(pe.category||"عام")}</td>
 <td class="expense">${money(pe.amount)}</td>
 <td>${escapeHTML(pe.note||"-")}</td>
-<td><button class="btn blue" onclick="editRecord('property_expenses','${pe.id}',${JSON.stringify({date:pe.date,category:pe.category||'',amount:pe.amount,note:pe.note||''})})">تعديل</button><button class="btn red" onclick="deletePropertyExpense('${pe.id}')">حذف</button></td>
+<td><button class="btn blue" onclick="editRecord('property_expenses','${pe.id}', 'date,category,note')">تعديل</button><button class="btn red" onclick="deletePropertyExpense('${pe.id}')">حذف</button></td>
 </tr>
 `).join(""):
 
@@ -4336,8 +4281,7 @@ catch(e){ alert(e.message); }
 };
 
 
-window.editRecord=async function(collectionName,id,data){
-const fields=Object.keys(data);const values={};for(const key of fields){let v=prompt("تعديل "+key,data[key]??"");if(v===null)return;if(key==="amount")v=Number(v)||0;values[key]=v;}try{await updateDoc(doc(firestore,collectionName,id),values);}catch(e){alert(e.message);}};
+window.editRecord=async function(collectionName,id,fields){const ref=doc(firestore,collectionName,id);const current=[...Object.values(db)].flat().find(x=>x&&x.id===id)||{};const updates={};for(const field of fields.split(",")){let label=field;if(field==="date")label="التاريخ";if(field==="name")label="الاسم";if(field==="category")label="التصنيف";if(field==="title")label="الاسم";if(field==="note")label="البيان";if(field==="unit")label="الوحدة";if(field==="tenant")label="المستأجر";if(field==="expenseCategory")label="تصنيف المصروف";const val=prompt(`تعديل ${label}:`,current[field]??"");if(val===null)return;updates[field]=val;}try{await updateDoc(ref,updates);}catch(e){alert("تعذر التعديل: "+e.message);}};
 
 window.deletePropertyExpense=async function(id){
 
