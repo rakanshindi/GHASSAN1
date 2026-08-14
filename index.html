@@ -468,34 +468,32 @@ grid-template-columns: 1fr;
 <!-- 2. قسم المشاريع -->
 <div id="projectsSection" style="display:none">
 <button class="btn secondary" onclick="showPortal()" style="margin-bottom:15px">← العودة للرئيسية</button>
-<h2>🏗️ إدارة المشاريع</h2>
-<div class="card">
-<div class="card" style="background:#f8fafc; border:1px solid #e2e8f0; margin-bottom:20px">
-<h3>➕ إضافة مشروع جديد</h3>
-<div class="grid">
-<div class="field">
-<label>اسم المشروع</label>
-<input id="newProjectName" placeholder="مثال: مشروع بناء فيلا...">
+<div class="stats" id="mainStats">
+<div class="stat">
+<small>إجمالي الدخل (الدفعات)</small>
+<strong id="totalIncome" class="income">0 ر.س</strong>
 </div>
-<div style="align-self:end">
-<button class="btn green" id="saveProjectBtn">إضافة المشروع</button>
+<div class="stat">
+<small>إجمالي المصاريف</small>
+<strong id="totalExpense" class="expense">0 ر.س</strong>
 </div>
+<div class="stat">
+<small>المتبقي (صافي الربح)</small>
+<strong id="netProfit">0 ر.س</strong>
+</div>
+<div class="stat">
+<small>عدد المشاريع</small>
+<strong id="projectCount">0</strong>
 </div>
 </div>
 
-<h3>📋 قائمة المشاريع</h3>
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th>اسم المشروع</th>
-<th>تاريخ الإنشاء</th>
-<th>إجراء</th>
-</tr>
-</thead>
-<tbody id="projectsBody"></tbody>
-</table>
+<div class="card" style="margin-top:15px">
+<div class="tabs" id="tabs">
+<button class="tab active" data-view="projects">المشاريع</button>
+<button class="tab" data-view="dashboard">ملخص عام</button>
+<button class="tab" data-view="transactions">جميع العمليات</button>
 </div>
+<div id="content"></div>
 </div>
 </div>
 
@@ -732,19 +730,24 @@ const firestore = getFirestore(firebaseApp);
 
 let db = {
 projects:[],
+transactions:[],
 officeExpenses:[],
 services:[],
 properties:[],
 rentals:[]
 };
 
+let currentOpenedProjectId = null;
 let currentOpenedPropertyId = null;
 
 let unsubscribeProjects = null;
+let unsubscribeTransactions = null;
 let unsubscribeOffice = null;
 let unsubscribeServices = null;
 let unsubscribeProperties = null;
 let unsubscribeRentals = null;
+
+const categories = ["عام", "مقاولات", "حكومي", "استشاري", "مواد", "أجور", "أخرى"];
 
 const money = function(number){
 return new Intl.NumberFormat("ar-SA", { maximumFractionDigits: 2 }).format(Number(number)||0) + " ر.س";
@@ -764,6 +767,7 @@ showPortal();
 }
 
 window.showPortal = function(){
+currentOpenedProjectId = null;
 currentOpenedPropertyId = null;
 document.getElementById("portalScreen").style.display = "block";
 document.getElementById("officeSection").style.display = "none";
@@ -791,7 +795,7 @@ document.getElementById("projectsSection").style.display = "block";
 document.getElementById("servicesSection").style.display = "none";
 document.getElementById("rentalsSection").style.display = "none";
 document.getElementById("homeBtn").style.display = "inline-block";
-renderProjects();
+render("projects");
 };
 
 window.openServices = function(){
@@ -860,6 +864,7 @@ button.textContent = "دخول";
 document.getElementById("logoutBtn").onclick = async function(){
 try {
 if(unsubscribeProjects) unsubscribeProjects();
+if(unsubscribeTransactions) unsubscribeTransactions();
 if(unsubscribeOffice) unsubscribeOffice();
 if(unsubscribeServices) unsubscribeServices();
 if(unsubscribeProperties) unsubscribeProperties();
@@ -879,6 +884,7 @@ showLogin();
 
 function startFirebaseListeners(){
 if(unsubscribeProjects) unsubscribeProjects();
+if(unsubscribeTransactions) unsubscribeTransactions();
 if(unsubscribeOffice) unsubscribeOffice();
 if(unsubscribeServices) unsubscribeServices();
 if(unsubscribeProperties) unsubscribeProperties();
@@ -886,7 +892,21 @@ if(unsubscribeRentals) unsubscribeRentals();
 
 unsubscribeProjects = onSnapshot(collection(firestore, "projects"), snapshot => {
 db.projects = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-if(document.getElementById("projectsSection").style.display === "block"){ renderProjects(); }
+updateStats();
+const activeTab = document.querySelector(".tab.active");
+if(activeTab && document.getElementById("projectsSection").style.display === "block"){
+render(activeTab.dataset.view);
+}
+});
+
+unsubscribeTransactions = onSnapshot(collection(firestore, "transactions"), snapshot => {
+db.transactions = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+db.transactions.sort((a,b) => String(b.date||"").localeCompare(String(a.date||"")));
+updateStats();
+const activeTab = document.querySelector(".tab.active");
+if(activeTab && document.getElementById("projectsSection").style.display === "block"){
+render(activeTab.dataset.view);
+}
 });
 
 unsubscribeOffice = onSnapshot(collection(firestore, "office_expenses"), snapshot => {
@@ -911,6 +931,19 @@ db.rentals = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
 db.rentals.sort((a,b) => String(b.date||"").localeCompare(String(a.date||"")));
 if(document.getElementById("rentalsSection").style.display === "block"){ renderRentals(); }
 });
+}
+
+function updateStats(){
+let inc = 0; let exp = 0;
+db.transactions.forEach(t => {
+const amt = Number(t.amount)||0;
+if(t.type === 'income') inc += amt;
+else exp += amt;
+});
+document.getElementById("totalIncome").textContent = money(inc);
+document.getElementById("totalExpense").textContent = money(exp);
+document.getElementById("netProfit").textContent = money(inc - exp);
+document.getElementById("projectCount").textContent = db.projects.length;
 }
 
 /* 🏢 مصاريف المكتب */
@@ -954,7 +987,7 @@ if(!name){ alert("أدخل اسم البند"); return; }
 if(!(amount > 0)){ alert("أدخل مبلغ صحيح"); return; }
 
 if(!auth.currentUser){
-alert("انتهت جلسة تسجيل الدخول، يرجى إعادة الدخول للحساب.");
+alert("انتهت جلسة تسجيل الدخول، يرجى إعادة الدخول بالحساب.");
 return;
 }
 
@@ -980,34 +1013,262 @@ try { await deleteOfficeExpenseFromFirebase(id); }
 catch(e){ console.error(e); alert("حدث خطأ أثناء الحذف: " + e.message); }
 };
 
-/* 🏗️ المشاريع */
-function renderProjects(){
-const tbody = document.getElementById("projectsBody");
-tbody.innerHTML = db.projects.length ? db.projects.map(p => `
-<tr>
-<td><strong>${escapeHTML(p.name)}</strong></td>
-<td>${p.createdAt ? new Date(p.createdAt).toLocaleDateString('ar-SA') : '-'}</td>
-<td><button class="btn red" onclick="deleteProject('${p.id}')">حذف</button></td>
-</tr>
-`).join("") : `<tr><td colspan="3"><div class="empty">لا توجد مشاريع مضافة</div></td></tr>`;
+/* 🏗️ قسم المشاريع */
+document.querySelectorAll("#tabs .tab").forEach(tab => {
+tab.onclick = function(){
+document.querySelectorAll("#tabs .tab").forEach(t => t.classList.remove("active"));
+this.classList.add("active");
+render(this.dataset.view);
+};
+});
+
+function render(view){
+const content = document.getElementById("content");
+if(view === "projects"){
+if(currentOpenedProjectId){
+renderProjectDetails(currentOpenedProjectId);
+} else {
+renderProjectsList();
+}
+} else if(view === "dashboard"){
+renderDashboard();
+} else if(view === "transactions"){
+renderTransactionsList();
+}
 }
 
-document.getElementById("saveProjectBtn").onclick = async function(){
-const name = document.getElementById("newProjectName").value.trim();
-if(!name){ alert("أدخل اسم المشروع"); return; }
+function renderProjectsList(){
+const content = document.getElementById("content");
+content.innerHTML = `
+<div class="card" style="background:#f8fafc; border:1px solid #e2e8f0; margin-bottom:20px">
+<h3>➕ إضافة مشروع جديد</h3>
+<div class="grid">
+<div class="field">
+<label>اسم المشروع</label>
+<input id="projName" placeholder="مثال: مشروع بناء فيلا...">
+</div>
+<div style="align-self:end">
+<button class="btn green" id="addProjectBtn">إضافة المشروع</button>
+</div>
+</div>
+</div>
 
+<h3>📋 قائمة المشاريع</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>اسم المشروع</th>
+<th>إجمالي الدخل</th>
+<th>إجمالي المصاريف</th>
+<th>الربح الصافي</th>
+<th>إجراء</th>
+</tr>
+</thead>
+<tbody>
+${db.projects.length ? db.projects.map(p => {
+let pInc = 0; let pExp = 0;
+db.transactions.filter(t => t.projectId === p.id).forEach(t => {
+if(t.type === 'income') pInc += Number(t.amount)||0;
+else pExp += Number(t.amount)||0;
+});
+const net = pInc - pExp;
+return `
+<tr>
+<td><strong>${escapeHTML(p.name)}</strong></td>
+<td class="income">${money(pInc)}</td>
+<td class="expense">${money(pExp)}</td>
+<td style="font-weight:bold; color:${net>=0?'#15803d':'#b91c1c'}">${money(net)}</td>
+<td>
+<button class="btn blue" onclick="openProject('${p.id}')">تفاصيل</button>
+<button class="btn red" onclick="deleteProject('${p.id}')">حذف</button>
+</td>
+</tr>
+`;
+}).join("") : `<tr><td colspan="5"><div class="empty">لا توجد مشاريع مضافة</div></td></tr>`}
+</tbody>
+</table>
+</div>
+`;
+
+document.getElementById("addProjectBtn").onclick = async function(){
+const name = document.getElementById("projName").value.trim();
+if(!name){ alert("أدخل اسم المشروع"); return; }
 const uid = auth.currentUser ? auth.currentUser.uid : "unknown";
 try {
 await addDoc(collection(firestore, "projects"), { name, createdAt: Date.now(), createdBy: uid });
-document.getElementById("newProjectName").value = "";
-} catch(e){ alert("خطأ أثناء حفظ المشروع: " + e.message); }
+} catch(e){ alert("خطأ: " + e.message); }
+};
+}
+
+window.openProject = function(id){
+currentOpenedProjectId = id;
+render("projects");
+};
+
+function renderProjectDetails(id){
+const p = db.projects.find(item => item.id === id);
+if(!p){ currentOpenedProjectId = null; renderProjectsList(); return; }
+
+const pTxs = db.transactions.filter(t => t.projectId === id);
+let inc = 0; let exp = 0;
+pTxs.forEach(t => {
+if(t.type==='income') inc += Number(t.amount)||0;
+else exp += Number(t.amount)||0;
+});
+
+const content = document.getElementById("content");
+content.innerHTML = `
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
+<h2>🏗️ ${escapeHTML(p.name)}</h2>
+<button class="btn secondary" onclick="currentOpenedProjectId=null; render('projects');">← العودة لقائمة المشاريع</button>
+</div>
+
+<div class="stats" style="margin-bottom:20px">
+<div class="stat"><small>إجمالي الدفعات</small><strong class="income">${money(inc)}</strong></div>
+<div class="stat"><small>إجمالي المصاريف</small><strong class="expense">${money(exp)}</strong></div>
+<div class="stat"><small>صافي الربح</small><strong style="color:${inc-exp>=0?'#15803d':'#b91c1c'}">${money(inc-exp)}</strong></div>
+<div class="stat"><small>عدد العمليات</small><strong>${pTxs.length}</strong></div>
+</div>
+
+<div class="card" style="background:#f8fafc; border:1px solid #e2e8f0; margin-bottom:20px">
+<h3>➕ تسجيل عملية مالية للمشروع</h3>
+<div class="grid">
+<div class="field">
+<label>التاريخ</label>
+<input id="txDate" type="date" value="${new Date().toISOString().slice(0,10)}">
+</div>
+<div class="field">
+<label>نوع العملية</label>
+<select id="txType">
+<option value="income">دفعة (دخل)</option>
+<option value="expense">مصروف</option>
+</select>
+</div>
+<div class="field">
+<label>التصنيف</label>
+<select id="txCat">${categories.map(c=>`<option value="${c}">${c}</option>`).join("")}</select>
+</div>
+<div class="field">
+<label>المبلغ (ر.س)</label>
+<input id="txAmount" type="number" min="0" step="0.01" placeholder="0">
+</div>
+<div class="field full">
+<label>ملاحظة / البيان</label>
+<input id="txNote" placeholder="تفاصيل العملية...">
+</div>
+<div class="full">
+<button class="btn green" id="saveTxBtn">تسجيل العملية</button>
+</div>
+</div>
+</div>
+
+<h3>📋 عمليات هذا المشروع</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>التاريخ</th>
+<th>النوع</th>
+<th>التصنيف</th>
+<th>المبلغ</th>
+<th>البيان</th>
+<th>إجراء</th>
+</tr>
+</thead>
+<tbody>
+${pTxs.length ? pTxs.map(t => `
+<tr>
+<td>${escapeHTML(t.date)}</td>
+<td class="${t.type==='income'?'income':'expense'}">${t.type==='income'?'دفعة':'مصروف'}</td>
+<td>${escapeHTML(t.category)}</td>
+<td class="${t.type==='income'?'income':'expense'}">${money(t.amount)}</td>
+<td>${escapeHTML(t.note)}</td>
+<td><button class="btn red" onclick="deleteTx('${t.id}')">حذف</button></td>
+</tr>
+`).join("") : `<tr><td colspan="6"><div class="empty">لا توجد عمليات مضافة لهذا المشروع</div></td></tr>`}
+</tbody>
+</table>
+</div>
+`;
+
+document.getElementById("saveTxBtn").onclick = async function(){
+const date = document.getElementById("txDate").value;
+const type = document.getElementById("txType").value;
+const category = document.getElementById("txCat").value;
+const amount = Number(document.getElementById("txAmount").value);
+const note = document.getElementById("txNote").value.trim();
+
+if(!(amount > 0)){ alert("أدخل مبلغ صحيح"); return; }
+const uid = auth.currentUser ? auth.currentUser.uid : "unknown";
+
+try {
+await addDoc(collection(firestore, "transactions"), {
+projectId: id, type, date, category, amount, note, createdAt: Date.now(), createdBy: uid
+});
+} catch(e){ alert("خطأ أثناء الحفظ: " + e.message); }
+};
+}
+
+window.deleteTx = async function(id){
+if(!confirm("حذف هذه العملية؟")) return;
+try { await deleteDoc(doc(firestore, "transactions", id)); }
+catch(e){ alert("خطأ: " + e.message); }
 };
 
 window.deleteProject = async function(id){
-if(!confirm("هل أنت تأكد من حذف هذا المشروع؟")) return;
-try { await deleteDoc(doc(firestore, "projects", id)); }
-catch(e){ alert("خطأ في الحذف: " + e.message); }
+if(!confirm("حذف المشروع وجميع عملياته بشكل نهائي؟")) return;
+try {
+const batch = writeBatch(firestore);
+batch.delete(doc(firestore, "projects", id));
+db.transactions.filter(t => t.projectId === id).forEach(t => batch.delete(doc(firestore, "transactions", t.id)));
+await batch.commit();
+if(currentOpenedProjectId === id) currentOpenedProjectId = null;
+} catch(e){ alert("خطأ أثناء حذف المشروع: " + e.message); }
 };
+
+function renderDashboard(){
+const content = document.getElementById("content");
+content.innerHTML = `<h3>📊 ملخص عام للمشاريع</h3><p class="muted">يتم حساب الإحصائيات من واقع العمليات المسجلة.</p>`;
+}
+
+function renderTransactionsList(){
+const content = document.getElementById("content");
+content.innerHTML = `
+<h3>📋 جميع عمليات المشاريع</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>التاريخ</th>
+<th>المشروع</th>
+<th>النوع</th>
+<th>التصنيف</th>
+<th>المبلغ</th>
+<th>البيان</th>
+<th>إجراء</th>
+</tr>
+</thead>
+<tbody>
+${db.transactions.length ? db.transactions.map(t => {
+const p = db.projects.find(item => item.id === t.projectId);
+return `
+<tr>
+<td>${escapeHTML(t.date)}</td>
+<td><strong>${escapeHTML(p ? p.name : 'غير معروف')}</strong></td>
+<td class="${t.type==='income'?'income':'expense'}">${t.type==='income'?'دفعة':'مصروف'}</td>
+<td>${escapeHTML(t.category)}</td>
+<td class="${t.type==='income'?'income':'expense'}">${money(t.amount)}</td>
+<td>${escapeHTML(t.note)}</td>
+<td><button class="btn red" onclick="deleteTx('${t.id}')">حذف</button></td>
+</tr>
+`;
+}).join("") : `<tr><td colspan="7"><div class="empty">لا توجد عمليات مسجلة بعد</div></td></tr>`}
+</tbody>
+</table>
+</div>
+`;
+}
 
 /* 🛠️ دخل الخدمات */
 async function addServiceTxToFirebase(data){
