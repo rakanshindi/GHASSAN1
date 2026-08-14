@@ -3642,7 +3642,8 @@ let html=`
 </div>
 <div class="field">
 <label>التصنيف / البيان</label>
-<input id="txCategory" placeholder="مثال: دفعة أولى، مواد بناء...">
+<input id="txCategory" list="projectCategoriesList" placeholder="مثال: دفعة أولى، مواد بناء...">
+<datalist id="projectCategoriesList">${[...new Set(db.transactions.map(t=>String(t.category||"").trim()).filter(Boolean))].sort().map(c=>`<option value="${escapeHTML(c)}"></option>`).join("")}</datalist>
 </div>
 <div class="field full">
 <label>ملاحظات</label>
