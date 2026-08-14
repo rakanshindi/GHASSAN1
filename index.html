@@ -205,6 +205,57 @@ text-align:center;
 color:#667085
 }
 
+.login-card{
+max-width:430px;
+margin:70px auto;
+background:#fff;
+border:1px solid #e6e9ee;
+border-radius:16px;
+padding:25px;
+box-shadow:0 4px 16px rgba(0,0,0,.06)
+}
+
+.login-card h2{
+margin-top:0
+}
+
+.login-field{
+margin-bottom:14px
+}
+
+.login-field label{
+display:block;
+font-weight:800;
+font-size:13px;
+margin-bottom:6px
+}
+
+.login-field input{
+width:100%;
+height:46px;
+border:1px solid #d7dce2;
+border-radius:10px;
+padding:0 12px;
+font-size:14px
+}
+
+.login-error{
+color:#b91c1c;
+background:#fef2f2;
+padding:10px;
+border-radius:10px;
+font-size:13px;
+margin-bottom:12px;
+display:none
+}
+
+.user-bar{
+display:flex;
+align-items:center;
+gap:8px;
+flex-wrap:wrap
+}
+
 @media(max-width:800px){
 .stats{
 grid-template-columns:repeat(2,1fr)
@@ -241,22 +292,113 @@ font-size:19px
 
 <body>
 
+<!-- =========================
+تسجيل الدخول
+========================= -->
+
+<div id="loginScreen" style="display:none">
+
+<div class="login-card">
+
+<h2>🔐 تسجيل الدخول</h2>
+
+<p class="muted">
+سجل الدخول للوصول إلى بيانات المشاريع والدخل والمصاريف.
+</p>
+
+<div id="loginError" class="login-error"></div>
+
+<div class="login-field">
+
+<label>
+البريد الإلكتروني
+</label>
+
+<input
+id="loginEmail"
+type="email"
+autocomplete="username"
+placeholder="البريد الإلكتروني"
+>
+
+</div>
+
+<div class="login-field">
+
+<label>
+كلمة المرور
+</label>
+
+<input
+id="loginPassword"
+type="password"
+autocomplete="current-password"
+placeholder="كلمة المرور"
+>
+
+</div>
+
+<button
+class="btn green"
+id="loginButton"
+style="width:100%"
+>
+دخول
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+الموقع
+========================= -->
+
+<div id="app" style="display:none">
+
 <div class="wrap">
 
 <div class="top">
 
 <div class="brand">
+
 <h1>📊 إدارة المشاريع</h1>
-<p>الدخل والمصاريف وصافي كل مشروع</p>
+
+<p>
+الدخل والمصاريف وصافي كل مشروع
+</p>
+
 </div>
 
 <div class="actions">
 
-<button class="btn secondary" id="importBtn">
+<div class="user-bar">
+
+<span
+id="currentUser"
+class="muted"
+style="font-size:12px"
+></span>
+
+<button
+class="btn secondary"
+id="logoutBtn"
+>
+تسجيل خروج
+</button>
+
+<button
+class="btn secondary"
+id="importBtn"
+>
 استيراد Excel
 </button>
 
-<button class="btn secondary" id="exportBtn">
+<button
+class="btn secondary"
+id="exportBtn"
+>
 تصدير Excel
 </button>
 
@@ -268,35 +410,68 @@ hidden
 >
 
 </div>
+
+</div>
+
 </div>
 
 
 <div class="notice">
-البيانات تحفظ تلقائيًا في هذا المتصفح.
-يمكنك استيراد ملف Excel وتسجيل الدخل والمصاريف والبحث عنها.
+البيانات تحفظ تلقائيًا في Firebase Cloud Firestore ويمكن الوصول إليها من أي جهاز بعد تسجيل الدخول.
 </div>
 
 
 <div class="stats">
 
 <div class="stat">
-<small>إجمالي الدخل</small>
-<strong id="totalIncome">0 ر.س</strong>
+
+<small>
+إجمالي الدخل
+</small>
+
+<strong id="totalIncome">
+0 ر.س
+</strong>
+
 </div>
 
-<div class="stat">
-<small>إجمالي المصاريف</small>
-<strong id="totalExpense">0 ر.س</strong>
-</div>
 
 <div class="stat">
-<small>صافي الربح</small>
-<strong id="netProfit">0 ر.س</strong>
+
+<small>
+إجمالي المصاريف
+</small>
+
+<strong id="totalExpense">
+0 ر.س
+</strong>
+
 </div>
 
+
 <div class="stat">
-<small>عدد المشاريع</small>
-<strong id="projectCount">0</strong>
+
+<small>
+صافي الربح
+</small>
+
+<strong id="netProfit">
+0 ر.س
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+عدد المشاريع
+</small>
+
+<strong id="projectCount">
+0
+</strong>
+
 </div>
 
 </div>
@@ -306,15 +481,24 @@ hidden
 
 <div class="tabs" id="tabs">
 
-<button class="tab active" data-view="dashboard">
+<button
+class="tab active"
+data-view="dashboard"
+>
 الرئيسية
 </button>
 
-<button class="tab" data-view="projects">
+<button
+class="tab"
+data-view="projects"
+>
 المشاريع
 </button>
 
-<button class="tab" data-view="transactions">
+<button
+class="tab"
+data-view="transactions"
+>
 الدخل والمصاريف
 </button>
 
@@ -326,33 +510,107 @@ hidden
 
 </div>
 
-
-<script>
-
-const STORAGE_KEY="ghassan_finance_database_v1";
+</div>
 
 
-let db;
+<script type="module">
 
-try{
+/* =========================
+Firebase
+========================= */
 
-db=JSON.parse(
-localStorage.getItem(STORAGE_KEY)
-||
-'{"projects":[],"transactions":[]}'
-);
+import {
+initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-}catch(e){
+import {
+getAuth,
+signInWithEmailAndPassword,
+onAuthStateChanged,
+signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-db={
-projects:[],
-transactions:[]
+import {
+getFirestore,
+collection,
+addDoc,
+deleteDoc,
+doc,
+getDocs,
+query,
+orderBy,
+onSnapshot,
+writeBatch
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+/* =========================
+Firebase Configuration
+========================= */
+
+const firebaseConfig = {
+
+apiKey:
+"AIzaSyDvk_d5RB5pzbWcaqWUEa6V_I7qnAQwwRM",
+
+authDomain:
+"ghassan-f0a60.firebaseapp.com",
+
+projectId:
+"ghassan-f0a60",
+
+storageBucket:
+"ghassan-f0a60.firebasestorage.app",
+
+messagingSenderId:
+"1052504371272",
+
+appId:
+"1:1052504371272:web:81e5accd7a8456a709687d",
+
+measurementId:
+"G-LK0437M2ZJ"
+
 };
 
-}
 
+/* =========================
+Firebase Initialize
+========================= */
+
+const firebaseApp =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(firebaseApp);
+
+const firestore =
+getFirestore(firebaseApp);
+
+
+/* =========================
+بيانات الموقع
+========================= */
+
+let db = {
+
+projects:[],
+
+transactions:[]
+
+};
+
+let unsubscribeProjects = null;
+
+let unsubscribeTransactions = null;
+
+
+/* =========================
+التصنيفات
+========================= */
 
 const categories=[
+
 "عامة",
 "مقاولات",
 "حكومي",
@@ -365,26 +623,41 @@ const categories=[
 "إيجار",
 "رواتب",
 "أخرى"
+
 ];
 
+
+/* =========================
+تنسيق المبالغ
+========================= */
 
 const money=function(number){
 
 return new Intl.NumberFormat(
+
 "ar-SA",
+
 {
 maximumFractionDigits:2
 }
+
 ).format(
+
 Number(number)||0
+
 )+" ر.س";
 
 };
 
 
+/* =========================
+حماية HTML
+========================= */
+
 const escapeHTML=function(value){
 
 return String(value??"")
+
 .replace(/[&<>"']/g,function(m){
 
 return {
@@ -402,87 +675,647 @@ return {
 };
 
 
-function save(){
+/* =========================
+إظهار التطبيق بعد تسجيل الدخول
+========================= */
 
-localStorage.setItem(
-STORAGE_KEY,
-JSON.stringify(db)
+function showApp(user){
+
+document.getElementById(
+"loginScreen"
+).style.display="none";
+
+document.getElementById(
+"app"
+).style.display="block";
+
+document.getElementById(
+"currentUser"
+).textContent=
+user.email || "";
+
+}
+
+
+/* =========================
+إظهار تسجيل الدخول
+========================= */
+
+function showLogin(){
+
+document.getElementById(
+"loginScreen"
+).style.display="block";
+
+document.getElementById(
+"app"
+).style.display="none";
+
+}
+
+
+/* =========================
+رسالة خطأ الدخول
+========================= */
+
+function loginError(message){
+
+const box=
+document.getElementById(
+"loginError"
 );
+
+box.textContent=message;
+
+box.style.display="block";
+
+}
+
+
+/* =========================
+تسجيل الدخول
+========================= */
+
+document.getElementById(
+"loginButton"
+).onclick=async function(){
+
+const email=
+document.getElementById(
+"loginEmail"
+).value.trim();
+
+const password=
+document.getElementById(
+"loginPassword"
+).value;
+
+
+if(!email){
+
+loginError(
+"أدخل البريد الإلكتروني."
+);
+
+return;
+
+}
+
+
+if(!password){
+
+loginError(
+"أدخل كلمة المرور."
+);
+
+return;
+
+}
+
+
+const button=
+document.getElementById(
+"loginButton"
+);
+
+button.disabled=true;
+
+button.textContent="جاري الدخول...";
+
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+document.getElementById(
+"loginError"
+).style.display="none";
+
+}catch(error){
+
+console.error(error);
+
+let message=
+"تعذر تسجيل الدخول.";
+
+if(
+error.code===
+"auth/invalid-credential"
+){
+
+message=
+"البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+
+}
+
+if(
+error.code===
+"auth/user-not-found"
+){
+
+message=
+"الحساب غير موجود.";
+
+}
+
+if(
+error.code===
+"auth/wrong-password"
+){
+
+message=
+"كلمة المرور غير صحيحة.";
+
+}
+
+loginError(message);
+
+}finally{
+
+button.disabled=false;
+
+button.textContent="دخول";
+
+}
+
+};
+
+
+/* =========================
+تسجيل الخروج
+========================= */
+
+document.getElementById(
+"logoutBtn"
+).onclick=async function(){
+
+try{
+
+if(unsubscribeProjects){
+
+unsubscribeProjects();
+
+unsubscribeProjects=null;
+
+}
+
+if(unsubscribeTransactions){
+
+unsubscribeTransactions();
+
+unsubscribeTransactions=null;
+
+}
+
+await signOut(auth);
+
+}catch(error){
+
+console.error(error);
+
+}
+
+};
+
+
+/* =========================
+مراقبة حالة تسجيل الدخول
+========================= */
+
+onAuthStateChanged(
+auth,
+function(user){
+
+if(user){
+
+showApp(user);
+
+startFirebaseListeners();
+
+render("dashboard");
+
+}else{
+
+showLogin();
+
+}
+
+}
+);
+
+
+/* =========================
+الاستماع للمشاريع من Firestore
+========================= */
+
+function startFirebaseListeners(){
+
+if(unsubscribeProjects){
+
+unsubscribeProjects();
+
+}
+
+if(unsubscribeTransactions){
+
+unsubscribeTransactions();
+
+}
+
+
+const projectsRef=
+collection(
+firestore,
+"projects"
+);
+
+
+unsubscribeProjects=
+onSnapshot(
+
+projectsRef,
+
+function(snapshot){
+
+db.projects=
+snapshot.docs.map(
+function(item){
+
+return {
+
+id:item.id,
+
+...item.data()
+
+};
+
+});
 
 updateStats();
 
+const activeTab=
+document.querySelector(
+".tab.active"
+);
+
+if(activeTab){
+
+render(
+activeTab.dataset.view
+);
+
 }
 
+},
+
+function(error){
+
+console.error(
+"Projects listener error:",
+error
+);
+
+alert(
+"حدث خطأ أثناء قراءة المشاريع من Firebase."
+);
+
+}
+
+);
+
+
+const transactionsRef=
+collection(
+firestore,
+"transactions"
+);
+
+
+unsubscribeTransactions=
+onSnapshot(
+
+transactionsRef,
+
+function(snapshot){
+
+db.transactions=
+snapshot.docs.map(
+function(item){
+
+return {
+
+id:item.id,
+
+...item.data()
+
+};
+
+});
+
+
+db.transactions.sort(
+function(a,b){
+
+return String(b.date||"")
+.localeCompare(
+String(a.date||"")
+);
+
+});
+
+updateStats();
+
+const activeTab=
+document.querySelector(
+".tab.active"
+);
+
+if(activeTab){
+
+render(
+activeTab.dataset.view
+);
+
+}
+
+},
+
+function(error){
+
+console.error(
+"Transactions listener error:",
+error
+);
+
+alert(
+"حدث خطأ أثناء قراءة العمليات من Firebase."
+);
+
+}
+
+);
+
+}
+
+
+/* =========================
+إضافة مشروع
+========================= */
+
+async function addProjectToFirebase(name){
+
+await addDoc(
+
+collection(
+firestore,
+"projects"
+),
+
+{
+
+name:name,
+
+createdAt:
+Date.now(),
+
+createdBy:
+auth.currentUser.uid
+
+}
+
+);
+
+}
+
+
+/* =========================
+إضافة عملية
+========================= */
+
+async function addTransactionToFirebase(data){
+
+await addDoc(
+
+collection(
+firestore,
+"transactions"
+),
+
+{
+
+projectId:data.projectId,
+
+type:data.type,
+
+date:data.date,
+
+category:data.category,
+
+amount:Number(data.amount)||0,
+
+note:data.note || "",
+
+createdAt:
+Date.now(),
+
+createdBy:
+auth.currentUser.uid
+
+}
+
+);
+
+}
+
+
+/* =========================
+حذف مشروع وجميع عملياته
+========================= */
+
+async function deleteProjectFromFirebase(id){
+
+const batch=
+writeBatch(firestore);
+
+
+const projectRef=
+doc(
+firestore,
+"projects",
+id
+);
+
+batch.delete(projectRef);
+
+
+const transactionQuery=
+query(
+collection(
+firestore,
+"transactions"
+)
+);
+
+
+const transactionSnapshot=
+await getDocs(
+transactionQuery
+);
+
+
+transactionSnapshot.forEach(
+function(item){
+
+const data=item.data();
+
+if(data.projectId===id){
+
+batch.delete(item.ref);
+
+}
+
+});
+
+
+await batch.commit();
+
+}
+
+
+/* =========================
+حذف عملية
+========================= */
+
+async function deleteTransactionFromFirebase(id){
+
+await deleteDoc(
+
+doc(
+firestore,
+"transactions",
+id
+)
+
+);
+
+}
+
+
+/* =========================
+اسم المشروع
+========================= */
 
 function projectName(id){
 
-const project=db.projects.find(
+const project=
+db.projects.find(
 function(p){
+
 return p.id===id;
+
 }
 );
 
-return project ? project.name : "غير محدد";
+return project
+?
+project.name
+:
+"غير محدد";
 
 }
 
+
+/* =========================
+الإجماليات
+========================= */
 
 function totals(){
 
 let income=0;
+
 let expense=0;
+
 
 db.transactions.forEach(
 function(t){
 
 if(t.type==="income"){
 
-income+=Number(t.amount)||0;
+income+=
+Number(t.amount)||0;
 
 }else{
 
-expense+=Number(t.amount)||0;
+expense+=
+Number(t.amount)||0;
 
 }
 
 });
 
+
 return {
+
 income:income,
+
 expense:expense
+
 };
 
 }
 
 
+/* =========================
+تحديث الإحصائيات
+========================= */
+
 function updateStats(){
 
-const total=totals();
+const total=
+totals();
+
 
 document.getElementById(
 "totalIncome"
-).textContent=money(total.income);
+).textContent=
+money(total.income);
+
 
 document.getElementById(
 "totalExpense"
-).textContent=money(total.expense);
+).textContent=
+money(total.expense);
+
 
 document.getElementById(
 "netProfit"
-).textContent=money(
+).textContent=
+money(
 total.income-total.expense
 );
 
+
 document.getElementById(
 "projectCount"
-).textContent=db.projects.length;
+).textContent=
+db.projects.length;
 
 }
 
 
+/* =========================
+الرندر
+========================= */
+
 function render(view="dashboard"){
 
-document.querySelectorAll(".tab").forEach(
+document.querySelectorAll(
+".tab"
+).forEach(
 function(button){
 
 button.classList.toggle(
@@ -494,19 +1327,27 @@ button.dataset.view===view
 
 
 const content=
-document.getElementById("content");
+document.getElementById(
+"content"
+);
 
 
 if(view==="dashboard"){
+
 dashboard(content);
+
 }
 
 if(view==="projects"){
+
 projects(content);
+
 }
 
 if(view==="transactions"){
+
 transactions(content);
+
 }
 
 updateStats();
@@ -522,39 +1363,54 @@ function dashboard(content){
 
 let rows=[];
 
+
 db.projects.forEach(
 function(project){
 
 const transactions=
 db.transactions.filter(
 function(t){
-return t.projectId===project.id;
+
+return t.projectId===
+project.id;
+
 }
 );
 
+
 let income=0;
+
 let expense=0;
+
 
 transactions.forEach(
 function(t){
 
 if(t.type==="income"){
 
-income+=Number(t.amount)||0;
+income+=
+Number(t.amount)||0;
 
 }else{
 
-expense+=Number(t.amount)||0;
+expense+=
+Number(t.amount)||0;
 
 }
 
 });
 
+
 rows.push({
+
 name:project.name,
+
 income:income,
+
 expense:expense,
+
 net:income-expense
+
 });
 
 });
@@ -649,7 +1505,6 @@ ${money(row.net)}
 
 `;
 
-
 }
 
 
@@ -733,23 +1588,31 @@ function(project){
 const transactions=
 db.transactions.filter(
 function(t){
-return t.projectId===project.id;
+
+return t.projectId===
+project.id;
+
 }
 );
 
+
 let income=0;
+
 let expense=0;
+
 
 transactions.forEach(
 function(t){
 
 if(t.type==="income"){
 
-income+=Number(t.amount)||0;
+income+=
+Number(t.amount)||0;
 
 }else{
 
-expense+=Number(t.amount)||0;
+expense+=
+Number(t.amount)||0;
 
 }
 
@@ -825,41 +1688,63 @@ onclick="deleteProject('${project.id}')"
 
 document.getElementById(
 "addProjectButton"
-).onclick=function(){
+).onclick=async function(){
 
 const input=
 document.getElementById(
 "projectNameInput"
 );
 
-const name=input.value.trim();
+const name=
+input.value.trim();
 
 
 if(!name){
 
-alert("اكتب اسم المشروع");
+alert(
+"اكتب اسم المشروع"
+);
 
 return;
 
 }
 
 
-db.projects.push({
+const button=
+document.getElementById(
+"addProjectButton"
+);
 
-id:
-Date.now().toString()+Math.random(),
+button.disabled=true;
 
-name:name
-
-});
+button.textContent=
+"جاري الحفظ...";
 
 
-save();
+try{
 
-render("projects");
+await addProjectToFirebase(name);
+
+input.value="";
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"حدث خطأ أثناء حفظ المشروع في Firebase."
+);
+
+}finally{
+
+button.disabled=false;
+
+button.textContent=
+"إضافة مشروع";
+
+}
 
 };
-
 
 }
 
@@ -868,16 +1753,23 @@ render("projects");
 حذف مشروع
 ========================= */
 
-window.deleteProject=function(id){
+window.deleteProject=
+async function(id){
 
-const project=db.projects.find(
+const project=
+db.projects.find(
 function(p){
+
 return p.id===id;
+
 }
 );
 
+
 if(!project){
+
 return;
+
 }
 
 
@@ -892,25 +1784,19 @@ return;
 }
 
 
-db.projects=
-db.projects.filter(
-function(p){
-return p.id!==id;
-}
+try{
+
+await deleteProjectFromFirebase(id);
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"حدث خطأ أثناء حذف المشروع."
 );
 
-
-db.transactions=
-db.transactions.filter(
-function(t){
-return t.projectId!==id;
 }
-);
-
-
-save();
-
-render("projects");
 
 };
 
@@ -1128,27 +2014,31 @@ style="margin-top:15px"
 
 document.getElementById(
 "saveTransactionButton"
-).onclick=function(){
+).onclick=async function(){
 
 const type=
 document.getElementById(
 "transactionType"
 ).value;
 
+
 const projectId=
 document.getElementById(
 "transactionProject"
 ).value;
+
 
 const date=
 document.getElementById(
 "transactionDate"
 ).value;
 
+
 const category=
 document.getElementById(
 "transactionCategory"
 ).value;
+
 
 const amount=
 Number(
@@ -1156,6 +2046,7 @@ document.getElementById(
 "transactionAmount"
 ).value
 );
+
 
 const note=
 document.getElementById(
@@ -1165,7 +2056,9 @@ document.getElementById(
 
 if(!projectId){
 
-alert("اختر المشروع");
+alert(
+"اختر المشروع"
+);
 
 return;
 
@@ -1174,17 +2067,29 @@ return;
 
 if(!(amount>0)){
 
-alert("أدخل مبلغًا صحيحًا");
+alert(
+"أدخل مبلغًا صحيحًا"
+);
 
 return;
 
 }
 
 
-db.transactions.unshift({
+const button=
+document.getElementById(
+"saveTransactionButton"
+);
 
-id:
-Date.now().toString()+Math.random(),
+button.disabled=true;
+
+button.textContent=
+"جاري الحفظ...";
+
+
+try{
+
+await addTransactionToFirebase({
 
 projectId:projectId,
 
@@ -1200,10 +2105,22 @@ note:note
 
 });
 
+}catch(error){
 
-save();
+console.error(error);
 
-render("transactions");
+alert(
+"حدث خطأ أثناء حفظ العملية في Firebase."
+);
+
+}finally{
+
+button.disabled=false;
+
+button.textContent=
+"حفظ العملية";
+
+}
 
 };
 
@@ -1236,7 +2153,9 @@ function(transaction){
 
 const text=
 
-projectName(transaction.projectId)
+projectName(
+transaction.projectId
+)
 +" "
 +
 transaction.note
@@ -1249,6 +2168,7 @@ transaction.amount
 +" "
 +
 transaction.date;
+
 
 return text
 .toLowerCase()
@@ -1278,7 +2198,9 @@ ${escapeHTML(transaction.date)}
 
 <td>
 ${escapeHTML(
-projectName(transaction.projectId)
+projectName(
+transaction.projectId
+)
 )}
 </td>
 
@@ -1359,7 +2281,8 @@ onclick="deleteTransaction('${transaction.id}')"
 حذف عملية
 ========================= */
 
-window.deleteTransaction=function(id){
+window.deleteTransaction=
+async function(id){
 
 if(
 !confirm(
@@ -1372,17 +2295,19 @@ return;
 }
 
 
-db.transactions=
-db.transactions.filter(
-function(t){
-return t.id!==id;
-}
+try{
+
+await deleteTransactionFromFirebase(id);
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"حدث خطأ أثناء حذف العملية."
 );
 
-
-save();
-
-render("transactions");
+}
 
 };
 
@@ -1400,7 +2325,9 @@ event.target.closest(".tab");
 
 
 if(!button){
+
 return;
+
 }
 
 
@@ -1435,7 +2362,9 @@ event.target.files[0];
 
 
 if(!file){
+
 return;
+
 }
 
 
@@ -1456,6 +2385,7 @@ cellDates:true
 
 
 let importedProjects=0;
+
 let importedTransactions=0;
 
 
@@ -1478,32 +2408,32 @@ defval:""
 
 
 if(!rows.length){
+
 continue;
+
 }
 
 
 let project=
 db.projects.find(
 function(p){
-return p.name===sheetName;
+
+return p.name===
+sheetName;
+
 }
 );
 
 
 if(!project){
 
-project={
-
-id:
-Date.now().toString()+Math.random(),
-
-name:sheetName
-
-};
-
-db.projects.push(project);
+await addProjectToFirebase(
+sheetName
+);
 
 importedProjects++;
+
+continue;
 
 }
 
@@ -1530,7 +2460,9 @@ rows[rowIndex];
 
 
 if(!row.length){
+
 continue;
+
 }
 
 
@@ -1569,16 +2501,23 @@ new Date()
 
 let note="";
 
+
 if(row[5]){
-note=String(row[5]).trim();
+
+note=
+String(row[5])
+.trim();
+
 }
+
 
 if(!note && row[11]){
-note=String(row[11]).trim();
+
+note=
+String(row[11])
+.trim();
+
 }
-
-
-let foundNumber=false;
 
 
 for(
@@ -1587,7 +2526,9 @@ column<row.length;
 column++
 ){
 
-const raw=row[column];
+const raw=
+row[column];
+
 
 if(
 raw===""
@@ -1596,7 +2537,9 @@ raw===null
 ||
 raw===undefined
 ){
+
 continue;
+
 }
 
 
@@ -1608,15 +2551,17 @@ String(raw)
 
 
 if(!Number.isFinite(number)){
+
 continue;
+
 }
+
 
 if(number===0){
+
 continue;
+
 }
-
-
-foundNumber=true;
 
 
 const header=
@@ -1641,11 +2586,7 @@ headerLower.includes("دخل")
 headerLower.includes("دفعة");
 
 
-db.transactions.push({
-
-id:
-Date.now().toString()
-+Math.random(),
+await addTransactionToFirebase({
 
 projectId:
 project.id,
@@ -1678,18 +2619,13 @@ importedTransactions++;
 
 }
 
-
 }
 
 }
-
-
-save();
-
-render("dashboard");
 
 
 alert(
+
 "تم استيراد ملف Excel بنجاح\n\n"+
 "المشاريع الجديدة: "
 +
@@ -1698,6 +2634,7 @@ importedProjects
 "\nالعمليات المستوردة: "
 +
 importedTransactions
+
 );
 
 
@@ -1706,7 +2643,8 @@ importedTransactions
 console.error(error);
 
 alert(
-"حدث خطأ أثناء قراءة ملف Excel"
+"حدث خطأ أثناء استيراد ملف Excel.\n\n"+
+error.message
 );
 
 }
@@ -1795,8 +2733,6 @@ workbook,
 /* =========================
 تشغيل الموقع
 ========================= */
-
-render("dashboard");
 
 </script>
 
