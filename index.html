@@ -1252,6 +1252,16 @@ id="saveServiceTxBtn">
 </div>
 
 
+<div class="card" style="background:#fff7ed;border:1px solid #fed7aa;margin-bottom:20px">
+<h3>➕ إضافة مصروفات الخدمات المستقلة</h3>
+<div class="grid">
+<div class="field"><label>التاريخ</label><input id="srvExpenseDate" type="date"></div>
+<div class="field"><label>اسم المصروف / التصنيف</label><input id="srvExpenseCategory" placeholder="مثال: بنزين، أدوات، نقل..."></div>
+<div class="field"><label>مبلغ المصروف (SAR)</label><input id="srvGeneralExpenseAmount" type="number" min="0" step="0.01" placeholder="0"></div>
+<div class="field full"><label>البيان / ملاحظة</label><input id="srvGeneralExpenseNote" placeholder="تفاصيل المصروف..."></div>
+<div class="full"><button class="btn red" id="saveServiceGeneralExpenseBtn">حفظ المصروف</button></div>
+</div></div>
+
 <h3>
 📊 ملخص الأرباح حسب نوع الخدمة
 </h3>
@@ -1314,10 +1324,17 @@ style="margin-bottom:25px">
 
 </div>
 
+<h3>📋 المصروفات المستقلة للخدمات</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>التاريخ</th><th>المصروف / التصنيف</th><th>المبلغ</th><th>البيان</th><th>إجراء</th></tr></thead>
+<tbody id="servicesGeneralExpensesBody"></tbody>
+</table>
 </div>
 
 </div>
 
+</div>
 
 <!-- ================= العقارات ================= -->
 
@@ -3847,123 +3864,64 @@ if (dataList) {
 
 
 function renderServices(){
-
-let totalInc=0, totalExpense=0, totalProfit=0;
-
+let totalInc=0,totalExpense=0;
 const summary={};
+const generalExpenses=[];
 
 db.services.forEach(s=>{
-
+if(s.recordType==="general_expense"){
+const amount=Number(s.amount)||0;
+totalExpense+=amount;
+generalExpenses.push(s);
+return;
+}
 const collected=Number(s.collectedAmount)||0;
-const expense = s.expense !== undefined ? (Number(s.expense)||0) : Math.max(0,collected-(Number(s.profit)||0));
-const profit = collected-expense;
-
+const expense=s.expense!==undefined?(Number(s.expense)||0):Math.max(0,collected-(Number(s.profit)||0));
+const profit=collected-expense;
 totalInc+=collected;
 totalExpense+=expense;
-totalProfit+=profit;
-
 const cat=s.category||"عام";
-
-if(!summary[cat]){ summary[cat]={ collected:0, expense:0, profit:0 }; }
-
+if(!summary[cat])summary[cat]={collected:0,expense:0,profit:0};
 summary[cat].collected+=collected;
 summary[cat].expense+=expense;
 summary[cat].profit+=profit;
-
 });
 
+const linkedProfit=Object.keys(summary).reduce((x,k)=>x+summary[k].profit,0);
+const independentExpense=generalExpenses.reduce((x,s)=>x+(Number(s.amount)||0),0);
+const totalProfit=linkedProfit-independentExpense;
 updateServicesDataList();
-
 document.getElementById("servicesTotalIncome").innerHTML=money(totalInc);
 document.getElementById("servicesTotalExpense").innerHTML=money(totalExpense);
 document.getElementById("servicesNetProfit").innerHTML=money(totalProfit);
 document.getElementById("servicesCategoryCount").textContent=formatNum(Object.keys(summary).length);
 
 const sumBody=document.getElementById("servicesSummaryBody");
-
-sumBody.innerHTML=Object.keys(summary).length?
-
-Object.keys(summary).map(cat=>`
-<tr>
-<td><strong>${escapeHTML(cat)}</strong></td>
-<td class="income">${money(summary[cat].collected)}</td>
-<td class="expense">${money(summary[cat].expense)}</td>
-<td class="profit-positive">${money(summary[cat].profit)}</td>
-</tr>
-`).join(""):
-
-`<tr><td colspan="4"><div class="empty">لا توجد بيانات للخدمات</div></td></tr>`;
-
+sumBody.innerHTML=Object.keys(summary).length?Object.keys(summary).map(cat=>`<tr><td><strong>${escapeHTML(cat)}</strong></td><td class="income">${money(summary[cat].collected)}</td><td class="expense">${money(summary[cat].expense)}</td><td class="profit-positive">${money(summary[cat].profit)}</td></tr>`).join(""):`<tr><td colspan="4"><div class="empty">لا توجد بيانات للخدمات</div></td></tr>`;
 
 const srvBody=document.getElementById("servicesBody");
-
-srvBody.innerHTML=db.services.length?
-
-db.services.map(s=>{
+const incomeRecords=db.services.filter(s=>s.recordType!=="general_expense");
+srvBody.innerHTML=incomeRecords.length?incomeRecords.map(s=>{
 const collected=Number(s.collectedAmount)||0;
-const expense=s.expense !== undefined ? (Number(s.expense)||0) : Math.max(0,collected-(Number(s.profit)||0));
+const expense=s.expense!==undefined?(Number(s.expense)||0):Math.max(0,collected-(Number(s.profit)||0));
 const profit=collected-expense;
-return `
-<tr>
-<td><span class="num-val">${escapeHTML(s.date)}</span></td>
-<td><strong>${escapeHTML(s.category||"عام")}</strong></td>
-<td class="profit-positive">${money(profit)}</td>
-<td class="income">${money(collected)}</td>
-<td class="expense">${money(expense)}</td>
-<td>${escapeHTML(s.note||"-")}</td>
-<td><button class="btn blue" onclick="editRecord('services','${s.id}', 'date,category,note')">تعديل</button><button class="btn red" onclick="deleteService('${s.id}')">حذف</button></td>
-</tr>
-`;}).join(""):
+return `<tr><td><span class="num-val">${escapeHTML(s.date)}</span></td><td><strong>${escapeHTML(s.category||"عام")}</strong></td><td class="profit-positive">${money(profit)}</td><td class="income">${money(collected)}</td><td class="expense">${money(expense)}</td><td>${escapeHTML(s.note||"-")}</td><td><button class="btn blue" onclick="editRecord('services','${s.id}','date,category,note')">تعديل</button><button class="btn red" onclick="deleteService('${s.id}')">حذف</button></td></tr>`;
+}).join(""):`<tr><td colspan="7"><div class="empty">لا توجد عمليات دخل خدمات مضافة</div></td></tr>`;
 
-`<tr><td colspan="7"><div class="empty">لا توجد عمليات خدمات مضافة</div></td></tr>`;
-
+const geBody=document.getElementById("servicesGeneralExpensesBody");
+geBody.innerHTML=generalExpenses.length?generalExpenses.map(s=>`<tr><td><span class="num-val">${escapeHTML(s.date||"")}</span></td><td><strong>${escapeHTML(s.category||"عام")}</strong></td><td class="expense">${money(s.amount)}</td><td>${escapeHTML(s.note||"-")}</td><td><button class="btn blue" onclick="editRecord('services','${s.id}','date,category,note')">تعديل</button><button class="btn red" onclick="deleteService('${s.id}')">حذف</button></td></tr>`).join(""):`<tr><td colspan="5"><div class="empty">لا توجد مصروفات مستقلة للخدمات</div></td></tr>`;
 }
 
-
 document.getElementById("saveServiceTxBtn").onclick=async function(){
+const btn=this,date=document.getElementById("srvDate").value,category=document.getElementById("srvCategory").value.trim(),collectedAmount=Number(document.getElementById("srvCollectedAmount").value),expense=Number(document.getElementById("srvExpense").value)||0,note=document.getElementById("srvNote").value.trim();
+if(!date){alert("اختر التاريخ.");return;} if(!category){alert("أدخل أو اختر اسم الخدمة.");return;} if(!(collectedAmount>0)){alert("أدخل مبلغ دخل صحيح.");return;} if(expense<0){alert("أدخل مصروف صحيح.");return;}
+btn.disabled=true;try{await addDoc(collection(firestore,"services"),{date,category,recordType:"income",profit:collectedAmount-expense,collectedAmount,expense,note,createdAt:serverTimestamp()});document.getElementById("srvCategory").value="";document.getElementById("srvCollectedAmount").value="";document.getElementById("srvExpense").value="";document.getElementById("srvNote").value="";}catch(e){alert(e.message);}finally{btn.disabled=false;}
+};
 
-const btn=this;
-
-const date=document.getElementById("srvDate").value;
-
-const category=document.getElementById("srvCategory").value.trim();
-
-const collectedAmount=Number(document.getElementById("srvCollectedAmount").value);
-
-const expense=Number(document.getElementById("srvExpense").value)||0;
-
-const note=document.getElementById("srvNote").value.trim();
-
-if(!date){ alert("اختر التاريخ."); return; }
-
-if(!category){ alert("أدخل أو اختر اسم الخدمة."); return; }
-
-if(!(collectedAmount>0)){ alert("أدخل مبلغ دخل صحيح."); return; }
-
-if(expense<0){ alert("أدخل مصروف صحيح."); return; }
-
-btn.disabled=true;
-
-try{
-
-await addDoc(collection(firestore,"services"),{
-
-date, category, profit:collectedAmount-expense, collectedAmount, expense, note, createdAt:serverTimestamp()
-
-});
-
-document.getElementById("srvCategory").value="";
-
-
-document.getElementById("srvCollectedAmount").value="";
-document.getElementById("srvExpense").value="";
-
-document.getElementById("srvNote").value="";
-
-}catch(e){ alert(e.message); }
-
-finally{ btn.disabled=false; }
-
+document.getElementById("saveServiceGeneralExpenseBtn").onclick=async function(){
+const btn=this,date=document.getElementById("srvExpenseDate").value,category=document.getElementById("srvExpenseCategory").value.trim(),amount=Number(document.getElementById("srvGeneralExpenseAmount").value),note=document.getElementById("srvGeneralExpenseNote").value.trim();
+if(!date){alert("اختر التاريخ.");return;} if(!category){alert("أدخل اسم المصروف / التصنيف.");return;} if(!(amount>0)){alert("أدخل مبلغ مصروف صحيح.");return;}
+btn.disabled=true;try{await addDoc(collection(firestore,"services"),{recordType:"general_expense",date,category,amount,note,createdAt:serverTimestamp()});document.getElementById("srvExpenseCategory").value="";document.getElementById("srvGeneralExpenseAmount").value="";document.getElementById("srvGeneralExpenseNote").value="";}catch(e){alert(e.message);}finally{btn.disabled=false;}
 };
 
 
