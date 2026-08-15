@@ -643,6 +643,7 @@ id="logoutBtn">
 <span class="portal-icon">🏢</span>
 <h2>المقاولات</h2>
 <p>إدارة دخل ومصروف وربح المقاولات</p>
+
 </div>
 
 <div class="portal-card" id="selectProjects">
@@ -730,7 +731,8 @@ id="logoutBtn">
 <thead>
 <tr>
 <th>التصنيف</th>
-<th>المجموع</th>
+<th>مجموع الدخل</th>
+<th>مجموع المصروف</th>
 </tr>
 </thead>
 <tbody id="contractingCategoriesBody"></tbody>
@@ -1759,7 +1761,6 @@ style="color:#d97706">
 </strong>
 
 </div>
-
 
 </div>
 
@@ -3189,7 +3190,7 @@ document.getElementById("contractingExpense").innerHTML=money(exp);
 document.getElementById("contractingProfit").innerHTML=money(inc-exp);
 
 
-/* مجموع كل تصنيف داخل المقاولات فقط */
+/* مجموع دخل ومصروف كل تصنيف داخل المقاولات فقط */
 
 const categoryTotals={};
 
@@ -3203,12 +3204,21 @@ if(!categoryTotals[key]){
 
 categoryTotals[key]={
 label:rawCategory,
-total:0
+income:0,
+expense:0
 };
 
 }
 
-categoryTotals[key].total+=Number(item.amount)||0;
+if(item.type==="income"){
+
+categoryTotals[key].income+=Number(item.amount)||0;
+
+}else{
+
+categoryTotals[key].expense+=Number(item.amount)||0;
+
+}
 
 });
 
@@ -3221,15 +3231,20 @@ const keys=Object.keys(categoryTotals);
 
 categoriesBody.innerHTML=keys.length
 ?keys
-.sort((a,b)=>categoryTotals[b].total-categoryTotals[a].total)
+.sort((a,b)=>{
+const totalA=categoryTotals[a].income+categoryTotals[a].expense;
+const totalB=categoryTotals[b].income+categoryTotals[b].expense;
+return totalB-totalA;
+})
 .map(key=>`
 <tr>
 <td><strong>${escapeHTML(categoryTotals[key].label)}</strong></td>
-<td class="${categoryTotals[key].total>=0?'income':'expense'}">${money(categoryTotals[key].total)}</td>
+<td class="income">${money(categoryTotals[key].income)}</td>
+<td class="expense">${money(categoryTotals[key].expense)}</td>
 </tr>
 `)
 .join("")
-:`<tr><td colspan="2"><div class="empty">لا توجد تصنيفات في الفترة المحددة</div></td></tr>`;
+:`<tr><td colspan="3"><div class="empty">لا توجد تصنيفات في الفترة المحددة</div></td></tr>`;
 
 }
 
@@ -4172,7 +4187,7 @@ const pContracts=filterBySelectedMonth(db.rentals.filter(r=>r.propertyId===propI
 let pRent=0,pRentExp=0,pPropExp=0,pRef=0,pRet=0;pContracts.forEach(r=>{pRent+=Number(r.amount)||0;pRentExp+=Number(r.expenseAmount)||0;if(r.depositStatus==="refunded")pRef+=Number(r.depositAmount)||0;else pRet+=Number(r.depositAmount)||0;});pExpenses.forEach(pe=>pPropExp+=Number(pe.amount)||0);const pNet=pRent+pRet-(pRentExp+pPropExp);
 document.getElementById("propTotalRent").innerHTML=money(pRent+pRet);document.getElementById("propRentalExpenses").innerHTML=money(pRentExp);document.getElementById("propGeneralExpenses").innerHTML=money(pPropExp);document.getElementById("propNetProfit").innerHTML=money(pNet);document.getElementById("propTotalRefunded").innerHTML=money(pRef);document.getElementById("propTotalRetained").innerHTML=money(pRet);document.getElementById("propContractsCount").textContent=formatNum(pContracts.length);document.getElementById("propGeneralExpenseCount").textContent=formatNum(pExpenses.length);
 const contractsBody=document.getElementById("rentContractsBody");contractsBody.innerHTML=pContracts.length?pContracts.map(r=>{const deposit=Number(r.depositAmount)||0,isRef=r.depositStatus==="refunded",net=Number(r.amount||0)+(isRef?0:deposit)-Number(r.expenseAmount||0);return `<tr><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','date','date')"><span class="num-val">${escapeHTML(r.date)}</span></td><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','unit')">${escapeHTML(r.unit||"-")}</td><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','tenant')">${escapeHTML(r.tenant||"-")}</td><td class="income">${money(r.amount)}</td><td>${money(r.depositAmount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','expenseCategory')">${escapeHTML(r.expenseCategory||"-")}</td><td class="expense">${money(r.expenseAmount)}</td><td class="${profitClass(net)}">${money(net)}</td><td><button class="btn ${isRef?'blue':'orange'}" onclick="toggleDeposit('${r.id}','${isRef?'active':'refunded'}')">${isRef?'تم الاسترداد':'مستمر (نشط)'}</button></td><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','note')">${escapeHTML(r.note||"-")}</td><td><button class="btn blue" onclick="editRecord('rentals','${r.id}','date,unit,tenant,expenseCategory,note')">تعديل</button> <button class="btn red" onclick="deleteRentContract('${r.id}')">حذف</button></td></tr>`;}).join(""):`<tr><td colspan="11"><div class="empty">لا توجد عمليات إيجار في الفترة المحددة</div></td></tr>`;
-const expensesBody=document.getElementById("propertyExpensesBody");expensesBody.innerHTML=pExpenses.length?pExpenses.map(pe=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','date','date')"><span class="num-val">${escapeHTML(pe.date)}</span></td><td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','category')">${escapeHTML(pe.category||"عام")}</td><td class="expense">${money(pe.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','note')">${escapeHTML(pe.note||"-")}</td><td><button class="btn blue" onclick="editRecord('property_expenses','${pe.id}','date,category,note')">تعديل</button> <button class="btn red" onclick="deletePropertyExpense('${pe.id}')">حذف</button></td></tr>`).join(""):`<tr><td colspan="5"><div class="empty">لا توجد مصاريف شاملة في الفترة المحددة</div></td></tr>`;
+const expensesBody=document.getElementById("propertyExpensesBody");expensesBody.innerHTML=pExpenses.length?pExpenses.map(pe=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','date','date')"><span class="num-val">${escapeHTML(pe.date||"")}</span></td><td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','category')">${escapeHTML(pe.category||"عام")}</td><td class="expense">${money(pe.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','note')">${escapeHTML(pe.note||"-")}</td><td><button class="btn blue" onclick="editRecord('property_expenses','${pe.id}','date,category,note')">تعديل</button> <button class="btn red" onclick="deletePropertyExpense('${pe.id}')">حذف</button></td></tr>`).join(""):`<tr><td colspan="5"><div class="empty">لا توجد مصاريف شاملة في الفترة المحددة</div></td></tr>`;
 }
 
 
