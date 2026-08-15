@@ -722,6 +722,22 @@ id="logoutBtn">
 <div class="stat"><small>إجمالي المصروف</small><strong id="contractingExpense" class="expense">0 SAR</strong></div>
 <div class="stat"><small>صافي الربح</small><strong id="contractingProfit">0 SAR</strong></div>
 </div>
+
+<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+<h3>📊 مجموع التصنيفات</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>التصنيف</th>
+<th>المجموع</th>
+</tr>
+</thead>
+<tbody id="contractingCategoriesBody"></tbody>
+</table>
+</div>
+</div>
+
 <div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 <h3>➕ إضافة عملية مقاولات</h3>
 <div class="grid">
@@ -3023,17 +3039,205 @@ if(el) el.innerHTML=money(i===0?income:i===1?expense:income-expense);
 });
 }
 
+
+/* ================= المقاولات ================= */
+
+function contractingCategoryKey(value){
+
+return String(value||"")
+.trim()
+.toLowerCase()
+.replace(/[أإآ]/g,"ا")
+.replace(/ة/g,"ه")
+.replace(/ى/g,"ي")
+.replace(/[ًٌٍَُِّْـ]/g,"")
+.replace(/[\s\-_.،,]+/g,"");
+
+}
+
+
+function contractingCategoryDistance(a,b){
+
+const aa=contractingCategoryKey(a);
+const bb=contractingCategoryKey(b);
+
+if(!aa||!bb) return 999;
+
+const matrix=[];
+
+for(let i=0;i<=aa.length;i++){
+
+matrix[i]=[i];
+
+}
+
+for(let j=0;j<=bb.length;j++){
+
+matrix[0][j]=j;
+
+}
+
+for(let i=1;i<=aa.length;i++){
+
+for(let j=1;j<=bb.length;j++){
+
+const cost=aa[i-1]===bb[j-1]?0:1;
+
+matrix[i][j]=Math.min(
+matrix[i-1][j]+1,
+matrix[i][j-1]+1,
+matrix[i-1][j-1]+cost
+);
+
+}
+
+}
+
+return matrix[aa.length][bb.length];
+
+}
+
+
+function findSimilarContractingCategory(value){
+
+const entered=String(value||"").trim();
+
+if(!entered) return null;
+
+const existing=[];
+
+db.contracting.forEach(item=>{
+
+const category=String(item.category||"").trim();
+
+if(category && !existing.some(x=>contractingCategoryKey(x)===contractingCategoryKey(category))){
+
+existing.push(category);
+
+}
+
+});
+
+const exact=existing.find(
+category=>contractingCategoryKey(category)===contractingCategoryKey(entered)
+);
+
+if(exact) return {
+category:exact,
+exact:true
+};
+
+let best=null;
+
+existing.forEach(category=>{
+
+const a=contractingCategoryKey(entered);
+const b=contractingCategoryKey(category);
+
+const distance=contractingCategoryDistance(a,b);
+
+const similarByContainment=
+a.length>=3 &&
+b.length>=3 &&
+(a.includes(b)||b.includes(a));
+
+const maxDistance=
+Math.max(a.length,b.length)<=5?1:
+Math.max(a.length,b.length)<=9?2:3;
+
+if(similarByContainment || distance<=maxDistance){
+
+if(!best || distance<best.distance){
+
+best={
+category,
+distance
+};
+
+}
+
+}
+
+});
+
+return best;
+
+}
+
+
 function renderContracting(){
+
 const records=filterBySelectedMonth(db.contracting,"contracting");
+
 let inc=0,exp=0;
-records.forEach(x=>x.type==="income"?inc+=Number(x.amount)||0:exp+=Number(x.amount)||0);
+
+records.forEach(
+x=>x.type==="income"
+?inc+=Number(x.amount)||0
+:exp+=Number(x.amount)||0
+);
+
 const filter=document.getElementById("contractingMonthFilter");
-if(filter) filter.innerHTML=monthFilterHTML("contracting");
+
+if(filter)
+filter.innerHTML=monthFilterHTML("contracting");
+
 document.getElementById("contractingIncome").innerHTML=money(inc);
+
 document.getElementById("contractingExpense").innerHTML=money(exp);
+
 document.getElementById("contractingProfit").innerHTML=money(inc-exp);
+
+
+/* مجموع كل تصنيف داخل المقاولات فقط */
+
+const categoryTotals={};
+
+records.forEach(item=>{
+
+const rawCategory=String(item.category||"عام").trim()||"عام";
+
+const key=contractingCategoryKey(rawCategory);
+
+if(!categoryTotals[key]){
+
+categoryTotals[key]={
+label:rawCategory,
+total:0
+};
+
+}
+
+categoryTotals[key].total+=Number(item.amount)||0;
+
+});
+
+
+const categoriesBody=document.getElementById("contractingCategoriesBody");
+
+if(categoriesBody){
+
+const keys=Object.keys(categoryTotals);
+
+categoriesBody.innerHTML=keys.length
+?keys
+.sort((a,b)=>categoryTotals[b].total-categoryTotals[a].total)
+.map(key=>`
+<tr>
+<td><strong>${escapeHTML(categoryTotals[key].label)}</strong></td>
+<td class="${categoryTotals[key].total>=0?'income':'expense'}">${money(categoryTotals[key].total)}</td>
+</tr>
+`)
+.join("")
+:`<tr><td colspan="2"><div class="empty">لا توجد تصنيفات في الفترة المحددة</div></td></tr>`;
+
+}
+
+
 const body=document.getElementById("contractingBody");
-body.innerHTML=records.length?records.map(x=>`
+
+body.innerHTML=records.length
+?records.map(x=>`
 <tr>
 <td class="editable-cell" onclick="inlineEditCell(this,'contracting','${x.id}','date','date')"><span class="num-val">${escapeHTML(x.date)}</span></td>
 <td class="${x.type==="income"?'income':'expense'}">${x.type==="income"?'دخل':'مصروف'}</td>
@@ -3042,40 +3246,242 @@ body.innerHTML=records.length?records.map(x=>`
 <td class="${x.type==="income"?'income':'expense'}">${money(x.amount)}</td>
 <td class="editable-cell" onclick="inlineEditCell(this,'contracting','${x.id}','note')">${escapeHTML(x.note||"-")}</td>
 <td><button class="btn blue" onclick="editContracting('${x.id}')">تعديل</button> <button class="btn red" onclick="deleteContracting('${x.id}')">حذف</button></td>
-</tr>`).join(""):`<tr><td colspan="7"><div class="empty">لا توجد عمليات في الفترة المحددة</div></td></tr>`;
+</tr>`).join("")
+:`<tr><td colspan="7"><div class="empty">لا توجد عمليات في الفترة المحددة</div></td></tr>`;
+
 }
 
+
 document.getElementById("saveContractingBtn").onclick=async function(){
+
 const btn=this;
+
 const date=document.getElementById("conDate").value;
+
 const type=document.getElementById("conType").value;
+
 const name=document.getElementById("conName").value.trim();
-const category=document.getElementById("conCategory").value.trim();
+
+let category=document.getElementById("conCategory").value.trim();
+
 const amount=Number(document.getElementById("conAmount").value);
+
 const note=document.getElementById("conNote").value.trim();
-if(!date||!name||!(amount>0)){alert("أدخل التاريخ والاسم والمبلغ الصحيح.");return;}
-btn.disabled=true; btn.textContent="جاري الحفظ...";
+
+if(!date||!name||!(amount>0)){
+
+alert("أدخل التاريخ والاسم والمبلغ الصحيح.");
+
+return;
+
+}
+
+if(!category){
+
+alert("أدخل التصنيف.");
+
+return;
+
+}
+
+
+/* البحث عن تصنيف مطابق أو مشابه داخل المقاولات فقط */
+
+const similarCategory=findSimilarContractingCategory(category);
+
+if(similarCategory){
+
+if(similarCategory.exact){
+
+category=similarCategory.category;
+
+}else{
+
+const useExisting=confirm(
+`هل تقصد التصنيف "${similarCategory.category}"؟\n\nاضغط "موافق" لاستخدام التصنيف الموجود.\nاضغط "إلغاء" لإضافة تصنيف جديد باسم "${category}".`
+);
+
+if(useExisting){
+
+category=similarCategory.category;
+
+}
+
+}
+
+}
+
+btn.disabled=true;
+
+btn.textContent="جاري الحفظ...";
+
 try{
-await addDoc(collection(firestore,"contracting"),{date,type,name,category,amount,note,createdAt:serverTimestamp()});
+
+await addDoc(
+collection(firestore,"contracting"),
+{
+date,
+type,
+name,
+category,
+amount,
+note,
+createdAt:serverTimestamp()
+}
+);
+
 document.getElementById("conName").value="";
+
 document.getElementById("conCategory").value="";
+
 document.getElementById("conAmount").value="";
+
 document.getElementById("conNote").value="";
-}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent="حفظ العملية";}
+
+}catch(e){
+
+alert(e.message);
+
+}finally{
+
+btn.disabled=false;
+
+btn.textContent="حفظ العملية";
+
+}
+
 };
+
 
 window.editContracting=async function(id){
-const item=db.contracting.find(x=>x.id===id); if(!item)return;
-const date=prompt("التاريخ (YYYY-MM-DD):",item.date||""); if(date===null)return;
-const name=prompt("الاسم / البند:",item.name||item.category||""); if(name===null)return;
-const category=prompt("التصنيف:",item.category||""); if(category===null)return;
-const amountText=prompt("المبلغ:",String(item.amount??"")); if(amountText===null)return;
-const amount=Number(amountText); if(!date||!name||!(amount>0)){alert("البيانات غير صحيحة.");return;}
-const note=prompt("البيان:",item.note||""); if(note===null)return;
-try{await updateDoc(doc(firestore,"contracting",id),{date,name,category,amount,note});}catch(e){alert(e.message);}
+
+const item=db.contracting.find(x=>x.id===id);
+
+if(!item)return;
+
+const date=prompt(
+"التاريخ (YYYY-MM-DD):",
+item.date||""
+);
+
+if(date===null)return;
+
+const name=prompt(
+"الاسم / البند:",
+item.name||item.category||""
+);
+
+if(name===null)return;
+
+let category=prompt(
+"التصنيف:",
+item.category||""
+);
+
+if(category===null)return;
+
+category=category.trim();
+
+if(!category){
+
+alert("أدخل التصنيف.");
+
+return;
+
+}
+
+
+/* نفس نظام التصنيف عند تعديل العملية */
+
+const similarCategory=findSimilarContractingCategory(category);
+
+if(similarCategory && similarCategory.category!==item.category){
+
+if(similarCategory.exact){
+
+category=similarCategory.category;
+
+}else{
+
+const useExisting=confirm(
+`هل تقصد التصنيف "${similarCategory.category}"؟\n\nاضغط "موافق" لاستخدام التصنيف الموجود.\nاضغط "إلغاء" للإبقاء على التصنيف الجديد "${category}".`
+);
+
+if(useExisting){
+
+category=similarCategory.category;
+
+}
+
+}
+
+}
+
+
+const amountText=prompt(
+"المبلغ:",
+String(item.amount??"")
+);
+
+if(amountText===null)return;
+
+const amount=Number(amountText);
+
+if(!date||!name||!(amount>0)){
+
+alert("البيانات غير صحيحة.");
+
+return;
+
+}
+
+const note=prompt(
+"البيان:",
+item.note||""
+);
+
+if(note===null)return;
+
+try{
+
+await updateDoc(
+doc(firestore,"contracting",id),
+{
+date,
+name,
+category,
+amount,
+note
+}
+);
+
+}catch(e){
+
+alert(e.message);
+
+}
+
 };
 
-window.deleteContracting=async function(id){if(!confirm("هل تريد حذف العملية؟"))return;try{await deleteDoc(doc(firestore,"contracting",id));}catch(e){alert(e.message)}};
+
+window.deleteContracting=async function(id){
+
+if(!confirm("هل تريد حذف العملية؟"))return;
+
+try{
+
+await deleteDoc(
+doc(firestore,"contracting",id)
+);
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+};
+
 
 /* ================= إحصائيات المشاريع ================= */
 
