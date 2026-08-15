@@ -2178,6 +2178,13 @@ getDocs
 from
 "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+import {
+getFunctions,
+httpsCallable
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-functions.js";
+
 const firebaseConfig = {
 
 apiKey:
@@ -2211,6 +2218,9 @@ getAuth(firebaseApp);
 
 const firestore =
 getFirestore(firebaseApp);
+
+const functions =
+getFunctions(firebaseApp);
 
 /* ================= البيانات ================= */
 
@@ -3122,32 +3132,7 @@ if(typeof value==="object"){
 
 try{
 
-return JSON.stringify(
-value,
-function(key,val){
-
-if(
-val &&
-typeof val==="object" &&
-typeof val.toDate==="function"
-){
-
-try{
-
-return val.toDate().toISOString();
-
-}catch(e){
-
-return String(val);
-
-}
-
-}
-
-return val;
-
-}
-);
+return JSON.stringify(value);
 
 }catch(e){
 
@@ -3186,398 +3171,6 @@ key=>backupExcelValue(record[key])
 );
 
 });
-
-}
-
-function backupFirestoreRestValue(value){
-
-if(value===undefined||value===null){
-
-return "";
-
-}
-
-if(Object.prototype.hasOwnProperty.call(value,"nullValue")){
-
-return "";
-
-}
-
-if(Object.prototype.hasOwnProperty.call(value,"stringValue")){
-
-return String(value.stringValue);
-
-}
-
-if(Object.prototype.hasOwnProperty.call(value,"integerValue")){
-
-return String(value.integerValue);
-
-}
-
-if(Object.prototype.hasOwnProperty.call(value,"doubleValue")){
-
-return String(value.doubleValue);
-
-}
-
-if(Object.prototype.hasOwnProperty.call(value,"booleanValue")){
-
-return value.booleanValue ? "TRUE" : "FALSE";
-
-}
-
-if(Object.prototype.hasOwnProperty.call(value,"timestampValue")){
-
-return String(value.timestampValue);
-
-}
-
-if(Object.prototype.hasOwnProperty.call(value,"bytesValue")){
-
-return String(value.bytesValue);
-
-}
-
-if(Object.prototype.hasOwnProperty.call(value,"referenceValue")){
-
-return String(value.referenceValue);
-
-}
-
-if(Object.prototype.hasOwnProperty.call(value,"geoPointValue")){
-
-return JSON.stringify(value.geoPointValue);
-
-}
-
-if(Object.prototype.hasOwnProperty.call(value,"arrayValue")){
-
-const values=
-Array.isArray(value.arrayValue.values)
-?
-value.arrayValue.values.map(
-item=>backupFirestoreRestValue(item)
-)
-:
-[];
-
-return JSON.stringify(values);
-
-}
-
-if(Object.prototype.hasOwnProperty.call(value,"mapValue")){
-
-const fields=
-value.mapValue.fields||{};
-
-const result={};
-
-Object.keys(fields).forEach(
-key=>{
-
-result[key]=
-backupFirestoreRestValue(
-fields[key]
-);
-
-}
-);
-
-return JSON.stringify(result);
-
-}
-
-return JSON.stringify(value);
-
-}
-
-function backupFirestoreRestDocument(document){
-
-const result={};
-
-const fullName=
-String(document.name||"");
-
-const parts=
-fullName.split("/");
-
-result.__documentId=
-parts.length
-?
-parts[parts.length-1]
-:
-"";
-
-result.__documentPath=
-fullName;
-
-const fields=
-document.fields||{};
-
-Object.keys(fields).forEach(
-key=>{
-
-result[key]=
-backupFirestoreRestValue(
-fields[key]
-);
-
-});
-
-return result;
-
-}
-
-async function backupFirestoreRequest(url,options={}){
-
-const user=auth.currentUser;
-
-if(!user){
-
-throw new Error(
-"يجب تسجيل الدخول أولاً."
-);
-
-}
-
-const token=
-await user.getIdToken(true);
-
-const response=
-await fetch(
-url,
-{
-...options,
-headers:{
-"Authorization":
-`Bearer ${token}`,
-"Content-Type":
-"application/json",
-...(options.headers||{})
-}
-}
-);
-
-if(!response.ok){
-
-let message="";
-
-try{
-
-const errorData=
-await response.json();
-
-message=
-errorData?.error?.message||"";
-
-}catch(e){
-
-}
-
-throw new Error(
-message||
-`تعذر الوصول إلى Firebase. رمز الخطأ: ${response.status}`
-);
-
-}
-
-return response.json();
-
-}
-
-async function backupListCollectionIds(parentPath){
-
-let pageToken="";
-const collectionIds=[];
-
-do{
-
-const url=
-`https://firestore.googleapis.com/v1/${parentPath}:listCollectionIds`;
-
-const body={
-pageSize:1000
-};
-
-if(pageToken){
-
-body.pageToken=pageToken;
-
-}
-
-const data=
-await backupFirestoreRequest(
-url,
-{
-method:"POST",
-body:JSON.stringify(body)
-}
-);
-
-if(
-Array.isArray(data.collectionIds)
-){
-
-collectionIds.push(
-...data.collectionIds
-);
-
-}
-
-pageToken=
-data.nextPageToken||"";
-
-}while(pageToken);
-
-return collectionIds;
-
-}
-
-async function backupListDocuments(collectionPath){
-
-let pageToken="";
-const documents=[];
-
-do{
-
-const url=
-`https://firestore.googleapis.com/v1/${collectionPath}?pageSize=1000&showMissing=false&orderBy=__name__`+
-(pageToken
-?
-`&pageToken=${encodeURIComponent(pageToken)}`
-:
-"");
-
-const data=
-await backupFirestoreRequest(
-url,
-{
-method:"GET"
-}
-);
-
-if(
-Array.isArray(data.documents)
-){
-
-documents.push(
-...data.documents
-);
-
-}
-
-pageToken=
-data.nextPageToken||"";
-
-}while(pageToken);
-
-return documents;
-
-}
-
-async function backupReadAllCollections(){
-
-const databasePath=
-"projects/ghassan-f0a60/databases/(default)/documents";
-
-const collections=[];
-
-async function scanDocumentChildren(
-parentCollectionPath,
-document
-){
-
-const childParent=
-String(document.name||"");
-
-const childCollectionIds=
-await backupListCollectionIds(
-childParent
-);
-
-for(
-const childCollectionId
-of childCollectionIds
-){
-
-const childCollectionPath=
-`${childParent}/${childCollectionId}`;
-
-const childDocuments=
-await backupListDocuments(
-childCollectionPath
-);
-
-const item={
-path:childCollectionPath,
-name:childCollectionId,
-documents:childDocuments.map(
-backupFirestoreRestDocument
-)
-};
-
-collections.push(item);
-
-for(
-const childDocument
-of childDocuments
-){
-
-await scanDocumentChildren(
-childCollectionPath,
-childDocument
-);
-
-}
-
-}
-
-}
-
-const rootCollectionIds=
-await backupListCollectionIds(
-databasePath
-);
-
-for(
-const collectionId
-of rootCollectionIds
-){
-
-const collectionPath=
-`${databasePath}/${collectionId}`;
-
-const documents=
-await backupListDocuments(
-collectionPath
-);
-
-const item={
-path:collectionPath,
-name:collectionId,
-documents:documents.map(
-backupFirestoreRestDocument
-)
-};
-
-collections.push(item);
-
-for(
-const document
-of documents
-){
-
-await scanDocumentChildren(
-collectionPath,
-document
-);
-
-}
-
-}
-
-return collections;
 
 }
 
@@ -3634,13 +3227,28 @@ throw new Error(
 
 }
 
+const callable =
+httpsCallable(
+functions,
+"exportFirestoreBackup"
+);
+
+const result =
+await callable({});
+
+const payload =
+result.data||{};
+
 const allCollections=
-await backupReadAllCollections();
+Array.isArray(payload.collections)
+?
+payload.collections
+:[];
 
 if(!allCollections.length){
 
 throw new Error(
-"لم يتم العثور على أي Collections قابلة للقراءة في Firebase."
+"لم يتم العثور على أي Collections في Firebase."
 );
 
 }
@@ -3660,17 +3268,17 @@ const summaryRows=[
 
 [
 "المشروع",
-"ghassan-f0a60"
+String(payload.projectId||"ghassan-f0a60")
 ],
 
 [
 "تاريخ النسخة",
-new Date().toISOString()
+String(payload.exportedAt||new Date().toISOString())
 ],
 
 [
 "البريد المسجل",
-auth.currentUser.email||""
+String(payload.userEmail||auth.currentUser.email||"")
 ],
 
 [
@@ -3680,7 +3288,7 @@ String(allCollections.length)
 
 [
 "ملاحظة",
-"تم اكتشاف Collections الموجودة في Firebase تلقائيًا، وحفظ جميع الحقول والبيانات المقروءة، بما فيها Document ID ومسار المستند."
+"تم اكتشاف Collections وSubcollections الموجودة في Firebase تلقائيًا، وحفظ الحقول وDocument ID ومسار المستند."
 ]
 
 ];
@@ -3690,14 +3298,10 @@ collectionItem=>{
 
 summaryRows.push([
 
-collectionItem.path
-.replace(
-"projects/ghassan-f0a60/databases/(default)/documents/",
-""
-),
+String(collectionItem.path||""),
 
 String(
-collectionItem.documents.length
+(collectionItem.documents||[]).length
 )
 
 ]);
@@ -3710,8 +3314,8 @@ summaryRows
 );
 
 summarySheet["!cols"]=[
-{wch:70},
-{wch:25}
+{wch:90},
+{wch:30}
 ];
 
 XLSX.utils.book_append_sheet(
@@ -3727,16 +3331,16 @@ allCollections.forEach(
 collectionItem=>{
 
 const records=
-collectionItem.documents||[];
+Array.isArray(collectionItem.documents)
+?
+collectionItem.documents
+:[];
 
 const headers=
 backupExcelHeaders(records);
 
-const displayPath=
-collectionItem.path.replace(
-"projects/ghassan-f0a60/databases/(default)/documents/",
-""
-);
+const displayName=
+String(collectionItem.path||collectionItem.name||"بيانات");
 
 if(!headers.length){
 
@@ -3745,7 +3349,7 @@ XLSX.utils.aoa_to_sheet(
 [
 [
 "مسار Collection",
-displayPath
+displayName
 ],
 [
 "لا توجد مستندات",
@@ -3767,33 +3371,24 @@ return;
 
 }
 
-const rows=[
-
+const sheetRows=
+[
 [
 "مسار Collection",
-displayPath
+displayName
 ],
 
 [
+"",
 ""
+],
 
-]
+headers,
 
-];
-
-const headerRow=[
-...headers
-];
-
-const dataRows=
-backupExcelRows(
+...backupExcelRows(
 records,
 headers
-);
-
-const sheetRows=[
-headerRow,
-...dataRows
+)
 ];
 
 const sheet=
@@ -3803,7 +3398,7 @@ sheetRows
 
 sheet["!cols"]=
 headers.map(
-()=>({wch:28})
+()=>({wch:30})
 );
 
 XLSX.utils.book_append_sheet(
@@ -3822,6 +3417,7 @@ const rawRows=[
 [
 "Collection Path",
 "Document ID",
+"Document Path",
 "البيانات الكاملة للمستند"
 ]
 
@@ -3830,7 +3426,7 @@ const rawRows=[
 allCollections.forEach(
 collectionItem=>{
 
-collectionItem.documents.forEach(
+(collectionItem.documents||[]).forEach(
 record=>{
 
 const data={
@@ -3842,7 +3438,13 @@ String(
 data.__documentId||""
 );
 
+const documentPath=
+String(
+data.__documentPath||""
+);
+
 delete data.__documentId;
+delete data.__documentPath;
 
 let json="";
 
@@ -3857,15 +3459,15 @@ null,
 
 }catch(e){
 
-json=
-String(data);
+json=String(data);
 
 }
 
 rawRows.push([
 
-collectionItem.path,
+String(collectionItem.path||""),
 documentId,
+documentPath,
 json
 
 ]);
@@ -3881,8 +3483,9 @@ rawRows
 
 rawSheet["!cols"]=[
 
-{wch:80},
-{wch:40},
+{wch:90},
+{wch:45},
+{wch:90},
 {wch:120}
 
 ];
@@ -3925,7 +3528,7 @@ const btn=this;
 btn.disabled=true;
 
 btn.textContent=
-"جاري اكتشاف وحفظ جميع بيانات Firebase...";
+"جاري قراءة جميع بيانات Firebase...";
 
 try{
 
