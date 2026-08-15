@@ -3333,7 +3333,9 @@ return value.toISOString();
 try{
 
 return JSON.stringify(
-value
+value,
+null,
+2
 );
 
 }catch(e){
@@ -3356,7 +3358,48 @@ key=>headers.add(key)
 
 });
 
-return Array.from(headers);
+const preferred=[
+"__documentId",
+"__documentPath",
+"date",
+"name",
+"title",
+"category",
+"type",
+"unit",
+"tenant",
+"amount",
+"collectedAmount",
+"expense",
+"expenseAmount",
+"depositAmount",
+"depositStatus",
+"profit",
+"note",
+"createdAt",
+"createdBy",
+"userEmail",
+"projectId",
+"propertyId"
+];
+
+const ordered=[];
+
+preferred.forEach(key=>{
+
+if(headers.has(key)){
+
+ordered.push(key);
+headers.delete(key);
+
+}
+
+});
+
+return [
+...ordered,
+...Array.from(headers)
+];
 
 }
 
@@ -3383,7 +3426,7 @@ String(name||"بيانات")
 /[\\\/\?\*\[\]\:]/g,
 "_"
 )
-.slice(0,31);
+slice(0,31);
 
 if(!clean){
 
@@ -3412,6 +3455,243 @@ number++;
 usedNames.add(finalName);
 
 return finalName;
+
+}
+
+function backupExcelCellStyle(
+cell,
+style
+){
+
+if(cell){
+
+cell.s=style;
+
+}
+
+}
+
+function backupExcelFormatSheet(
+worksheet,
+headers,
+rowCount
+){
+
+const headerStyle={
+font:{bold:true,color:"FFFFFF"},
+fill:{fgColor:{rgb:"1F4E78"}},
+alignment:{horizontal:"center",vertical:"center",wrap_text:true},
+border:{
+left:{style:"thin",color:{rgb:"D9E2F3"}},
+right:{style:"thin",color:{rgb:"D9E2F3"}},
+top:{style:"thin",color:{rgb:"D9E2F3"}},
+bottom:{style:"thin",color:{rgb:"D9E2F3"}}
+}
+};
+
+const cellStyle={
+alignment:{vertical:"top",wrap_text:true},
+border:{
+bottom:{style:"thin",color:{rgb:"E5E7EB"}}
+}
+};
+
+for(let c=0;c<headers.length;c++){
+
+const cellAddress=
+XLSX.utils.encode_cell({r:0,c});
+
+backupExcelCellStyle(
+worksheet[cellAddress],
+headerStyle
+);
+
+}
+
+for(let r=1;r<=rowCount;r++){
+
+for(let c=0;c<headers.length;c++){
+
+const cellAddress=
+XLSX.utils.encode_cell({r,c});
+
+if(worksheet[cellAddress]){
+
+backupExcelCellStyle(
+worksheet[cellAddress],
+cellStyle
+);
+
+}
+
+}
+
+}
+
+worksheet["!freeze"]= {
+rows:1,
+columns:0
+};
+
+worksheet["!autofilter"]={
+ref:XLSX.utils.encode_range({
+r:0,
+c:0,
+r:Math.max(0,rowCount),
+c:Math.max(0,headers.length-1)
+})
+};
+
+worksheet["!rows"]=[
+{hpt:28}
+];
+
+}
+
+function backupExcelColumnWidths(
+worksheet,
+headers,
+rows
+){
+
+const widths=headers.map(
+header=>{
+
+let max=String(header||"").length;
+
+rows.forEach(row=>{
+
+const index=headers.indexOf(header);
+const value=row[index];
+
+if(value!==undefined && value!==null){
+
+const length=
+String(value).replace(/\n/g," ").length;
+
+if(length>max)max=length;
+
+}
+
+});
+
+return {
+wch:Math.min(Math.max(max+2,12),38)
+};
+
+});
+
+worksheet["!cols"]=widths;
+
+}
+
+function backupExcelApplyNumberFormats(
+worksheet,
+headers,
+rowCount
+){
+
+const numericWords=[
+"amount",
+"amounts",
+"expense",
+"expenseAmount",
+"depositAmount",
+"collectedAmount",
+"profit",
+"total",
+"income",
+"balance"
+];
+
+headers.forEach((header,c)=>{
+
+const lower=String(header||"").toLowerCase();
+
+const shouldFormat=
+numericWords.some(word=>
+String(word).toLowerCase()===lower ||
+lower.includes(String(word).toLowerCase())
+);
+
+if(!shouldFormat)return;
+
+for(let r=1;r<=rowCount;r++){
+
+const address=
+XLSX.utils.encode_cell({r,c});
+
+const cell=worksheet[address];
+
+if(cell && typeof cell.v==="number"){
+
+cell.z='#,##0.00';
+
+}
+
+}
+
+});
+
+}
+
+function backupExcelAddTitle(
+workbook,
+title,
+rows,
+usedNames
+){
+
+const sheet=
+XLSX.utils.aoa_to_sheet(rows);
+
+sheet["!cols"]=[
+{wch:34},
+{wch:80}
+];
+
+const titleCell=sheet["A1"];
+
+if(titleCell){
+
+titleCell.s={
+font:{bold:true,color:"FFFFFF",sz:15},
+fill:{fgColor:{rgb:"17365D"}},
+alignment:{horizontal:"center",vertical:"center"}
+};
+
+}
+
+const lastRow=Math.max(1,rows.length);
+
+if(sheet["B1"]){
+
+sheet["B1"].s={
+font:{bold:true,color:"FFFFFF",sz:15},
+fill:{fgColor:{rgb:"17365D"}},
+alignment:{horizontal:"center",vertical:"center"}
+};
+
+}
+
+sheet["!merges"]=[
+{
+s:{r:0,c:0},
+e:{r:0,c:1}
+}
+];
+
+sheet["!rows"]=[
+{hpt:30}
+];
+
+XLSX.utils.book_append_sheet(
+workbook,
+sheet,
+backupExcelSafeSheetName(title,usedNames)
+);
+
+return sheet;
 
 }
 
@@ -3498,7 +3778,9 @@ error:error.message
 
 }
 
-const summaryRows=[
+/* ================= ورقة الفهرس ================= */
+
+const indexRows=[
 
 [
 "نسخة احتياطية كاملة من Firebase",
@@ -3512,7 +3794,7 @@ const summaryRows=[
 
 [
 "تاريخ النسخة",
-new Date().toISOString()
+new Date().toLocaleString("ar-SA")
 ],
 
 [
@@ -3531,8 +3813,12 @@ exportedCollections.length
 ],
 
 [
-"ملاحظة",
-"أي Collection جديدة يتم استخدامها من الموقع عبر collection(firestore,...) يتم تسجيل مسارها تلقائيًا للنسخ الاحتياطي."
+""
+],
+
+[
+"Collection",
+"عدد المستندات"
 ]
 
 ];
@@ -3540,7 +3826,7 @@ exportedCollections.length
 exportedCollections.forEach(
 item=>{
 
-summaryRows.push([
+indexRows.push([
 
 item.path,
 
@@ -3550,27 +3836,83 @@ item.records.length
 
 });
 
-const summarySheet=
+const indexSheet=
 XLSX.utils.aoa_to_sheet(
-summaryRows
+indexRows
 );
 
-summarySheet["!cols"]=[
-
-{wch:100},
-
-{wch:35}
-
+indexSheet["!cols"]=[
+{wch:70},
+{wch:22}
 ];
+
+if(indexSheet["A1"]){
+
+indexSheet["A1"].s={
+font:{bold:true,color:"FFFFFF",sz:16},
+fill:{fgColor:{rgb:"17365D"}},
+alignment:{horizontal:"center",vertical:"center"}
+};
+
+}
+
+if(indexSheet["B1"]){
+
+indexSheet["B1"].s={
+font:{bold:true,color:"FFFFFF",sz:16},
+fill:{fgColor:{rgb:"17365D"}},
+alignment:{horizontal:"center",vertical:"center"}
+};
+
+}
+
+indexSheet["!merges"]=[
+{
+s:{r:0,c:0},
+e:{r:0,c:1}
+}
+];
+
+indexSheet["!rows"]=[
+{hpt:32}
+];
+
+for(let c=0;c<2;c++){
+
+const cell=
+XLSX.utils.encode_cell({r:7,c});
+
+if(indexSheet[cell]){
+
+indexSheet[cell].s={
+font:{bold:true,color:"FFFFFF"},
+fill:{fgColor:{rgb:"1F4E78"}},
+alignment:{horizontal:"center",vertical:"center"}
+};
+
+}
+
+}
+
+indexSheet["!autofilter"]={
+ref:`A8:B${indexRows.length}`
+};
+
+indexSheet["!freeze"]={
+rows:8,
+columns:0
+};
 
 XLSX.utils.book_append_sheet(
 workbook,
-summarySheet,
+indexSheet,
 backupExcelSafeSheetName(
-"ملخص النسخة",
+"الفهرس",
 usedSheetNames
 )
 );
+
+/* ================= ورقة مستقلة لكل Collection ================= */
 
 exportedCollections.forEach(
 collectionItem=>{
@@ -3579,26 +3921,51 @@ const records=
 collectionItem.records||[];
 
 const headers=
-backupExcelHeaders(
-records
-);
+backupExcelHeaders(records);
 
 if(!headers.length){
 
-const emptySheet=
-XLSX.utils.aoa_to_sheet(
+const emptyRows=[
+
 [
-[
-"مسار Collection",
+"Collection",
 collectionItem.path
 ],
 
 [
-"لا توجد مستندات أو لا توجد صلاحية قراءة",
-collectionItem.error||""
+"الحالة",
+collectionItem.error||"لا توجد مستندات"
 ]
-]
+
+];
+
+const emptySheet=
+XLSX.utils.aoa_to_sheet(
+emptyRows
 );
+
+emptySheet["!cols"]=[
+{wch:28},
+{wch:80}
+];
+
+for(let c=0;c<2;c++){
+
+const cell=emptySheet[
+XLSX.utils.encode_cell({r:0,c})
+];
+
+if(cell){
+
+cell.s={
+font:{bold:true,color:"FFFFFF"},
+fill:{fgColor:{rgb:"1F4E78"}},
+alignment:{horizontal:"center"}
+};
+
+}
+
+}
 
 XLSX.utils.book_append_sheet(
 workbook,
@@ -3613,35 +3980,36 @@ return;
 
 }
 
-const sheetRows=[
-
-[
-"مسار Collection",
-collectionItem.path
-],
-
-[
-"",
-""
-],
-
-headers,
-
-...backupExcelRows(
+const rows=
+backupExcelRows(
 records,
 headers
-)
-
-];
+);
 
 const sheet=
 XLSX.utils.aoa_to_sheet(
-sheetRows
+[
+headers,
+...rows
+]
 );
 
-sheet["!cols"]=
-headers.map(
-()=>({wch:32})
+backupExcelColumnWidths(
+ sheet,
+ headers,
+ rows
+);
+
+backupExcelFormatSheet(
+ sheet,
+ headers,
+ rows.length
+);
+
+backupExcelApplyNumberFormats(
+ sheet,
+ headers,
+ rows.length
 );
 
 XLSX.utils.book_append_sheet(
@@ -3655,10 +4023,12 @@ usedSheetNames
 
 });
 
+/* ================= ورقة البيانات الخام ================= */
+
 const rawRows=[
 
 [
-"Collection Path",
+"Collection",
 "Document ID",
 "Document Path",
 "البيانات الكاملة للمستند"
@@ -3678,12 +4048,12 @@ const data={
 
 const documentId=
 String(
-data.__documentId||""
+ data.__documentId||""
 );
 
 const documentPath=
 String(
-data.__documentPath||""
+ data.__documentPath||""
 );
 
 delete data.__documentId;
@@ -3695,9 +4065,9 @@ try{
 
 json=
 JSON.stringify(
-data,
-null,
-2
+ data,
+ null,
+ 2
 );
 
 }catch(e){
@@ -3729,15 +4099,64 @@ rawRows
 
 rawSheet["!cols"]=[
 
-{wch:100},
-
-{wch:45},
-
-{wch:100},
-
-{wch:120}
+{wch:55},
+{wch:38},
+{wch:75},
+{wch:110}
 
 ];
+
+for(let c=0;c<4;c++){
+
+const cell=
+rawSheet[
+XLSX.utils.encode_cell({r:0,c})
+];
+
+if(cell){
+
+cell.s={
+font:{bold:true,color:"FFFFFF"},
+fill:{fgColor:{rgb:"1F4E78"}},
+alignment:{horizontal:"center",vertical:"center",wrap_text:true}
+};
+
+}
+
+}
+
+for(let r=1;r<rawRows.length;r++){
+
+for(let c=0;c<4;c++){
+
+const cell=
+rawSheet[
+XLSX.utils.encode_cell({r,c})
+];
+
+if(cell){
+
+cell.s={
+alignment:{vertical:"top",wrap_text:true},
+border:{
+bottom:{style:"thin",color:{rgb:"E5E7EB"}}
+}
+};
+
+}
+
+}
+
+}
+
+rawSheet["!freeze"]={
+rows:1,
+columns:0
+};
+
+rawSheet["!autofilter"]={
+ref:`A1:D${Math.max(1,rawRows.length)}`
+};
 
 XLSX.utils.book_append_sheet(
 workbook,
@@ -3777,14 +4196,14 @@ const btn=this;
 btn.disabled=true;
 
 btn.textContent=
-"جاري قراءة جميع بيانات Firebase...";
+"جاري ترتيب بيانات Excel...";
 
 try{
 
 await exportCompleteFirebaseBackup();
 
 alert(
-"تم حفظ النسخة الاحتياطية الكاملة من Firebase في ملف Excel."
+"تم حفظ النسخة الاحتياطية في Excel بشكل مرتب."
 );
 
 }catch(e){
@@ -3809,7 +4228,6 @@ btn.textContent=
 }
 
 };
-
 
 /* ================= المقاولات ================= */
 
