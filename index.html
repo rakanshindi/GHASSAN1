@@ -1,274 +1,3899 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
+
 <head>
+
 <meta charset="utf-8">
+
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>إدارة المكتب والمشاريع والعقارات والمصاريف</title>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#f4f6f8;color:#17202a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif}
-.wrap{max-width:1100px;margin:auto;padding:18px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:15px}
-.brand h1{font-size:24px;margin:0}.brand p{margin:5px 0;color:#667085;font-size:13px}
-button,.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:800;cursor:pointer;background:#0f172a;color:white;display:inline-flex;align-items:center;justify-content:center;gap:6px}
-button:disabled{opacity:.65;cursor:not-allowed}.btn.secondary{background:#fff;color:#111827;border:1px solid #d7dce2}.btn.green{background:#16a34a}.btn.red{background:#dc2626}.btn.blue{background:#2563eb}.btn.orange{background:#d97706}
-.card{background:#fff;border:1px solid #e6e9ee;border-radius:16px;padding:16px;margin-bottom:15px;box-shadow:0 4px 16px rgba(0,0,0,.04)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{padding:16px;border-radius:14px;background:#f8fafc}.stat small{color:#667085}.stat strong{display:block;font-size:23px;margin-top:7px;direction:ltr;text-align:right}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.field label{display:block;font-weight:800;font-size:13px;margin-bottom:6px}
-.field input,.field select{width:100%;height:44px;border:1px solid #d7dce2;border-radius:10px;padding:0 11px;font-size:14px;background:#fff}.full{grid-column:1/-1}
-.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:5px;margin-bottom:15px}.tab{white-space:nowrap;background:#fff;color:#111827;border:1px solid #d7dce2}.tab.active{background:#0f172a;color:#fff}
-.table-wrap{overflow-x:auto;width:100%;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:650px}th,td{padding:10px 8px;border-bottom:1px solid #edf0f3;text-align:right;font-size:13px}th{background:#f8fafc}
-.num-val{direction:ltr;unicode-bidi:bidi-override;display:inline-block}.income{color:#15803d;font-weight:800}.expense{color:#b91c1c;font-weight:800}.profit-positive{color:#15803d;font-weight:800}.profit-negative{color:#b91c1c;font-weight:800}.muted{color:#667085}
-.actions{display:flex;gap:7px;flex-wrap:wrap}.notice{padding:11px;border-radius:10px;background:#eff6ff;color:#1e40af;margin-bottom:12px;font-size:13px}.empty{padding:25px;text-align:center;color:#667085}
-.login-card{max-width:430px;margin:70px auto;background:#fff;border:1px solid #e6e9ee;border-radius:16px;padding:25px;box-shadow:0 4px 16px rgba(0,0,0,.06)}.login-card h2{margin-top:0}.login-field{margin-bottom:14px}.login-field label{display:block;font-weight:800;font-size:13px;margin-bottom:6px}.login-field input{width:100%;height:46px;border:1px solid #d7dce2;border-radius:10px;padding:0 12px;font-size:14px}.login-error{color:#b91c1c;background:#fef2f2;padding:10px;border-radius:10px;font-size:13px;margin-bottom:12px;display:none}
-.user-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.portal-selection{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:30px}
-.portal-card{background:#fff;border:2px solid #e6e9ee;border-radius:18px;padding:25px 15px;text-align:center;cursor:pointer;transition:all .2s ease;box-shadow:0 4px 16px rgba(0,0,0,.04)}.portal-card:hover{border-color:#0f172a;transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.08)}.portal-card h2{margin:10px 0 5px;font-size:19px}.portal-card p{color:#667085;margin:0;font-size:13px}.portal-icon{font-size:38px;display:block;margin-bottom:10px}
-.section-nav{display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap}.month-filter{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px}.month-filter select{height:42px;border:1px solid #d7dce2;border-radius:10px;padding:0 11px;font-size:14px;background:#fff;min-width:190px}
-.month-group-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:15px;margin-bottom:15px}.month-header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #cbd5e1;padding-bottom:8px;margin-bottom:12px}.month-header h4{margin:0;font-size:16px}.editable-cell{cursor:pointer;transition:background .15s ease;border-radius:6px}.editable-cell:hover{background:#f1f5f9}.inline-edit-input{width:100%;min-width:80px;height:36px;border:1px solid #2563eb;border-radius:8px;padding:0 8px;font-size:13px;background:#fff;outline:none}
-@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.wrap{padding:10px}.top{align-items:flex-start}.stats{gap:8px}.stat strong{font-size:18px}.portal-selection{grid-template-columns:1fr}.brand h1{font-size:20px}}
+
+*{
+box-sizing:border-box
+}
+
+body{
+margin:0;
+background:#f4f6f8;
+color:#17202a;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif
+}
+
+.wrap{
+max-width:1100px;
+margin:auto;
+padding:18px
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:15px
+}
+
+.brand h1{
+font-size:24px;
+margin:0
+}
+
+.brand p{
+margin:5px 0;
+color:#667085;
+font-size:13px
+}
+
+button,.btn{
+border:0;
+border-radius:10px;
+padding:11px 15px;
+font-weight:800;
+cursor:pointer;
+background:#0f172a;
+color:white;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:6px
+}
+
+button:disabled{
+opacity:.65;
+cursor:not-allowed
+}
+
+.btn.secondary{
+background:#fff;
+color:#111827;
+border:1px solid #d7dce2
+}
+
+.btn.green{
+background:#16a34a
+}
+
+.btn.red{
+background:#dc2626
+}
+
+.btn.blue{
+background:#2563eb
+}
+
+.btn.orange{
+background:#d97706
+}
+
+.card{
+background:#fff;
+border:1px solid #e6e9ee;
+border-radius:16px;
+padding:16px;
+margin-bottom:15px;
+box-shadow:0 4px 16px rgba(0,0,0,.04)
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px
+}
+
+.stat{
+padding:16px;
+border-radius:14px;
+background:#f8fafc
+}
+
+.stat small{
+color:#667085
+}
+
+.stat strong{
+display:block;
+font-size:23px;
+margin-top:7px;
+direction:ltr;
+text-align:right
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px
+}
+
+.field label{
+display:block;
+font-weight:800;
+font-size:13px;
+margin-bottom:6px
+}
+
+.field input,
+.field select{
+width:100%;
+height:44px;
+border:1px solid #d7dce2;
+border-radius:10px;
+padding:0 11px;
+font-size:14px;
+background:#fff
+}
+
+.full{
+grid-column:1/-1
+}
+
+.tabs{
+display:flex;
+gap:8px;
+overflow-x:auto;
+padding-bottom:5px;
+margin-bottom:15px
+}
+
+.tab{
+white-space:nowrap;
+background:#fff;
+color:#111827;
+border:1px solid #d7dce2
+}
+
+.tab.active{
+background:#0f172a;
+color:#fff
+}
+
+.table-wrap{
+overflow-x:auto;
+width:100%;
+-webkit-overflow-scrolling:touch
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:650px
+}
+
+th,td{
+padding:10px 8px;
+border-bottom:1px solid #edf0f3;
+text-align:right;
+font-size:13px
+}
+
+th{
+background:#f8fafc
+}
+
+.num-val{
+direction:ltr;
+unicode-bidi:bidi-override;
+display:inline-block
+}
+
+.income{
+color:#15803d;
+font-weight:800
+}
+
+.expense{
+color:#b91c1c;
+font-weight:800
+}
+
+.profit-positive{
+color:#15803d;
+font-weight:800
+}
+
+.profit-negative{
+color:#b91c1c;
+font-weight:800
+}
+
+.muted{
+color:#667085
+}
+
+.editable-cell{
+cursor:pointer;
+transition:background .15s ease;
+border-radius:6px
+}
+
+.editable-cell:hover{
+background:#f1f5f9
+}
+
+.inline-edit-input{
+width:100%;
+min-width:80px;
+height:34px;
+border:1px solid #2563eb;
+border-radius:7px;
+padding:0 7px;
+font-size:13px;
+background:#fff;
+outline:none
+}
+
+.actions{
+display:flex;
+gap:7px;
+flex-wrap:wrap
+}
+
+.notice{
+padding:11px;
+border-radius:10px;
+background:#eff6ff;
+color:#1e40af;
+margin-bottom:12px;
+font-size:13px
+}
+
+.empty{
+padding:25px;
+text-align:center;
+color:#667085
+}
+
+.login-card{
+max-width:430px;
+margin:70px auto;
+background:#fff;
+border:1px solid #e6e9ee;
+border-radius:16px;
+padding:25px;
+box-shadow:0 4px 16px rgba(0,0,0,.06)
+}
+
+.login-card h2{
+margin-top:0
+}
+
+.login-field{
+margin-bottom:14px
+}
+
+.login-field label{
+display:block;
+font-weight:800;
+font-size:13px;
+margin-bottom:6px
+}
+
+.login-field input{
+width:100%;
+height:46px;
+border:1px solid #d7dce2;
+border-radius:10px;
+padding:0 12px;
+font-size:14px
+}
+
+.login-error{
+color:#b91c1c;
+background:#fef2f2;
+padding:10px;
+border-radius:10px;
+font-size:13px;
+margin-bottom:12px;
+display:none
+}
+
+.user-bar{
+display:flex;
+align-items:center;
+gap:8px;
+flex-wrap:wrap
+}
+
+.portal-selection{
+display:grid;
+grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+gap:15px;
+margin-top:30px
+}
+
+.portal-card{
+background:#fff;
+border:2px solid #e6e9ee;
+border-radius:18px;
+padding:25px 15px;
+text-align:center;
+cursor:pointer;
+transition:all .2s ease;
+box-shadow:0 4px 16px rgba(0,0,0,.04)
+}
+
+.portal-card:hover{
+border-color:#0f172a;
+transform:translateY(-3px);
+box-shadow:0 8px 24px rgba(0,0,0,.08)
+}
+
+.portal-card h2{
+margin:10px 0 5px 0;
+font-size:19px
+}
+
+.portal-card p{
+color:#667085;
+margin:0;
+font-size:13px
+}
+
+.portal-icon{
+font-size:38px;
+display:block;
+margin-bottom:10px
+}
+
+.save-status{
+display:none;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
+font-size:13px;
+font-weight:700
+}
+
+.save-status.success{
+display:block;
+background:#f0fdf4;
+color:#15803d;
+border:1px solid #bbf7d0
+}
+
+.save-status.error{
+display:block;
+background:#fef2f2;
+color:#b91c1c;
+border:1px solid #fecaca
+}
+
+.section-nav{
+display:flex;
+gap:10px;
+margin-bottom:15px;
+flex-wrap:wrap
+}
+
+.month-group-card{
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:15px;
+margin-bottom:15px
+}
+
+.month-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:2px solid #cbd5e1;
+padding-bottom:8px;
+margin-bottom:12px
+}
+
+.month-header h4{
+margin:0;
+font-size:16px;
+color:#0f172a
+}
+
+.month-header span{
+font-size:15px;
+font-weight:800
+}
+
+.month-filter{
+display:flex;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:15px
+}
+
+.month-filter .month-filter-label{
+font-weight:800;
+font-size:13px
+}
+
+.month-filter select{
+height:42px;
+border:1px solid #d7dce2;
+border-radius:10px;
+padding:0 11px;
+font-size:14px;
+background:#fff;
+min-width:190px
+}
+
+.editable-cell{
+cursor:pointer;
+transition:background .15s ease
+}
+
+.editable-cell:hover{
+background:#f1f5f9
+}
+
+.inline-edit-input{
+width:100%;
+min-width:90px;
+height:36px;
+border:1px solid #2563eb;
+border-radius:8px;
+padding:0 8px;
+font-size:13px;
+background:#fff
+}
+
+@media(max-width:900px){
+.portal-selection{
+grid-template-columns:repeat(2,1fr)
+}
+}
+
+@media(max-width:800px){
+.stats{
+grid-template-columns:repeat(2,1fr)
+}
+}
+
+@media(max-width:560px){
+.grid{
+grid-template-columns:1fr
+}
+.full{
+grid-column:auto
+}
+.wrap{
+padding:10px
+}
+.top{
+align-items:flex-start
+}
+.stats{
+gap:8px
+}
+.stat strong{
+font-size:18px
+}
+.portal-selection{
+grid-template-columns:1fr
+}
+.brand h1{
+font-size:20px
+}
+}
+
 </style>
+
 </head>
+
 <body>
 
+
+<!-- ================= تسجيل الدخول ================= -->
+
 <div id="loginScreen" style="display:none">
+
 <div class="login-card">
-<h2>🔐 تسجيل الدخول</h2><p class="muted">سجل الدخول للوصول إلى البيانات.</p>
+
+<h2>🔐 تسجيل الدخول</h2>
+
+<p class="muted">
+سجل الدخول للوصول إلى بيانات المشاريع والدخل والمصاريف.
+</p>
+
 <div id="loginError" class="login-error"></div>
-<div class="login-field"><label>البريد الإلكتروني</label><input id="loginEmail" type="email" autocomplete="username"></div>
-<div class="login-field"><label>كلمة المرور</label><input id="loginPassword" type="password" autocomplete="current-password"></div>
-<button class="btn green" id="loginButton" style="width:100%">دخول</button>
-</div></div>
+
+<div class="login-field">
+
+<label>البريد الإلكتروني</label>
+
+<input
+id="loginEmail"
+type="email"
+autocomplete="username"
+placeholder="البريد الإلكتروني">
+
+</div>
+
+<div class="login-field">
+
+<label>كلمة المرور</label>
+
+<input
+id="loginPassword"
+type="password"
+autocomplete="current-password"
+placeholder="كلمة المرور">
+
+</div>
+
+<button
+class="btn green"
+id="loginButton"
+style="width:100%">
+
+دخول
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- ================= التطبيق ================= -->
 
 <div id="app" style="display:none">
+
 <div class="wrap">
+
+
 <div class="top">
-<div class="brand"><h1>📊 نظام الإدارة الشامل</h1><p>المكتب والمقاولات والمشاريع ودخل الخدمات وإيجارات العقارات والمصاريف الشخصية</p></div>
-<div class="user-bar"><span id="currentUser" class="muted" style="font-size:12px"></span><button class="btn secondary" id="homeBtn" style="display:none">🏠 الرئيسية</button><button class="btn secondary" id="logoutBtn">تسجيل خروج</button></div>
-</div>
-<div class="notice">البيانات تحفظ تلقائيًا في Firebase Cloud Firestore.</div>
 
-<div id="portalScreen">
+<div class="brand">
+
+<h1>📊 نظام الإدارة الشامل</h1>
+
+<p>
+المكتب والمشاريع ودخل الخدمات وإيجارات العقارات والمصاريف الشخصية
+</p>
+
+</div>
+
+<div class="actions">
+
+<div class="user-bar">
+
+<span
+id="currentUser"
+class="muted"
+style="font-size:12px">
+</span>
+
+<button
+class="btn secondary"
+id="homeBtn"
+style="display:none">
+
+🏠 الرئيسية
+
+</button>
+
+<button
+class="btn secondary"
+id="logoutBtn">
+
+تسجيل خروج
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="notice">
+
+البيانات تحفظ تلقائيًا في Firebase Cloud Firestore ويمكن الوصول إليها من أي جهاز بعد تسجيل الدخول.
+
+</div>
+
+
+<!-- ================= الرئيسية ================= -->
+
+<div id="portalScreen" style="display:block">
+
 <div class="portal-selection">
-<div class="portal-card" id="selectOffice"><span class="portal-icon">🏢</span><h2>المكتب</h2><p>إدارة دخل ومصاريف المكتب</p></div>
-<div class="portal-card" id="selectContracting"><span class="portal-icon">🏗️</span><h2>المقاولات</h2><p>إدارة دخل ومصروف وربح المقاولات</p></div>
-<div class="portal-card" id="selectProjects"><span class="portal-icon">🏗️</span><h2>المشاريع</h2><p>متابعة مصاريف ودفعات المشاريع</p></div>
-<div class="portal-card" id="selectServices"><span class="portal-icon">🛠️</span><h2>دخل الخدمات</h2><p>متابعة أرباح الخدمات وتصنيفها</p></div>
-<div class="portal-card" id="selectRentals"><span class="portal-icon">🔑</span><h2>إيجارات العقارات</h2><p>إدارة العقارات والوحدات والتأمين</p></div>
-<div class="portal-card" id="selectPersonal"><span class="portal-icon">💳</span><h2>المصاريف الشخصية</h2><p>متابعة المصاريف الشخصية والشهرية</p></div>
-</div>
-<div class="card" id="fullSiteWallet" style="margin-top:20px"><h2>💰 محفظة كامل الموقع</h2><div class="stats"><div class="stat"><small>صافي السيولة الحالية</small><strong id="walletBalance" class="income">0 SAR</strong></div><div class="stat"><small>إجمالي الدخل</small><strong id="walletIncome" class="income">0 SAR</strong></div><div class="stat"><small>إجمالي المصروفات</small><strong id="walletExpense" class="expense">0 SAR</strong></div><div class="stat"><small>الربح / الخسارة</small><strong id="walletProfit">0 SAR</strong></div></div></div>
-</div>
 
-<div id="officeSection" style="display:none"><div class="card">
-<div class="section-nav"><button class="btn secondary" onclick="goBack()">← رجوع</button><button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button></div>
-<h2>🏢 المكتب</h2><div id="officeMonthFilter"></div>
-<div class="stats"><div class="stat"><small>إجمالي المصروف</small><strong id="officeTotalExpense" class="expense">0 SAR</strong></div><div class="stat"><small>عدد المصاريف</small><strong id="officeExpenseCount">0</strong></div><div class="stat"><small>إجمالي دخل المكتب</small><strong id="officeTotalIncome" class="income">0 SAR</strong></div></div>
-<div class="card"><h3>➕ إضافة دخل مكتب</h3><div class="grid"><div class="field"><label>التاريخ</label><input id="offIncDate" type="date"></div><div class="field"><label>اسم الدخل</label><input id="offIncName"></div><div class="field"><label>المبلغ</label><input id="offIncAmount" type="number" min="0" step="0.01"></div><div class="field"><label>ملاحظات</label><input id="offIncNote"></div><div class="full"><button class="btn green" id="saveOfficeIncomeBtn">حفظ الدخل</button></div></div></div>
-<div class="card"><h3>➕ إضافة مصروف مكتب</h3><div class="grid"><div class="field"><label>التاريخ</label><input id="offExpDate" type="date"></div><div class="field"><label>اسم البند</label><input id="offExpName"></div><div class="field"><label>المبلغ</label><input id="offExpAmount" type="number" min="0" step="0.01"></div><div class="field"><label>ملاحظات</label><input id="offExpNote"></div><div class="full"><button class="btn red" id="saveOfficeExpenseBtn">حفظ المصروف</button></div></div></div>
-<h3>📋 دخل المكتب</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>الاسم</th><th>المبلغ</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody id="officeIncomeBody"></tbody></table></div>
-<h3>📋 مصاريف المكتب</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>البند</th><th>المبلغ</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody id="officeExpensesBody"></tbody></table></div>
-</div></div>
 
-<div id="contractingSection" style="display:none"><div class="card">
-<div class="section-nav"><button class="btn secondary" onclick="goBack()">← رجوع</button><button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button></div>
-<h2>🏗️ المقاولات</h2><div id="contractingMonthFilter"></div>
-<div class="stats"><div class="stat"><small>إجمالي الدخل</small><strong id="contractingIncome" class="income">0 SAR</strong></div><div class="stat"><small>إجمالي المصروف</small><strong id="contractingExpense" class="expense">0 SAR</strong></div><div class="stat"><small>صافي الربح</small><strong id="contractingProfit">0 SAR</strong></div></div>
-<div class="card"><h3>➕ إضافة عملية</h3><div class="grid"><div class="field"><label>التاريخ</label><input id="conDate" type="date"></div><div class="field"><label>نوع العملية</label><select id="conType"><option value="income">دخل</option><option value="expense">مصروف</option></select></div><div class="field"><label>التصنيف</label><input id="conCategory" list="contractingCategoriesList"><datalist id="contractingCategoriesList"></datalist></div><div class="field"><label>المبلغ</label><input id="conAmount" type="number" min="0" step="0.01"></div><div class="field full"><label>الملاحظات</label><input id="conNote"></div><div class="full"><button class="btn green" id="saveContractingBtn">حفظ العملية</button></div></div></div>
-<h3>📊 مجموع كل تصنيف</h3><div class="table-wrap"><table><thead><tr><th>التصنيف</th><th>الدخل</th><th>المصروف</th><th>الصافي</th></tr></thead><tbody id="contractingSummaryBody"></tbody></table></div>
-<h3>📋 جميع العمليات</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>النوع</th><th>التصنيف</th><th>المبلغ</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody id="contractingBody"></tbody></table></div>
-</div></div>
+<div class="portal-card" id="selectOffice">
 
-<div id="projectsSection" style="display:none"><div class="section-nav"><button class="btn secondary" onclick="goBack()">← رجوع</button><button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button></div>
-<div class="stats"><div class="stat"><small>إجمالي الدخل</small><strong id="totalIncome" class="income">0 SAR</strong></div><div class="stat"><small>إجمالي المصاريف</small><strong id="totalExpense" class="expense">0 SAR</strong></div><div class="stat"><small>صافي الربح</small><strong id="netProfit">0 SAR</strong></div><div class="stat"><small>عدد المشاريع</small><strong id="projectCount">0</strong></div></div>
-<div class="card"><div class="tabs" id="tabs"><button class="tab active" data-view="projects">المشاريع</button><button class="tab" data-view="transactions">جميع العمليات</button></div><div id="content"></div></div>
+<span class="portal-icon">🏢</span>
+
+<h2>المكتب</h2>
+
+<p>
+إدارة دخل ومصاريف المكتب
+</p>
+
 </div>
 
-<div id="servicesSection" style="display:none"><div class="card">
-<div class="section-nav"><button class="btn secondary" onclick="goBack()">← رجوع</button><button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button></div>
-<h2>🛠️ دخل الخدمات</h2><div id="servicesMonthFilter"></div>
-<div class="stats"><div class="stat"><small>إجمالي الدخل</small><strong id="servicesTotalIncome" class="income">0 SAR</strong></div><div class="stat"><small>إجمالي المصروف</small><strong id="servicesTotalExpense" class="expense">0 SAR</strong></div><div class="stat"><small>صافي الربح</small><strong id="servicesNetProfit">0 SAR</strong></div><div class="stat"><small>عدد الخدمات</small><strong id="servicesCategoryCount">0</strong></div></div>
-<div class="card"><h3>➕ إضافة عملية خدمة</h3><div class="grid"><div class="field"><label>التاريخ</label><input id="srvDate" type="date"></div><div class="field"><label>اسم الخدمة / التصنيف</label><input id="srvCategory" list="servicesList"><datalist id="servicesList"></datalist></div><div class="field"><label>الدخل / المبلغ المحصل</label><input id="srvCollectedAmount" type="number" min="0" step="0.01"></div><div class="field"><label>المصروف</label><input id="srvExpense" type="number" min="0" step="0.01"></div><div class="field full"><label>البيان / ملاحظة</label><input id="srvNote"></div><div class="full"><button class="btn green" id="saveServiceTxBtn">حفظ العملية</button></div></div></div>
-<div class="card"><h3>➕ إضافة مصروفات الخدمات المستقلة</h3><div class="grid"><div class="field"><label>التاريخ</label><input id="srvExpenseDate" type="date"></div><div class="field"><label>اسم المصروف / التصنيف</label><input id="srvExpenseCategory"></div><div class="field"><label>مبلغ المصروف</label><input id="srvGeneralExpenseAmount" type="number" min="0" step="0.01"></div><div class="field full"><label>البيان / ملاحظة</label><input id="srvGeneralExpenseNote"></div><div class="full"><button class="btn red" id="saveServiceGeneralExpenseBtn">حفظ المصروف</button></div></div></div>
-<h3>📊 ملخص الأرباح حسب نوع الخدمة</h3><div class="table-wrap"><table><thead><tr><th>الخدمة</th><th>المبلغ المحصل</th><th>المصروف</th><th>الربح</th></tr></thead><tbody id="servicesSummaryBody"></tbody></table></div>
-<h3>📋 عمليات الخدمات</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>الخدمة</th><th>الربح</th><th>الدخل</th><th>المصروف</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody id="servicesBody"></tbody></table></div>
-<h3>📋 المصروفات المستقلة</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>التصنيف</th><th>المبلغ</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody id="servicesGeneralExpensesBody"></tbody></table></div>
+
+<div class="portal-card" id="selectContracting">
+<span class="portal-icon">🏢</span>
+<h2>المقاولات</h2>
+<p>إدارة دخل ومصروف وربح المقاولات</p>
+</div>
+
+<div class="portal-card" id="selectProjects">
+
+<span class="portal-icon">🏗️</span>
+
+<h2>المشاريع</h2>
+
+<p>
+متابعة مصاريف ودفعات المشاريع
+</p>
+
+</div>
+
+
+<div class="portal-card" id="selectServices">
+
+<span class="portal-icon">🛠️</span>
+
+<h2>دخل الخدمات</h2>
+
+<p>
+متابعة أرباح الخدمات وتصنيفها
+</p>
+
+</div>
+
+
+<div class="portal-card" id="selectRentals">
+
+<span class="portal-icon">🔑</span>
+
+<h2>إيجارات العقارات</h2>
+
+<p>
+إدارة العقارات والوحدات والتأمين
+</p>
+
+</div>
+
+
+<div class="portal-card" id="selectPersonal">
+
+<span class="portal-icon">💳</span>
+
+<h2>المصاريف الشخصية</h2>
+
+<p>
+متابعة المصاريف الشخصية والشهرية
+</p>
+
+</div>
+
+
+</div>
+
+<!-- ================= المقاولات ================= -->
+<div id="contractingSection" style="display:none">
+<div class="card">
+<div class="section-nav"><button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button><button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button></div>
+<h2>🏢 المقاولات</h2>
+<div id="contractingMonthFilter"></div>
+<div class="stats" style="margin-bottom:20px">
+<div class="stat"><small>إجمالي الدخل</small><strong id="contractingIncome" class="income">0 SAR</strong></div>
+<div class="stat"><small>إجمالي المصروف</small><strong id="contractingExpense" class="expense">0 SAR</strong></div>
+<div class="stat"><small>صافي الربح</small><strong id="contractingProfit">0 SAR</strong></div>
+</div>
+<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+<h3>➕ إضافة عملية مقاولات</h3>
+<div class="grid">
+<div class="field"><label>النوع</label><select id="conType"><option value="income">دخل</option><option value="expense">مصروف</option></select></div>
+<div class="field"><label>التاريخ</label><input id="conDate" type="date"></div>
+<div class="field"><label>الاسم / البند</label><input id="conName" placeholder="مثال: عقد، دفعة، مواد، أجور..."></div>
+<div class="field"><label>المبلغ (SAR)</label><input id="conAmount" type="number" min="0" step="0.01" placeholder="0"></div>
+<div class="field"><label>التصنيف</label><input id="conCategory" placeholder="مواد، أجور، دفعة..."></div>
+<div class="field full"><label>البيان</label><input id="conNote" placeholder="بيان إضافي..."></div>
+<div class="full"><button class="btn green" id="saveContractingBtn">حفظ العملية</button></div>
+</div></div>
+<h3>📋 عمليات المقاولات</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>النوع</th><th>الاسم / البند</th><th>التصنيف</th><th>المبلغ</th><th>البيان</th><th>إجراء</th></tr></thead><tbody id="contractingBody"></tbody></table></div>
 </div></div>
 
-<div id="personalSection" style="display:none"><div class="card">
-<div class="section-nav"><button class="btn secondary" onclick="goBack()">← رجوع</button><button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button></div>
-<h2>💳 المصاريف الشخصية</h2><div id="personalMonthFilter"></div>
-<div class="stats"><div class="stat"><small>إجمالي المصاريف</small><strong id="personalTotalExpense" class="expense">0 SAR</strong></div><div class="stat"><small>عدد البنود</small><strong id="personalExpenseCount">0</strong></div></div>
-<div class="card"><h3>➕ إضافة مصروف شخصي</h3><div class="grid"><div class="field"><label>التاريخ</label><input id="perExpDate" type="date"></div><div class="field"><label>المصروف</label><input id="perExpAmount" type="number" min="0" step="0.01"></div><div class="field full"><label>الملاحظة</label><input id="perExpNote"></div><div class="full"><button class="btn red" id="savePersonalExpenseBtn">حفظ المصروف الشخصي</button></div></div></div>
+<!-- ================= المصاريف الشخصية ================= -->
+
+<div id="personalSection" style="display:none">
+
+<div class="card">
+
+<div class="section-nav">
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
+</div>
+
+<h2>💳 المصاريف الشخصية</h2>
+<div id="personalMonthFilter"></div>
+
+
+<div class="stats" style="margin-bottom:20px">
+
+<div class="stat">
+
+<small>
+إجمالي المصاريف الشخصية
+</small>
+
+<strong
+id="personalTotalExpense"
+class="expense">
+
+0 SAR
+
+</strong>
+
+</div>
+
+<div class="stat">
+
+<small>
+عدد بنود المصاريف
+</small>
+
+<strong id="personalExpenseCount">
+0
+</strong>
+
+</div>
+
+</div>
+
+
+<div
+class="card"
+style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+
+<h3>
+➕ إضافة مصروف شخصي جديد
+</h3>
+
+<div class="grid">
+
+<div class="field">
+
+<label>التاريخ</label>
+
+<input
+id="perExpDate"
+type="date">
+
+</div>
+
+<div class="field">
+
+<label>المصروف (SAR)</label>
+
+<input
+id="perExpAmount"
+type="number"
+min="0"
+step="0.01"
+placeholder="0">
+
+</div>
+
+<div class="field full">
+
+<label>الملاحظة / البيان</label>
+
+<input
+id="perExpNote"
+placeholder="تفاصيل المصروف...">
+
+</div>
+
+<div class="full">
+
+<button
+class="btn red"
+id="savePersonalExpenseBtn">
+
+حفظ المصروف الشخصي
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<h3>
+📅 المصاريف الشهرية (مجمعة حسب الشهر الميلادي)
+</h3>
+
 <div id="personalMonthlyContainer"></div>
+
+</div>
+
+</div>
+
+
+<!-- ================= المكتب ================= -->
+
+<div id="officeSection" style="display:none">
+
+<div class="card">
+
+<div class="section-nav">
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
+</div>
+
+<h2>🏢 مصاريف المكتب</h2>
+<div id="officeMonthFilter"></div>
+
+
+<div class="stats" style="margin-bottom:20px">
+
+
+<div class="stat">
+
+<small>
+إجمالي مصاريف المكتب
+</small>
+
+<strong
+id="officeTotalExpense"
+class="expense">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+عدد بنود المصاريف
+</small>
+
+<strong id="officeExpenseCount">
+0
+</strong>
+
+</div>
+<div class="stat"><small>إجمالي دخل المكتب</small><strong id="officeTotalIncome" class="income">0 SAR</strong></div>
+
+
+
+</div>
+
+
+<div
+class="card"
+style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+
+<h3>➕ إضافة دخل مكتب</h3>
+<div class="grid">
+<div class="field"><label>التاريخ</label><input id="offIncDate" type="date"></div>
+<div class="field"><label>اسم الدخل</label><input id="offIncName" placeholder="مثال: أتعاب، استشارة، خدمة..."></div>
+<div class="field"><label>المبلغ (SAR)</label><input id="offIncAmount" type="number" min="0" step="0.01" placeholder="0"></div>
+<div class="field"><label>ملاحظات</label><input id="offIncNote" placeholder="بيان إضافي..."></div>
+<div class="full"><button class="btn green" id="saveOfficeIncomeBtn">حفظ الدخل</button></div>
+</div>
+
+<h3>➕ إضافة مصروف مكتب</h3>
+
+
+<div class="grid">
+
+
+<div class="field">
+
+<label>التاريخ</label>
+
+<input
+id="offExpDate"
+type="date">
+
+</div>
+
+
+<div class="field">
+
+<label>اسم البند / المسمى</label>
+
+<input
+id="offExpName"
+placeholder="مثال: إيجار المكتب، كهرباء، أدوات مكتبية...">
+
+</div>
+
+
+<div class="field">
+
+<label>المبلغ (SAR)</label>
+
+<input
+id="offExpAmount"
+type="number"
+min="0"
+step="0.01"
+placeholder="0">
+
+</div>
+
+
+<div class="field">
+
+<label>ملاحظات</label>
+
+<input
+id="offExpNote"
+placeholder="بيان إضافي...">
+
+</div>
+
+
+<div class="full">
+
+<button
+class="btn red"
+id="saveOfficeExpenseBtn">
+
+حفظ المصروف
+
+</button>
+
+<div
+id="officeSaveStatus"
+class="save-status">
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<h3>
+📋 قائمة مصاريف المكتب
+</h3>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>التاريخ</th>
+<th>اسم البند</th>
+<th>المبلغ</th>
+<th>الملاحظات</th>
+<th>إجراء</th>
+
+</tr>
+
+</thead>
+
+<tbody id="officeExpensesBody"></tbody>
+</table></div>
+<h3>📋 قائمة دخل المكتب</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>الاسم</th><th>المبلغ</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody id="officeIncomeBody"></tbody></table></div>
+</div>
+</div>
+
+<!-- ================= المشاريع ================= -->
+
+<div id="projectsSection" style="display:none">
+
+<div class="section-nav">
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
+</div>
+
+
+<div
+class="stats"
+id="mainStats">
+
+<div class="stat">
+
+<small>
+إجمالي الدخل (الدفعات)
+</small>
+
+<strong
+id="totalIncome"
+class="income">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+إجمالي المصاريف
+</small>
+
+<strong
+id="totalExpense"
+class="expense">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+المتبقي (صافي الربح)
+</small>
+
+<strong id="netProfit">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+عدد المشاريع
+</small>
+
+<strong id="projectCount">
+0
+</strong>
+
+</div>
+
+</div>
+
+
+<div
+class="card"
+style="margin-top:15px">
+
+<div
+class="tabs"
+id="tabs">
+
+<button
+class="tab active"
+data-view="projects">
+
+المشاريع
+
+</button>
+
+<button
+class="tab"
+data-view="transactions">
+
+جميع العمليات
+
+</button>
+
+</div>
+
+
+<div id="content"></div>
+
+</div>
+
+</div>
+
+
+<!-- ================= الخدمات ================= -->
+
+<div id="servicesSection" style="display:none">
+
+<div class="card">
+
+<div class="section-nav">
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
+</div>
+
+
+<h2>🛠️ دخل الخدمات</h2>
+<div id="servicesMonthFilter"></div>
+
+
+<div
+class="stats"
+style="margin-bottom:20px">
+
+
+<div class="stat">
+
+<small>
+إجمالي الدخل الشامل
+</small>
+
+<strong
+id="servicesTotalIncome"
+class="income">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+إجمالي المصاريف
+</small>
+
+<strong
+id="servicesTotalExpense"
+class="expense">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+صافي الربح الشامل
+</small>
+
+<strong id="servicesNetProfit">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+عدد الخدمات
+</small>
+
+<strong id="servicesCategoryCount">
+0
+</strong>
+
+</div>
+
+
+</div>
+
+
+<div
+class="card"
+style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+
+<h3>
+➕ إضافة عملية خدمة جديدة
+</h3>
+
+
+<div class="grid">
+
+
+<div class="field">
+
+<label>التاريخ</label>
+
+<input
+id="srvDate"
+type="date">
+
+</div>
+
+
+<div class="field">
+
+<label>اسم الخدمة / التصنيف</label>
+
+<input
+id="srvCategory"
+list="servicesList"
+placeholder="اكتب أو اختر خدمة">
+
+<datalist id="servicesList"></datalist>
+
+</div>
+
+
+<div class="field">
+
+<label>الدخل / المبلغ المحصل (SAR)</label>
+
+<input
+id="srvCollectedAmount"
+type="number"
+min="0"
+step="0.01"
+placeholder="0">
+
+</div>
+
+
+
+
+<div class="field">
+
+<label>المصروف (SAR)</label>
+
+<input
+id="srvExpense"
+type="number"
+min="0"
+step="0.01"
+placeholder="0">
+
+</div>
+
+
+<div class="field full">
+
+<label>
+البيان / ملاحظة
+</label>
+
+<input
+id="srvNote"
+placeholder="تفاصيل العملية...">
+
+</div>
+
+
+<div class="full">
+
+<button
+class="btn green"
+id="saveServiceTxBtn">
+
+حفظ العملية
+
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<div class="card" style="background:#fff7ed;border:1px solid #fed7aa;margin-bottom:20px">
+<h3>➕ إضافة مصروفات الخدمات المستقلة</h3>
+<div class="grid">
+<div class="field"><label>التاريخ</label><input id="srvExpenseDate" type="date"></div>
+<div class="field"><label>اسم المصروف / التصنيف</label><input id="srvExpenseCategory" placeholder="مثال: بنزين، أدوات، نقل..."></div>
+<div class="field"><label>مبلغ المصروف (SAR)</label><input id="srvGeneralExpenseAmount" type="number" min="0" step="0.01" placeholder="0"></div>
+<div class="field full"><label>البيان / ملاحظة</label><input id="srvGeneralExpenseNote" placeholder="تفاصيل المصروف..."></div>
+<div class="full"><button class="btn red" id="saveServiceGeneralExpenseBtn">حفظ المصروف</button></div>
 </div></div>
 
-<div id="rentalsSection" style="display:none"><div class="card">
-<div class="section-nav"><button class="btn secondary" onclick="goBack()">← رجوع</button><button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button></div>
-<h2>🔑 إدارة إيجارات العقارات</h2><div id="rentalsMonthFilter"></div>
-<div class="stats"><div class="stat"><small>إجمالي الإيجارات</small><strong id="allPropertiesRent" class="income">0 SAR</strong></div><div class="stat"><small>إجمالي المصاريف</small><strong id="allPropertiesExpense" class="expense">0 SAR</strong></div><div class="stat"><small>صافي الربح</small><strong id="allPropertiesNetProfit">0 SAR</strong></div><div class="stat"><small>عدد العقارات</small><strong id="allPropertiesCount">0</strong></div></div>
+<h3>
+📊 ملخص الأرباح حسب نوع الخدمة
+</h3>
+
+
+<div
+class="table-wrap"
+style="margin-bottom:25px">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>الخدمة</th>
+<th>إجمالي المبلغ المحصل</th>
+<th>إجمالي المصروف</th>
+<th>إجمالي الربح</th>
+
+</tr>
+
+</thead>
+
+<tbody id="servicesSummaryBody"></tbody>
+
+</table>
+
+</div>
+
+
+<h3>
+📋 سجل جميع عمليات الخدمات
+</h3>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>التاريخ</th>
+<th>الخدمة</th>
+<th>الربح</th>
+<th>المبلغ المحصل</th>
+<th>المصروف</th>
+<th>البيان</th>
+<th>إجراء</th>
+
+</tr>
+
+</thead>
+
+<tbody id="servicesBody"></tbody>
+
+</table>
+
+</div>
+
+<h3>📋 المصروفات المستقلة للخدمات</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>التاريخ</th><th>المصروف / التصنيف</th><th>المبلغ</th><th>البيان</th><th>إجراء</th></tr></thead>
+<tbody id="servicesGeneralExpensesBody"></tbody>
+</table>
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= العقارات ================= -->
+
+<div id="rentalsSection" style="display:none">
+
+<div class="card">
+
+
+<div class="section-nav">
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
+</div>
+
+
+<h2>🔑 إدارة إيجارات العقارات</h2>
+<div id="rentalsMonthFilter"></div>
+
+
+<!-- ملخص العقارات داخل قسم الإيجارات فقط -->
+
+<div
+class="stats"
+style="margin-bottom:20px">
+
+
+<div class="stat">
+
+<small>
+إجمالي إيجارات العقارات
+</small>
+
+<strong
+id="allPropertiesRent"
+class="income">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+إجمالي مصاريف العقارات
+</small>
+
+<strong
+id="allPropertiesExpense"
+class="expense">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+صافي ربح العقارات
+</small>
+
+<strong id="allPropertiesNetProfit">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+عدد العقارات
+</small>
+
+<strong id="allPropertiesCount">
+0
+</strong>
+
+</div>
+
+
+</div>
+
+
+<!-- قائمة العقارات -->
+
 <div id="rentalMainView">
-<div class="card"><h3>➕ إضافة عقار</h3><div class="grid"><div class="field"><label>اسم العقار</label><input id="propertyTitle"></div><div style="align-self:end"><button class="btn green" id="savePropertyBtn">إضافة العقار</button></div></div></div>
-<div class="table-wrap"><table><thead><tr><th>اسم العقار</th><th>الإيجارات</th><th>مصاريف الإيجار</th><th>مصاريف العقار</th><th>الصافي</th><th>التأمينات المستردة</th><th>التأمينات النشطة</th><th>إجراء</th></tr></thead><tbody id="propertiesListBody"></tbody></table></div>
+
+
+<div
+class="card"
+style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+
+
+<h3>
+➕ إضافة عقار جديد
+</h3>
+
+
+<div class="grid">
+
+
+<div class="field">
+
+<label>اسم العقار</label>
+
+<input
+id="propertyTitle"
+placeholder="مثال: عمارة النزهة، مجمع الياسمين...">
+
 </div>
-<div id="rentalDetailView" style="display:none">
-<div class="section-nav"><h2 id="currentPropertyName">اسم العقار</h2><button class="btn secondary" onclick="closePropertyDetails()">← قائمة العقارات</button></div>
-<div class="stats"><div class="stat"><small>إجمالي الإيجارات</small><strong id="propTotalRent" class="income">0 SAR</strong></div><div class="stat"><small>مصاريف عمليات الإيجار</small><strong id="propRentalExpenses" class="expense">0 SAR</strong></div><div class="stat"><small>مصاريف العقار</small><strong id="propGeneralExpenses" class="expense">0 SAR</strong></div><div class="stat"><small>صافي الربح</small><strong id="propNetProfit">0 SAR</strong></div></div>
-<div class="card"><h3>➕ تسجيل عقد / عملية إيجار</h3><div class="grid"><div class="field"><label>التاريخ</label><input id="rentDate" type="date"></div><div class="field"><label>الوحدة</label><input id="rentUnit"></div><div class="field"><label>المستأجر</label><input id="rentTenant"></div><div class="field"><label>الإيجار</label><input id="rentAmount" type="number" min="0" step="0.01"></div><div class="field"><label>التأمين</label><input id="rentDeposit" type="number" min="0" step="0.01"></div><div class="field"><label>تصنيف المصروف</label><input id="rentExpenseCategory"></div><div class="field"><label>مصروف العملية</label><input id="rentExpenseAmount" type="number" min="0" step="0.01"></div><div class="field"><label>ملاحظات</label><input id="rentNote"></div><div class="full"><button class="btn green" id="saveRentContractBtn">تسجيل العقد</button></div></div></div>
-<div class="card"><h3>➕ مصروف شامل للعقار</h3><div class="grid"><div class="field"><label>التاريخ</label><input id="propertyExpenseDate" type="date"></div><div class="field"><label>التصنيف</label><input id="propertyExpenseCategory"></div><div class="field"><label>المبلغ</label><input id="propertyExpenseAmount" type="number" min="0" step="0.01"></div><div class="field"><label>ملاحظات</label><input id="propertyExpenseNote"></div><div class="full"><button class="btn orange" id="savePropertyExpenseBtn">حفظ مصروف العقار</button></div></div></div>
-<div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>الوحدة</th><th>المستأجر</th><th>الإيجار</th><th>التأمين</th><th>تصنيف المصروف</th><th>مصروف العملية</th><th>الصافي</th><th>التأمين</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody id="rentContractsBody"></tbody></table></div>
-<h3>📋 المصاريف الشاملة</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>التصنيف</th><th>المبلغ</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody id="propertyExpensesBody"></tbody></table></div>
+
+
+<div style="align-self:end">
+
+<button
+class="btn green"
+id="savePropertyBtn">
+
+إضافة العقار
+
+</button>
+
 </div>
+
 </div>
+
 </div>
+
+
+<h3>
+📋 قائمة العقارات
+</h3>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>اسم العقار</th>
+<th>إجمالي الإيجارات</th>
+<th>مصاريف الإيجار</th>
+<th>مصاريف العقار</th>
+<th>صافي الربح</th>
+<th>التأمينات المستردة</th>
+<th>التأمينات النشطة</th>
+<th>إجراء</th>
+
+</tr>
+
+</thead>
+
+<tbody id="propertiesListBody"></tbody>
+
+</table>
+
 </div>
+
+</div>
+
+
+<!-- تفاصيل العقار -->
+
+<div
+id="rentalDetailView"
+style="display:none">
+
+
+<div
+style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:15px">
+
+
+<h2 id="currentPropertyName">
+اسم العقار
+</h2>
+
+
+<button
+class="btn secondary"
+onclick="closePropertyDetails()">
+
+← العودة لقائمة العقارات
+
+</button>
+
+
+</div>
+
+
+<!-- إحصائيات العقار -->
+
+<div
+class="stats"
+style="margin-bottom:20px">
+
+
+<div class="stat">
+
+<small>
+إجمالي الإيجارات
+</small>
+
+<strong
+id="propTotalRent"
+class="income">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+مصاريف عمليات الإيجار
+</small>
+
+<strong
+id="propRentalExpenses"
+class="expense">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+مصاريف العقار الشاملة
+</small>
+
+<strong
+id="propGeneralExpenses"
+class="expense">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+صافي ربح العقار
+</small>
+
+<strong id="propNetProfit">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+</div>
+
+
+<div
+class="stats"
+style="margin-bottom:20px">
+
+
+<div class="stat">
+
+<small>
+التأمينات المستردة
+</small>
+
+<strong
+id="propTotalRefunded"
+style="color:#2563eb">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+التأمينات المتبقية
+</small>
+
+<strong
+id="propTotalRetained"
+style="color:#d97706">
+
+0 SAR
+
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+عدد العقود
+</small>
+
+<strong id="propContractsCount">
+0
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>
+عدد المصاريف الشاملة
+</small>
+
+<strong id="propGeneralExpenseCount">
+0
+</strong>
+
+</div>
+
+
+</div>
+
+
+<!-- إضافة عقد إيجار -->
+
+<div
+class="card"
+style="background:#f0fdf4;border:1px solid #bbf7d0;margin-bottom:20px">
+
+
+<h3>
+➕ تسجيل عقد / عملية إيجار جديدة
+</h3>
+
+
+<div class="grid">
+
+
+<div class="field">
+
+<label>التاريخ</label>
+
+<input
+id="rentDate"
+type="date">
+
+</div>
+
+
+<div class="field">
+
+<label>المسمى / رقم الوحدة</label>
+
+<input
+id="rentUnit"
+placeholder="مثال: شقة 101">
+
+</div>
+
+
+<div class="field">
+
+<label>اسم المستأجر</label>
+
+<input
+id="rentTenant"
+placeholder="اسم المستأجر...">
+
+</div>
+
+
+<div class="field">
+
+<label>مبلغ الإيجار (SAR)</label>
+
+<input
+id="rentAmount"
+type="number"
+min="0"
+step="0.01"
+placeholder="0">
+
+</div>
+
+
+<div class="field">
+
+<label>مبلغ التأمين</label>
+
+<input
+id="rentDeposit"
+type="number"
+min="0"
+step="0.01"
+placeholder="0">
+
+</div>
+
+
+<div class="field">
+
+<label>تصنيف مصروف عملية الإيجار</label>
+
+<input
+id="rentExpenseCategory"
+placeholder="مثال: صيانة، كهرباء، سباكة...">
+
+</div>
+
+
+<div class="field">
+
+<label>مبلغ مصروف عملية الإيجار</label>
+
+<input
+id="rentExpenseAmount"
+type="number"
+min="0"
+step="0.01"
+placeholder="0">
+
+</div>
+
+
+<div class="field">
+
+<label>ملاحظات</label>
+
+<input
+id="rentNote"
+placeholder="ملاحظات العقد...">
+
+</div>
+
+
+<div class="full">
+
+<button
+class="btn green"
+id="saveRentContractBtn">
+
+تسجيل العقد
+
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- مصروف شامل للعقار -->
+
+<div
+class="card"
+style="background:#fff7ed;border:1px solid #fed7aa;margin-bottom:20px">
+
+
+<h3>
+➕ إضافة مصروف شامل للعقار
+</h3>
+
+
+<p class="muted">
+هذا المصروف يخص العقار كاملًا وليس عملية إيجار معينة.
+</p>
+
+
+<div class="grid">
+
+
+<div class="field">
+
+<label>التاريخ</label>
+
+<input
+id="propertyExpenseDate"
+type="date">
+
+</div>
+
+
+<div class="field">
+
+<label>نوع / تصنيف المصروف</label>
+
+<input
+id="propertyExpenseCategory"
+placeholder="مثال: صيانة العمارة، حارس، كهرباء، نظافة...">
+
+</div>
+
+
+<div class="field">
+
+<label>المبلغ (SAR)</label>
+
+<input
+id="propertyExpenseAmount"
+type="number"
+min="0"
+step="0.01"
+placeholder="0">
+
+</div>
+
+
+<div class="field">
+
+<label>ملاحظات</label>
+
+<input
+id="propertyExpenseNote"
+placeholder="بيان إضافي...">
+
+</div>
+
+
+<div class="full">
+
+<button
+class="btn orange"
+id="savePropertyExpenseBtn">
+
+حفظ مصروف العقار
+
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- عمليات الإيجار -->
+
+<h3>
+📋 عمليات إيجارات هذا العقار
+</h3>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>التاريخ</th>
+<th>الوحدة</th>
+<th>المستأجر</th>
+<th>الإيجار</th>
+<th>التأمين</th>
+<th>تصنيف المصروف</th>
+<th>مصروف العملية</th>
+<th>صافي العملية</th>
+<th>حالة التأمين</th>
+<th>الملاحظات</th>
+<th>إجراء</th>
+
+</tr>
+
+</thead>
+
+<tbody id="rentContractsBody"></tbody>
+
+</table>
+
+</div>
+
+
+<!-- المصاريف الشاملة -->
+
+<h3 style="margin-top:25px">
+📋 المصاريف الشاملة للعقار
+</h3>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>التاريخ</th>
+<th>التصنيف</th>
+<th>المبلغ</th>
+<th>الملاحظات</th>
+<th>إجراء</th>
+
+</tr>
+
+</thead>
+
+<tbody id="propertyExpensesBody"></tbody>
+
+</table>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
 
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import {getFirestore,collection,addDoc,deleteDoc,doc,onSnapshot,writeBatch,updateDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-const firebaseConfig={
-apiKey:"AIzaSyDvk_d5RB5pzbWcaqWUEa6V_I7qnAQwwRM",
-authDomain:"ghassan-f0a60.firebaseapp.com",
-projectId:"ghassan-f0a60",
-storageBucket:"ghassan-f0a60.firebasestorage.app",
-messagingSenderId:"1052504371272",
-appId:"1:1052504371272:web:81e5accd7a8456a709687d",
-measurementId:"G-LK0437M2ZJ"
+
+/* ================= FIREBASE ================= */
+
+import {
+initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+
+import {
+getAuth,
+signInWithEmailAndPassword,
+onAuthStateChanged,
+signOut
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+import {
+getFirestore,
+collection,
+addDoc,
+deleteDoc,
+doc,
+onSnapshot,
+writeBatch,
+updateDoc,
+serverTimestamp
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+const firebaseConfig = {
+
+apiKey:
+"AIzaSyDvk_d5RB5pzbWcaqWUEa6V_I7qnAQwwRM",
+
+authDomain:
+"ghassan-f0a60.firebaseapp.com",
+
+projectId:
+"ghassan-f0a60",
+
+storageBucket:
+"ghassan-f0a60.firebasestorage.app",
+
+messagingSenderId:
+"1052504371272",
+
+appId:
+"1:1052504371272:web:81e5accd7a8456a709687d",
+
+measurementId:
+"G-LK0437M2ZJ"
+
 };
-const app=initializeApp(firebaseConfig),auth=getAuth(app),firestore=getFirestore(app);
 
-let db={projects:[],transactions:[],officeExpenses:[],officeIncome:[],contracting:[],services:[],properties:[],rentals:[],propertyExpenses:[],personalExpenses:[]};
-let currentOpenedProjectId=null,currentOpenedPropertyId=null,pageHistory=["portalScreen"];
-let unsub={};
-const nowMonth=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`};
-const selectedMonths={office:nowMonth(),contracting:nowMonth(),projects:nowMonth(),services:nowMonth(),rentals:nowMonth(),personal:nowMonth()};
-const arabicMonths=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
-const today=()=>new Date().toISOString().slice(0,10);
-const money=n=>`<span class="num-val">${new Intl.NumberFormat("en-US",{minimumFractionDigits:0,maximumFractionDigits:2}).format(Number(n)||0)} SAR</span>`;
-const formatNum=n=>new Intl.NumberFormat("en-US").format(Number(n)||0);
-const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
-const profitClass=n=>Number(n)>=0?"profit-positive":"profit-negative";
+
+const firebaseApp =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(firebaseApp);
+
+const firestore =
+getFirestore(firebaseApp);
+
+
+/* ================= البيانات ================= */
+
+let db = {
+
+projects:[],
+transactions:[],
+officeExpenses:[],
+officeIncome:[],
+contracting:[],
+services:[],
+properties:[],
+rentals:[],
+propertyExpenses:[],
+personalExpenses:[]
+
+};
+
+
+let currentOpenedProjectId=null;
+
+let currentOpenedPropertyId=null;
+
+let pageHistory = ["portalScreen"];
+
+
+let unsubscribeProjects=null;
+let unsubscribeTransactions=null;
+let unsubscribeOffice=null;
+let unsubscribeOfficeIncome=null;
+let unsubscribeContracting=null;
+let unsubscribeServices=null;
+let unsubscribeProperties=null;
+let unsubscribeRentals=null;
+let unsubscribePropertyExpenses=null;
+let unsubscribePersonalExpenses=null;
+
+
+const categories=[
+
+"عام",
+"مقاولات",
+"حكومي",
+"استشاري",
+"مواد",
+"أجور",
+"أخرى"
+
+];
+
+
+/* ================= الأدوات ================= */
+
+function money(number){
+
+const formatted = new Intl.NumberFormat(
+"en-US",
+{
+minimumFractionDigits: 0,
+maximumFractionDigits: 2
+}
+).format(Number(number)||0);
+
+return `<span class="num-val">${formatted} SAR</span>`;
+
+}
+
+function formatNum(number){
+return new Intl.NumberFormat("en-US").format(Number(number)||0);
+}
+
+
+function escapeHTML(value){
+
+return String(value ?? "")
+.replace(
+/[&<>"']/g,
+function(m){
+
+return {
+
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+
+}[m];
+
+}
+);
+
+}
+
+
+function today(){
+
+return new Date()
+.toISOString()
+.slice(0,10);
+
+}
+
+function currentMonthKey(){
+const d=new Date();
+return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+}
+
+const selectedMonths={
+office:currentMonthKey(),
+contracting:currentMonthKey(),
+projects:currentMonthKey(),
+services:currentMonthKey(),
+rentals:currentMonthKey(),
+personal:currentMonthKey()
+};
+
+const arabicMonths=[
+"يناير","فبراير","مارس","أبريل","مايو","يونيو",
+"يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"
+];
 
 function monthFilterHTML(key){
-const y=new Date().getFullYear(),v=selectedMonths[key]||nowMonth();
-return `<div class="card month-filter"><b>📅 عرض:</b><select onchange="changeMonthFilter('${key}',this.value)">${arabicMonths.map((m,i)=>{const x=`${y}-${String(i+1).padStart(2,"0")}`;return `<option value="${x}" ${v===x?"selected":""}>${m} ${y}</option>`}).join("")}<option value="all" ${v==="all"?"selected":""}>كامل السنة ${y}</option></select></div>`;
+const currentYear=new Date().getFullYear();
+const value=selectedMonths[key]||currentMonthKey();
+return `
+<div class="card month-filter">
+<span class="month-filter-label">📅 عرض:</span>
+<select id="${key}MonthSelect" onchange="changeMonthFilter('${key}',this.value)">
+${arabicMonths.map((name,i)=>{
+const month=`${currentYear}-${String(i+1).padStart(2,"0")}`;
+return `<option value="${month}" ${value===month?"selected":""}>${name} ${currentYear}</option>`;
+}).join("")}
+<option value="all" ${value==="all"?"selected":""}>كامل السنة ${currentYear}</option>
+</select>
+</div>`;
 }
-window.changeMonthFilter=(key,v)=>{selectedMonths[key]=v;if(key==="office")renderOffice();else if(key==="contracting")renderContracting();else if(key==="services")renderServices();else if(key==="rentals")renderRentals();else if(key==="personal")renderPersonal();else render(document.querySelector(".tab.active")?.dataset.view||"projects")};
-function filterMonth(items,key){const v=selectedMonths[key]||nowMonth(),y=String(new Date().getFullYear());return v==="all"?items.filter(x=>String(x.date||"").slice(0,4)===y):items.filter(x=>String(x.date||"").slice(0,7)===v)}
-function normalizedCategoryKey(v){return String(v||"").trim().toLowerCase().replace(/[\s\-_.،,]+/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي")}
 
-function navigateTo(id){["portalScreen","officeSection","contractingSection","projectsSection","servicesSection","rentalsSection","personalSection"].forEach(x=>{const e=document.getElementById(x);if(e)e.style.display=x===id?"block":"none"});if(pageHistory.at(-1)!==id)pageHistory.push(id);document.getElementById("homeBtn").style.display=id==="portalScreen"?"none":"inline-flex"}
-window.goBack=()=>{if(pageHistory.length>1){pageHistory.pop();navigateTo(pageHistory.at(-1))}else showPortal()};
-window.showPortal=()=>{currentOpenedProjectId=null;currentOpenedPropertyId=null;pageHistory=["portalScreen"];navigateTo("portalScreen");updateWallet()};
-window.openOffice=()=>{navigateTo("officeSection");document.getElementById("offIncDate").value=today();document.getElementById("offExpDate").value=today();renderOffice()};
-window.openContracting=()=>{navigateTo("contractingSection");document.getElementById("conDate").value=today();renderContracting()};
-window.openProjects=()=>{navigateTo("projectsSection");render("projects")};
-window.openServices=()=>{navigateTo("servicesSection");document.getElementById("srvDate").value=today();document.getElementById("srvExpenseDate").value=today();renderServices()};
-window.openRentals=()=>{navigateTo("rentalsSection");renderRentals()};
-window.openPersonal=()=>{navigateTo("personalSection");document.getElementById("perExpDate").value=today();renderPersonal()};
-selectOffice.onclick=openOffice;selectContracting.onclick=openContracting;selectProjects.onclick=openProjects;selectServices.onclick=openServices;selectRentals.onclick=openRentals;selectPersonal.onclick=openPersonal;homeBtn.onclick=showPortal;
-
-function loginError(m){const e=document.getElementById("loginError");e.textContent=m;e.style.display="block"}
-loginButton.onclick=async function(){const email=loginEmail.value.trim(),password=loginPassword.value;if(!email)return loginError("أدخل البريد الإلكتروني.");if(!password)return loginError("أدخل كلمة المرور.");this.disabled=true;this.textContent="جاري الدخول...";try{await signInWithEmailAndPassword(auth,email,password);loginError("");}catch(e){loginError("البريد الإلكتروني أو كلمة المرور غير صحيحة.")}finally{this.disabled=false;this.textContent="دخول"}};
-logoutBtn.onclick=async()=>{Object.values(unsub).forEach(f=>{if(typeof f==="function")f()});await signOut(auth)};
-onAuthStateChanged(auth,u=>{if(u){loginScreen.style.display="none";app.style.display="block";currentUser.textContent=u.email||"";showPortal();startListeners()}else{loginScreen.style.display="block";app.style.display="none"}});
-
-function listen(name,cb){unsub[name]=onSnapshot(collection(firestore,name),s=>{db[name==="office_expenses"?"officeExpenses":name==="office_income"?"officeIncome":name==="property_expenses"?"propertyExpenses":name==="personal_expenses"?"personalExpenses":name]=s.docs.map(d=>({id:d.id,...d.data()}));cb&&cb();updateWallet()},e=>console.error(name,e))}
-function startListeners(){
-Object.values(unsub).forEach(f=>{if(typeof f==="function")f()});unsub={};
-listen("projects",()=>{updateStats();if(projectsSection.style.display==="block")render("projects")});
-listen("transactions",()=>{updateStats();if(projectsSection.style.display==="block")render(document.querySelector(".tab.active")?.dataset.view||"projects")});
-listen("office_expenses",()=>{if(officeSection.style.display==="block")renderOffice()});
-listen("office_income",()=>{if(officeSection.style.display==="block")renderOffice()});
-listen("contracting",()=>{if(contractingSection.style.display==="block")renderContracting()});
-listen("services",()=>{if(servicesSection.style.display==="block")renderServices()});
-listen("properties",()=>{if(rentalsSection.style.display==="block")renderRentals()});
-listen("rentals",()=>{if(rentalsSection.style.display==="block")renderRentals()});
-listen("property_expenses",()=>{if(rentalsSection.style.display==="block")renderRentals()});
-listen("personal_expenses",()=>{if(personalSection.style.display==="block")renderPersonal()});
+window.changeMonthFilter=function(key,value){
+selectedMonths[key]=value;
+if(key==="office") renderOffice();
+else if(key==="contracting") renderContracting();
+else if(key==="services") renderServices();
+else if(key==="rentals") renderRentals();
+else if(key==="personal") renderPersonal();
+else if(key==="projects"){
+const activeTab=document.querySelector(".tab.active");
+if(activeTab) render(activeTab.dataset.view);
+else render("projects");
 }
+};
+
+function filterBySelectedMonth(items,key){
+const selected=selectedMonths[key]||currentMonthKey();
+const currentYear=String(new Date().getFullYear());
+if(selected==="all") return items.filter(item=>String(item.date||"").slice(0,4)===currentYear);
+return items.filter(item=>String(item.date||"").slice(0,7)===selected);
+}
+
+
+function profitClass(value){
+
+return Number(value)>=0
+?
+"profit-positive"
+:
+"profit-negative";
+
+}
+
+
+/* ================= التنقل والدخول ================= */
+
+function navigateTo(screenId) {
+
+const screens = [
+"portalScreen", 
+"officeSection", 
+"projectsSection",
+"contractingSection", 
+"servicesSection", 
+"rentalsSection", 
+"personalSection"
+];
+
+screens.forEach(s => {
+const el = document.getElementById(s);
+if (el) el.style.display = (s === screenId) ? "block" : "none";
+});
+
+if (pageHistory[pageHistory.length - 1] !== screenId) {
+pageHistory.push(screenId);
+}
+
+const homeBtn = document.getElementById("homeBtn");
+if (homeBtn) {
+homeBtn.style.display = (screenId === "portalScreen") ? "none" : "inline-flex";
+}
+
+}
+
+
+window.goBack = function() {
+
+if (pageHistory.length > 1) {
+pageHistory.pop();
+const previousScreen = pageHistory[pageHistory.length - 1];
+navigateTo(previousScreen);
+} else {
+showPortal();
+}
+
+};
+
+
+function showApp(user){
+
+document.getElementById(
+"loginScreen"
+).style.display="none";
+
+document.getElementById(
+"app"
+).style.display="block";
+
+document.getElementById(
+"currentUser"
+).textContent=
+user.email || "";
+
+showPortal();
+
+}
+
+
+window.showPortal=function(){
+
+currentOpenedProjectId=null;
+
+currentOpenedPropertyId=null;
+
+pageHistory = ["portalScreen"];
+
+navigateTo("portalScreen");
+updateWallet();
+
+};
+
+
+window.openOffice=function(){
+
+navigateTo("officeSection");
+
+document.getElementById("offExpDate").value=today(); document.getElementById("offIncDate").value=today();
+
+renderOffice();
+
+};
+
+
+window.openContracting=function(){ navigateTo("contractingSection"); document.getElementById("conDate").value=today(); renderContracting(); };
+
+window.openProjects=function(){
+
+navigateTo("projectsSection");
+
+render("projects");
+
+};
+
+
+window.openServices=function(){
+
+navigateTo("servicesSection");
+
+document.getElementById(
+"srvDate"
+).value=today();
+document.getElementById("srvExpenseDate").value=today();
+
+renderServices();
+
+};
+
+
+window.openRentals=function(){
+
+navigateTo("rentalsSection");
+
+renderRentals();
+
+};
+
+window.openPersonal=function(){
+
+navigateTo("personalSection");
+
+document.getElementById(
+"perExpDate"
+).value=today();
+
+renderPersonal();
+
+};
+
+
+document.getElementById("selectOffice").onclick=openOffice;
+document.getElementById("selectProjects").onclick=openProjects;
+document.getElementById("selectContracting").onclick=openContracting;
+document.getElementById("selectServices").onclick=openServices;
+document.getElementById("selectRentals").onclick=openRentals;
+document.getElementById("selectPersonal").onclick=openPersonal;
+
+document.getElementById("homeBtn").onclick=showPortal;
+
+
+function showLogin(){
+
+document.getElementById(
+"loginScreen"
+).style.display="block";
+
+document.getElementById(
+"app"
+).style.display="none";
+
+}
+
+
+function loginError(message){
+
+const box=
+document.getElementById(
+"loginError"
+);
+
+box.textContent=message;
+
+box.style.display="block";
+
+}
+
+
+document.getElementById(
+"loginButton"
+).onclick=
+async function(){
+
+const email=
+document.getElementById(
+"loginEmail"
+).value.trim();
+
+const password=
+document.getElementById(
+"loginPassword"
+).value;
+
+if(!email){
+
+loginError(
+"أدخل البريد الإلكتروني."
+);
+
+return;
+
+}
+
+if(!password){
+
+loginError(
+"أدخل كلمة المرور."
+);
+
+return;
+
+}
+
+const button=this;
+
+button.disabled=true;
+
+button.textContent=
+"جاري الدخول...";
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+document.getElementById(
+"loginError"
+).style.display="none";
+
+}catch(error){
+
+console.error(
+"Login Error:",
+error
+);
+
+let message=
+"تعذر تسجيل الدخول.";
+
+if(
+error.code==="auth/invalid-credential"
+){
+
+message=
+"البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+
+}
+
+loginError(message);
+
+}finally{
+
+button.disabled=false;
+
+button.textContent="دخول";
+
+}
+
+};
+
+
+document.getElementById(
+"logoutBtn"
+).onclick=
+async function(){
+
+try{
+
+if(unsubscribeProjects) unsubscribeProjects();
+if(unsubscribeTransactions) unsubscribeTransactions();
+if(unsubscribeOffice) unsubscribeOffice();
+if(unsubscribeOfficeIncome) unsubscribeOfficeIncome();
+if(unsubscribeContracting) unsubscribeContracting();
+if(unsubscribeServices) unsubscribeServices();
+if(unsubscribeProperties) unsubscribeProperties();
+if(unsubscribeRentals) unsubscribeRentals();
+if(unsubscribePropertyExpenses) unsubscribePropertyExpenses();
+if(unsubscribePersonalExpenses) unsubscribePersonalExpenses();
+
+await signOut(auth);
+
+}catch(error){
+
+console.error(
+"Logout Error:",
+error
+);
+
+}
+
+};
+
+
+onAuthStateChanged(
+auth,
+function(user){
+
+if(user){
+
+showApp(user);
+
+startFirebaseListeners();
+
+}else{
+
+showLogin();
+
+}
+
+}
+);
+
+
+/* ================= FIREBASE LISTENERS ================= */
+
+function startFirebaseListeners(){
+
+if(unsubscribeProjects) unsubscribeProjects();
+if(unsubscribeTransactions) unsubscribeTransactions();
+if(unsubscribeOffice) unsubscribeOffice();
+if(unsubscribeOfficeIncome) unsubscribeOfficeIncome();
+if(unsubscribeContracting) unsubscribeContracting();
+if(unsubscribeServices) unsubscribeServices();
+if(unsubscribeProperties) unsubscribeProperties();
+if(unsubscribeRentals) unsubscribeRentals();
+if(unsubscribePropertyExpenses) unsubscribePropertyExpenses();
+if(unsubscribePersonalExpenses) unsubscribePersonalExpenses();
+
+
+/* المشاريع */
+
+unsubscribeProjects=
+onSnapshot(
+collection(
+firestore,
+"projects"
+),
+
+snapshot=>{
+
+db.projects=
+snapshot.docs.map(
+item=>({
+id:item.id,
+...item.data()
+})
+);
+
+updateStats();
+
+const activeTab=
+document.querySelector(
+".tab.active"
+);
+
+if(
+activeTab &&
+document.getElementById(
+"projectsSection"
+).style.display==="block"
+){
+
+render(
+activeTab.dataset.view
+);
+
+}
+
+},
+
+error=>{
+console.error("Projects Firebase Error:", error);
+}
+);
+
+
+/* العمليات */
+
+unsubscribeTransactions=
+onSnapshot(
+collection(
+firestore,
+"transactions"
+),
+
+snapshot=>{
+
+db.transactions=
+snapshot.docs.map(
+item=>({
+id:item.id,
+...item.data()
+})
+);
+
+db.transactions.sort(
+(a,b)=>
+String(b.date||"")
+.localeCompare(
+String(a.date||"")
+)
+);
+
+updateStats();
+
+const activeTab=
+document.querySelector(
+".tab.active"
+);
+
+if(
+activeTab &&
+document.getElementById(
+"projectsSection"
+).style.display==="block"
+){
+
+render(
+activeTab.dataset.view
+);
+
+}
+
+},
+
+error=>{
+console.error("Transactions Firebase Error:", error);
+}
+);
+
+
+/* المكتب */
+
+unsubscribeOffice=
+onSnapshot(
+collection(
+firestore,
+"office_expenses"
+),
+
+snapshot=>{
+
+db.officeExpenses=
+snapshot.docs.map(
+item=>({
+id:item.id,
+...item.data()
+})
+);
+
+db.officeExpenses.sort(
+(a,b)=>
+String(b.date||"")
+.localeCompare(
+String(a.date||"")
+)
+);
+
+if(
+document.getElementById(
+"officeSection"
+).style.display==="block"
+){
+
+renderOffice();
+
+}
+
+},
+
+error=>{
+console.error("Office Firebase Error:", error);
+}
+);
+
+
+/* دخل المكتب */
+unsubscribeOfficeIncome=onSnapshot(collection(firestore,"office_income"),snapshot=>{
+db.officeIncome=snapshot.docs.map(item=>({id:item.id,...item.data()}));
+db.officeIncome.sort(
+(a,b)=>
+String(b.date||"")
+.localeCompare(
+String(a.date||"")
+)
+);
+if(document.getElementById("officeSection").style.display==="block") renderOffice();
+updateWallet();
+},error=>console.error("Office Income Firebase Error:",error));
+
+/* المقاولات */
+unsubscribeContracting=onSnapshot(collection(firestore,"contracting"),snapshot=>{
+db.contracting=snapshot.docs.map(item=>({id:item.id,...item.data()}));
+db.contracting.sort(
+(a,b)=>
+String(b.date||"")
+.localeCompare(
+String(a.date||"")
+)
+);
+if(document.getElementById("contractingSection").style.display==="block") renderContracting();
+updateWallet();
+},error=>console.error("Contracting Firebase Error:",error));
+
+/* الخدمات */
+
+unsubscribeServices=
+onSnapshot(
+collection(
+firestore,
+"services"
+),
+
+snapshot=>{
+
+db.services=
+snapshot.docs.map(
+item=>({
+id:item.id,
+...item.data()
+})
+);
+
+db.services.sort(
+(a,b)=>
+String(b.date||"")
+.localeCompare(
+String(a.date||"")
+)
+);
+
+if(document.getElementById("servicesSection").style.display==="block"){renderServices();}
+updateWallet();
+
+},
+
+error=>{
+console.error("Services Firebase Error:", error);
+}
+);
+
+
+/* العقارات */
+
+unsubscribeProperties=
+onSnapshot(
+collection(
+firestore,
+"properties"
+),
+
+snapshot=>{
+
+db.properties=
+snapshot.docs.map(
+item=>({
+id:item.id,
+...item.data()
+})
+);
+
+if(document.getElementById("rentalsSection").style.display==="block"){renderRentals();}
+updateWallet();
+
+},
+
+error=>{
+console.error("Properties Firebase Error:", error);
+}
+);
+
+
+/* عمليات الإيجار */
+
+unsubscribeRentals=
+onSnapshot(
+collection(
+firestore,
+"rentals"
+),
+
+snapshot=>{
+
+db.rentals=
+snapshot.docs.map(
+item=>({
+id:item.id,
+...item.data()
+})
+);
+
+db.rentals.sort(
+(a,b)=>
+String(b.date||"")
+.localeCompare(
+String(a.date||"")
+)
+);
+
+if(
+document.getElementById(
+"rentalsSection"
+).style.display==="block"
+){
+
+renderRentals();
+
+}
+
+},
+
+error=>{
+console.error("Rentals Firebase Error:", error);
+}
+);
+
+
+/* مصاريف العقارات الشاملة */
+
+unsubscribePropertyExpenses=
+onSnapshot(
+collection(
+firestore,
+"property_expenses"
+),
+
+snapshot=>{
+
+db.propertyExpenses=
+snapshot.docs.map(
+item=>({
+id:item.id,
+...item.data()
+})
+);
+
+db.propertyExpenses.sort(
+(a,b)=>
+String(b.date||"")
+.localeCompare(
+String(a.date||"")
+)
+);
+
+if(
+document.getElementById(
+"rentalsSection"
+).style.display==="block"
+){
+
+renderRentals();
+
+}
+
+},
+
+error=>{
+console.error("Property Expenses Firebase Error:", error);
+}
+);
+
+
+/* المصاريف الشخصية */
+
+unsubscribePersonalExpenses=
+onSnapshot(
+collection(
+firestore,
+"personal_expenses"
+),
+
+snapshot=>{
+
+db.personalExpenses=
+snapshot.docs.map(
+item=>({
+id:item.id,
+...item.data()
+})
+);
+
+db.personalExpenses.sort(
+(a,b)=>
+String(b.date||"")
+.localeCompare(
+String(a.date||"")
+)
+);
+
+if(document.getElementById("personalSection").style.display==="block"){renderPersonal();}
+updateWallet();
+
+},
+
+error=>{
+console.error("Personal Expenses Firebase Error:", error);
+}
+);
+
+}
+
 
 function updateWallet(){
-let income=0,expense=0;
-const add=(t,n)=>t==="income"?income+=Number(n)||0:expense+=Number(n)||0;
-db.transactions.forEach(x=>add(x.type,x.amount));db.officeIncome.forEach(x=>add("income",x.amount));db.officeExpenses.forEach(x=>add("expense",x.amount));db.contracting.forEach(x=>add(x.type,x.amount));
-db.services.forEach(x=>x.recordType==="general_expense"?add("expense",x.amount): (add("income",x.collectedAmount),add("expense",x.expense!==undefined?x.expense:Math.max(0,(Number(x.collectedAmount)||0)-(Number(x.profit)||0)))));
-db.rentals.forEach(x=>{add("income",x.amount);add("expense",x.expenseAmount)});db.propertyExpenses.forEach(x=>add("expense",x.amount));db.personalExpenses.forEach(x=>add("expense",x.amount));
-walletIncome.innerHTML=money(income);walletExpense.innerHTML=money(expense);walletProfit.innerHTML=money(income-expense);walletBalance.innerHTML=money(income-expense);
+let income=0, expense=0; const cats={};
+const add=(type,amount,cat)=>{amount=Number(amount)||0;if(type==="income")income+=amount;else{expense+=amount;const c=cat||"عام";cats[c]=(cats[c]||0)+amount;}};
+db.transactions.forEach(t=>add(t.type,t.amount,t.category)); db.officeIncome.forEach(x=>add("income",x.amount,"دخل المكتب")); db.officeExpenses.forEach(x=>add("expense",x.amount,x.name)); db.contracting.forEach(x=>add(x.type,x.amount,x.category)); db.services.forEach(x=>{if(x.recordType==="general_expense"){expense+=Number(x.amount)||0;}else{income+=Number(x.collectedAmount)||0;expense+=Number(x.expense!==undefined?x.expense:Math.max(0,(Number(x.collectedAmount)||0)-(Number(x.profit)||0)))||0;}}); db.rentals.forEach(x=>{income+=Number(x.amount)||0;expense+=Number(x.expenseAmount)||0;}); db.propertyExpenses.forEach(x=>{expense+=Number(x.amount)||0;cats[x.category||"عام"]=(cats[x.category||"عام"]||0)+(Number(x.amount)||0);}); db.personalExpenses.forEach(x=>{expense+=Number(x.amount)||0;cats["مصاريف شخصية"]=(cats["مصاريف شخصية"]||0)+(Number(x.amount)||0);});
+["walletIncome","walletExpense","walletProfit","walletBalance"].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.innerHTML=money(i===0?income:i===1?expense:income-expense);});
+const box=document.getElementById("walletCategories");if(box)box.innerHTML=Object.keys(cats).length?`<table><thead><tr><th>التصنيف</th><th>المجموع</th></tr></thead><tbody>${Object.keys(cats).sort().map(c=>`<tr><td>${escapeHTML(c)}</td><td class="expense">${money(cats[c])}</td></tr>`).join("")}</tbody></table>`:`<div class="empty">لا توجد مصروفات</div>`;
 }
-function updateStats(){let i=0,e=0;db.transactions.forEach(x=>x.type==="income"?i+=Number(x.amount)||0:e+=Number(x.amount)||0);totalIncome.innerHTML=money(i);totalExpense.innerHTML=money(e);netProfit.innerHTML=money(i-e);projectCount.textContent=formatNum(db.projects.length)}
-
-function renderOffice(){
-const ex=filterMonth(db.officeExpenses,"office"),inc=filterMonth(db.officeIncome,"office");officeMonthFilter.innerHTML=monthFilterHTML("office");officeTotalExpense.innerHTML=money(ex.reduce((s,x)=>s+(Number(x.amount)||0),0));officeTotalIncome.innerHTML=money(inc.reduce((s,x)=>s+(Number(x.amount)||0),0));officeExpenseCount.textContent=formatNum(ex.length);
-officeIncomeBody.innerHTML=inc.length?inc.map(x=>row(x,"office_income",["date","name","note"],money(x.amount),"income","editOfficeIncome","deleteOfficeIncome")).join(""):`<tr><td colspan="5"><div class="empty">لا يوجد دخل في الفترة المحددة</div></td></tr>`;
-officeExpensesBody.innerHTML=ex.length?ex.map(x=>row(x,"office_expenses",["date","name","note"],money(x.amount),"expense","editOfficeExpense","deleteOfficeExpense")).join(""):`<tr><td colspan="5"><div class="empty">لا توجد مصاريف في الفترة المحددة</div></td></tr>`;
-}
-function row(x,col,fields,amount,cls,editFn,delFn){return `<tr>${fields.map(f=>`<td class="editable-cell" onclick="inlineEditCell(this,'${col}','${x.id}','${f}',${f==="date"?"'date'":"'text'"})">${f==="date"?`<span class="num-val">${esc(x[f])}</span>`:esc(x[f]||"-")}</td>`).join("")}<td class="${cls}">${amount}</td><td><button class="btn blue" onclick="${editFn}('${x.id}')">تعديل</button> <button class="btn red" onclick="${delFn}('${x.id}')">حذف</button></td></tr>`}
-saveOfficeIncomeBtn.onclick=async()=>{const d=offIncDate.value,n=offIncName.value.trim(),a=Number(offIncAmount.value),note=offIncNote.value.trim();if(!d||!n||!(a>0))return alert("أدخل التاريخ والاسم والمبلغ الصحيح.");await addDoc(collection(firestore,"office_income"),{date:d,name:n,amount:a,note,createdAt:serverTimestamp()});offIncName.value="";offIncAmount.value="";offIncNote.value=""};
-saveOfficeExpenseBtn.onclick=async()=>{const d=offExpDate.value,n=offExpName.value.trim(),a=Number(offExpAmount.value),note=offExpNote.value.trim();if(!d||!n||!(a>0))return alert("أدخل التاريخ والبند والمبلغ الصحيح.");await addDoc(collection(firestore,"office_expenses"),{date:d,name:n,amount:a,note,createdAt:serverTimestamp()});offExpName.value="";offExpAmount.value="";offExpNote.value=""};
 
 function renderContracting(){
-const r=filterMonth(db.contracting,"contracting");contractingMonthFilter.innerHTML=monthFilterHTML("contracting");let i=0,e=0,s={};
-r.forEach(x=>{const a=Number(x.amount)||0;x.type==="income"?i+=a:e+=a;const raw=String(x.category||"عام").trim()||"عام",k=normalizedCategoryKey(raw);if(!s[k])s[k]={label:raw,i:0,e:0};x.type==="income"?s[k].i+=a:s[k].e+=a});
-contractingIncome.innerHTML=money(i);contractingExpense.innerHTML=money(e);contractingProfit.innerHTML=money(i-e);
-contractingSummaryBody.innerHTML=Object.values(s).map(x=>`<tr><td>${esc(x.label)}</td><td class="income">${money(x.i)}</td><td class="expense">${money(x.e)}</td><td class="${profitClass(x.i-x.e)}">${money(x.i-x.e)}</td></tr>`).join("")||`<tr><td colspan="4"><div class="empty">لا توجد بيانات</div></td></tr>`;
-contractingBody.innerHTML=r.length?r.map(x=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'contracting','${x.id}','date','date')">${esc(x.date)}</td><td>${x.type==="income"?"دخل":"مصروف"}</td><td class="editable-cell" onclick="inlineEditCell(this,'contracting','${x.id}','category')">${esc(x.category||"عام")}</td><td class="${x.type==="income"?"income":"expense"}">${money(x.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'contracting','${x.id}','note')">${esc(x.note||"-")}</td><td><button class="btn blue" onclick="editRecord('contracting','${x.id}','date,category,note')">تعديل</button> <button class="btn red" onclick="deleteRecord('contracting','${x.id}')">حذف</button></td></tr>`).join(""):`<tr><td colspan="6"><div class="empty">لا توجد عمليات</div></td></tr>`;
-contractingCategoriesList.innerHTML=[...new Set(db.contracting.map(x=>x.category).filter(Boolean))].map(x=>`<option value="${esc(x)}"></option>`).join("");
+const records=filterBySelectedMonth(db.contracting,"contracting");
+let inc=0,exp=0;
+records.forEach(x=>x.type==="income"?inc+=Number(x.amount)||0:exp+=Number(x.amount)||0);
+const filter=document.getElementById("contractingMonthFilter");
+if(filter) filter.innerHTML=monthFilterHTML("contracting");
+document.getElementById("contractingIncome").innerHTML=money(inc);
+document.getElementById("contractingExpense").innerHTML=money(exp);
+document.getElementById("contractingProfit").innerHTML=money(inc-exp);
+const body=document.getElementById("contractingBody");
+body.innerHTML=records.length?records.map(x=>`
+<tr>
+<td class="editable-cell" onclick="inlineEditCell(this,'contracting','${x.id}','date','date')"><span class="num-val">${escapeHTML(x.date)}</span></td>
+<td class="${x.type==="income"?'income':'expense'}">${x.type==="income"?'دخل':'مصروف'}</td>
+<td class="editable-cell" onclick="inlineEditCell(this,'contracting','${x.id}','name')"><strong>${escapeHTML(x.name||x.category||"-")}</strong></td>
+<td class="editable-cell" onclick="inlineEditCell(this,'contracting','${x.id}','category')">${escapeHTML(x.category||"-")}</td>
+<td class="${x.type==="income"?'income':'expense'}">${money(x.amount)}</td>
+<td class="editable-cell" onclick="inlineEditCell(this,'contracting','${x.id}','note')">${escapeHTML(x.note||"-")}</td>
+<td><button class="btn blue" onclick="editContracting('${x.id}')">تعديل</button> <button class="btn red" onclick="deleteContracting('${x.id}')">حذف</button></td>
+</tr>`).join(""):`<tr><td colspan="7"><div class="empty">لا توجد عمليات في الفترة المحددة</div></td></tr>`;
 }
-saveContractingBtn.onclick=async()=>{const d=conDate.value,t=conType.value,c=conCategory.value.trim(),a=Number(conAmount.value),n=conNote.value.trim();if(!d||!c||!(a>0))return alert("أدخل البيانات الصحيحة.");await addDoc(collection(firestore,"contracting"),{date:d,type:t,category:c,amount:a,note:n,createdAt:serverTimestamp()});conCategory.value="";conAmount.value="";conNote.value=""};
 
-function render(v){if(v==="projects")renderProjects();else renderTransactions()}
-tabs.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{tabs.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));t.classList.add("active");render(t.dataset.view)});
-function renderProjects(){
-if(currentOpenedProjectId)return renderProjectDetails(currentOpenedProjectId);
-const tx=filterMonth(db.transactions,"projects");const cats=[...new Set(db.transactions.map(x=>x.category).filter(Boolean))];
-let h=monthFilterHTML("projects")+`<div class="card"><h3>➕ إضافة مشروع</h3><div class="grid"><div class="field"><label>اسم المشروع</label><input id="projName"></div><div style="align-self:end"><button class="btn green" id="saveProjectBtn">إضافة المشروع</button></div></div></div><h3>📋 المشاريع</h3><div class="table-wrap"><table><thead><tr><th>اسم المشروع</th><th>الدخل</th><th>المصاريف</th><th>الصافي</th><th>إجراء</th></tr></thead><tbody>`;
-db.projects.forEach(p=>{const a=tx.filter(x=>x.projectId===p.id&&x.type==="income").reduce((s,x)=>s+(Number(x.amount)||0),0),e=tx.filter(x=>x.projectId===p.id&&x.type==="expense").reduce((s,x)=>s+(Number(x.amount)||0),0);h+=`<tr><td>${esc(p.name)}</td><td class="income">${money(a)}</td><td class="expense">${money(e)}</td><td class="${profitClass(a-e)}">${money(a-e)}</td><td><button class="btn blue" onclick="openSingleProject('${p.id}')">التفاصيل</button> <button class="btn red" onclick="deleteProject('${p.id}')">حذف</button></td></tr>`});h+=`</tbody></table></div>`;content.innerHTML=h;saveProjectBtn.onclick=async()=>{const n=projName.value.trim();if(!n)return alert("أدخل اسم المشروع.");await addDoc(collection(firestore,"projects"),{name:n,createdAt:serverTimestamp()});projName.value=""}
+document.getElementById("saveContractingBtn").onclick=async function(){
+const btn=this;
+const date=document.getElementById("conDate").value;
+const type=document.getElementById("conType").value;
+const name=document.getElementById("conName").value.trim();
+const category=document.getElementById("conCategory").value.trim();
+const amount=Number(document.getElementById("conAmount").value);
+const note=document.getElementById("conNote").value.trim();
+if(!date||!name||!(amount>0)){alert("أدخل التاريخ والاسم والمبلغ الصحيح.");return;}
+btn.disabled=true; btn.textContent="جاري الحفظ...";
+try{
+await addDoc(collection(firestore,"contracting"),{date,type,name,category,amount,note,createdAt:serverTimestamp()});
+document.getElementById("conName").value="";
+document.getElementById("conCategory").value="";
+document.getElementById("conAmount").value="";
+document.getElementById("conNote").value="";
+}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent="حفظ العملية";}
+};
+
+window.editContracting=async function(id){
+const item=db.contracting.find(x=>x.id===id); if(!item)return;
+const date=prompt("التاريخ (YYYY-MM-DD):",item.date||""); if(date===null)return;
+const name=prompt("الاسم / البند:",item.name||item.category||""); if(name===null)return;
+const category=prompt("التصنيف:",item.category||""); if(category===null)return;
+const amountText=prompt("المبلغ:",String(item.amount??"")); if(amountText===null)return;
+const amount=Number(amountText); if(!date||!name||!(amount>0)){alert("البيانات غير صحيحة.");return;}
+const note=prompt("البيان:",item.note||""); if(note===null)return;
+try{await updateDoc(doc(firestore,"contracting",id),{date,name,category,amount,note});}catch(e){alert(e.message);}
+};
+
+window.deleteContracting=async function(id){if(!confirm("هل تريد حذف العملية؟"))return;try{await deleteDoc(doc(firestore,"contracting",id));}catch(e){alert(e.message)}};
+
+/* ================= إحصائيات المشاريع ================= */
+
+function updateStats(){
+const records=filterBySelectedMonth(db.transactions,"projects");
+let inc=0,exp=0;
+records.forEach(t=>{const amt=Number(t.amount)||0;if(t.type==="income")inc+=amt;else exp+=amt;});
+document.getElementById("totalIncome").innerHTML=money(inc);
+document.getElementById("totalExpense").innerHTML=money(exp);
+document.getElementById("netProfit").innerHTML=money(inc-exp);
+document.getElementById("projectCount").textContent=formatNum(db.projects.length);
+updateWallet();
 }
-function renderTransactions(){const r=filterMonth(db.transactions,"projects");content.innerHTML=monthFilterHTML("projects")+`<h3>📋 جميع العمليات</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>المشروع</th><th>النوع</th><th>التصنيف</th><th>المبلغ</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody>${r.map(x=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'transactions','${x.id}','date','date')">${esc(x.date)}</td><td>${esc(db.projects.find(p=>p.id===x.projectId)?.name||"غير محدد")}</td><td>${x.type==="income"?"دخل":"مصروف"}</td><td class="editable-cell" onclick="inlineEditCell(this,'transactions','${x.id}','category')">${esc(x.category||"-")}</td><td class="${x.type==="income"?"income":"expense"}">${money(x.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'transactions','${x.id}','note')">${esc(x.note||"-")}</td><td><button class="btn blue" onclick="editRecord('transactions','${x.id}','date,category,note')">تعديل</button> <button class="btn red" onclick="deleteRecord('transactions','${x.id}')">حذف</button></td></tr>`).join("")||`<tr><td colspan="7"><div class="empty">لا توجد عمليات</div></td></tr>`}</tbody></table></div>`}
-function renderProjectDetails(id){
-const p=db.projects.find(x=>x.id===id);if(!p){currentOpenedProjectId=null;return render("projects")}const tx=db.transactions.filter(x=>x.projectId===id).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));let i=0,e=0;tx.forEach(x=>x.type==="income"?i+=Number(x.amount)||0:e+=Number(x.amount)||0);
-content.innerHTML=`<div class="section-nav"><h2>🏗️ ${esc(p.name)}</h2><button class="btn secondary" onclick="closeSingleProject()">← المشاريع</button></div><div class="stats"><div class="stat"><small>الدخل</small><strong class="income">${money(i)}</strong></div><div class="stat"><small>المصاريف</small><strong class="expense">${money(e)}</strong></div><div class="stat"><small>الصافي</small><strong class="${profitClass(i-e)}">${money(i-e)}</strong></div><div class="stat"><small>العمليات</small><strong>${formatNum(tx.length)}</strong></div></div><div class="card"><h3>➕ إضافة عملية</h3><div class="grid"><div class="field"><label>نوع العملية</label><select id="txType"><option value="income">دخل</option><option value="expense">مصروف</option></select></div><div class="field"><label>التاريخ</label><input id="txDate" type="date" value="${today()}"></div><div class="field"><label>المبلغ</label><input id="txAmount" type="number" min="0" step="0.01"></div><div class="field"><label>التصنيف</label><input id="txCategory" list="projectCategoriesList"><datalist id="projectCategoriesList">${[...new Set(db.transactions.map(x=>x.category).filter(Boolean))].map(x=>`<option value="${esc(x)}"></option>`).join("")}</datalist></div><div class="field full"><label>الملاحظات</label><input id="txNote"></div><div class="full"><button class="btn green" id="saveTxBtn">حفظ العملية</button></div></div></div><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>النوع</th><th>التصنيف</th><th>المبلغ</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody>${tx.map(x=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'transactions','${x.id}','date','date')">${esc(x.date)}</td><td>${x.type==="income"?"دخل":"مصروف"}</td><td class="editable-cell" onclick="inlineEditCell(this,'transactions','${x.id}','category')">${esc(x.category||"-")}</td><td class="${x.type==="income"?"income":"expense"}">${money(x.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'transactions','${x.id}','note')">${esc(x.note||"-")}</td><td><button class="btn blue" onclick="editRecord('transactions','${x.id}','date,category,note')">تعديل</button> <button class="btn red" onclick="deleteRecord('transactions','${x.id}')">حذف</button></td></tr>`).join("")}</tbody></table></div>`;
-saveTxBtn.onclick=async()=>{const t=txType.value,d=txDate.value,a=Number(txAmount.value),c=txCategory.value.trim(),n=txNote.value.trim();if(!d||!(a>0)||!c)return alert("أدخل التاريخ والمبلغ والتصنيف.");await addDoc(collection(firestore,"transactions"),{projectId:id,type:t,date:d,amount:a,category:c,note:n,createdAt:serverTimestamp()})}
+
+
+/* =====================================================
+   المصاريف الشخصية
+===================================================== */
+
+async function addPersonalExpenseToFirebase(data){
+
+if(!auth.currentUser)
+throw new Error(
+"لا يوجد مستخدم مسجل دخول حاليًا."
+);
+
+await addDoc(
+collection(
+firestore,
+"personal_expenses"
+),
+{
+date:data.date,
+amount:Number(data.amount)||0,
+note:data.note||"",
+createdAt:serverTimestamp(),
+createdBy:auth.currentUser.uid,
+userEmail:auth.currentUser.email||""
 }
-window.openSingleProject=id=>{currentOpenedProjectId=id;render("projects")};window.closeSingleProject=()=>{currentOpenedProjectId=null;render("projects")};
-window.deleteProject=async id=>{if(!confirm("حذف المشروع وكافة عملياته؟"))return;const b=writeBatch(firestore);b.delete(doc(firestore,"projects",id));db.transactions.filter(x=>x.projectId===id).forEach(x=>b.delete(doc(firestore,"transactions",x.id)));await b.commit()};
-window.deleteTransaction=id=>deleteRecord("transactions",id);
+);
+
+}
+
+function renderPersonal(){
+const records=filterBySelectedMonth(db.personalExpenses,"personal");
+let total=0;
+const grouped={};
+records.forEach(item=>{
+const amt=Number(item.amount)||0;
+total+=amt;
+const monthKey=(item.date&&item.date.length>=7)?item.date.substring(0,7):"غير محدد";
+if(!grouped[monthKey]) grouped[monthKey]={total:0,items:[]};
+grouped[monthKey].total+=amt;
+grouped[monthKey].items.push(item);
+});
+const filter=document.getElementById("personalMonthFilter");
+if(filter) filter.innerHTML=monthFilterHTML("personal");
+document.getElementById("personalTotalExpense").innerHTML=money(total);
+document.getElementById("personalExpenseCount").textContent=formatNum(records.length);
+const container=document.getElementById("personalMonthlyContainer");
+const sortedMonths=Object.keys(grouped).sort((a,b)=>b.localeCompare(a));
+if(!sortedMonths.length){container.innerHTML=`<div class="empty">لا توجد مصاريف شخصية في الفترة المحددة.</div>`;return;}
+container.innerHTML=sortedMonths.map(month=>{
+const group=grouped[month];
+const rows=group.items.map(item=>`<tr>
+<td class="editable-cell" onclick="inlineEditCell(this,'personal_expenses','${item.id}','date','date')"><span class="num-val">${escapeHTML(item.date)}</span></td>
+<td class="expense">${money(item.amount)}</td>
+<td class="editable-cell" onclick="inlineEditCell(this,'personal_expenses','${item.id}','note')">${escapeHTML(item.note||"")}</td>
+<td><button class="btn blue" onclick="editRecord('personal_expenses','${item.id}','date,note')">تعديل</button> <button class="btn red" onclick="deletePersonalExpense('${item.id}')">حذف</button></td>
+</tr>`).join("");
+return `<div class="month-group-card"><div class="month-header"><h4>📅 شهر: <span class="num-val">${month}</span> الميلادي</h4><div class="expense">المجموع: ${money(group.total)}</div></div><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>المصروف</th><th>الملاحظة</th><th>إجراء</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+}).join("");
+}
+
+
+document.getElementById("savePersonalExpenseBtn").onclick = async function(){
+
+const btn = this;
+const date = document.getElementById("perExpDate").value;
+const amount = Number(document.getElementById("perExpAmount").value);
+const note = document.getElementById("perExpNote").value.trim();
+
+if(!date){
+alert("اختر التاريخ.");
+return;
+}
+
+if(!(amount > 0)){
+alert("أدخل مبلغ مصروف صحيح.");
+return;
+}
+
+btn.disabled = true;
+btn.textContent = "جاري الحفظ...";
+
+try {
+await addPersonalExpenseToFirebase({ date, amount, note });
+document.getElementById("perExpAmount").value = "";
+document.getElementById("perExpNote").value = "";
+} catch(e) {
+console.error(e);
+alert("حدث خطأ أثناء الحفظ:\n" + e.message);
+} finally {
+btn.disabled = false;
+btn.textContent = "حفظ المصروف الشخصي";
+}
+
+};
+
+
+window.deletePersonalExpense = async function(id){
+
+if(!confirm("هل تريد حذف هذا المصروف؟")) return;
+
+try {
+await deleteDoc(doc(firestore, "personal_expenses", id));
+} catch(e) {
+alert("حدث خطأ أثناء الحذف:\n" + e.message);
+}
+
+};
+
+
+/* =====================================================
+   المكتب
+===================================================== */
+
+async function addOfficeExpenseToFirebase(data){
+
+if(!auth.currentUser)
+throw new Error(
+"لا يوجد مستخدم مسجل دخول حاليًا."
+);
+
+await addDoc(
+collection(
+firestore,
+"office_expenses"
+),
+{
+
+date:data.date,
+
+name:data.name,
+
+amount:Number(data.amount)||0,
+
+note:data.note||"",
+
+createdAt:serverTimestamp(),
+
+createdBy:auth.currentUser.uid,
+
+userEmail:
+auth.currentUser.email||""
+
+}
+);
+
+}
+
+
+function renderOffice(){
+const expenses=filterBySelectedMonth(db.officeExpenses,"office");
+const incomes=filterBySelectedMonth(db.officeIncome,"office");
+let total=0,incomeTotal=0;
+expenses.forEach(item=>total+=Number(item.amount)||0);
+incomes.forEach(x=>incomeTotal+=Number(x.amount)||0);
+const filter=document.getElementById("officeMonthFilter");
+if(filter) filter.innerHTML=monthFilterHTML("office");
+document.getElementById("officeTotalExpense").innerHTML=money(total);
+const officeIncomeEl=document.getElementById("officeTotalIncome");
+if(officeIncomeEl) officeIncomeEl.innerHTML=money(incomeTotal);
+document.getElementById("officeExpenseCount").textContent=formatNum(expenses.length);
+const incomeBody=document.getElementById("officeIncomeBody");
+if(incomeBody){incomeBody.innerHTML=incomes.length?incomes.map(item=>`<tr>
+<td class="editable-cell" onclick="inlineEditCell(this,'office_income','${item.id}','date','date')"><span class="num-val">${escapeHTML(item.date)}</span></td>
+<td class="editable-cell" onclick="inlineEditCell(this,'office_income','${item.id}','name')"><strong>${escapeHTML(item.name)}</strong></td>
+<td class="income">${money(item.amount)}</td>
+<td class="editable-cell" onclick="inlineEditCell(this,'office_income','${item.id}','note')">${escapeHTML(item.note||"")}</td>
+<td><button class="btn blue" onclick="editOfficeIncome('${item.id}')">تعديل</button> <button class="btn red" onclick="deleteOfficeIncome('${item.id}')">حذف</button></td>
+</tr>`).join(""):`<tr><td colspan="5"><div class="empty">لا يوجد دخل مكتب في الفترة المحددة</div></td></tr>`;}
+const tbody=document.getElementById("officeExpensesBody");
+tbody.innerHTML=expenses.length?expenses.map(item=>`<tr>
+<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','date','date')"><span class="num-val">${escapeHTML(item.date)}</span></td>
+<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','name')"><strong>${escapeHTML(item.name)}</strong></td>
+<td class="expense">${money(item.amount)}</td>
+<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','note')">${escapeHTML(item.note||"")}</td>
+<td><button class="btn blue" onclick="editOfficeExpense('${item.id}')">تعديل</button> <button class="btn red" onclick="deleteOfficeExpense('${item.id}')">حذف</button></td>
+</tr>`).join(""):`<tr><td colspan="5"><div class="empty">لا توجد مصاريف مكتب في الفترة المحددة</div></td></tr>`;
+}
+
+
+document.getElementById(
+"saveOfficeExpenseBtn"
+).onclick=
+async function(){
+
+const btn=this;
+
+const date=
+document.getElementById(
+"offExpDate"
+).value;
+
+const name=
+document.getElementById(
+"offExpName"
+).value.trim();
+
+const amount=
+Number(
+document.getElementById(
+"offExpAmount"
+).value
+);
+
+const note=
+document.getElementById(
+"offExpNote"
+).value.trim();
+
+if(!date){
+
+alert("اختر التاريخ.");
+
+return;
+
+}
+
+if(!name){
+
+alert("أدخل اسم البند.");
+
+return;
+
+}
+
+if(!(amount>0)){
+
+alert("أدخل مبلغ صحيح.");
+
+return;
+
+}
+
+btn.disabled=true;
+
+btn.textContent=
+"جاري الحفظ...";
+
+try{
+
+await addOfficeExpenseToFirebase({
+
+date,
+name,
+amount,
+note
+
+});
+
+document.getElementById(
+"offExpName"
+).value="";
+
+document.getElementById(
+"offExpAmount"
+).value="";
+
+document.getElementById(
+"offExpNote"
+).value="";
+
+}catch(e){
+
+console.error(e);
+
+alert(
+"حدث خطأ أثناء الحفظ:\n"+
+e.message
+);
+
+}finally{
+
+btn.disabled=false;
+
+btn.textContent=
+"حفظ المصروف";
+
+}
+
+};
+
+
+document.getElementById("saveOfficeIncomeBtn").onclick=async function(){
+const date=document.getElementById("offIncDate").value, name=document.getElementById("offIncName").value.trim(), amount=Number(document.getElementById("offIncAmount").value), note=document.getElementById("offIncNote").value.trim();
+if(!date||!name||!(amount>0)){alert("أدخل التاريخ والاسم والمبلغ الصحيح.");return;}
+this.disabled=true; try{await addDoc(collection(firestore,"office_income"),{date,name,amount,note,createdAt:serverTimestamp()}); document.getElementById("offIncName").value="";document.getElementById("offIncAmount").value="";document.getElementById("offIncNote").value="";}catch(e){alert(e.message);}finally{this.disabled=false;}};
+
+window.editOfficeIncome=async function(id){
+const item=db.officeIncome.find(x=>x.id===id); if(!item)return;
+const date=prompt("التاريخ (YYYY-MM-DD):",item.date||""); if(date===null)return;
+const name=prompt("اسم الدخل:",item.name||""); if(name===null)return;
+const amountText=prompt("المبلغ:",String(item.amount??"")); if(amountText===null)return;
+const amount=Number(amountText); if(!date||!name||!(amount>0)){alert("البيانات غير صحيحة.");return;}
+const note=prompt("الملاحظات:",item.note||""); if(note===null)return;
+try{await updateDoc(doc(firestore,"office_income",id),{date,name,amount,note});}catch(e){alert(e.message);}
+};
+
+window.deleteOfficeIncome=async function(id){if(!confirm("هل تريد حذف هذا الدخل؟"))return;try{await deleteDoc(doc(firestore,"office_income",id));}catch(e){alert(e.message);}};
+
+window.editOfficeExpense=async function(id){
+const item=db.officeExpenses.find(x=>x.id===id); if(!item)return;
+const date=prompt("التاريخ (YYYY-MM-DD):",item.date||""); if(date===null)return;
+const name=prompt("اسم البند / المسمى:",item.name||""); if(name===null)return;
+const amountText=prompt("المبلغ:",String(item.amount??"")); if(amountText===null)return;
+const amount=Number(amountText); if(!date||!name||!(amount>0)){alert("البيانات غير صحيحة.");return;}
+const note=prompt("الملاحظات:",item.note||""); if(note===null)return;
+try{await updateDoc(doc(firestore,"office_expenses",id),{date,name,amount,note});}catch(e){alert(e.message);}
+};
+
+window.deleteOfficeExpense=
+async function(id){
+
+if(
+!confirm(
+"هل تريد حذف هذا المصروف؟"
+)
+)
+return;
+
+try{
+
+await deleteDoc(
+doc(
+firestore,
+"office_expenses",
+id
+)
+);
+
+}catch(e){
+
+alert(
+"حدث خطأ أثناء الحذف:\n"+
+e.message
+);
+
+}
+
+};
+
+
+/* =====================================================
+   المشاريع
+===================================================== */
+
+document
+.querySelectorAll("#tabs .tab")
+.forEach(
+tab=>{
+
+tab.onclick=function(){
+
+document
+.querySelectorAll("#tabs .tab")
+.forEach(
+t=>
+t.classList.remove("active")
+);
+
+this.classList.add("active");
+
+render(this.dataset.view);
+
+};
+
+}
+);
+
+
+function render(view){
+
+const content=
+document.getElementById("content");
+
+if(view==="projects"){
+
+renderProjectsView(content);
+
+}else if(view==="dashboard"){
+
+renderDashboardView(content);
+
+}else if(view==="transactions"){
+
+renderTransactionsView(content);
+
+}
+
+}
+
+
+function renderProjectsView(content){
+if(currentOpenedProjectId){renderSingleProjectView(content,currentOpenedProjectId);return;}
+const records=filterBySelectedMonth(db.transactions,"projects");
+let html=`
+${monthFilterHTML("projects")}
+<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+<h3>➕ إضافة مشروع جديد</h3>
+<div class="grid">
+<div class="field"><label>اسم المشروع</label><input id="projName" placeholder="مثال: مشروع برج الرياض"></div>
+<div style="align-self:end"><button class="btn green" id="saveProjectBtn">إضافة المشروع</button></div>
+</div>
+</div>
+<h3>📋 قائمة المشاريع</h3>
+<div class="table-wrap"><table><thead><tr><th>اسم المشروع</th><th>التصنيف</th><th>إجمالي الدخل</th><th>إجمالي المصاريف</th><th>الصافي</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>`;
+if(!db.projects.length){html+=`<tr><td colspan="7"><div class="empty">لا توجد مشاريع حتى الآن</div></td></tr>`;}else{
+db.projects.forEach(p=>{
+let pInc=0,pExp=0;
+records.filter(t=>t.projectId===p.id).forEach(t=>{if(t.type==="income")pInc+=Number(t.amount)||0;else pExp+=Number(t.amount)||0;});
+const pNet=pInc-pExp;
+html+=`<tr><td><strong>${escapeHTML(p.name)}</strong></td><td>${escapeHTML(p.category||"عام")}</td><td class="income">${money(pInc)}</td><td class="expense">${money(pExp)}</td><td class="${profitClass(pNet)}">${money(pNet)}</td><td>${p.status==="closed"?'<span class="expense">مغلق</span>':'<span class="income">مفتوح</span>'}</td><td><div class="actions"><button class="btn blue" onclick="openSingleProject('${p.id}')">التفاصيل</button> <button class="btn blue" onclick="editRecord('projects','${p.id}','name')">تعديل</button> <button class="btn orange" onclick="toggleProjectStatus('${p.id}')">${p.status==="closed"?'فتح المشروع':'إغلاق المشروع'}</button> <button class="btn red" onclick="deleteProject('${p.id}')">حذف</button></div></td></tr>`;
+});}
+html+=`</tbody></table></div>`;
+content.innerHTML=html;
+document.getElementById("saveProjectBtn").onclick=async function(){const name=document.getElementById("projName").value.trim();if(!name){alert("أدخل اسم المشروع.");return;}this.disabled=true;try{await addDoc(collection(firestore,"projects"),{name,status:"open",createdAt:serverTimestamp()});document.getElementById("projName").value="";}catch(e){alert(e.message);}finally{this.disabled=false;}};
+}
+
+
+window.openSingleProject=function(id){
+currentOpenedProjectId=id;
+render("projects");
+};
+
+window.closeSingleProject=function(){currentOpenedProjectId=null;render("projects");};
+window.toggleProjectStatus=async function(id){const p=db.projects.find(x=>x.id===id);if(!p)return;try{await updateDoc(doc(firestore,"projects",id),{status:p.status==="closed"?"open":"closed"});}catch(e){alert(e.message);}};
+
+
+function renderSingleProjectView(content,projId){
+const proj=db.projects.find(p=>p.id===projId);
+if(!proj){currentOpenedProjectId=null;render("projects");return;}
+const pTxs=filterBySelectedMonth(db.transactions.filter(t=>t.projectId===projId),"projects");
+let pInc=0,pExp=0;
+pTxs.forEach(t=>{if(t.type==="income")pInc+=Number(t.amount)||0;else pExp+=Number(t.amount)||0;});
+const pNet=pInc-pExp;
+const catTotals={};
+pTxs.filter(t=>t.type!=="income").forEach(t=>{const raw=String(t.category||"عام").trim()||"عام";const key=normalizedCategoryKey(raw);if(!catTotals[key])catTotals[key]={label:raw,total:0};catTotals[key].total+=Number(t.amount)||0;});
+const categoryValues=[...new Set(db.transactions.filter(t=>t.projectId===projId).map(t=>String(t.category||"").trim()).filter(Boolean))].sort();
+let html=`${monthFilterHTML("projects")}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:10px"><h2>🏗️ مشروع: ${escapeHTML(proj.name)}</h2><button class="btn secondary" onclick="closeSingleProject()">← العودة للمشاريع</button></div>
+<div class="stats" style="margin-bottom:20px"><div class="stat"><small>إجمالي الدخل</small><strong class="income">${money(pInc)}</strong></div><div class="stat"><small>إجمالي المصاريف</small><strong class="expense">${money(pExp)}</strong></div><div class="stat"><small>صافي الربح</small><strong class="${profitClass(pNet)}">${money(pNet)}</strong></div><div class="stat"><small>عدد العمليات</small><strong>${formatNum(pTxs.length)}</strong></div></div>
+<div class="card" style="margin-bottom:20px"><h3>📊 مصروفات المشروع حسب التصنيف</h3><div class="table-wrap"><table><thead><tr><th>التصنيف</th><th>المجموع</th></tr></thead><tbody>${Object.keys(catTotals).length?Object.keys(catTotals).map(k=>`<tr><td>${escapeHTML(catTotals[k].label)}</td><td class="expense">${money(catTotals[k].total)}</td></tr>`).join(""):`<tr><td colspan="2"><div class="empty">لا توجد مصروفات في الفترة المحددة</div></td></tr>`}</tbody></table></div></div>
+<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px"><h3>➕ إضافة عملية للمشروع</h3><div class="grid"><div class="field"><label>نوع العملية</label><select id="txType"><option value="income">دفعة مقبوضة (دخل)</option><option value="expense">مصروف</option></select></div><div class="field"><label>التاريخ</label><input id="txDate" type="date" value="${today()}"></div><div class="field"><label>المبلغ (SAR)</label><input id="txAmount" type="number" min="0" step="0.01" placeholder="0"></div><div class="field"><label>التصنيف / البيان</label><input id="txCategory" list="projectCategoriesList" placeholder="اكتب تصنيف جديد أو اختر الموجود"><datalist id="projectCategoriesList">${categoryValues.map(c=>`<option value="${escapeHTML(c)}"></option>`).join("")}</datalist></div><div class="field full"><label>ملاحظات</label><input id="txNote" placeholder="ملاحظات تفصيلية..."></div><div class="full"><button class="btn green" id="saveTxBtn">حفظ العملية</button></div></div></div>
+<h3>📋 سجل عمليات المشروع</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>النوع</th><th>التصنيف</th><th>المبلغ</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody>`;
+if(!pTxs.length){html+=`<tr><td colspan="6"><div class="empty">لا توجد عمليات في الفترة المحددة</div></td></tr>`;}else{pTxs.forEach(t=>{const isInc=t.type==="income";html+=`<tr><td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','date','date')"><span class="num-val">${escapeHTML(t.date)}</span></td><td class="${isInc?'income':'expense'}">${isInc?'دفعة':'مصروف'}</td><td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','category')">${escapeHTML(t.category||"-")}</td><td class="${isInc?'income':'expense'}">${money(t.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','note')">${escapeHTML(t.note||"-")}</td><td><button class="btn blue" onclick="editRecord('transactions','${t.id}','date,category,note')">تعديل</button> <button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button></td></tr>`;});}
+html+=`</tbody></table></div>`;
+content.innerHTML=html;
+document.getElementById("saveTxBtn").onclick=async function(){const type=document.getElementById("txType").value,date=document.getElementById("txDate").value,amount=Number(document.getElementById("txAmount").value),category=document.getElementById("txCategory").value.trim(),note=document.getElementById("txNote").value.trim();if(!date){alert("اختر التاريخ.");return;}if(!(amount>0)){alert("أدخل مبلغ صحيح.");return;}if(!category){alert("أدخل التصنيف / البيان.");return;}this.disabled=true;try{await addDoc(collection(firestore,"transactions"),{projectId:projId,type,date,amount,category,note,createdAt:serverTimestamp()});document.getElementById("txAmount").value="";document.getElementById("txCategory").value="";document.getElementById("txNote").value="";}catch(e){alert(e.message);}finally{this.disabled=false;}};
+}
+
+
+window.deleteProject=async function(id){
+
+if(!confirm("هل أنت تأكد من حذف هذا المشروع وكافة عملياته؟")) return;
+
+try{
+
+const batch=writeBatch(firestore);
+
+batch.delete(doc(firestore,"projects",id));
+
+db.transactions.filter(t=>t.projectId===id).forEach(t=>{
+
+batch.delete(doc(firestore,"transactions",t.id));
+
+});
+
+await batch.commit();
+
+}catch(e){ alert(e.message); }
+
+};
+
+
+window.deleteTransaction=async function(id){
+
+if(!confirm("هل تريد حذف هذه العملية؟")) return;
+
+try{ await deleteDoc(doc(firestore,"transactions",id)); }
+
+catch(e){ alert(e.message); }
+
+};
+
+
+function renderDashboardView(content){
+
+let inc=0, exp=0;
+
+db.transactions.forEach(t=>{
+
+if(t.type==="income") inc+=Number(t.amount)||0;
+
+else exp+=Number(t.amount)||0;
+
+});
+
+content.innerHTML=`
+<h3>📊 الملخص العام والمؤشرات</h3>
+<div class="stats">
+<div class="stat"><small>إجمالي الإيرادات المقبوضة</small><strong class="income">${money(inc)}</strong></div>
+<div class="stat"><small>إجمالي المصاريف المصروفة</small><strong class="expense">${money(exp)}</strong></div>
+<div class="stat"><small>صافي الربح العام</small><strong class="${profitClass(inc-exp)}">${money(inc-exp)}</strong></div>
+<div class="stat"><small>إجمالي عدد المشاريع</small><strong>${formatNum(db.projects.length)}</strong></div>
+</div>
+`;
+
+}
+
+
+function renderTransactionsView(content){
+const records=filterBySelectedMonth(db.transactions,"projects");
+let html=`${monthFilterHTML("projects")}<h3>📋 جميع عمليات المشاريع المسجلة</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>المشروع</th><th>النوع</th><th>التصنيف</th><th>المبلغ</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody>`;
+if(!records.length){html+=`<tr><td colspan="7"><div class="empty">لا توجد عمليات في الفترة المحددة</div></td></tr>`;}else{records.forEach(t=>{const p=db.projects.find(proj=>proj.id===t.projectId),isInc=t.type==="income";html+=`<tr><td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','date','date')"><span class="num-val">${escapeHTML(t.date)}</span></td><td><strong>${escapeHTML(p?p.name:"غير محدد")}</strong></td><td><span class="${isInc?'income':'expense'}">${isInc?'دفعة':'مصروف'}</span></td><td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','category')">${escapeHTML(t.category||"-")}</td><td class="${isInc?'income':'expense'}">${money(t.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','note')">${escapeHTML(t.note||"-")}</td><td><button class="btn blue" onclick="editRecord('transactions','${t.id}','date,category,note')">تعديل</button> <button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button></td></tr>`;});}
+html+=`</tbody></table></div>`;content.innerHTML=html;
+}
+
+
+/* =====================================================
+   الخدمات
+===================================================== */
+
+function updateServicesDataList() {
+
+const categoriesSet = new Set();
+
+db.services.forEach(item => {
+  if (item.category && item.category.trim()) {
+    categoriesSet.add(item.category.trim());
+  }
+});
+
+const dataList = document.getElementById("servicesList");
+if (dataList) {
+  dataList.innerHTML = Array.from(categoriesSet).map(cat => 
+    `<option value="${escapeHTML(cat)}">`
+  ).join("");
+}
+
+}
+
+
+function normalizedCategoryKey(value){
+const text=String(value||"").trim().toLowerCase();
+return text.replace(/[\s\-_.،,]+/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي");
+}
 
 function renderServices(){
-const r=filterMonth(db.services,"services").sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));let inc=0,exp=0,s={},general=[];
-r.forEach(x=>{if(x.recordType==="general_expense"){exp+=Number(x.amount)||0;general.push(x);return}const a=Number(x.collectedAmount)||0,e=x.expense!==undefined?Number(x.expense)||0:Math.max(0,a-(Number(x.profit)||0)),p=a-e;inc+=a;exp+=e;const raw=String(x.category||"عام").trim()||"عام",k=normalizedCategoryKey(raw);if(!s[k])s[k]={label:raw,inc:0,exp:0,profit:0};s[k].inc+=a;s[k].exp+=e;s[k].profit+=p});
-servicesMonthFilter.innerHTML=monthFilterHTML("services");servicesTotalIncome.innerHTML=money(inc);servicesTotalExpense.innerHTML=money(exp);servicesNetProfit.innerHTML=money(inc-exp);servicesCategoryCount.textContent=formatNum(Object.keys(s).length);
-servicesSummaryBody.innerHTML=Object.values(s).map(x=>`<tr><td>${esc(x.label)}</td><td class="income">${money(x.inc)}</td><td class="expense">${money(x.exp)}</td><td class="${profitClass(x.profit)}">${money(x.profit)}</td></tr>`).join("")||`<tr><td colspan="4"><div class="empty">لا توجد بيانات</div></td></tr>`;
-servicesBody.innerHTML=r.filter(x=>x.recordType!=="general_expense").map(x=>{const a=Number(x.collectedAmount)||0,e=x.expense!==undefined?Number(x.expense)||0:Math.max(0,a-(Number(x.profit)||0)),p=a-e;return `<tr><td class="editable-cell" onclick="inlineEditCell(this,'services','${x.id}','date','date')">${esc(x.date)}</td><td class="editable-cell" onclick="inlineEditCell(this,'services','${x.id}','category')">${esc(x.category||"عام")}</td><td class="${profitClass(p)}">${money(p)}</td><td class="income">${money(a)}</td><td class="expense">${money(e)}</td><td class="editable-cell" onclick="inlineEditCell(this,'services','${x.id}','note')">${esc(x.note||"-")}</td><td><button class="btn blue" onclick="editRecord('services','${x.id}','date,category,collectedAmount,expense,note')">تعديل</button> <button class="btn red" onclick="deleteService('${x.id}')">حذف</button></td></tr>`}).join("")||`<tr><td colspan="7"><div class="empty">لا توجد عمليات دخل خدمات في الفترة المحددة</div></td></tr>`;
-servicesGeneralExpensesBody.innerHTML=general.map(x=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'services','${x.id}','date','date')">${esc(x.date)}</td><td class="editable-cell" onclick="inlineEditCell(this,'services','${x.id}','category')">${esc(x.category||"عام")}</td><td class="expense">${money(x.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'services','${x.id}','note')">${esc(x.note||"-")}</td><td><button class="btn blue" onclick="editRecord('services','${x.id}','date,category,amount,note')">تعديل</button> <button class="btn red" onclick="deleteService('${x.id}')">حذف</button></td></tr>`).join("")||`<tr><td colspan="5"><div class="empty">لا توجد مصروفات مستقلة</div></td></tr>`;
-servicesList.innerHTML=[...new Set(db.services.map(x=>x.category).filter(Boolean))].map(x=>`<option value="${esc(x)}"></option>`).join("");
+const records=filterBySelectedMonth(db.services,"services").slice().sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+let totalInc=0,totalExpense=0;const summary={},generalExpenses=[];
+records.forEach(s=>{if(s.recordType==="general_expense"){const amount=Number(s.amount)||0;totalExpense+=amount;generalExpenses.push(s);return;}const collected=Number(s.collectedAmount)||0;const expense=s.expense!==undefined?(Number(s.expense)||0):Math.max(0,collected-(Number(s.profit)||0));const profit=collected-expense;totalInc+=collected;totalExpense+=expense;const raw=String(s.category||"عام").trim()||"عام";const key=normalizedCategoryKey(raw);if(!summary[key])summary[key]={label:raw,collected:0,expense:0,profit:0};summary[key].collected+=collected;summary[key].expense+=expense;summary[key].profit+=profit;});
+const linkedProfit=Object.keys(summary).reduce((x,k)=>x+summary[k].profit,0),independentExpense=generalExpenses.reduce((x,s)=>x+(Number(s.amount)||0),0),totalProfit=linkedProfit-independentExpense;
+updateServicesDataList();const filter=document.getElementById("servicesMonthFilter");if(filter)filter.innerHTML=monthFilterHTML("services");document.getElementById("servicesTotalIncome").innerHTML=money(totalInc);document.getElementById("servicesTotalExpense").innerHTML=money(totalExpense);document.getElementById("servicesNetProfit").innerHTML=money(totalProfit);document.getElementById("servicesCategoryCount").textContent=formatNum(Object.keys(summary).length);
+const sumBody=document.getElementById("servicesSummaryBody");sumBody.innerHTML=Object.keys(summary).length?Object.keys(summary).map(k=>`<tr><td><strong>${escapeHTML(summary[k].label)}</strong></td><td class="income">${money(summary[k].collected)}</td><td class="expense">${money(summary[k].expense)}</td><td class="profit-positive">${money(summary[k].profit)}</td></tr>`).join(""):`<tr><td colspan="4"><div class="empty">لا توجد بيانات للخدمات في الفترة المحددة</div></td></tr>`;
+const srvBody=document.getElementById("servicesBody"),incomeRecords=records.filter(s=>s.recordType!=="general_expense");srvBody.innerHTML=incomeRecords.length?incomeRecords.map(s=>{const collected=Number(s.collectedAmount)||0,expense=s.expense!==undefined?(Number(s.expense)||0):Math.max(0,collected-(Number(s.profit)||0)),profit=collected-expense;return `<tr><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','date','date')"><span class="num-val">${escapeHTML(s.date)}</span></td><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','category')"><strong>${escapeHTML(s.category||"عام")}</strong></td><td class="${profitClass(profit)}">${money(profit)}</td><td class="income">${money(collected)}</td><td class="expense">${money(expense)}</td><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','note')">${escapeHTML(s.note||"-")}</td><td><button class="btn blue" onclick="editRecord('services','${s.id}','date,category,collectedAmount,expense,note')">تعديل</button> <button class="btn red" onclick="deleteService('${s.id}')">حذف</button></td></tr>`;}).join(""):`<tr><td colspan="7"><div class="empty">لا توجد عمليات دخل خدمات في الفترة المحددة</div></td></tr>`;
+const geBody=document.getElementById("servicesGeneralExpensesBody");geBody.innerHTML=generalExpenses.length?generalExpenses.map(s=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','date','date')"><span class="num-val">${escapeHTML(s.date||"")}</span></td><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','category')"><strong>${escapeHTML(s.category||"عام")}</strong></td><td class="expense">${money(s.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','note')">${escapeHTML(s.note||"-")}</td><td><button class="btn blue" onclick="editRecord('services','${s.id}','date,category,amount,note')">تعديل</button> <button class="btn red" onclick="deleteService('${s.id}')">حذف</button></td></tr>`).join(""):`<tr><td colspan="5"><div class="empty">لا توجد مصروفات مستقلة للخدمات في الفترة المحددة</div></td></tr>`;
 }
-saveServiceTxBtn.onclick=async()=>{const d=srvDate.value,c=srvCategory.value.trim(),a=Number(srvCollectedAmount.value),e=Number(srvExpense.value)||0,n=srvNote.value.trim();if(!d||!c||!(a>0)||e<0)return alert("أدخل بيانات الخدمة صحيحة.");await addDoc(collection(firestore,"services"),{date:d,category:c,recordType:"income",collectedAmount:a,expense:e,profit:a-e,note:n,createdAt:serverTimestamp()});srvCategory.value="";srvCollectedAmount.value="";srvExpense.value="";srvNote.value=""};
-saveServiceGeneralExpenseBtn.onclick=async()=>{const d=srvExpenseDate.value,c=srvExpenseCategory.value.trim(),a=Number(srvGeneralExpenseAmount.value),n=srvGeneralExpenseNote.value.trim();if(!d||!c||!(a>0))return alert("أدخل بيانات المصروف صحيحة.");await addDoc(collection(firestore,"services"),{date:d,category:c,recordType:"general_expense",amount:a,note:n,createdAt:serverTimestamp()});srvExpenseCategory.value="";srvGeneralExpenseAmount.value="";srvGeneralExpenseNote.value=""};
-window.deleteService=id=>deleteRecord("services",id);
 
-function renderPersonal(){const r=filterMonth(db.personalExpenses,"personal").sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));personalMonthFilter.innerHTML=monthFilterHTML("personal");personalTotalExpense.innerHTML=money(r.reduce((s,x)=>s+(Number(x.amount)||0),0));personalExpenseCount.textContent=formatNum(r.length);personalMonthlyContainer.innerHTML=`<div class="month-group-card"><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>المصروف</th><th>الملاحظة</th><th>إجراء</th></tr></thead><tbody>${r.map(x=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'personal_expenses','${x.id}','date','date')">${esc(x.date)}</td><td class="expense">${money(x.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'personal_expenses','${x.id}','note')">${esc(x.note||"")}</td><td><button class="btn blue" onclick="editRecord('personal_expenses','${x.id}','date,note')">تعديل</button> <button class="btn red" onclick="deletePersonalExpense('${x.id}')">حذف</button></td></tr>`).join("")||`<tr><td colspan="4"><div class="empty">لا توجد مصاريف</div></td></tr>`}</tbody></table></div></div>`}
-savePersonalExpenseBtn.onclick=async()=>{const d=perExpDate.value,a=Number(perExpAmount.value),n=perExpNote.value.trim();if(!d||!(a>0))return alert("أدخل التاريخ والمبلغ.");await addDoc(collection(firestore,"personal_expenses"),{date:d,amount:a,note:n,createdAt:serverTimestamp()});perExpAmount.value="";perExpNote.value=""};
-window.deletePersonalExpense=id=>deleteRecord("personal_expenses",id);
+document.getElementById("saveServiceTxBtn").onclick=async function(){
+const btn=this,date=document.getElementById("srvDate").value,category=document.getElementById("srvCategory").value.trim(),collectedAmount=Number(document.getElementById("srvCollectedAmount").value),expense=Number(document.getElementById("srvExpense").value)||0,note=document.getElementById("srvNote").value.trim();
+if(!date){alert("اختر التاريخ.");return;} if(!category){alert("أدخل أو اختر اسم الخدمة.");return;} if(!(collectedAmount>0)){alert("أدخل مبلغ دخل صحيح.");return;} if(expense<0){alert("أدخل مصروف صحيح.");return;}
+btn.disabled=true;try{await addDoc(collection(firestore,"services"),{date,category,recordType:"income",profit:collectedAmount-expense,collectedAmount,expense,note,createdAt:serverTimestamp()});document.getElementById("srvCategory").value="";document.getElementById("srvCollectedAmount").value="";document.getElementById("srvExpense").value="";document.getElementById("srvNote").value="";}catch(e){alert(e.message);}finally{btn.disabled=false;}
+};
 
-function renderRentals(){const r=filterMonth(db.rentals,"rentals"),pe=filterMonth(db.propertyExpenses,"rentals");rentalsMonthFilter.innerHTML=monthFilterHTML("rentals");const total=r.reduce((s,x)=>s+(Number(x.amount)||0),0),re=r.reduce((s,x)=>s+(Number(x.expenseAmount)||0),0),ge=pe.reduce((s,x)=>s+(Number(x.amount)||0),0);allPropertiesRent.innerHTML=money(total);allPropertiesExpense.innerHTML=money(re+ge);allPropertiesNetProfit.innerHTML=money(total-re-ge);allPropertiesCount.textContent=formatNum(db.properties.length);if(currentOpenedPropertyId)return renderPropertyDetails(currentOpenedPropertyId);rentalMainView.style.display="block";rentalDetailView.style.display="none";propertiesListBody.innerHTML=db.properties.map(p=>{const a=r.filter(x=>x.propertyId===p.id),b=pe.filter(x=>x.propertyId===p.id),ri=a.reduce((s,x)=>s+(Number(x.amount)||0),0),re2=a.reduce((s,x)=>s+(Number(x.expenseAmount)||0),0),ge2=b.reduce((s,x)=>s+(Number(x.amount)||0),0);return `<tr><td>${esc(p.title)}</td><td class="income">${money(ri)}</td><td class="expense">${money(re2)}</td><td class="expense">${money(ge2)}</td><td class="${profitClass(ri-re2-ge2)}">${money(ri-re2-ge2)}</td><td>${money(a.filter(x=>x.depositStatus==="refunded").reduce((s,x)=>s+(Number(x.depositAmount)||0),0))}</td><td>${money(a.filter(x=>x.depositStatus!=="refunded").reduce((s,x)=>s+(Number(x.depositAmount)||0),0))}</td><td><button class="btn blue" onclick="openPropertyDetails('${p.id}')">إدارة</button> <button class="btn blue" onclick="editRecord('properties','${p.id}','title')">تعديل</button> <button class="btn red" onclick="deleteProperty('${p.id}')">حذف</button></td></tr>`}).join("")||`<tr><td colspan="8"><div class="empty">لا توجد عقارات</div></td></tr>`}
-savePropertyBtn.onclick=async()=>{const t=propertyTitle.value.trim();if(!t)return alert("أدخل اسم العقار.");await addDoc(collection(firestore,"properties"),{title:t,createdAt:serverTimestamp()});propertyTitle.value=""};
-window.openPropertyDetails=id=>{currentOpenedPropertyId=id;renderRentals()};window.closePropertyDetails=()=>{currentOpenedPropertyId=null;renderRentals()};
-function renderPropertyDetails(id){const p=db.properties.find(x=>x.id===id);if(!p)return closePropertyDetails();rentalMainView.style.display="none";rentalDetailView.style.display="block";currentPropertyName.textContent="🏢 "+p.title;rentDate.value=today();propertyExpenseDate.value=today();const r=filterMonth(db.rentals,"rentals").filter(x=>x.propertyId===id),pe=filterMonth(db.propertyExpenses,"rentals").filter(x=>x.propertyId===id),ri=r.reduce((s,x)=>s+(Number(x.amount)||0),0),re=r.reduce((s,x)=>s+(Number(x.expenseAmount)||0),0),ge=pe.reduce((s,x)=>s+(Number(x.amount)||0),0);propTotalRent.innerHTML=money(ri);propRentalExpenses.innerHTML=money(re);propGeneralExpenses.innerHTML=money(ge);propNetProfit.innerHTML=money(ri-re-ge);rentContractsBody.innerHTML=r.map(x=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${x.id}','date','date')">${esc(x.date)}</td><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${x.id}','unit')">${esc(x.unit||"-")}</td><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${x.id}','tenant')">${esc(x.tenant||"-")}</td><td class="income">${money(x.amount)}</td><td>${money(x.depositAmount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${x.id}','expenseCategory')">${esc(x.expenseCategory||"-")}</td><td class="expense">${money(x.expenseAmount)}</td><td class="${profitClass((Number(x.amount)||0)-(Number(x.expenseAmount)||0))}">${money((Number(x.amount)||0)-(Number(x.expenseAmount)||0))}</td><td><button class="btn orange" onclick="toggleDeposit('${x.id}','${x.depositStatus==="refunded"?"active":"refunded"}')">${x.depositStatus==="refunded"?"تم الاسترداد":"نشط"}</button></td><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${x.id}','note')">${esc(x.note||"-")}</td><td><button class="btn blue" onclick="editRecord('rentals','${x.id}','date,unit,tenant,expenseCategory,note')">تعديل</button> <button class="btn red" onclick="deleteRecord('rentals','${x.id}')">حذف</button></td></tr>`).join("")||`<tr><td colspan="11"><div class="empty">لا توجد عمليات</div></td></tr>`;propertyExpensesBody.innerHTML=pe.map(x=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${x.id}','date','date')">${esc(x.date)}</td><td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${x.id}','category')">${esc(x.category||"عام")}</td><td class="expense">${money(x.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${x.id}','note')">${esc(x.note||"-")}</td><td><button class="btn blue" onclick="editRecord('property_expenses','${x.id}','date,category,note')">تعديل</button> <button class="btn red" onclick="deleteRecord('property_expenses','${x.id}')">حذف</button></td></tr>`).join("")||`<tr><td colspan="5"><div class="empty">لا توجد مصاريف</div></td></tr>`}
-saveRentContractBtn.onclick=async()=>{if(!currentOpenedPropertyId)return;const d=rentDate.value,u=rentUnit.value.trim(),t=rentTenant.value.trim(),a=Number(rentAmount.value)||0,dep=Number(rentDeposit.value)||0,c=rentExpenseCategory.value.trim(),ea=Number(rentExpenseAmount.value)||0,n=rentNote.value.trim();if(!d)return alert("اختر التاريخ.");await addDoc(collection(firestore,"rentals"),{propertyId:currentOpenedPropertyId,date:d,unit:u,tenant:t,amount:a,depositAmount:dep,depositStatus:"active",expenseCategory:c,expenseAmount:ea,note:n,createdAt:serverTimestamp()});renderPropertyDetails(currentOpenedPropertyId)};
-savePropertyExpenseBtn.onclick=async()=>{if(!currentOpenedPropertyId)return;const d=propertyExpenseDate.value,c=propertyExpenseCategory.value.trim(),a=Number(propertyExpenseAmount.value),n=propertyExpenseNote.value.trim();if(!d||!(a>0))return alert("أدخل التاريخ والمبلغ.");await addDoc(collection(firestore,"property_expenses"),{propertyId:currentOpenedPropertyId,date:d,category:c,amount:a,note:n,createdAt:serverTimestamp()});renderPropertyDetails(currentOpenedPropertyId)};
-window.toggleDeposit=async(id,status)=>updateDoc(doc(firestore,"rentals",id),{depositStatus:status});
-window.deleteProperty=async id=>{if(!confirm("حذف العقار وجميع عملياته؟"))return;const b=writeBatch(firestore);b.delete(doc(firestore,"properties",id));db.rentals.filter(x=>x.propertyId===id).forEach(x=>b.delete(doc(firestore,"rentals",x.id)));db.propertyExpenses.filter(x=>x.propertyId===id).forEach(x=>b.delete(doc(firestore,"property_expenses",x.id)));await b.commit()};
+document.getElementById("saveServiceGeneralExpenseBtn").onclick=async function(){
+const btn=this,date=document.getElementById("srvExpenseDate").value,category=document.getElementById("srvExpenseCategory").value.trim(),amount=Number(document.getElementById("srvGeneralExpenseAmount").value),note=document.getElementById("srvGeneralExpenseNote").value.trim();
+if(!date){alert("اختر التاريخ.");return;} if(!category){alert("أدخل اسم المصروف / التصنيف.");return;} if(!(amount>0)){alert("أدخل مبلغ مصروف صحيح.");return;}
+btn.disabled=true;try{await addDoc(collection(firestore,"services"),{recordType:"general_expense",date,category,amount,note,createdAt:serverTimestamp()});document.getElementById("srvExpenseCategory").value="";document.getElementById("srvGeneralExpenseAmount").value="";document.getElementById("srvGeneralExpenseNote").value="";}catch(e){alert(e.message);}finally{btn.disabled=false;}
+};
 
-window.inlineEditCell=async(cell,col,id,field,type="text")=>{if(cell.dataset.editing==="1")return;const map={projects:"projects",transactions:"transactions",office_expenses:"officeExpenses",office_income:"officeIncome",contracting:"contracting",services:"services",properties:"properties",rentals:"rentals",property_expenses:"propertyExpenses",personal_expenses:"personalExpenses"};const item=(db[map[col]]||[]).find(x=>x.id===id);if(!item)return;cell.dataset.editing="1";const input=document.createElement("input");input.className="inline-edit-input";input.type=type;input.value=item[field]??"";cell.innerHTML="";cell.appendChild(input);input.focus();input.select();let done=false;const finish=async save=>{if(done)return;done=true;if(save&&input.value!==String(item[field]??"")){let value=input.value;if(["amount","collectedAmount","expense","profit"].includes(field))value=Number(value)||0;await updateDoc(doc(firestore,col,id),{[field]:value})}renderAfterEdit(col)};input.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();finish(true)}if(e.key==="Escape"){e.preventDefault();finish(false)}};input.onblur=()=>finish(true)};
-function renderAfterEdit(col){if(col==="services")renderServices();else if(col==="office_expenses"||col==="office_income")renderOffice();else if(col==="contracting")renderContracting();else if(col==="personal_expenses")renderPersonal();else if(col==="rentals"||col==="property_expenses")renderRentals();else if(col==="transactions")render(document.querySelector(".tab.active")?.dataset.view||"projects");else if(col==="properties")renderRentals()}
 
-window.editRecord=async(col,id,fields)=>{const map={projects:"projects",transactions:"transactions",office_expenses:"officeExpenses",office_income:"officeIncome",contracting:"contracting",services:"services",properties:"properties",rentals:"rentals",property_expenses:"propertyExpenses",personal_expenses:"personalExpenses"};const item=(db[map[col]]||[]).find(x=>x.id===id);if(!item)return;const updates={};for(const f of fields.split(",")){let label=f;if(f==="date")label="التاريخ";else if(f==="category")label="التصنيف";else if(f==="note")label="الملاحظات";else if(f==="name")label="الاسم";else if(f==="title")label="اسم العقار";else if(f==="unit")label="الوحدة";else if(f==="tenant")label="المستأجر";else if(f==="amount")label="المبلغ";else if(f==="collectedAmount")label="الدخل";else if(f==="expense")label="المصروف";const v=prompt(`تعديل ${label}:`,item[f]??"");if(v===null)return;updates[f]=["amount","collectedAmount","expense"].includes(f)?Number(v)||0:v}await updateDoc(doc(firestore,col,id),updates);renderAfterEdit(col)};
-window.deleteRecord=async(col,id)=>{if(!confirm("هل تريد حذف هذه العملية؟"))return;await deleteDoc(doc(firestore,col,id))};
-window.editOfficeIncome=id=>editRecord("office_income",id,"date,name,amount,note");window.deleteOfficeIncome=id=>deleteRecord("office_income",id);window.editOfficeExpense=id=>editRecord("office_expenses",id,"date,name,amount,note");window.deleteOfficeExpense=id=>deleteRecord("office_expenses",id);
+window.deleteService=async function(id){
+
+if(!confirm("هل تريد حذف هذه العملية؟")) return;
+
+try{ await deleteDoc(doc(firestore,"services",id)); }
+
+catch(e){ alert(e.message); }
+
+};
+
+
+/* =====================================================
+   العقارات
+===================================================== */
+
+function renderRentals(){
+const rentals=filterBySelectedMonth(db.rentals,"rentals"),propertyExpenses=filterBySelectedMonth(db.propertyExpenses,"rentals");
+let allRent=0,allRentExp=0,allPropExp=0;rentals.forEach(r=>{allRent+=Number(r.amount)||0;allRentExp+=Number(r.expenseAmount)||0;});propertyExpenses.forEach(pe=>allPropExp+=Number(pe.amount)||0);
+const filter=document.getElementById("rentalsMonthFilter");if(filter)filter.innerHTML=monthFilterHTML("rentals");
+document.getElementById("allPropertiesRent").innerHTML=money(allRent);document.getElementById("allPropertiesExpense").innerHTML=money(allRentExp+allPropExp);document.getElementById("allPropertiesNetProfit").innerHTML=money(allRent-(allRentExp+allPropExp));document.getElementById("allPropertiesCount").textContent=formatNum(db.properties.length);
+if(currentOpenedPropertyId){renderPropertyDetails(currentOpenedPropertyId);}else{document.getElementById("rentalMainView").style.display="block";document.getElementById("rentalDetailView").style.display="none";renderPropertiesList();}
+}
+
+
+function renderPropertiesList(){
+const tbody=document.getElementById("propertiesListBody");
+const rentals=filterBySelectedMonth(db.rentals,"rentals"),propertyExpenses=filterBySelectedMonth(db.propertyExpenses,"rentals");
+if(!db.properties.length){tbody.innerHTML=`<tr><td colspan="8"><div class="empty">لا توجد عقارات مضافة حتى الآن</div></td></tr>`;return;}
+tbody.innerHTML=db.properties.map(p=>{let pRent=0,pRentExp=0,pPropExp=0,pRef=0,pRet=0;rentals.filter(r=>r.propertyId===p.id).forEach(r=>{pRent+=Number(r.amount)||0;pRentExp+=Number(r.expenseAmount)||0;if(r.depositStatus==="refunded")pRef+=Number(r.depositAmount)||0;else pRet+=Number(r.depositAmount)||0;});propertyExpenses.filter(pe=>pe.propertyId===p.id).forEach(pe=>pPropExp+=Number(pe.amount)||0);const pNet=pRent-(pRentExp+pPropExp);return `<tr><td><strong>${escapeHTML(p.title)}</strong></td><td class="income">${money(pRent)}</td><td class="expense">${money(pRentExp)}</td><td class="expense">${money(pPropExp)}</td><td class="${profitClass(pNet)}">${money(pNet)}</td><td style="color:#2563eb">${money(pRef)}</td><td style="color:#d97706">${money(pRet)}</td><td><div class="actions"><button class="btn blue" onclick="openPropertyDetails('${p.id}')">إدارة العقار</button><button class="btn blue" onclick="editRecord('properties','${p.id}','title')">تعديل</button><button class="btn red" onclick="deleteProperty('${p.id}')">حذف</button></div></td></tr>`;}).join("");
+}
+
+
+document.getElementById("savePropertyBtn").onclick=async function(){
+
+const title=document.getElementById("propertyTitle").value.trim();
+
+if(!title){ alert("أدخل اسم العقار."); return; }
+
+this.disabled=true;
+
+try{
+
+await addDoc(collection(firestore,"properties"),{ title, createdAt:serverTimestamp() });
+
+document.getElementById("propertyTitle").value="";
+
+}catch(e){ alert(e.message); }
+
+finally{ this.disabled=false; }
+
+};
+
+
+window.deleteProperty=async function(id){
+
+if(!confirm("هل تريد حذف هذا العقار وجميع عقوده ومصاريفه؟")) return;
+
+try{
+
+const batch=writeBatch(firestore);
+
+batch.delete(doc(firestore,"properties",id));
+
+db.rentals.filter(r=>r.propertyId===id).forEach(r=>batch.delete(doc(firestore,"rentals",r.id)));
+
+db.propertyExpenses.filter(pe=>pe.propertyId===id).forEach(pe=>batch.delete(doc(firestore,"property_expenses",pe.id)));
+
+await batch.commit();
+
+}catch(e){ alert(e.message); }
+
+};
+
+
+window.openPropertyDetails=function(id){
+
+currentOpenedPropertyId=id;
+
+document.getElementById("rentalMainView").style.display="none";
+
+document.getElementById("rentalDetailView").style.display="block";
+
+renderRentals();
+
+};
+
+
+window.closePropertyDetails=function(){
+
+currentOpenedPropertyId=null;
+
+document.getElementById("rentalMainView").style.display="block";
+
+document.getElementById("rentalDetailView").style.display="none";
+
+renderRentals();
+
+};
+
+
+function renderPropertyDetails(propId){
+const prop=db.properties.find(p=>p.id===propId);if(!prop){closePropertyDetails();return;}
+document.getElementById("currentPropertyName").textContent="🏢 "+prop.title;document.getElementById("rentDate").value=today();document.getElementById("propertyExpenseDate").value=today();
+const pContracts=filterBySelectedMonth(db.rentals.filter(r=>r.propertyId===propId),"rentals"),pExpenses=filterBySelectedMonth(db.propertyExpenses.filter(pe=>pe.propertyId===propId),"rentals");
+let pRent=0,pRentExp=0,pPropExp=0,pRef=0,pRet=0;pContracts.forEach(r=>{pRent+=Number(r.amount)||0;pRentExp+=Number(r.expenseAmount)||0;if(r.depositStatus==="refunded")pRef+=Number(r.depositAmount)||0;else pRet+=Number(r.depositAmount)||0;});pExpenses.forEach(pe=>pPropExp+=Number(pe.amount)||0);const pNet=pRent-(pRentExp+pPropExp);
+document.getElementById("propTotalRent").innerHTML=money(pRent);document.getElementById("propRentalExpenses").innerHTML=money(pRentExp);document.getElementById("propGeneralExpenses").innerHTML=money(pPropExp);document.getElementById("propNetProfit").innerHTML=money(pNet);document.getElementById("propTotalRefunded").innerHTML=money(pRef);document.getElementById("propTotalRetained").innerHTML=money(pRet);document.getElementById("propContractsCount").textContent=formatNum(pContracts.length);document.getElementById("propGeneralExpenseCount").textContent=formatNum(pExpenses.length);
+const contractsBody=document.getElementById("rentContractsBody");contractsBody.innerHTML=pContracts.length?pContracts.map(r=>{const net=Number(r.amount||0)-Number(r.expenseAmount||0),isRef=r.depositStatus==="refunded";return `<tr><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','date','date')"><span class="num-val">${escapeHTML(r.date)}</span></td><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','unit')">${escapeHTML(r.unit||"-")}</td><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','tenant')">${escapeHTML(r.tenant||"-")}</td><td class="income">${money(r.amount)}</td><td>${money(r.depositAmount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','expenseCategory')">${escapeHTML(r.expenseCategory||"-")}</td><td class="expense">${money(r.expenseAmount)}</td><td class="${profitClass(net)}">${money(net)}</td><td><button class="btn ${isRef?'blue':'orange'}" onclick="toggleDeposit('${r.id}','${isRef?'active':'refunded'}')">${isRef?'تم الاسترداد':'مستمر (نشط)'}</button></td><td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','note')">${escapeHTML(r.note||"-")}</td><td><button class="btn blue" onclick="editRecord('rentals','${r.id}','date,unit,tenant,expenseCategory,note')">تعديل</button> <button class="btn red" onclick="deleteRentContract('${r.id}')">حذف</button></td></tr>`;}).join(""):`<tr><td colspan="11"><div class="empty">لا توجد عمليات إيجار في الفترة المحددة</div></td></tr>`;
+const expensesBody=document.getElementById("propertyExpensesBody");expensesBody.innerHTML=pExpenses.length?pExpenses.map(pe=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','date','date')"><span class="num-val">${escapeHTML(pe.date)}</span></td><td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','category')">${escapeHTML(pe.category||"عام")}</td><td class="expense">${money(pe.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','note')">${escapeHTML(pe.note||"-")}</td><td><button class="btn blue" onclick="editRecord('property_expenses','${pe.id}','date,category,note')">تعديل</button> <button class="btn red" onclick="deletePropertyExpense('${pe.id}')">حذف</button></td></tr>`).join(""):`<tr><td colspan="5"><div class="empty">لا توجد مصاريف شاملة في الفترة المحددة</div></td></tr>`;
+}
+
+
+document.getElementById("saveRentContractBtn").onclick=async function(){
+
+if(!currentOpenedPropertyId) return;
+
+const date=document.getElementById("rentDate").value;
+
+const unit=document.getElementById("rentUnit").value.trim();
+
+const tenant=document.getElementById("rentTenant").value.trim();
+
+const amount=Number(document.getElementById("rentAmount").value);
+
+const depositAmount=Number(document.getElementById("rentDeposit").value);
+
+const expenseCategory=document.getElementById("rentExpenseCategory").value.trim();
+
+const expenseAmount=Number(document.getElementById("rentExpenseAmount").value);
+
+const note=document.getElementById("rentNote").value.trim();
+
+if(!date){ alert("اختر التاريخ."); return; }
+
+this.disabled=true;
+
+try{
+
+await addDoc(collection(firestore,"rentals"),{
+
+propertyId:currentOpenedPropertyId, date, unit, tenant, amount, depositAmount, depositStatus:"active", expenseCategory, expenseAmount, note, createdAt:serverTimestamp()
+
+});
+
+document.getElementById("rentUnit").value="";
+
+document.getElementById("rentTenant").value="";
+
+document.getElementById("rentAmount").value="";
+
+document.getElementById("rentDeposit").value="";
+
+document.getElementById("rentExpenseCategory").value="";
+
+document.getElementById("rentExpenseAmount").value="";
+
+document.getElementById("rentNote").value="";
+
+}catch(e){ alert(e.message); }
+
+finally{ this.disabled=false; }
+
+};
+
+
+document.getElementById("savePropertyExpenseBtn").onclick=async function(){
+
+if(!currentOpenedPropertyId) return;
+
+const date=document.getElementById("propertyExpenseDate").value;
+
+const category=document.getElementById("propertyExpenseCategory").value.trim();
+
+const amount=Number(document.getElementById("propertyExpenseAmount").value);
+
+const note=document.getElementById("propertyExpenseNote").value.trim();
+
+if(!date || !(amount>0)){ alert("أدخل تاريخ ومبلغ صحيح."); return; }
+
+this.disabled=true;
+
+try{
+
+await addDoc(collection(firestore,"property_expenses"),{
+
+propertyId:currentOpenedPropertyId, date, category, amount, note, createdAt:serverTimestamp()
+
+});
+
+document.getElementById("propertyExpenseCategory").value="";
+
+document.getElementById("propertyExpenseAmount").value="";
+
+document.getElementById("propertyExpenseNote").value="";
+
+}catch(e){ alert(e.message); }
+
+finally{ this.disabled=false; }
+
+};
+
+
+window.toggleDeposit=async function(id, newStatus){
+
+try{ await updateDoc(doc(firestore,"rentals",id),{ depositStatus:newStatus }); }
+
+catch(e){ alert(e.message); }
+
+};
+
+
+window.deleteRentContract=async function(id){
+
+if(!confirm("هل تريد حذف هذا العقد؟")) return;
+
+try{ await deleteDoc(doc(firestore,"rentals",id)); }
+
+catch(e){ alert(e.message); }
+
+};
+
+
+window.inlineEditCell=async function(cell,collectionName,id,field,inputType="text"){
+if(cell.dataset.editing==="1")return;
+cell.dataset.editing="1";
+const sourceMap={projects:"projects",transactions:"transactions",office_expenses:"officeExpenses",office_income:"officeIncome",contracting:"contracting",services:"services",properties:"properties",rentals:"rentals",property_expenses:"propertyExpenses",personal_expenses:"personalExpenses"};
+const source=db[sourceMap[collectionName]]||[];
+const current=source.find(x=>x&&x.id===id)||{};
+const oldValue=current[field]??"";
+const input=document.createElement("input");input.className="inline-edit-input";input.type=inputType;input.value=oldValue;input.setAttribute("aria-label",field);cell.innerHTML="";cell.appendChild(input);input.focus();if(inputType==="text")input.select();
+let finished=false;
+const finish=async save=>{if(finished)return;finished=true;const value=input.value;if(save&&value!==String(oldValue)){try{await updateDoc(doc(firestore,collectionName,id),{[field]:value});}catch(e){alert("تعذر التعديل: "+e.message);}}renderAfterInlineEdit(collectionName);};
+input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();finish(true);}else if(e.key==="Escape"){e.preventDefault();finish(false);}});input.addEventListener("blur",()=>finish(true));
+};
+
+function renderAfterInlineEdit(collectionName){
+if(collectionName==="transactions"){
+const activeTab=document.querySelector(".tab.active");
+if(activeTab) render(activeTab.dataset.view);
+}else if(collectionName==="office_expenses"||collectionName==="office_income") renderOffice();
+else if(collectionName==="contracting") renderContracting();
+else if(collectionName==="services") renderServices();
+else if(collectionName==="rentals"||collectionName==="property_expenses") renderRentals();
+else if(collectionName==="personal_expenses") renderPersonal();
+else if(collectionName==="projects"){
+const activeTab=document.querySelector(".tab.active");
+if(activeTab) render(activeTab.dataset.view);
+}
+}
+
+window.editRecord=async function(collectionName,id,fields){
+const sourceMap={projects:"projects",transactions:"transactions",office_expenses:"officeExpenses",office_income:"officeIncome",contracting:"contracting",services:"services",properties:"properties",rentals:"rentals",property_expenses:"propertyExpenses",personal_expenses:"personalExpenses"};
+const source=db[sourceMap[collectionName]]||[];const current=source.find(x=>x&&x.id===id);
+if(!current){alert("لم يتم العثور على البيانات.");return;}
+const updates={};
+for(const field of fields.split(",")){
+let label=field;if(field==="date")label="التاريخ";else if(field==="name")label="الاسم / البند";else if(field==="category")label="التصنيف";else if(field==="title")label="اسم العقار";else if(field==="note")label="الملاحظات";else if(field==="unit")label="الوحدة";else if(field==="tenant")label="المستأجر";else if(field==="expenseCategory")label="تصنيف المصروف";else if(field==="amount")label="المبلغ";else if(field==="collectedAmount")label="المبلغ المحصل";else if(field==="expense")label="المصروف";
+const val=prompt(`تعديل ${label}:`,current[field]??"");if(val===null)return;
+if(field==="amount"||field==="collectedAmount"||field==="expense"){
+const num=Number(val);if(!(num>=0)){alert("أدخل مبلغ صحيح.");return;}updates[field]=num;
+}else{updates[field]=val;}
+}
+try{await updateDoc(doc(firestore,collectionName,id),updates);renderAfterInlineEdit(collectionName);}catch(e){alert("تعذر التعديل: "+e.message);}
+};
+
+window.deletePropertyExpense=async function(id){
+
+if(!confirm("هل تريد حذف هذا المصروف؟")) return;
+
+try{ await deleteDoc(doc(firestore,"property_expenses",id)); }
+
+catch(e){ alert(e.message); }
+
+};
+
 
 </script>
+
 </body>
+
 </html>
