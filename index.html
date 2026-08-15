@@ -2165,8 +2165,8 @@ from
 
 import {
 getFirestore,
-collection,
-addDoc,
+collection as firebaseCollection,
+addDoc as firebaseAddDoc,
 deleteDoc,
 doc,
 onSnapshot,
@@ -2177,13 +2177,6 @@ getDocs
 }
 from
 "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-import {
-getFunctions,
-httpsCallable
-}
-from
-"https://www.gstatic.com/firebasejs/12.1.0/firebase-functions.js";
 
 const firebaseConfig = {
 
@@ -2218,9 +2211,6 @@ getAuth(firebaseApp);
 
 const firestore =
 getFirestore(firebaseApp);
-
-const functions =
-getFunctions(firebaseApp);
 
 /* ================= البيانات ================= */
 
@@ -3120,6 +3110,187 @@ if(el) el.innerHTML=money(i===0?income:i===1?expense:income-expense);
 
 /* ================= النسخة الاحتياطية الكاملة Excel ================= */
 
+const backupKnownCollectionPaths=[
+
+"projects",
+"transactions",
+"office_expenses",
+"office_income",
+"contracting",
+"services",
+"properties",
+"rentals",
+"property_expenses",
+"personal_expenses"
+
+];
+
+function getBackupCollectionPaths(){
+
+let saved=[];
+
+try{
+
+saved=
+JSON.parse(
+localStorage.getItem(
+"firebaseBackupCollectionPaths"
+)||"[]"
+);
+
+}catch(e){
+
+saved=[];
+
+}
+
+if(!Array.isArray(saved)){
+
+saved=[];
+
+}
+
+const all=
+new Set(
+[
+...backupKnownCollectionPaths,
+...saved
+]
+);
+
+const result=
+Array.from(all)
+.filter(
+path=>
+typeof path==="string" &&
+path.trim()
+);
+
+try{
+
+localStorage.setItem(
+"firebaseBackupCollectionPaths",
+JSON.stringify(result)
+);
+
+}catch(e){
+
+}
+
+return result;
+
+}
+
+function registerBackupCollectionPath(path){
+
+if(
+typeof path!=="string" ||
+!path.trim()
+){
+
+return;
+
+}
+
+let paths=[];
+
+try{
+
+paths=
+JSON.parse(
+localStorage.getItem(
+"firebaseBackupCollectionPaths"
+)||"[]"
+);
+
+}catch(e){
+
+paths=[];
+
+}
+
+if(!Array.isArray(paths)){
+
+paths=[];
+
+}
+
+if(!paths.includes(path)){
+
+paths.push(path);
+
+try{
+
+localStorage.setItem(
+"firebaseBackupCollectionPaths",
+JSON.stringify(paths)
+);
+
+}catch(e){
+
+}
+
+}
+
+}
+
+function collection(
+firestoreInstance,
+...pathSegments
+){
+
+const ref=
+firebaseCollection(
+firestoreInstance,
+...pathSegments
+);
+
+if(ref && ref.path){
+
+registerBackupCollectionPath(
+ref.path
+);
+
+}
+
+return ref;
+
+}
+
+async function addDoc(
+collectionReference,
+data,
+options
+){
+
+if(
+collectionReference &&
+collectionReference.path
+){
+
+registerBackupCollectionPath(
+collectionReference.path
+);
+
+}
+
+if(options===undefined){
+
+return firebaseAddDoc(
+collectionReference,
+data
+);
+
+}
+
+return firebaseAddDoc(
+collectionReference,
+data,
+options
+);
+
+}
+
 function backupExcelValue(value){
 
 if(value===null||value===undefined){
@@ -3128,21 +3299,48 @@ return "";
 
 }
 
-if(typeof value==="object"){
+if(
+typeof value==="string" ||
+typeof value==="number" ||
+typeof value==="boolean"
+){
+
+return value;
+
+}
+
+if(
+typeof value==="object" &&
+typeof value.toDate==="function"
+){
 
 try{
 
-return JSON.stringify(value);
+return value.toDate().toISOString();
+
+}catch(e){
+
+}
+
+}
+
+if(value instanceof Date){
+
+return value.toISOString();
+
+}
+
+try{
+
+return JSON.stringify(
+value
+);
 
 }catch(e){
 
 return String(value);
 
 }
-
-}
-
-return String(value);
 
 }
 
@@ -3227,28 +3425,13 @@ throw new Error(
 
 }
 
-const callable =
-httpsCallable(
-functions,
-"exportFirestoreBackup"
-);
+const paths=
+getBackupCollectionPaths();
 
-const result =
-await callable({});
-
-const payload =
-result.data||{};
-
-const allCollections=
-Array.isArray(payload.collections)
-?
-payload.collections
-:[];
-
-if(!allCollections.length){
+if(!paths.length){
 
 throw new Error(
-"لم يتم العثور على أي Collections في Firebase."
+"لم يتم العثور على أي Collections محفوظة للنسخ الاحتياطي."
 );
 
 }
@@ -3259,6 +3442,62 @@ XLSX.utils.book_new();
 const usedSheetNames=
 new Set();
 
+const exportedCollections=[];
+
+for(
+const path of paths
+){
+
+try{
+
+const snapshot=
+await getDocs(
+collection(
+firestore,
+...path.split("/")
+)
+);
+
+const records=
+snapshot.docs.map(
+item=>({
+
+__documentId:item.id,
+
+__documentPath:item.ref.path,
+
+...item.data()
+
+})
+);
+
+exportedCollections.push({
+
+path,
+records
+
+});
+
+}catch(error){
+
+console.error(
+"Backup Collection Error:",
+path,
+error
+);
+
+exportedCollections.push({
+
+path,
+records:[],
+error:error.message
+
+});
+
+}
+
+}
+
 const summaryRows=[
 
 [
@@ -3268,41 +3507,44 @@ const summaryRows=[
 
 [
 "المشروع",
-String(payload.projectId||"ghassan-f0a60")
+"ghassan-f0a60"
 ],
 
 [
 "تاريخ النسخة",
-String(payload.exportedAt||new Date().toISOString())
+new Date().toISOString()
 ],
 
 [
 "البريد المسجل",
-String(payload.userEmail||auth.currentUser.email||"")
+auth.currentUser.email||""
 ],
 
 [
 "عدد Collections",
-String(allCollections.length)
+exportedCollections.length
+],
+
+[
+"طريقة النسخ",
+"قراءة مباشرة من Firestore بصلاحيات المستخدم الحالي"
 ],
 
 [
 "ملاحظة",
-"تم اكتشاف Collections وSubcollections الموجودة في Firebase تلقائيًا، وحفظ الحقول وDocument ID ومسار المستند."
+"أي Collection جديدة يتم استخدامها من الموقع عبر collection(firestore,...) يتم تسجيل مسارها تلقائيًا للنسخ الاحتياطي."
 ]
 
 ];
 
-allCollections.forEach(
-collectionItem=>{
+exportedCollections.forEach(
+item=>{
 
 summaryRows.push([
 
-String(collectionItem.path||""),
+item.path,
 
-String(
-(collectionItem.documents||[]).length
-)
+item.records.length
 
 ]);
 
@@ -3314,8 +3556,11 @@ summaryRows
 );
 
 summarySheet["!cols"]=[
-{wch:90},
-{wch:30}
+
+{wch:100},
+
+{wch:35}
+
 ];
 
 XLSX.utils.book_append_sheet(
@@ -3327,20 +3572,16 @@ usedSheetNames
 )
 );
 
-allCollections.forEach(
+exportedCollections.forEach(
 collectionItem=>{
 
 const records=
-Array.isArray(collectionItem.documents)
-?
-collectionItem.documents
-:[];
+collectionItem.records||[];
 
 const headers=
-backupExcelHeaders(records);
-
-const displayName=
-String(collectionItem.path||collectionItem.name||"بيانات");
+backupExcelHeaders(
+records
+);
 
 if(!headers.length){
 
@@ -3349,11 +3590,12 @@ XLSX.utils.aoa_to_sheet(
 [
 [
 "مسار Collection",
-displayName
+collectionItem.path
 ],
+
 [
-"لا توجد مستندات",
-""
+"لا توجد مستندات أو لا توجد صلاحية قراءة",
+collectionItem.error||""
 ]
 ]
 );
@@ -3362,7 +3604,7 @@ XLSX.utils.book_append_sheet(
 workbook,
 emptySheet,
 backupExcelSafeSheetName(
-collectionItem.name,
+collectionItem.path,
 usedSheetNames
 )
 );
@@ -3371,11 +3613,11 @@ return;
 
 }
 
-const sheetRows=
-[
+const sheetRows=[
+
 [
 "مسار Collection",
-displayName
+collectionItem.path
 ],
 
 [
@@ -3389,6 +3631,7 @@ headers,
 records,
 headers
 )
+
 ];
 
 const sheet=
@@ -3398,14 +3641,14 @@ sheetRows
 
 sheet["!cols"]=
 headers.map(
-()=>({wch:30})
+()=>({wch:32})
 );
 
 XLSX.utils.book_append_sheet(
 workbook,
 sheet,
 backupExcelSafeSheetName(
-collectionItem.name,
+collectionItem.path,
 usedSheetNames
 )
 );
@@ -3423,10 +3666,10 @@ const rawRows=[
 
 ];
 
-allCollections.forEach(
+exportedCollections.forEach(
 collectionItem=>{
 
-(collectionItem.documents||[]).forEach(
+(collectionItem.records||[]).forEach(
 record=>{
 
 const data={
@@ -3465,9 +3708,12 @@ json=String(data);
 
 rawRows.push([
 
-String(collectionItem.path||""),
+collectionItem.path,
+
 documentId,
+
 documentPath,
+
 json
 
 ]);
@@ -3483,9 +3729,12 @@ rawRows
 
 rawSheet["!cols"]=[
 
-{wch:90},
+{wch:100},
+
 {wch:45},
-{wch:90},
+
+{wch:100},
+
 {wch:120}
 
 ];
@@ -3560,6 +3809,7 @@ btn.textContent=
 }
 
 };
+
 
 /* ================= المقاولات ================= */
 
