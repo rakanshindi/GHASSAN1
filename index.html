@@ -2265,6 +2265,11 @@ return String(value??"")
 .replace(/[إأآٱ]/g,"ا")
 .replace(/ى/g,"ي")
 .replace(/ة/g,"ه")
+.replace(/ؤ/g,"و")
+.replace(/ئ/g,"ي")
+.replace(/ء/g,"")
+.replace(/ـ/g,"")
+.replace(/[ًٌٍَُِّْ]/g,"")
 .replace(/\s+/g,"")
 .toLowerCase();
 }
@@ -3149,10 +3154,6 @@ if(view==="projects"){
 
 renderProjectsView(content);
 
-}else if(view==="dashboard"){
-
-renderDashboardView(content);
-
 }else if(view==="transactions"){
 
 renderTransactionsView(content);
@@ -3314,31 +3315,6 @@ document.getElementById("txNote").value="";
 }catch(e){alert(e.message);}
 finally{this.disabled=false;}
 };
-}
-
-
-function renderDashboardView(content){
-
-let inc=0, exp=0;
-
-db.transactions.forEach(t=>{
-
-if(t.type==="income") inc+=Number(t.amount)||0;
-
-else exp+=Number(t.amount)||0;
-
-});
-
-content.innerHTML=`
-<h3>📊 الملخص العام والمؤشرات</h3>
-<div class="stats">
-<div class="stat"><small>إجمالي الإيرادات المقبوضة</small><strong class="income">${money(inc)}</strong></div>
-<div class="stat"><small>إجمالي المصاريف المصروفة</small><strong class="expense">${money(exp)}</strong></div>
-<div class="stat"><small>صافي الربح العام</small><strong class="${profitClass(inc-exp)}">${money(inc-exp)}</strong></div>
-<div class="stat"><small>إجمالي عدد المشاريع</small><strong>${formatNum(db.projects.length)}</strong></div>
-</div>
-`;
-
 }
 
 
