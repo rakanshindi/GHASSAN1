@@ -633,15 +633,9 @@ id="logoutBtn">
 </div>
 
 <div class="portal-card" id="selectContracting">
-
 <span class="portal-icon">🏢</span>
-
 <h2>المقاولات</h2>
-
-<p>
-إدارة دخل ومصروف وربح المقاولات
-</p>
-
+<p>إدارة دخل ومصروف وربح المقاولات</p>
 </div>
 
 <div class="portal-card" id="selectProjects">
@@ -695,65 +689,13 @@ id="logoutBtn">
 </div>
 
 <div class="card" id="mainWallet" style="margin-top:15px">
-
 <h2>💰 المحفظة</h2>
-
 <div class="stats">
-
-<div class="stat">
-
-<small>إجمالي الدخل</small>
-
-<strong
-id="walletIncome"
-class="income">
-
-0 SAR
-
-</strong>
-
+<div class="stat"><small>إجمالي الدخل</small><strong id="walletIncome" class="income">0 SAR</strong></div>
+<div class="stat"><small>إجمالي المصروف</small><strong id="walletExpense" class="expense">0 SAR</strong></div>
+<div class="stat"><small>الربح / الخسارة</small><strong id="walletProfit">0 SAR</strong></div>
+<div class="stat"><small>الرصيد</small><strong id="walletBalance">0 SAR</strong></div>
 </div>
-
-<div class="stat">
-
-<small>إجمالي المصروف</small>
-
-<strong
-id="walletExpense"
-class="expense">
-
-0 SAR
-
-</strong>
-
-</div>
-
-<div class="stat">
-
-<small>الربح / الخسارة</small>
-
-<strong id="walletProfit">
-
-0 SAR
-
-</strong>
-
-</div>
-
-<div class="stat">
-
-<small>الرصيد</small>
-
-<strong id="walletBalance">
-
-0 SAR
-
-</strong>
-
-</div>
-
-</div>
-
 </div>
 
 </div>
@@ -765,90 +707,38 @@ class="expense">
 <div class="card">
 
 <div class="section-nav">
-
-<button
-class="btn secondary"
-onclick="goBack()">
-
-← رجوع للصفحة السابقة
-
-</button>
-
-<button
-class="btn secondary"
-onclick="showPortal()">
-
-🏠 الرئيسية
-
-</button>
-
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
 </div>
 
 <h2>🏢 المقاولات</h2>
 
 <div id="contractingMonthFilter"></div>
 
-<div
-class="stats"
-style="margin-bottom:20px">
+<div class="stats" style="margin-bottom:20px">
 
 <div class="stat">
-
-<small>
-إجمالي الدخل
-</small>
-
-<strong
-id="contractingIncome"
-class="income">
-
-0 SAR
-
-</strong>
-
+<small>إجمالي الدخل</small>
+<strong id="contractingIncome" class="income">0 SAR</strong>
 </div>
 
 <div class="stat">
-
-<small>
-إجمالي المصروف
-</small>
-
-<strong
-id="contractingExpense"
-class="expense">
-
-0 SAR
-
-</strong>
-
+<small>إجمالي المصروف</small>
+<strong id="contractingExpense" class="expense">0 SAR</strong>
 </div>
 
 <div class="stat">
-
-<small>
-صافي الربح
-</small>
-
-<strong id="contractingProfit">
-
-0 SAR
-
-</strong>
-
+<small>صافي الربح</small>
+<strong id="contractingProfit">0 SAR</strong>
 </div>
 
 </div>
 
-<!-- ملخص التصنيفات للمقاولات -->
+<!-- ================= ملخص تصنيف الدخل ================= -->
 
-<div
-class="card"
-style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>
-📊 ملخص المقاولات حسب التصنيف
-</h3>
+<h3>📈 ملخص تصنيف الدخل</h3>
 
 <div class="table-wrap">
 
@@ -857,20 +747,13 @@ style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 <thead>
 
 <tr>
-
 <th>التصنيف</th>
-
 <th>إجمالي الدخل</th>
-
-<th>إجمالي المصروف</th>
-
-<th>الصافي</th>
-
 </tr>
 
 </thead>
 
-<tbody id="contractingSummaryBody"></tbody>
+<tbody id="contractingIncomeSummaryBody"></tbody>
 
 </table>
 
@@ -878,106 +761,11 @@ style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
 </div>
 
-<div
-class="card"
-style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+<!-- ================= ملخص تصنيف المصروفات ================= -->
 
-<h3>
-➕ إضافة عملية مقاولات
-</h3>
+<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<div class="grid">
-
-<div class="field">
-
-<label>النوع</label>
-
-<select id="conType">
-
-<option value="income">
-دخل
-</option>
-
-<option value="expense">
-مصروف
-</option>
-
-</select>
-
-</div>
-
-<div class="field">
-
-<label>التاريخ</label>
-
-<input
-id="conDate"
-type="date">
-
-</div>
-
-<div class="field">
-
-<label>الاسم / البند</label>
-
-<input
-id="conName"
-placeholder="مثال: عقد، دفعة، مواد، أجور...">
-
-</div>
-
-<div class="field">
-
-<label>المبلغ (SAR)</label>
-
-<input
-id="conAmount"
-type="number"
-min="0"
-step="0.01"
-placeholder="0">
-
-</div>
-
-<div class="field">
-
-<label>التصنيف</label>
-
-<input
-id="conCategory"
-placeholder="مواد، أجور، دفعة...">
-
-</div>
-
-<div class="field full">
-
-<label>البيان</label>
-
-<input
-id="conNote"
-placeholder="بيان إضافي...">
-
-</div>
-
-<div class="full">
-
-<button
-class="btn green"
-id="saveContractingBtn">
-
-حفظ العملية
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<h3>
-📋 عمليات المقاولات
-</h3>
+<h3>📉 ملخص تصنيف المصروفات</h3>
 
 <div class="table-wrap">
 
@@ -986,7 +774,76 @@ id="saveContractingBtn">
 <thead>
 
 <tr>
+<th>التصنيف</th>
+<th>إجمالي المصروف</th>
+</tr>
 
+</thead>
+
+<tbody id="contractingExpenseSummaryBody"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+
+<h3>➕ إضافة عملية مقاولات</h3>
+
+<div class="grid">
+
+<div class="field">
+<label>النوع</label>
+<select id="conType">
+<option value="income">دخل</option>
+<option value="expense">مصروف</option>
+</select>
+</div>
+
+<div class="field">
+<label>التاريخ</label>
+<input id="conDate" type="date">
+</div>
+
+<div class="field">
+<label>الاسم / البند</label>
+<input id="conName" placeholder="مثال: عقد، دفعة، مواد، أجور...">
+</div>
+
+<div class="field">
+<label>المبلغ (SAR)</label>
+<input id="conAmount" type="number" min="0" step="0.01" placeholder="0">
+</div>
+
+<div class="field">
+<label>التصنيف</label>
+<input id="conCategory" placeholder="مواد، أجور، دفعة...">
+</div>
+
+<div class="field full">
+<label>البيان</label>
+<input id="conNote" placeholder="بيان إضافي...">
+</div>
+
+<div class="full">
+<button class="btn green" id="saveContractingBtn">حفظ العملية</button>
+</div>
+
+</div>
+
+</div>
+
+<h3>📋 عمليات المقاولات</h3>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
 <th>التاريخ</th>
 <th>النوع</th>
 <th>الاسم / البند</th>
@@ -994,7 +851,6 @@ id="saveContractingBtn">
 <th>المبلغ</th>
 <th>البيان</th>
 <th>إجراء</th>
-
 </tr>
 
 </thead>
@@ -1016,19 +872,11 @@ id="saveContractingBtn">
 <div class="card">
 
 <div class="section-nav">
-
-<button class="btn secondary" onclick="goBack()">
-← رجوع للصفحة السابقة
-</button>
-
-<button class="btn secondary" onclick="showPortal()">
-🏠 الرئيسية
-</button>
-
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
 </div>
 
 <h2>💳 المصاريف الشخصية</h2>
-
 <div id="personalMonthFilter"></div>
 
 <div class="stats" style="margin-bottom:20px">
@@ -1139,19 +987,11 @@ id="savePersonalExpenseBtn">
 <div class="card">
 
 <div class="section-nav">
-
-<button class="btn secondary" onclick="goBack()">
-← رجوع للصفحة السابقة
-</button>
-
-<button class="btn secondary" onclick="showPortal()">
-🏠 الرئيسية
-</button>
-
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
 </div>
 
 <h2>🏢 مصاريف المكتب</h2>
-
 <div id="officeMonthFilter"></div>
 
 <div class="stats" style="margin-bottom:20px">
@@ -1185,19 +1025,8 @@ class="expense">
 </div>
 
 <div class="stat">
-
-<small>
-إجمالي دخل المكتب
-</small>
-
-<strong
-id="officeTotalIncome"
-class="income">
-
-0 SAR
-
-</strong>
-
+<small>إجمالي دخل المكتب</small>
+<strong id="officeTotalIncome" class="income">0 SAR</strong>
 </div>
 
 </div>
@@ -1211,58 +1040,27 @@ style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 <div class="grid">
 
 <div class="field">
-
 <label>التاريخ</label>
-
-<input
-id="offIncDate"
-type="date">
-
+<input id="offIncDate" type="date">
 </div>
 
 <div class="field">
-
 <label>اسم الدخل</label>
-
-<input
-id="offIncName"
-placeholder="مثال: أتعاب، استشارة، خدمة...">
-
+<input id="offIncName" placeholder="مثال: أتعاب، استشارة، خدمة...">
 </div>
 
 <div class="field">
-
 <label>المبلغ (SAR)</label>
-
-<input
-id="offIncAmount"
-type="number"
-min="0"
-step="0.01"
-placeholder="0">
-
+<input id="offIncAmount" type="number" min="0" step="0.01" placeholder="0">
 </div>
 
 <div class="field">
-
 <label>ملاحظات</label>
-
-<input
-id="offIncNote"
-placeholder="بيان إضافي...">
-
+<input id="offIncNote" placeholder="بيان إضافي...">
 </div>
 
 <div class="full">
-
-<button
-class="btn green"
-id="saveOfficeIncomeBtn">
-
-حفظ الدخل
-
-</button>
-
+<button class="btn green" id="saveOfficeIncomeBtn">حفظ الدخل</button>
 </div>
 
 </div>
@@ -1327,7 +1125,6 @@ id="saveOfficeExpenseBtn">
 <div
 id="officeSaveStatus"
 class="save-status">
-
 </div>
 
 </div>
@@ -1364,9 +1161,7 @@ class="save-status">
 
 </div>
 
-<h3>
-📋 قائمة دخل المكتب
-</h3>
+<h3>📋 قائمة دخل المكتب</h3>
 
 <div class="table-wrap">
 
@@ -1375,13 +1170,11 @@ class="save-status">
 <thead>
 
 <tr>
-
 <th>التاريخ</th>
 <th>الاسم</th>
 <th>المبلغ</th>
 <th>الملاحظات</th>
 <th>إجراء</th>
-
 </tr>
 
 </thead>
@@ -1401,15 +1194,8 @@ class="save-status">
 <div id="projectsSection" style="display:none">
 
 <div class="section-nav">
-
-<button class="btn secondary" onclick="goBack()">
-← رجوع للصفحة السابقة
-</button>
-
-<button class="btn secondary" onclick="showPortal()">
-🏠 الرئيسية
-</button>
-
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
 </div>
 
 <div
@@ -1515,19 +1301,11 @@ data-view="transactions">
 <div class="card">
 
 <div class="section-nav">
-
-<button class="btn secondary" onclick="goBack()">
-← رجوع للصفحة السابقة
-</button>
-
-<button class="btn secondary" onclick="showPortal()">
-🏠 الرئيسية
-</button>
-
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
 </div>
 
 <h2>🛠️ دخل الخدمات</h2>
-
 <div id="servicesMonthFilter"></div>
 
 <div
@@ -1681,71 +1459,34 @@ id="saveServiceTxBtn">
 
 </div>
 
-<div
-class="card"
-style="background:#fff7ed;border:1px solid #fed7aa;margin-bottom:20px">
+<div class="card" style="background:#fff7ed;border:1px solid #fed7aa;margin-bottom:20px">
 
-<h3>
-➕ إضافة مصروفات الخدمات المستقلة
-</h3>
+<h3>➕ إضافة مصروفات الخدمات المستقلة</h3>
 
 <div class="grid">
 
 <div class="field">
-
 <label>التاريخ</label>
-
-<input
-id="srvExpenseDate"
-type="date">
-
+<input id="srvExpenseDate" type="date">
 </div>
 
 <div class="field">
-
 <label>اسم المصروف / التصنيف</label>
-
-<input
-id="srvExpenseCategory"
-placeholder="مثال: بنزين، أدوات، نقل...">
-
+<input id="srvExpenseCategory" placeholder="مثال: بنزين، أدوات، نقل...">
 </div>
 
 <div class="field">
-
 <label>مبلغ المصروف (SAR)</label>
-
-<input
-id="srvGeneralExpenseAmount"
-type="number"
-min="0"
-step="0.01"
-placeholder="0">
-
+<input id="srvGeneralExpenseAmount" type="number" min="0" step="0.01" placeholder="0">
 </div>
 
 <div class="field full">
-
-<label>
-البيان / ملاحظة
-</label>
-
-<input
-id="srvGeneralExpenseNote"
-placeholder="تفاصيل المصروف...">
-
+<label>البيان / ملاحظة</label>
+<input id="srvGeneralExpenseNote" placeholder="تفاصيل المصروف...">
 </div>
 
 <div class="full">
-
-<button
-class="btn red"
-id="saveServiceGeneralExpenseBtn">
-
-حفظ المصروف
-
-</button>
-
+<button class="btn red" id="saveServiceGeneralExpenseBtn">حفظ المصروف</button>
 </div>
 
 </div>
@@ -1811,26 +1552,20 @@ style="margin-bottom:25px">
 
 </div>
 
-<h3>
-📋 المصروفات المستقلة للخدمات
-</h3>
+<h3>📋 المصروفات المستقلة للخدمات</h3>
 
 <div class="table-wrap">
 
 <table>
 
 <thead>
-
 <tr>
-
 <th>التاريخ</th>
 <th>المصروف / التصنيف</th>
 <th>المبلغ</th>
 <th>البيان</th>
 <th>إجراء</th>
-
 </tr>
-
 </thead>
 
 <tbody id="servicesGeneralExpensesBody"></tbody>
@@ -1850,19 +1585,11 @@ style="margin-bottom:25px">
 <div class="card">
 
 <div class="section-nav">
-
-<button class="btn secondary" onclick="goBack()">
-← رجوع للصفحة السابقة
-</button>
-
-<button class="btn secondary" onclick="showPortal()">
-🏠 الرئيسية
-</button>
-
+<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
+<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
 </div>
 
 <h2>🔑 إدارة إيجارات العقارات</h2>
-
 <div id="rentalsMonthFilter"></div>
 
 <div
@@ -2539,11 +2266,7 @@ return `<span class="num-val">${formatted} SAR</span>`;
 }
 
 function formatNum(number){
-
-return new Intl.NumberFormat(
-"en-US"
-).format(Number(number)||0);
-
+return new Intl.NumberFormat("en-US").format(Number(number)||0);
 }
 
 function escapeHTML(value){
@@ -2577,143 +2300,59 @@ return new Date()
 }
 
 function currentMonthKey(){
-
 const d=new Date();
-
-return `${d.getFullYear()}-${String(
-d.getMonth()+1
-).padStart(2,"0")}`;
-
+return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
 }
 
 const selectedMonths={
-
 office:currentMonthKey(),
 contracting:currentMonthKey(),
 projects:currentMonthKey(),
 services:currentMonthKey(),
 rentals:currentMonthKey(),
 personal:currentMonthKey()
-
 };
 
 const arabicMonths=[
-
-"يناير",
-"فبراير",
-"مارس",
-"أبريل",
-"مايو",
-"يونيو",
-"يوليو",
-"أغسطس",
-"سبتمبر",
-"أكتوبر",
-"نوفمبر",
-"ديسمبر"
-
+"يناير","فبراير","مارس","أبريل","مايو","يونيو",
+"يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"
 ];
 
 function monthFilterHTML(key){
-
 const currentYear=new Date().getFullYear();
-
-const value=
-selectedMonths[key]||currentMonthKey();
-
+const value=selectedMonths[key]||currentMonthKey();
 return `
-
 <div class="card month-filter">
-
-<span class="month-filter-label">
-📅 عرض:
-</span>
-
-<select
-id="${key}MonthSelect"
-onchange="changeMonthFilter('${key}',this.value)">
-
+<span class="month-filter-label">📅 عرض:</span>
+<select id="${key}MonthSelect" onchange="changeMonthFilter('${key}',this.value)">
 ${arabicMonths.map((name,i)=>{
-
-const month=
-`${currentYear}-${String(i+1).padStart(2,"0")}`;
-
-return `
-<option
-value="${month}"
-${value===month?"selected":""}>
-${name} ${currentYear}
-</option>`;
-
+const month=`${currentYear}-${String(i+1).padStart(2,"0")}`;
+return `<option value="${month}" ${value===month?"selected":""}>${name} ${currentYear}</option>`;
 }).join("")}
-
-<option
-value="all"
-${value==="all"?"selected":""}>
-كامل السنة ${currentYear}
-</option>
-
+<option value="all" ${value==="all"?"selected":""}>كامل السنة ${currentYear}</option>
 </select>
-
-</div>
-
-`;
-
+</div>`;
 }
 
 window.changeMonthFilter=function(key,value){
-
 selectedMonths[key]=value;
-
-if(key==="office")
-renderOffice();
-
-else if(key==="contracting")
-renderContracting();
-
-else if(key==="services")
-renderServices();
-
-else if(key==="rentals")
-renderRentals();
-
-else if(key==="personal")
-renderPersonal();
-
+if(key==="office") renderOffice();
+else if(key==="contracting") renderContracting();
+else if(key==="services") renderServices();
+else if(key==="rentals") renderRentals();
+else if(key==="personal") renderPersonal();
 else if(key==="projects"){
-
-const activeTab=
-document.querySelector(".tab.active");
-
-if(activeTab)
-render(activeTab.dataset.view);
-
-else
-render("projects");
-
+const activeTab=document.querySelector(".tab.active");
+if(activeTab) render(activeTab.dataset.view);
+else render("projects");
 }
-
 };
 
 function filterBySelectedMonth(items,key){
-
-const selected=
-selectedMonths[key]||currentMonthKey();
-
-const currentYear=
-String(new Date().getFullYear());
-
-if(selected==="all")
-return items.filter(
-item=>
-String(item.date||"").slice(0,4)===currentYear
-);
-
-return items.filter(
-item=>
-String(item.date||"").slice(0,7)===selected
-);
-
+const selected=selectedMonths[key]||currentMonthKey();
+const currentYear=String(new Date().getFullYear());
+if(selected==="all") return items.filter(item=>String(item.date||"").slice(0,4)===currentYear);
+return items.filter(item=>String(item.date||"").slice(0,7)===selected);
 }
 
 function profitClass(value){
@@ -2728,77 +2367,42 @@ return Number(value)>=0
 
 /* ================= التنقل والدخول ================= */
 
-function navigateTo(screenId){
+function navigateTo(screenId) {
 
-const screens=[
-
-"portalScreen",
-"officeSection",
+const screens = [
+"portalScreen", 
+"officeSection", 
 "projectsSection",
-"contractingSection",
-"servicesSection",
-"rentalsSection",
+"contractingSection", 
+"servicesSection", 
+"rentalsSection", 
 "personalSection"
-
 ];
 
-screens.forEach(s=>{
-
-const el=document.getElementById(s);
-
-if(el)
-el.style.display=
-(s===screenId)
-?
-"block"
-:
-"none";
-
+screens.forEach(s => {
+const el = document.getElementById(s);
+if (el) el.style.display = (s === screenId) ? "block" : "none";
 });
 
-if(
-pageHistory[
-pageHistory.length-1
-]!==screenId
-){
-
+if (pageHistory[pageHistory.length - 1] !== screenId) {
 pageHistory.push(screenId);
-
 }
 
-const homeBtn=
-document.getElementById("homeBtn");
-
-if(homeBtn){
-
-homeBtn.style.display=
-(screenId==="portalScreen")
-?
-"none"
-:
-"inline-flex";
-
+const homeBtn = document.getElementById("homeBtn");
+if (homeBtn) {
+homeBtn.style.display = (screenId === "portalScreen") ? "none" : "inline-flex";
 }
 
 }
 
-window.goBack=function(){
+window.goBack = function() {
 
-if(pageHistory.length>1){
-
+if (pageHistory.length > 1) {
 pageHistory.pop();
-
-const previousScreen=
-pageHistory[
-pageHistory.length-1
-];
-
+const previousScreen = pageHistory[pageHistory.length - 1];
 navigateTo(previousScreen);
-
-}else{
-
+} else {
 showPortal();
-
 }
 
 };
@@ -2828,10 +2432,9 @@ currentOpenedProjectId=null;
 
 currentOpenedPropertyId=null;
 
-pageHistory=["portalScreen"];
+pageHistory = ["portalScreen"];
 
 navigateTo("portalScreen");
-
 updateWallet();
 
 };
@@ -2840,28 +2443,17 @@ window.openOffice=function(){
 
 navigateTo("officeSection");
 
-document.getElementById(
-"offExpDate"
-).value=today();
-
-document.getElementById(
-"offIncDate"
-).value=today();
+document.getElementById("offExpDate").value=today();
+document.getElementById("offIncDate").value=today();
 
 renderOffice();
 
 };
 
 window.openContracting=function(){
-
 navigateTo("contractingSection");
-
-document.getElementById(
-"conDate"
-).value=today();
-
+document.getElementById("conDate").value=today();
 renderContracting();
-
 };
 
 window.openProjects=function(){
@@ -2880,9 +2472,7 @@ document.getElementById(
 "srvDate"
 ).value=today();
 
-document.getElementById(
-"srvExpenseDate"
-).value=today();
+document.getElementById("srvExpenseDate").value=today();
 
 renderServices();
 
@@ -2908,33 +2498,14 @@ renderPersonal();
 
 };
 
-document.getElementById(
-"selectOffice"
-).onclick=openOffice;
+document.getElementById("selectOffice").onclick=openOffice;
+document.getElementById("selectProjects").onclick=openProjects;
+document.getElementById("selectContracting").onclick=openContracting;
+document.getElementById("selectServices").onclick=openServices;
+document.getElementById("selectRentals").onclick=openRentals;
+document.getElementById("selectPersonal").onclick=openPersonal;
 
-document.getElementById(
-"selectProjects"
-).onclick=openProjects;
-
-document.getElementById(
-"selectContracting"
-).onclick=openContracting;
-
-document.getElementById(
-"selectServices"
-).onclick=openServices;
-
-document.getElementById(
-"selectRentals"
-).onclick=openRentals;
-
-document.getElementById(
-"selectPersonal"
-).onclick=openPersonal;
-
-document.getElementById(
-"homeBtn"
-).onclick=showPortal;
+document.getElementById("homeBtn").onclick=showPortal;
 
 function showLogin(){
 
@@ -3053,35 +2624,16 @@ async function(){
 
 try{
 
-if(unsubscribeProjects)
-unsubscribeProjects();
-
-if(unsubscribeTransactions)
-unsubscribeTransactions();
-
-if(unsubscribeOffice)
-unsubscribeOffice();
-
-if(unsubscribeOfficeIncome)
-unsubscribeOfficeIncome();
-
-if(unsubscribeContracting)
-unsubscribeContracting();
-
-if(unsubscribeServices)
-unsubscribeServices();
-
-if(unsubscribeProperties)
-unsubscribeProperties();
-
-if(unsubscribeRentals)
-unsubscribeRentals();
-
-if(unsubscribePropertyExpenses)
-unsubscribePropertyExpenses();
-
-if(unsubscribePersonalExpenses)
-unsubscribePersonalExpenses();
+if(unsubscribeProjects) unsubscribeProjects();
+if(unsubscribeTransactions) unsubscribeTransactions();
+if(unsubscribeOffice) unsubscribeOffice();
+if(unsubscribeOfficeIncome) unsubscribeOfficeIncome();
+if(unsubscribeContracting) unsubscribeContracting();
+if(unsubscribeServices) unsubscribeServices();
+if(unsubscribeProperties) unsubscribeProperties();
+if(unsubscribeRentals) unsubscribeRentals();
+if(unsubscribePropertyExpenses) unsubscribePropertyExpenses();
+if(unsubscribePersonalExpenses) unsubscribePersonalExpenses();
 
 await signOut(auth);
 
@@ -3119,35 +2671,16 @@ showLogin();
 
 function startFirebaseListeners(){
 
-if(unsubscribeProjects)
-unsubscribeProjects();
-
-if(unsubscribeTransactions)
-unsubscribeTransactions();
-
-if(unsubscribeOffice)
-unsubscribeOffice();
-
-if(unsubscribeOfficeIncome)
-unsubscribeOfficeIncome();
-
-if(unsubscribeContracting)
-unsubscribeContracting();
-
-if(unsubscribeServices)
-unsubscribeServices();
-
-if(unsubscribeProperties)
-unsubscribeProperties();
-
-if(unsubscribeRentals)
-unsubscribeRentals();
-
-if(unsubscribePropertyExpenses)
-unsubscribePropertyExpenses();
-
-if(unsubscribePersonalExpenses)
-unsubscribePersonalExpenses();
+if(unsubscribeProjects) unsubscribeProjects();
+if(unsubscribeTransactions) unsubscribeTransactions();
+if(unsubscribeOffice) unsubscribeOffice();
+if(unsubscribeOfficeIncome) unsubscribeOfficeIncome();
+if(unsubscribeContracting) unsubscribeContracting();
+if(unsubscribeServices) unsubscribeServices();
+if(unsubscribeProperties) unsubscribeProperties();
+if(unsubscribeRentals) unsubscribeRentals();
+if(unsubscribePropertyExpenses) unsubscribePropertyExpenses();
+if(unsubscribePersonalExpenses) unsubscribePersonalExpenses();
 
 /* المشاريع */
 
@@ -3191,12 +2724,7 @@ activeTab.dataset.view
 },
 
 error=>{
-
-console.error(
-"Projects Firebase Error:",
-error
-);
-
+console.error("Projects Firebase Error:", error);
 }
 );
 
@@ -3250,12 +2778,7 @@ activeTab.dataset.view
 },
 
 error=>{
-
-console.error(
-"Transactions Firebase Error:",
-error
-);
-
+console.error("Transactions Firebase Error:", error);
 }
 );
 
@@ -3299,34 +2822,14 @@ renderOffice();
 },
 
 error=>{
-
-console.error(
-"Office Firebase Error:",
-error
-);
-
+console.error("Office Firebase Error:", error);
 }
 );
 
 /* دخل المكتب */
 
-unsubscribeOfficeIncome=
-onSnapshot(
-collection(
-firestore,
-"office_income"
-),
-
-snapshot=>{
-
-db.officeIncome=
-snapshot.docs.map(
-item=>({
-id:item.id,
-...item.data()
-})
-);
-
+unsubscribeOfficeIncome=onSnapshot(collection(firestore,"office_income"),snapshot=>{
+db.officeIncome=snapshot.docs.map(item=>({id:item.id,...item.data()}));
 db.officeIncome.sort(
 (a,b)=>
 String(b.date||"")
@@ -3334,44 +2837,14 @@ String(b.date||"")
 String(a.date||"")
 )
 );
-
-if(
-document.getElementById(
-"officeSection"
-).style.display==="block"
-)
-renderOffice();
-
+if(document.getElementById("officeSection").style.display==="block") renderOffice();
 updateWallet();
-
-},
-
-error=>
-console.error(
-"Office Income Firebase Error:",
-error
-)
-);
+},error=>console.error("Office Income Firebase Error:",error));
 
 /* المقاولات */
 
-unsubscribeContracting=
-onSnapshot(
-collection(
-firestore,
-"contracting"
-),
-
-snapshot=>{
-
-db.contracting=
-snapshot.docs.map(
-item=>({
-id:item.id,
-...item.data()
-})
-);
-
+unsubscribeContracting=onSnapshot(collection(firestore,"contracting"),snapshot=>{
+db.contracting=snapshot.docs.map(item=>({id:item.id,...item.data()}));
 db.contracting.sort(
 (a,b)=>
 String(b.date||"")
@@ -3379,24 +2852,9 @@ String(b.date||"")
 String(a.date||"")
 )
 );
-
-if(
-document.getElementById(
-"contractingSection"
-).style.display==="block"
-)
-renderContracting();
-
+if(document.getElementById("contractingSection").style.display==="block") renderContracting();
 updateWallet();
-
-},
-
-error=>
-console.error(
-"Contracting Firebase Error:",
-error
-)
-);
+},error=>console.error("Contracting Firebase Error:",error));
 
 /* الخدمات */
 
@@ -3425,27 +2883,13 @@ String(a.date||"")
 )
 );
 
-if(
-document.getElementById(
-"servicesSection"
-).style.display==="block"
-){
-
-renderServices();
-
-}
-
+if(document.getElementById("servicesSection").style.display==="block"){renderServices();}
 updateWallet();
 
 },
 
 error=>{
-
-console.error(
-"Services Firebase Error:",
-error
-);
-
+console.error("Services Firebase Error:", error);
 }
 );
 
@@ -3468,27 +2912,13 @@ id:item.id,
 })
 );
 
-if(
-document.getElementById(
-"rentalsSection"
-).style.display==="block"
-){
-
-renderRentals();
-
-}
-
+if(document.getElementById("rentalsSection").style.display==="block"){renderRentals();}
 updateWallet();
 
 },
 
 error=>{
-
-console.error(
-"Properties Firebase Error:",
-error
-);
-
+console.error("Properties Firebase Error:", error);
 }
 );
 
@@ -3534,12 +2964,7 @@ updateWallet();
 },
 
 error=>{
-
-console.error(
-"Rentals Firebase Error:",
-error
-);
-
+console.error("Rentals Firebase Error:", error);
 }
 );
 
@@ -3583,12 +3008,7 @@ renderRentals();
 },
 
 error=>{
-
-console.error(
-"Property Expenses Firebase Error:",
-error
-);
-
+console.error("Property Expenses Firebase Error:", error);
 }
 );
 
@@ -3619,27 +3039,13 @@ String(a.date||"")
 )
 );
 
-if(
-document.getElementById(
-"personalSection"
-).style.display==="block"
-){
-
-renderPersonal();
-
-}
-
+if(document.getElementById("personalSection").style.display==="block"){renderPersonal();}
 updateWallet();
 
 },
 
 error=>{
-
-console.error(
-"Personal Expenses Firebase Error:",
-error
-);
-
+console.error("Personal Expenses Firebase Error:", error);
 }
 );
 
@@ -3647,321 +3053,197 @@ error
 
 function updateWallet(){
 
-let income=0;
-let expense=0;
+let income=0, expense=0;
 
 const add=(type,amount)=>{
-
 amount=Number(amount)||0;
-
-if(type==="income")
-income+=amount;
-
-else
-expense+=amount;
-
+if(type==="income") income+=amount;
+else expense+=amount;
 };
 
-db.transactions.forEach(
-t=>
-add(
-t.type,
-t.amount
-)
-);
+db.transactions.forEach(t=>add(t.type,t.amount));
 
-db.officeIncome.forEach(
-x=>
-add(
-"income",
-x.amount
-)
-);
+db.officeIncome.forEach(x=>add("income",x.amount));
 
-db.officeExpenses.forEach(
-x=>
-add(
-"expense",
-x.amount
-)
-);
+db.officeExpenses.forEach(x=>add("expense",x.amount));
 
-db.contracting.forEach(
-x=>
-add(
-x.type,
-x.amount
-)
-);
+db.contracting.forEach(x=>add(x.type,x.amount));
 
 db.services.forEach(x=>{
-
-if(
-x.recordType==="general_expense"
-){
-
-expense+=
-Number(x.amount)||0;
-
+if(x.recordType==="general_expense"){
+expense+=Number(x.amount)||0;
 }else{
-
-income+=
-Number(x.collectedAmount)||0;
-
-expense+=
-Number(
-x.expense!==undefined
-?
-x.expense
-:
-Math.max(
-0,
-(
-Number(x.collectedAmount)||0
-)-
-(
-Number(x.profit)||0
-)
-)
-)||0;
-
+income+=Number(x.collectedAmount)||0;
+expense+=Number(x.expense!==undefined?x.expense:Math.max(0,(Number(x.collectedAmount)||0)-(Number(x.profit)||0)))||0;
 }
-
 });
 
 db.rentals.forEach(x=>{
-
-income+=
-Number(x.amount)||0;
-
-expense+=
-Number(x.expenseAmount)||0;
-
-if(
-x.depositStatus!=="refunded"
-)
-income+=
-Number(x.depositAmount)||0;
-
+income+=Number(x.amount)||0;
+expense+=Number(x.expenseAmount)||0;
+if(x.depositStatus!=="refunded") income+=Number(x.depositAmount)||0;
 });
 
-db.propertyExpenses.forEach(
-x=>
-expense+=
-Number(x.amount)||0
-);
+db.propertyExpenses.forEach(x=>{
+expense+=Number(x.amount)||0;
+});
 
-db.personalExpenses.forEach(
-x=>
-expense+=
-Number(x.amount)||0
-);
+db.personalExpenses.forEach(x=>{
+expense+=Number(x.amount)||0;
+});
 
-[
-"walletIncome",
-"walletExpense",
-"walletProfit",
-"walletBalance"
-].forEach(
-(id,i)=>{
-
-const el=
-document.getElementById(id);
-
-if(el)
-el.innerHTML=
-money(
-i===0
-?
-income
-:
-i===1
-?
-expense
-:
-income-expense
-);
-
-}
-);
+["walletIncome","walletExpense","walletProfit","walletBalance"].forEach((id,i)=>{
+const el=document.getElementById(id);
+if(el) el.innerHTML=money(i===0?income:i===1?expense:income-expense);
+});
 
 }
 
-/* =====================================================
-   المقاولات
-===================================================== */
+/* ================= المقاولات ================= */
 
 function renderContracting(){
 
-const records=
-filterBySelectedMonth(
-db.contracting,
-"contracting"
-);
+const records=filterBySelectedMonth(db.contracting,"contracting");
 
 let inc=0;
 let exp=0;
 
-records.forEach(x=>{
-
-if(x.type==="income")
-inc+=Number(x.amount)||0;
-
-else
-exp+=Number(x.amount)||0;
-
-});
-
-const filter=
-document.getElementById(
-"contractingMonthFilter"
-);
-
-if(filter)
-filter.innerHTML=
-monthFilterHTML(
-"contracting"
-);
-
-document.getElementById(
-"contractingIncome"
-).innerHTML=
-money(inc);
-
-document.getElementById(
-"contractingExpense"
-).innerHTML=
-money(exp);
-
-document.getElementById(
-"contractingProfit"
-).innerHTML=
-money(inc-exp);
-
-/* ================= ملخص التصنيفات ================= */
-
-const categorySummary={};
+const incomeCategories={};
+const expenseCategories={};
 
 records.forEach(x=>{
 
-const rawCategory=
-String(
-x.category||"غير مصنف"
-).trim() ||
-"غير مصنف";
+const amount=Number(x.amount)||0;
 
-const key=
-normalizedCategoryKey(
-rawCategory
-);
+const rawCategory=String(x.category||"عام").trim()||"عام";
 
-if(!categorySummary[key]){
-
-categorySummary[key]={
-label:rawCategory,
-income:0,
-expense:0,
-profit:0
-};
-
-}
-
-const amount=
-Number(x.amount)||0;
+const categoryKey=normalizedCategoryKey(rawCategory);
 
 if(x.type==="income"){
 
-categorySummary[key].income+=amount;
+inc+=amount;
+
+if(!incomeCategories[categoryKey]){
+incomeCategories[categoryKey]={
+label:rawCategory,
+total:0
+};
+}
+
+incomeCategories[categoryKey].total+=amount;
 
 }else{
 
-categorySummary[key].expense+=amount;
+exp+=amount;
+
+if(!expenseCategories[categoryKey]){
+expenseCategories[categoryKey]={
+label:rawCategory,
+total:0
+};
+}
+
+expenseCategories[categoryKey].total+=amount;
 
 }
 
-categorySummary[key].profit=
-categorySummary[key].income-
-categorySummary[key].expense;
-
 });
 
-const summaryBody=
-document.getElementById(
-"contractingSummaryBody"
-);
+const filter=document.getElementById("contractingMonthFilter");
 
-const summaryKeys=
-Object.keys(categorySummary)
-.sort(
-(a,b)=>
-categorySummary[a].label.localeCompare(
-categorySummary[b].label,
-"ar"
-)
-);
+if(filter){
+filter.innerHTML=monthFilterHTML("contracting");
+}
 
-if(summaryBody){
+document.getElementById("contractingIncome").innerHTML=money(inc);
 
-summaryBody.innerHTML=
-summaryKeys.length
+document.getElementById("contractingExpense").innerHTML=money(exp);
+
+document.getElementById("contractingProfit").innerHTML=money(inc-exp);
+
+/* ===== ملخص تصنيف الدخل ===== */
+
+const incomeSummaryBody=
+document.getElementById("contractingIncomeSummaryBody");
+
+if(incomeSummaryBody){
+
+const incomeKeys=Object.keys(incomeCategories);
+
+incomeSummaryBody.innerHTML=
+incomeKeys.length
 ?
-summaryKeys.map(key=>{
-
-const item=
-categorySummary[key];
-
-return `
+incomeKeys.map(key=>`
 
 <tr>
 
 <td>
-<strong>
-${escapeHTML(item.label)}
-</strong>
+<strong>${escapeHTML(incomeCategories[key].label)}</strong>
 </td>
 
 <td class="income">
-${money(item.income)}
-</td>
-
-<td class="expense">
-${money(item.expense)}
-</td>
-
-<td class="${profitClass(item.profit)}">
-${money(item.profit)}
+${money(incomeCategories[key].total)}
 </td>
 
 </tr>
 
-`;
-
-}).join("")
+`).join("")
 :
 `
-
 <tr>
-
-<td colspan="4">
-
+<td colspan="2">
 <div class="empty">
-لا توجد عمليات في التصنيف المحدد للفترة الحالية
+لا توجد عمليات دخل في الفترة المحددة
 </div>
-
 </td>
-
 </tr>
-
 `;
 
 }
 
-/* ================= سجل العمليات ================= */
+/* ===== ملخص تصنيف المصروفات ===== */
 
-const body=
-document.getElementById(
-"contractingBody"
-);
+const expenseSummaryBody=
+document.getElementById("contractingExpenseSummaryBody");
+
+if(expenseSummaryBody){
+
+const expenseKeys=Object.keys(expenseCategories);
+
+expenseSummaryBody.innerHTML=
+expenseKeys.length
+?
+expenseKeys.map(key=>`
+
+<tr>
+
+<td>
+<strong>${escapeHTML(expenseCategories[key].label)}</strong>
+</td>
+
+<td class="expense">
+${money(expenseCategories[key].total)}
+</td>
+
+</tr>
+
+`).join("")
+:
+`
+<tr>
+<td colspan="2">
+<div class="empty">
+لا توجد عمليات مصروف في الفترة المحددة
+</div>
+</td>
+</tr>
+`;
+
+}
+
+/* ===== سجل العمليات ===== */
+
+const body=document.getElementById("contractingBody");
 
 body.innerHTML=
 records.length
@@ -3972,13 +3254,7 @@ records.map(x=>`
 
 <td
 class="editable-cell"
-onclick="inlineEditCell(
-this,
-'contracting',
-'${x.id}',
-'date',
-'date'
-)">
+onclick="inlineEditCell(this,'contracting','${x.id}','date','date')">
 
 <span class="num-val">
 ${escapeHTML(x.date)}
@@ -3986,58 +3262,29 @@ ${escapeHTML(x.date)}
 
 </td>
 
-<td
-class="${x.type==="income"?'income':'expense'}">
-
-${x.type==="income"
-?
-"دخل"
-:
-"مصروف"}
-
+<td class="${x.type==="income"?'income':'expense'}">
+${x.type==="income"?'دخل':'مصروف'}
 </td>
 
 <td
 class="editable-cell"
-onclick="inlineEditCell(
-this,
-'contracting',
-'${x.id}',
-'name'
-)">
+onclick="inlineEditCell(this,'contracting','${x.id}','name')">
 
 <strong>
-${escapeHTML(
-x.name||
-x.category||
-"-"
-)}
+${escapeHTML(x.name||x.category||"-")}
 </strong>
 
 </td>
 
 <td
 class="editable-cell"
-onclick="inlineEditCell(
-this,
-'contracting',
-'${x.id}',
-'category'
-)">
+onclick="inlineEditCell(this,'contracting','${x.id}','category')">
 
-${escapeHTML(
-x.category||
-"-"
-)}
+${escapeHTML(x.category||"-")}
 
 </td>
 
-<td
-class="${x.type==="income"
-?
-"income"
-:
-"expense"}">
+<td class="${x.type==="income"?'income':'expense'}">
 
 ${money(x.amount)}
 
@@ -4045,17 +3292,9 @@ ${money(x.amount)}
 
 <td
 class="editable-cell"
-onclick="inlineEditCell(
-this,
-'contracting',
-'${x.id}',
-'note'
-)">
+onclick="inlineEditCell(this,'contracting','${x.id}','note')">
 
-${escapeHTML(
-x.note||
-"-"
-)}
+${escapeHTML(x.note||"-")}
 
 </td>
 
@@ -4084,88 +3323,45 @@ onclick="deleteContracting('${x.id}')">
 `).join("")
 :
 `
-
 <tr>
-
 <td colspan="7">
-
 <div class="empty">
 لا توجد عمليات في الفترة المحددة
 </div>
-
 </td>
-
 </tr>
-
 `;
 
 }
 
-document.getElementById(
-"saveContractingBtn"
-).onclick=
-async function(){
+document.getElementById("saveContractingBtn").onclick=async function(){
 
 const btn=this;
 
-const date=
-document.getElementById(
-"conDate"
-).value;
+const date=document.getElementById("conDate").value;
 
-const type=
-document.getElementById(
-"conType"
-).value;
+const type=document.getElementById("conType").value;
 
-const name=
-document.getElementById(
-"conName"
-).value.trim();
+const name=document.getElementById("conName").value.trim();
 
-const category=
-document.getElementById(
-"conCategory"
-).value.trim();
+const category=document.getElementById("conCategory").value.trim();
 
-const amount=
-Number(
-document.getElementById(
-"conAmount"
-).value
-);
+const amount=Number(document.getElementById("conAmount").value);
 
-const note=
-document.getElementById(
-"conNote"
-).value.trim();
+const note=document.getElementById("conNote").value.trim();
 
-if(
-!date||
-!name||
-!(amount>0)
-){
-
-alert(
-"أدخل التاريخ والاسم والمبلغ الصحيح."
-);
-
+if(!date||!name||!(amount>0)){
+alert("أدخل التاريخ والاسم والمبلغ الصحيح.");
 return;
-
 }
 
 btn.disabled=true;
-
-btn.textContent=
-"جاري الحفظ...";
+btn.textContent="جاري الحفظ...";
 
 try{
 
 await addDoc(
-collection(
-firestore,
-"contracting"
-),
+collection(firestore,"contracting"),
 {
 date,
 type,
@@ -4173,26 +3369,14 @@ name,
 category,
 amount,
 note,
-createdAt:
-serverTimestamp()
+createdAt:serverTimestamp()
 }
 );
 
-document.getElementById(
-"conName"
-).value="";
-
-document.getElementById(
-"conCategory"
-).value="";
-
-document.getElementById(
-"conAmount"
-).value="";
-
-document.getElementById(
-"conNote"
-).value="";
+document.getElementById("conName").value="";
+document.getElementById("conCategory").value="";
+document.getElementById("conAmount").value="";
+document.getElementById("conNote").value="";
 
 }catch(e){
 
@@ -4201,102 +3385,49 @@ alert(e.message);
 }finally{
 
 btn.disabled=false;
-
-btn.textContent=
-"حفظ العملية";
+btn.textContent="حفظ العملية";
 
 }
 
 };
 
-window.editContracting=
-async function(id){
+window.editContracting=async function(id){
 
-const item=
-db.contracting.find(
-x=>x.id===id
-);
+const item=db.contracting.find(x=>x.id===id);
 
-if(!item)
+if(!item)return;
+
+const date=prompt("التاريخ (YYYY-MM-DD):",item.date||"");
+
+if(date===null)return;
+
+const name=prompt("الاسم / البند:",item.name||item.category||"");
+
+if(name===null)return;
+
+const category=prompt("التصنيف:",item.category||"");
+
+if(category===null)return;
+
+const amountText=prompt("المبلغ:",String(item.amount??""));
+
+if(amountText===null)return;
+
+const amount=Number(amountText);
+
+if(!date||!name||!(amount>0)){
+alert("البيانات غير صحيحة.");
 return;
-
-const date=
-prompt(
-"التاريخ (YYYY-MM-DD):",
-item.date||""
-);
-
-if(date===null)
-return;
-
-const name=
-prompt(
-"الاسم / البند:",
-item.name||
-item.category||
-""
-);
-
-if(name===null)
-return;
-
-const category=
-prompt(
-"التصنيف:",
-item.category||
-""
-);
-
-if(category===null)
-return;
-
-const amountText=
-prompt(
-"المبلغ:",
-String(
-item.amount??
-""
-)
-);
-
-if(amountText===null)
-return;
-
-const amount=
-Number(amountText);
-
-if(
-!date||
-!name||
-!(amount>0)
-){
-
-alert(
-"البيانات غير صحيحة."
-);
-
-return;
-
 }
 
-const note=
-prompt(
-"البيان:",
-item.note||
-""
-);
+const note=prompt("البيان:",item.note||"");
 
-if(note===null)
-return;
+if(note===null)return;
 
 try{
 
 await updateDoc(
-doc(
-firestore,
-"contracting",
-id
-),
+doc(firestore,"contracting",id),
 {
 date,
 name,
@@ -4314,24 +3445,14 @@ alert(e.message);
 
 };
 
-window.deleteContracting=
-async function(id){
+window.deleteContracting=async function(id){
 
-if(
-!confirm(
-"هل تريد حذف العملية؟"
-)
-)
-return;
+if(!confirm("هل تريد حذف العملية؟"))return;
 
 try{
 
 await deleteDoc(
-doc(
-firestore,
-"contracting",
-id
-)
+doc(firestore,"contracting",id)
 );
 
 }catch(e){
@@ -4346,49 +3467,27 @@ alert(e.message);
 
 function updateStats(){
 
-const records=
-filterBySelectedMonth(
-db.transactions,
-"projects"
-);
+const records=filterBySelectedMonth(db.transactions,"projects");
 
-let inc=0;
-let exp=0;
+let inc=0,exp=0;
 
 records.forEach(t=>{
 
-const amt=
-Number(t.amount)||0;
+const amt=Number(t.amount)||0;
 
-if(t.type==="income")
-inc+=amt;
+if(t.type==="income")inc+=amt;
 
-else
-exp+=amt;
+else exp+=amt;
 
 });
 
-document.getElementById(
-"totalIncome"
-).innerHTML=
-money(inc);
+document.getElementById("totalIncome").innerHTML=money(inc);
 
-document.getElementById(
-"totalExpense"
-).innerHTML=
-money(exp);
+document.getElementById("totalExpense").innerHTML=money(exp);
 
-document.getElementById(
-"netProfit"
-).innerHTML=
-money(inc-exp);
+document.getElementById("netProfit").innerHTML=money(inc-exp);
 
-document.getElementById(
-"projectCount"
-).textContent=
-formatNum(
-db.projects.length
-);
+document.getElementById("projectCount").textContent=formatNum(db.projects.length);
 
 updateWallet();
 
@@ -4401,7 +3500,6 @@ updateWallet();
 async function addPersonalExpenseToFirebase(data){
 
 if(!auth.currentUser)
-
 throw new Error(
 "لا يوجد مستخدم مسجل دخول حاليًا."
 );
@@ -4412,23 +3510,12 @@ firestore,
 "personal_expenses"
 ),
 {
-
 date:data.date,
-
-amount:
-Number(data.amount)||0,
-
+amount:Number(data.amount)||0,
 note:data.note||"",
-
-createdAt:
-serverTimestamp(),
-
-createdBy:
-auth.currentUser.uid,
-
-userEmail:
-auth.currentUser.email||""
-
+createdAt:serverTimestamp(),
+createdBy:auth.currentUser.uid,
+userEmail:auth.currentUser.email||""
 }
 );
 
@@ -4436,11 +3523,7 @@ auth.currentUser.email||""
 
 function renderPersonal(){
 
-const records=
-filterBySelectedMonth(
-db.personalExpenses,
-"personal"
-);
+const records=filterBySelectedMonth(db.personalExpenses,"personal");
 
 let total=0;
 
@@ -4448,155 +3531,61 @@ const grouped={};
 
 records.forEach(item=>{
 
-const amt=
-Number(item.amount)||0;
+const amt=Number(item.amount)||0;
 
 total+=amt;
 
-const monthKey=
-(
-item.date&&
-item.date.length>=7
-)
-?
-item.date.substring(0,7)
-:
-"غير محدد";
+const monthKey=(item.date&&item.date.length>=7)?item.date.substring(0,7):"غير محدد";
 
-if(!grouped[monthKey])
-grouped[monthKey]={
-total:0,
-items:[]
-};
+if(!grouped[monthKey]) grouped[monthKey]={total:0,items:[]};
 
 grouped[monthKey].total+=amt;
 
-grouped[monthKey].items.push(
-item
-);
+grouped[monthKey].items.push(item);
 
 });
 
-const filter=
-document.getElementById(
-"personalMonthFilter"
-);
+const filter=document.getElementById("personalMonthFilter");
 
-if(filter)
-filter.innerHTML=
-monthFilterHTML(
-"personal"
-);
+if(filter) filter.innerHTML=monthFilterHTML("personal");
 
-document.getElementById(
-"personalTotalExpense"
-).innerHTML=
-money(total);
+document.getElementById("personalTotalExpense").innerHTML=money(total);
 
-document.getElementById(
-"personalExpenseCount"
-).textContent=
-formatNum(
-records.length
-);
+document.getElementById("personalExpenseCount").textContent=formatNum(records.length);
 
-const container=
-document.getElementById(
-"personalMonthlyContainer"
-);
+const container=document.getElementById("personalMonthlyContainer");
 
-const sortedMonths=
-Object.keys(grouped)
-.sort(
-(a,b)=>
-b.localeCompare(a)
-);
+const sortedMonths=Object.keys(grouped).sort((a,b)=>b.localeCompare(a));
 
 if(!sortedMonths.length){
 
-container.innerHTML=
-`
-
-<div class="empty">
-لا توجد مصاريف شخصية في الفترة المحددة.
-</div>
-
-`;
+container.innerHTML=`<div class="empty">لا توجد مصاريف شخصية في الفترة المحددة.</div>`;
 
 return;
 
 }
 
-container.innerHTML=
-sortedMonths.map(month=>{
+container.innerHTML=sortedMonths.map(month=>{
 
-const group=
-grouped[month];
+const group=grouped[month];
 
-const rows=
-group.items.map(item=>`
+const rows=group.items.map(item=>`
 
 <tr>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'personal_expenses',
-'${item.id}',
-'date',
-'date'
-)">
-
-<span class="num-val">
-${escapeHTML(item.date)}
-</span>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'personal_expenses','${item.id}','date','date')">
+<span class="num-val">${escapeHTML(item.date)}</span>
 </td>
 
-<td class="expense">
+<td class="expense">${money(item.amount)}</td>
 
-${money(item.amount)}
-
-</td>
-
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'personal_expenses',
-'${item.id}',
-'note'
-)">
-
-${escapeHTML(
-item.note||""
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'personal_expenses','${item.id}','note')">
+${escapeHTML(item.note||"")}
 </td>
 
 <td>
-
-<button
-class="btn blue"
-onclick="editRecord(
-'personal_expenses',
-'${item.id}',
-'date,note'
-)">
-
-تعديل
-
-</button>
-
-<button
-class="btn red"
-onclick="deletePersonalExpense('${item.id}')">
-
-حذف
-
-</button>
-
+<button class="btn blue" onclick="editRecord('personal_expenses','${item.id}','date,note')">تعديل</button>
+<button class="btn red" onclick="deletePersonalExpense('${item.id}')">حذف</button>
 </td>
 
 </tr>
@@ -4611,15 +3600,12 @@ return `
 
 <h4>
 📅 شهر:
-<span class="num-val">
-${month}
-</span>
+<span class="num-val">${month}</span>
 الميلادي
 </h4>
 
 <div class="expense">
-المجموع:
-${money(group.total)}
+المجموع: ${money(group.total)}
 </div>
 
 </div>
@@ -4631,12 +3617,10 @@ ${money(group.total)}
 <thead>
 
 <tr>
-
 <th>التاريخ</th>
 <th>المصروف</th>
 <th>الملاحظة</th>
 <th>إجراء</th>
-
 </tr>
 
 </thead>
@@ -4657,29 +3641,15 @@ ${rows}
 
 }
 
-document.getElementById(
-"savePersonalExpenseBtn"
-).onclick=
-async function(){
+document.getElementById("savePersonalExpenseBtn").onclick = async function(){
 
-const btn=this;
+const btn = this;
 
-const date=
-document.getElementById(
-"perExpDate"
-).value;
+const date = document.getElementById("perExpDate").value;
 
-const amount=
-Number(
-document.getElementById(
-"perExpAmount"
-).value
-);
+const amount = Number(document.getElementById("perExpAmount").value);
 
-const note=
-document.getElementById(
-"perExpNote"
-).value.trim();
+const note = document.getElementById("perExpNote").value.trim();
 
 if(!date){
 
@@ -4689,83 +3659,53 @@ return;
 
 }
 
-if(!(amount>0)){
+if(!(amount > 0)){
 
-alert(
-"أدخل مبلغ مصروف صحيح."
-);
+alert("أدخل مبلغ مصروف صحيح.");
 
 return;
 
 }
 
-btn.disabled=true;
+btn.disabled = true;
 
-btn.textContent=
-"جاري الحفظ...";
+btn.textContent = "جاري الحفظ...";
 
-try{
+try {
 
-await addPersonalExpenseToFirebase({
-date,
-amount,
-note
-});
+await addPersonalExpenseToFirebase({ date, amount, note });
 
-document.getElementById(
-"perExpAmount"
-).value="";
+document.getElementById("perExpAmount").value = "";
 
-document.getElementById(
-"perExpNote"
-).value="";
+document.getElementById("perExpNote").value = "";
 
-}catch(e){
+} catch(e) {
 
 console.error(e);
 
-alert(
-"حدث خطأ أثناء الحفظ:\n"+
-e.message
-);
+alert("حدث خطأ أثناء الحفظ:\n" + e.message);
 
-}finally{
+} finally {
 
-btn.disabled=false;
+btn.disabled = false;
 
-btn.textContent=
-"حفظ المصروف الشخصي";
+btn.textContent = "حفظ المصروف الشخصي";
 
 }
 
 };
 
-window.deletePersonalExpense=
-async function(id){
+window.deletePersonalExpense = async function(id){
 
-if(
-!confirm(
-"هل تريد حذف هذا المصروف؟"
-)
-)
-return;
+if(!confirm("هل تريد حذف هذا المصروف؟")) return;
 
-try{
+try {
 
-await deleteDoc(
-doc(
-firestore,
-"personal_expenses",
-id
-)
-);
+await deleteDoc(doc(firestore, "personal_expenses", id));
 
-}catch(e){
+} catch(e) {
 
-alert(
-"حدث خطأ أثناء الحذف:\n"+
-e.message
-);
+alert("حدث خطأ أثناء الحذف:\n" + e.message);
 
 }
 
@@ -4778,7 +3718,6 @@ e.message
 async function addOfficeExpenseToFirebase(data){
 
 if(!auth.currentUser)
-
 throw new Error(
 "لا يوجد مستخدم مسجل دخول حاليًا."
 );
@@ -4794,16 +3733,13 @@ date:data.date,
 
 name:data.name,
 
-amount:
-Number(data.amount)||0,
+amount:Number(data.amount)||0,
 
 note:data.note||"",
 
-createdAt:
-serverTimestamp(),
+createdAt:serverTimestamp(),
 
-createdBy:
-auth.currentUser.uid,
+createdBy:auth.currentUser.uid,
 
 userEmail:
 auth.currentUser.email||""
@@ -4815,272 +3751,89 @@ auth.currentUser.email||""
 
 function renderOffice(){
 
-const expenses=
-filterBySelectedMonth(
-db.officeExpenses,
-"office"
-);
+const expenses=filterBySelectedMonth(db.officeExpenses,"office");
 
-const incomes=
-filterBySelectedMonth(
-db.officeIncome,
-"office"
-);
+const incomes=filterBySelectedMonth(db.officeIncome,"office");
 
-let total=0;
-let incomeTotal=0;
+let total=0,incomeTotal=0;
 
-expenses.forEach(
-item=>
-total+=
-Number(item.amount)||0
-);
+expenses.forEach(item=>total+=Number(item.amount)||0);
 
-incomes.forEach(
-x=>
-incomeTotal+=
-Number(x.amount)||0
-);
+incomes.forEach(x=>incomeTotal+=Number(x.amount)||0);
 
-const filter=
-document.getElementById(
-"officeMonthFilter"
-);
+const filter=document.getElementById("officeMonthFilter");
 
-if(filter)
-filter.innerHTML=
-monthFilterHTML(
-"office"
-);
+if(filter) filter.innerHTML=monthFilterHTML("office");
 
-document.getElementById(
-"officeTotalExpense"
-).innerHTML=
-money(total);
+document.getElementById("officeTotalExpense").innerHTML=money(total);
 
-const officeIncomeEl=
-document.getElementById(
-"officeTotalIncome"
-);
+const officeIncomeEl=document.getElementById("officeTotalIncome");
 
-if(officeIncomeEl)
-officeIncomeEl.innerHTML=
-money(incomeTotal);
+if(officeIncomeEl) officeIncomeEl.innerHTML=money(incomeTotal);
 
-document.getElementById(
-"officeExpenseCount"
-).textContent=
-formatNum(
-expenses.length
-);
+document.getElementById("officeExpenseCount").textContent=formatNum(expenses.length);
 
-const incomeBody=
-document.getElementById(
-"officeIncomeBody"
-);
+const incomeBody=document.getElementById("officeIncomeBody");
 
 if(incomeBody){
 
-incomeBody.innerHTML=
-incomes.length
-?
-incomes.map(item=>`
+incomeBody.innerHTML=incomes.length?incomes.map(item=>`
 
 <tr>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'office_income',
-'${item.id}',
-'date',
-'date'
-)">
-
-<span class="num-val">
-${escapeHTML(item.date)}
-</span>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'office_income','${item.id}','date','date')">
+<span class="num-val">${escapeHTML(item.date)}</span>
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'office_income',
-'${item.id}',
-'name'
-)">
-
-<strong>
-${escapeHTML(item.name)}
-</strong>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'office_income','${item.id}','name')">
+<strong>${escapeHTML(item.name)}</strong>
 </td>
 
-<td class="income">
+<td class="income">${money(item.amount)}</td>
 
-${money(item.amount)}
-
-</td>
-
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'office_income',
-'${item.id}',
-'note'
-)">
-
+<td class="editable-cell" onclick="inlineEditCell(this,'office_income','${item.id}','note')">
 ${escapeHTML(item.note||"")}
-
 </td>
 
 <td>
-
-<button
-class="btn blue"
-onclick="editOfficeIncome('${item.id}')">
-
-تعديل
-
-</button>
-
-<button
-class="btn red"
-onclick="deleteOfficeIncome('${item.id}')">
-
-حذف
-
-</button>
-
+<button class="btn blue" onclick="editOfficeIncome('${item.id}')">تعديل</button>
+<button class="btn red" onclick="deleteOfficeIncome('${item.id}')">حذف</button>
 </td>
 
 </tr>
 
-`).join("")
-:
-`
-
-<tr>
-
-<td colspan="5">
-
-<div class="empty">
-لا يوجد دخل مكتب في الفترة المحددة
-</div>
-
-</td>
-
-</tr>
-
-`;
+`).join(""):`<tr><td colspan="5"><div class="empty">لا يوجد دخل مكتب في الفترة المحددة</div></td></tr>`;
 
 }
 
-const tbody=
-document.getElementById(
-"officeExpensesBody"
-);
+const tbody=document.getElementById("officeExpensesBody");
 
-tbody.innerHTML=
-expenses.length
-?
-expenses.map(item=>`
+tbody.innerHTML=expenses.length?expenses.map(item=>`
 
 <tr>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'office_expenses',
-'${item.id}',
-'date',
-'date'
-)">
-
-<span class="num-val">
-${escapeHTML(item.date)}
-</span>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','date','date')">
+<span class="num-val">${escapeHTML(item.date)}</span>
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'office_expenses',
-'${item.id}',
-'name'
-)">
-
-<strong>
-${escapeHTML(item.name)}
-</strong>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','name')">
+<strong>${escapeHTML(item.name)}</strong>
 </td>
 
-<td class="expense">
+<td class="expense">${money(item.amount)}</td>
 
-${money(item.amount)}
-
-</td>
-
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'office_expenses',
-'${item.id}',
-'note'
-)">
-
+<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','note')">
 ${escapeHTML(item.note||"")}
-
 </td>
 
 <td>
-
-<button
-class="btn blue"
-onclick="editOfficeExpense('${item.id}')">
-
-تعديل
-
-</button>
-
-<button
-class="btn red"
-onclick="deleteOfficeExpense('${item.id}')">
-
-حذف
-
-</button>
-
+<button class="btn blue" onclick="editOfficeExpense('${item.id}')">تعديل</button>
+<button class="btn red" onclick="deleteOfficeExpense('${item.id}')">حذف</button>
 </td>
 
 </tr>
 
-`).join("")
-:
-`
-
-<tr>
-
-<td colspan="5">
-
-<div class="empty">
-لا توجد مصاريف مكتب في الفترة المحددة
-</div>
-
-</td>
-
-</tr>
-
-`;
+`).join(""):`<tr><td colspan="5"><div class="empty">لا توجد مصاريف مكتب في الفترة المحددة</div></td></tr>`;
 
 }
 
@@ -5115,9 +3868,7 @@ document.getElementById(
 
 if(!date){
 
-alert(
-"اختر التاريخ."
-);
+alert("اختر التاريخ.");
 
 return;
 
@@ -5125,9 +3876,7 @@ return;
 
 if(!name){
 
-alert(
-"أدخل اسم البند."
-);
+alert("أدخل اسم البند.");
 
 return;
 
@@ -5135,9 +3884,7 @@ return;
 
 if(!(amount>0)){
 
-alert(
-"أدخل مبلغ صحيح."
-);
+alert("أدخل مبلغ صحيح.");
 
 return;
 
@@ -5191,45 +3938,19 @@ btn.textContent=
 
 };
 
-document.getElementById(
-"saveOfficeIncomeBtn"
-).onclick=
-async function(){
+document.getElementById("saveOfficeIncomeBtn").onclick=async function(){
 
-const date=
-document.getElementById(
-"offIncDate"
-).value;
+const date=document.getElementById("offIncDate").value;
 
-const name=
-document.getElementById(
-"offIncName"
-).value.trim();
+const name=document.getElementById("offIncName").value.trim();
 
-const amount=
-Number(
-document.getElementById(
-"offIncAmount"
-).value
-);
+const amount=Number(document.getElementById("offIncAmount").value);
 
-const note=
-document.getElementById(
-"offIncNote"
-).value.trim();
+const note=document.getElementById("offIncNote").value.trim();
 
-if(
-!date||
-!name||
-!(amount>0)
-){
-
-alert(
-"أدخل التاريخ والاسم والمبلغ الصحيح."
-);
-
+if(!date||!name||!(amount>0)){
+alert("أدخل التاريخ والاسم والمبلغ الصحيح.");
 return;
-
 }
 
 this.disabled=true;
@@ -5237,31 +3958,19 @@ this.disabled=true;
 try{
 
 await addDoc(
-collection(
-firestore,
-"office_income"
-),
+collection(firestore,"office_income"),
 {
 date,
 name,
 amount,
 note,
-createdAt:
-serverTimestamp()
+createdAt:serverTimestamp()
 }
 );
 
-document.getElementById(
-"offIncName"
-).value="";
-
-document.getElementById(
-"offIncAmount"
-).value="";
-
-document.getElementById(
-"offIncNote"
-).value="";
+document.getElementById("offIncName").value="";
+document.getElementById("offIncAmount").value="";
+document.getElementById("offIncNote").value="";
 
 }catch(e){
 
@@ -5275,81 +3984,39 @@ this.disabled=false;
 
 };
 
-window.editOfficeIncome=
-async function(id){
+window.editOfficeIncome=async function(id){
 
-const item=
-db.officeIncome.find(
-x=>x.id===id
-);
+const item=db.officeIncome.find(x=>x.id===id);
 
-if(!item)
+if(!item)return;
+
+const date=prompt("التاريخ (YYYY-MM-DD):",item.date||"");
+
+if(date===null)return;
+
+const name=prompt("اسم الدخل:",item.name||"");
+
+if(name===null)return;
+
+const amountText=prompt("المبلغ:",String(item.amount??""));
+
+if(amountText===null)return;
+
+const amount=Number(amountText);
+
+if(!date||!name||!(amount>0)){
+alert("البيانات غير صحيحة.");
 return;
-
-const date=
-prompt(
-"التاريخ (YYYY-MM-DD):",
-item.date||""
-);
-
-if(date===null)
-return;
-
-const name=
-prompt(
-"اسم الدخل:",
-item.name||""
-);
-
-if(name===null)
-return;
-
-const amountText=
-prompt(
-"المبلغ:",
-String(
-item.amount??
-""
-)
-);
-
-if(amountText===null)
-return;
-
-const amount=
-Number(amountText);
-
-if(
-!date||
-!name||
-!(amount>0)
-){
-
-alert(
-"البيانات غير صحيحة."
-);
-
-return;
-
 }
 
-const note=
-prompt(
-"الملاحظات:",
-item.note||""
-);
+const note=prompt("الملاحظات:",item.note||"");
 
-if(note===null)
-return;
+if(note===null)return;
 
 try{
 
 await updateDoc(
-doc(
-firestore,
-"office_income",
-id
-),
+doc(firestore,"office_income",id),
 {
 date,
 name,
@@ -5366,24 +4033,14 @@ alert(e.message);
 
 };
 
-window.deleteOfficeIncome=
-async function(id){
+window.deleteOfficeIncome=async function(id){
 
-if(
-!confirm(
-"هل تريد حذف هذا الدخل؟"
-)
-)
-return;
+if(!confirm("هل تريد حذف هذا الدخل؟"))return;
 
 try{
 
 await deleteDoc(
-doc(
-firestore,
-"office_income",
-id
-)
+doc(firestore,"office_income",id)
 );
 
 }catch(e){
@@ -5394,81 +4051,39 @@ alert(e.message);
 
 };
 
-window.editOfficeExpense=
-async function(id){
+window.editOfficeExpense=async function(id){
 
-const item=
-db.officeExpenses.find(
-x=>x.id===id
-);
+const item=db.officeExpenses.find(x=>x.id===id);
 
-if(!item)
+if(!item)return;
+
+const date=prompt("التاريخ (YYYY-MM-DD):",item.date||"");
+
+if(date===null)return;
+
+const name=prompt("اسم البند / المسمى:",item.name||"");
+
+if(name===null)return;
+
+const amountText=prompt("المبلغ:",String(item.amount??""));
+
+if(amountText===null)return;
+
+const amount=Number(amountText);
+
+if(!date||!name||!(amount>0)){
+alert("البيانات غير صحيحة.");
 return;
-
-const date=
-prompt(
-"التاريخ (YYYY-MM-DD):",
-item.date||""
-);
-
-if(date===null)
-return;
-
-const name=
-prompt(
-"اسم البند / المسمى:",
-item.name||""
-);
-
-if(name===null)
-return;
-
-const amountText=
-prompt(
-"المبلغ:",
-String(
-item.amount??
-""
-)
-);
-
-if(amountText===null)
-return;
-
-const amount=
-Number(amountText);
-
-if(
-!date||
-!name||
-!(amount>0)
-){
-
-alert(
-"البيانات غير صحيحة."
-);
-
-return;
-
 }
 
-const note=
-prompt(
-"الملاحظات:",
-item.note||""
-);
+const note=prompt("الملاحظات:",item.note||"");
 
-if(note===null)
-return;
+if(note===null)return;
 
 try{
 
 await updateDoc(
-doc(
-firestore,
-"office_expenses",
-id
-),
+doc(firestore,"office_expenses",id),
 {
 date,
 name,
@@ -5521,32 +4136,22 @@ e.message
 ===================================================== */
 
 document
-.querySelectorAll(
-"#tabs .tab"
-)
+.querySelectorAll("#tabs .tab")
 .forEach(
 tab=>{
 
 tab.onclick=function(){
 
 document
-.querySelectorAll(
-"#tabs .tab"
-)
+.querySelectorAll("#tabs .tab")
 .forEach(
 t=>
-t.classList.remove(
-"active"
-)
+t.classList.remove("active")
 );
 
-this.classList.add(
-"active"
-);
+this.classList.add("active");
 
-render(
-this.dataset.view
-);
+render(this.dataset.view);
 
 };
 
@@ -5556,27 +4161,19 @@ this.dataset.view
 function render(view){
 
 const content=
-document.getElementById(
-"content"
-);
+document.getElementById("content");
 
 if(view==="projects"){
 
-renderProjectsView(
-content
-);
+renderProjectsView(content);
 
 }else if(view==="dashboard"){
 
-renderDashboardView(
-content
-);
+renderDashboardView(content);
 
 }else if(view==="transactions"){
 
-renderTransactionsView(
-content
-);
+renderTransactionsView(content);
 
 }
 
@@ -5585,65 +4182,36 @@ content
 function renderProjectsView(content){
 
 if(currentOpenedProjectId){
-
-renderSingleProjectView(
-content,
-currentOpenedProjectId
-);
-
+renderSingleProjectView(content,currentOpenedProjectId);
 return;
-
 }
 
-const records=
-filterBySelectedMonth(
-db.transactions,
-"projects"
-);
+const records=filterBySelectedMonth(db.transactions,"projects");
 
 let html=`
 
 ${monthFilterHTML("projects")}
 
-<div
-class="card"
-style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>
-➕ إضافة مشروع جديد
-</h3>
+<h3>➕ إضافة مشروع جديد</h3>
 
 <div class="grid">
 
 <div class="field">
-
 <label>اسم المشروع</label>
-
-<input
-id="projName"
-placeholder="مثال: مشروع برج الرياض">
-
+<input id="projName" placeholder="مثال: مشروع برج الرياض">
 </div>
 
 <div style="align-self:end">
-
-<button
-class="btn green"
-id="saveProjectBtn">
-
-إضافة المشروع
-
-</button>
-
+<button class="btn green" id="saveProjectBtn">إضافة المشروع</button>
 </div>
 
 </div>
 
 </div>
 
-<h3>
-📋 قائمة المشاريع
-</h3>
+<h3>📋 قائمة المشاريع</h3>
 
 <div class="table-wrap">
 
@@ -5652,7 +4220,6 @@ id="saveProjectBtn">
 <thead>
 
 <tr>
-
 <th>اسم المشروع</th>
 <th>التصنيف</th>
 <th>إجمالي الدخل</th>
@@ -5660,75 +4227,44 @@ id="saveProjectBtn">
 <th>الصافي</th>
 <th>الحالة</th>
 <th>إجراءات</th>
-
 </tr>
 
 </thead>
 
 <tbody>
+
 `;
 
 if(!db.projects.length){
 
-html+=`
-
-<tr>
-
-<td colspan="7">
-
-<div class="empty">
-لا توجد مشاريع حتى الآن
-</div>
-
-</td>
-
-</tr>
-
-`;
+html+=`<tr><td colspan="7"><div class="empty">لا توجد مشاريع حتى الآن</div></td></tr>`;
 
 }else{
 
 db.projects.forEach(p=>{
 
-let pInc=0;
-let pExp=0;
+let pInc=0,pExp=0;
 
-records
-.filter(
-t=>
-t.projectId===p.id
-)
-.forEach(t=>{
+records.filter(t=>t.projectId===p.id).forEach(t=>{
 
-if(t.type==="income")
-pInc+=
-Number(t.amount)||0;
+if(t.type==="income")pInc+=Number(t.amount)||0;
 
-else
-pExp+=
-Number(t.amount)||0;
+else pExp+=Number(t.amount)||0;
 
 });
 
-const pNet=
-pInc-pExp;
+const pNet=pInc-pExp;
 
 html+=`
 
 <tr>
 
 <td>
-
-<strong>
-${escapeHTML(p.name)}
-</strong>
-
+<strong>${escapeHTML(p.name)}</strong>
 </td>
 
 <td>
-${escapeHTML(
-p.category||"عام"
-)}
+${escapeHTML(p.category||"عام")}
 </td>
 
 <td class="income">
@@ -5744,61 +4280,27 @@ ${money(pNet)}
 </td>
 
 <td>
-
-${
-p.status==="closed"
-?
-'<span class="expense">مغلق</span>'
-:
-'<span class="income">مفتوح</span>'
-}
-
+${p.status==="closed"?'<span class="expense">مغلق</span>':'<span class="income">مفتوح</span>'}
 </td>
 
 <td>
 
 <div class="actions">
 
-<button
-class="btn blue"
-onclick="openSingleProject('${p.id}')">
-
+<button class="btn blue" onclick="openSingleProject('${p.id}')">
 التفاصيل
-
 </button>
 
-<button
-class="btn blue"
-onclick="editRecord(
-'projects',
-'${p.id}',
-'name'
-)">
-
+<button class="btn blue" onclick="editRecord('projects','${p.id}','name')">
 تعديل
-
 </button>
 
-<button
-class="btn orange"
-onclick="toggleProjectStatus('${p.id}')">
-
-${
-p.status==="closed"
-?
-"فتح المشروع"
-:
-"إغلاق المشروع"
-}
-
+<button class="btn orange" onclick="toggleProjectStatus('${p.id}')">
+${p.status==="closed"?'فتح المشروع':'إغلاق المشروع'}
 </button>
 
-<button
-class="btn red"
-onclick="deleteProject('${p.id}')">
-
+<button class="btn red" onclick="deleteProject('${p.id}')">
 حذف
-
 </button>
 
 </div>
@@ -5825,24 +4327,13 @@ html+=`
 
 content.innerHTML=html;
 
-document.getElementById(
-"saveProjectBtn"
-).onclick=
-async function(){
+document.getElementById("saveProjectBtn").onclick=async function(){
 
-const name=
-document.getElementById(
-"projName"
-).value.trim();
+const name=document.getElementById("projName").value.trim();
 
 if(!name){
-
-alert(
-"أدخل اسم المشروع."
-);
-
+alert("أدخل اسم المشروع.");
 return;
-
 }
 
 this.disabled=true;
@@ -5850,21 +4341,15 @@ this.disabled=true;
 try{
 
 await addDoc(
-collection(
-firestore,
-"projects"
-),
+collection(firestore,"projects"),
 {
 name,
 status:"open",
-createdAt:
-serverTimestamp()
+createdAt:serverTimestamp()
 }
 );
 
-document.getElementById(
-"projName"
-).value="";
+document.getElementById("projName").value="";
 
 }catch(e){
 
@@ -5880,8 +4365,7 @@ this.disabled=false;
 
 }
 
-window.openSingleProject=
-function(id){
+window.openSingleProject=function(id){
 
 currentOpenedProjectId=id;
 
@@ -5889,8 +4373,7 @@ render("projects");
 
 };
 
-window.closeSingleProject=
-function(){
+window.closeSingleProject=function(){
 
 currentOpenedProjectId=null;
 
@@ -5898,32 +4381,18 @@ render("projects");
 
 };
 
-window.toggleProjectStatus=
-async function(id){
+window.toggleProjectStatus=async function(id){
 
-const p=
-db.projects.find(
-x=>x.id===id
-);
+const p=db.projects.find(x=>x.id===id);
 
-if(!p)
-return;
+if(!p)return;
 
 try{
 
 await updateDoc(
-doc(
-firestore,
-"projects",
-id
-),
+doc(firestore,"projects",id),
 {
-status:
-p.status==="closed"
-?
-"open"
-:
-"closed"
+status:p.status==="closed"?"open":"closed"
 }
 );
 
@@ -5935,15 +4404,9 @@ alert(e.message);
 
 };
 
-function renderSingleProjectView(
-content,
-projId
-){
+function renderSingleProjectView(content,projId){
 
-const proj=
-db.projects.find(
-p=>p.id===projId
-);
+const proj=db.projects.find(p=>p.id===projId);
 
 if(!proj){
 
@@ -5955,173 +4418,99 @@ return;
 
 }
 
-const pTxs=
-filterBySelectedMonth(
-db.transactions.filter(
-t=>t.projectId===projId
-),
+const pTxs=filterBySelectedMonth(
+db.transactions.filter(t=>t.projectId===projId),
 "projects"
 );
 
-let pInc=0;
-let pExp=0;
+let pInc=0,pExp=0;
 
 pTxs.forEach(t=>{
 
-if(t.type==="income")
-pInc+=
-Number(t.amount)||0;
+if(t.type==="income")pInc+=Number(t.amount)||0;
 
-else
-pExp+=
-Number(t.amount)||0;
+else pExp+=Number(t.amount)||0;
 
 });
 
-const pNet=
-pInc-pExp;
+const pNet=pInc-pExp;
 
 const catTotals={};
 
-pTxs
-.filter(
-t=>t.type!=="income"
-)
-.forEach(t=>{
+pTxs.filter(t=>t.type!=="income").forEach(t=>{
 
-const raw=
-String(
-t.category||"عام"
-).trim()||
-"عام";
+const raw=String(t.category||"عام").trim()||"عام";
 
-const key=
-normalizedCategoryKey(
-raw
-);
+const key=normalizedCategoryKey(raw);
 
-if(!catTotals[key]){
+if(!catTotals[key])catTotals[key]={label:raw,total:0};
 
-catTotals[key]={
-label:raw,
-total:0
-};
-
-}
-
-catTotals[key].total+=
-Number(t.amount)||0;
+catTotals[key].total+=Number(t.amount)||0;
 
 });
 
-const categoryValues=
-[
+const categoryValues=[
 ...new Set(
 db.transactions
-.filter(
-t=>
-t.projectId===projId
-)
-.map(
-t=>
-String(
-t.category||""
-).trim()
-)
+.filter(t=>t.projectId===projId)
+.map(t=>String(t.category||"").trim())
 .filter(Boolean)
 )
-]
-.sort();
+].sort();
 
 let html=`
 
 ${monthFilterHTML("projects")}
 
-<div
-style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:10px">
 
 <h2>
-🏗️ مشروع:
-${escapeHTML(proj.name)}
+🏗️ مشروع: ${escapeHTML(proj.name)}
 </h2>
 
-<button
-class="btn secondary"
-onclick="closeSingleProject()">
-
+<button class="btn secondary" onclick="closeSingleProject()">
 ← العودة للمشاريع
-
 </button>
 
 </div>
 
-<div
-class="stats"
-style="margin-bottom:20px">
+<div class="stats" style="margin-bottom:20px">
 
 <div class="stat">
-
 <small>إجمالي الدخل</small>
-
-<strong class="income">
-${money(pInc)}
-</strong>
-
+<strong class="income">${money(pInc)}</strong>
 </div>
 
 <div class="stat">
-
 <small>إجمالي المصاريف</small>
-
-<strong class="expense">
-${money(pExp)}
-</strong>
-
+<strong class="expense">${money(pExp)}</strong>
 </div>
 
 <div class="stat">
-
 <small>صافي الربح</small>
-
-<strong class="${profitClass(pNet)}">
-${money(pNet)}
-</strong>
-
+<strong class="${profitClass(pNet)}">${money(pNet)}</strong>
 </div>
 
 <div class="stat">
-
 <small>عدد العمليات</small>
-
-<strong>
-${formatNum(pTxs.length)}
-</strong>
-
+<strong>${formatNum(pTxs.length)}</strong>
 </div>
 
 </div>
 
-<div
-class="card"
-style="margin-bottom:20px">
+<div class="card" style="margin-bottom:20px">
 
-<h3>
-📊 مصروفات المشروع حسب التصنيف
-</h3>
+<h3>📊 مصروفات المشروع حسب التصنيف</h3>
 
 <div class="table-wrap">
 
 <table>
 
 <thead>
-
 <tr>
-
 <th>التصنيف</th>
 <th>المجموع</th>
-
 </tr>
-
 </thead>
 
 <tbody>
@@ -6129,42 +4518,23 @@ style="margin-bottom:20px">
 ${
 Object.keys(catTotals).length
 ?
-Object.keys(catTotals)
-.map(k=>`
+Object.keys(catTotals).map(k=>`
 
 <tr>
 
 <td>
-${escapeHTML(
-catTotals[k].label
-)}
+${escapeHTML(catTotals[k].label)}
 </td>
 
 <td class="expense">
-${money(
-catTotals[k].total
-)}
+${money(catTotals[k].total)}
 </td>
 
 </tr>
 
 `).join("")
 :
-`
-
-<tr>
-
-<td colspan="2">
-
-<div class="empty">
-لا توجد مصروفات في الفترة المحددة
-</div>
-
-</td>
-
-</tr>
-
-`
+`<tr><td colspan="2"><div class="empty">لا توجد مصروفات في الفترة المحددة</div></td></tr>`
 }
 
 </tbody>
@@ -6175,13 +4545,9 @@ catTotals[k].total
 
 </div>
 
-<div
-class="card"
-style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>
-➕ إضافة عملية للمشروع
-</h3>
+<h3>➕ إضافة عملية للمشروع</h3>
 
 <div class="grid">
 
@@ -6190,41 +4556,20 @@ style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 <label>نوع العملية</label>
 
 <select id="txType">
-
-<option value="income">
-دفعة مقبوضة (دخل)
-</option>
-
-<option value="expense">
-مصروف
-</option>
-
+<option value="income">دفعة مقبوضة (دخل)</option>
+<option value="expense">مصروف</option>
 </select>
 
 </div>
 
 <div class="field">
-
 <label>التاريخ</label>
-
-<input
-id="txDate"
-type="date"
-value="${today()}">
-
+<input id="txDate" type="date" value="${today()}">
 </div>
 
 <div class="field">
-
 <label>المبلغ (SAR)</label>
-
-<input
-id="txAmount"
-type="number"
-min="0"
-step="0.01"
-placeholder="0">
-
+<input id="txAmount" type="number" min="0" step="0.01" placeholder="0">
 </div>
 
 <div class="field">
@@ -6236,50 +4581,28 @@ id="txCategory"
 list="projectCategoriesList"
 placeholder="اكتب تصنيف جديد أو اختر الموجود">
 
-<datalist
-id="projectCategoriesList">
+<datalist id="projectCategoriesList">
 
-${categoryValues.map(c=>`
-
-<option
-value="${escapeHTML(c)}">
-</option>
-
-`).join("")}
+${categoryValues.map(c=>`<option value="${escapeHTML(c)}"></option>`).join("")}
 
 </datalist>
 
 </div>
 
 <div class="field full">
-
 <label>ملاحظات</label>
-
-<input
-id="txNote"
-placeholder="ملاحظات تفصيلية...">
-
+<input id="txNote" placeholder="ملاحظات تفصيلية...">
 </div>
 
 <div class="full">
-
-<button
-class="btn green"
-id="saveTxBtn">
-
-حفظ العملية
-
-</button>
-
+<button class="btn green" id="saveTxBtn">حفظ العملية</button>
 </div>
 
 </div>
 
 </div>
 
-<h3>
-📋 سجل عمليات المشروع
-</h3>
+<h3>📋 سجل عمليات المشروع</h3>
 
 <div class="table-wrap">
 
@@ -6288,14 +4611,12 @@ id="saveTxBtn">
 <thead>
 
 <tr>
-
 <th>التاريخ</th>
 <th>النوع</th>
 <th>التصنيف</th>
 <th>المبلغ</th>
 <th>الملاحظات</th>
 <th>إجراء</th>
-
 </tr>
 
 </thead>
@@ -6306,121 +4627,41 @@ id="saveTxBtn">
 
 if(!pTxs.length){
 
-html+=`
-
-<tr>
-
-<td colspan="6">
-
-<div class="empty">
-لا توجد عمليات في الفترة المحددة
-</div>
-
-</td>
-
-</tr>
-
-`;
+html+=`<tr><td colspan="6"><div class="empty">لا توجد عمليات في الفترة المحددة</div></td></tr>`;
 
 }else{
 
 pTxs.forEach(t=>{
 
-const isInc=
-t.type==="income";
+const isInc=t.type==="income";
 
 html+=`
 
 <tr>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'transactions',
-'${t.id}',
-'date',
-'date'
-)">
-
-<span class="num-val">
-${escapeHTML(t.date)}
-</span>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','date','date')">
+<span class="num-val">${escapeHTML(t.date)}</span>
 </td>
 
-<td
-class="${isInc?'income':'expense'}">
-
-${
-isInc
-?
-"دفعة"
-:
-"مصروف"
-}
-
+<td class="${isInc?'income':'expense'}">
+${isInc?'دفعة':'مصروف'}
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'transactions',
-'${t.id}',
-'category'
-)">
-
-${escapeHTML(
-t.category||"-"
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','category')">
+${escapeHTML(t.category||"-")}
 </td>
 
-<td
-class="${isInc?'income':'expense'}">
-
+<td class="${isInc?'income':'expense'}">
 ${money(t.amount)}
-
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'transactions',
-'${t.id}',
-'note'
-)">
-
-${escapeHTML(
-t.note||"-"
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','note')">
+${escapeHTML(t.note||"-")}
 </td>
 
 <td>
-
-<button
-class="btn blue"
-onclick="editRecord(
-'transactions',
-'${t.id}',
-'date,category,note'
-)">
-
-تعديل
-
-</button>
-
-<button
-class="btn red"
-onclick="deleteTransaction('${t.id}')">
-
-حذف
-
-</button>
-
+<button class="btn blue" onclick="editRecord('transactions','${t.id}','date,category,note')">تعديل</button>
+<button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button>
 </td>
 
 </tr>
@@ -6443,43 +4684,21 @@ html+=`
 
 content.innerHTML=html;
 
-document.getElementById(
-"saveTxBtn"
-).onclick=
-async function(){
+document.getElementById("saveTxBtn").onclick=async function(){
 
-const type=
-document.getElementById(
-"txType"
-).value;
+const type=document.getElementById("txType").value;
 
-const date=
-document.getElementById(
-"txDate"
-).value;
+const date=document.getElementById("txDate").value;
 
-const amount=
-Number(
-document.getElementById(
-"txAmount"
-).value
-);
+const amount=Number(document.getElementById("txAmount").value);
 
-const category=
-document.getElementById(
-"txCategory"
-).value.trim();
+const category=document.getElementById("txCategory").value.trim();
 
-const note=
-document.getElementById(
-"txNote"
-).value.trim();
+const note=document.getElementById("txNote").value.trim();
 
 if(!date){
 
-alert(
-"اختر التاريخ."
-);
+alert("اختر التاريخ.");
 
 return;
 
@@ -6487,9 +4706,7 @@ return;
 
 if(!(amount>0)){
 
-alert(
-"أدخل مبلغ صحيح."
-);
+alert("أدخل مبلغ صحيح.");
 
 return;
 
@@ -6497,9 +4714,7 @@ return;
 
 if(!category){
 
-alert(
-"أدخل التصنيف / البيان."
-);
+alert("أدخل التصنيف / البيان.");
 
 return;
 
@@ -6510,10 +4725,7 @@ this.disabled=true;
 try{
 
 await addDoc(
-collection(
-firestore,
-"transactions"
-),
+collection(firestore,"transactions"),
 {
 projectId:projId,
 type,
@@ -6521,22 +4733,15 @@ date,
 amount,
 category,
 note,
-createdAt:
-serverTimestamp()
+createdAt:serverTimestamp()
 }
 );
 
-document.getElementById(
-"txAmount"
-).value="";
+document.getElementById("txAmount").value="";
 
-document.getElementById(
-"txCategory"
-).value="";
+document.getElementById("txCategory").value="";
 
-document.getElementById(
-"txNote"
-).value="";
+document.getElementById("txNote").value="";
 
 }catch(e){
 
@@ -6552,43 +4757,19 @@ this.disabled=false;
 
 }
 
-window.deleteProject=
-async function(id){
+window.deleteProject=async function(id){
 
-if(
-!confirm(
-"هل أنت تأكد من حذف هذا المشروع وكافة عملياته؟"
-)
-)
-return;
+if(!confirm("هل أنت تأكد من حذف هذا المشروع وكافة عملياته؟")) return;
 
 try{
 
-const batch=
-writeBatch(firestore);
+const batch=writeBatch(firestore);
 
-batch.delete(
-doc(
-firestore,
-"projects",
-id
-)
-);
+batch.delete(doc(firestore,"projects",id));
 
-db.transactions
-.filter(
-t=>
-t.projectId===id
-)
-.forEach(t=>{
+db.transactions.filter(t=>t.projectId===id).forEach(t=>{
 
-batch.delete(
-doc(
-firestore,
-"transactions",
-t.id
-)
-);
+batch.delete(doc(firestore,"transactions",t.id));
 
 });
 
@@ -6602,25 +4783,13 @@ alert(e.message);
 
 };
 
-window.deleteTransaction=
-async function(id){
+window.deleteTransaction=async function(id){
 
-if(
-!confirm(
-"هل تريد حذف هذه العملية؟"
-)
-)
-return;
+if(!confirm("هل تريد حذف هذه العملية؟")) return;
 
 try{
 
-await deleteDoc(
-doc(
-firestore,
-"transactions",
-id
-)
-);
+await deleteDoc(doc(firestore,"transactions",id));
 
 }catch(e){
 
@@ -6632,75 +4801,40 @@ alert(e.message);
 
 function renderDashboardView(content){
 
-let inc=0;
-let exp=0;
+let inc=0, exp=0;
 
 db.transactions.forEach(t=>{
 
-if(t.type==="income")
-inc+=
-Number(t.amount)||0;
+if(t.type==="income") inc+=Number(t.amount)||0;
 
-else
-exp+=
-Number(t.amount)||0;
+else exp+=Number(t.amount)||0;
 
 });
 
 content.innerHTML=`
 
-<h3>
-📊 الملخص العام والمؤشرات
-</h3>
+<h3>📊 الملخص العام والمؤشرات</h3>
 
 <div class="stats">
 
 <div class="stat">
-
-<small>
-إجمالي الإيرادات المقبوضة
-</small>
-
-<strong class="income">
-${money(inc)}
-</strong>
-
+<small>إجمالي الإيرادات المقبوضة</small>
+<strong class="income">${money(inc)}</strong>
 </div>
 
 <div class="stat">
-
-<small>
-إجمالي المصاريف المصروفة
-</small>
-
-<strong class="expense">
-${money(exp)}
-</strong>
-
+<small>إجمالي المصاريف المصروفة</small>
+<strong class="expense">${money(exp)}</strong>
 </div>
 
 <div class="stat">
-
-<small>
-صافي الربح العام
-</small>
-
-<strong class="${profitClass(inc-exp)}">
-${money(inc-exp)}
-</strong>
-
+<small>صافي الربح العام</small>
+<strong class="${profitClass(inc-exp)}">${money(inc-exp)}</strong>
 </div>
 
 <div class="stat">
-
-<small>
-إجمالي عدد المشاريع
-</small>
-
-<strong>
-${formatNum(db.projects.length)}
-</strong>
-
+<small>إجمالي عدد المشاريع</small>
+<strong>${formatNum(db.projects.length)}</strong>
 </div>
 
 </div>
@@ -6711,19 +4845,13 @@ ${formatNum(db.projects.length)}
 
 function renderTransactionsView(content){
 
-const records=
-filterBySelectedMonth(
-db.transactions,
-"projects"
-);
+const records=filterBySelectedMonth(db.transactions,"projects");
 
 let html=`
 
 ${monthFilterHTML("projects")}
 
-<h3>
-📋 جميع عمليات المشاريع المسجلة
-</h3>
+<h3>📋 جميع عمليات المشاريع المسجلة</h3>
 
 <div class="table-wrap">
 
@@ -6732,7 +4860,6 @@ ${monthFilterHTML("projects")}
 <thead>
 
 <tr>
-
 <th>التاريخ</th>
 <th>المشروع</th>
 <th>النوع</th>
@@ -6740,7 +4867,6 @@ ${monthFilterHTML("projects")}
 <th>المبلغ</th>
 <th>الملاحظات</th>
 <th>إجراء</th>
-
 </tr>
 
 </thead>
@@ -6751,145 +4877,49 @@ ${monthFilterHTML("projects")}
 
 if(!records.length){
 
-html+=`
-
-<tr>
-
-<td colspan="7">
-
-<div class="empty">
-لا توجد عمليات في الفترة المحددة
-</div>
-
-</td>
-
-</tr>
-
-`;
+html+=`<tr><td colspan="7"><div class="empty">لا توجد عمليات في الفترة المحددة</div></td></tr>`;
 
 }else{
 
 records.forEach(t=>{
 
-const p=
-db.projects.find(
-proj=>
-proj.id===t.projectId
-);
+const p=db.projects.find(proj=>proj.id===t.projectId);
 
-const isInc=
-t.type==="income";
+const isInc=t.type==="income";
 
 html+=`
 
 <tr>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'transactions',
-'${t.id}',
-'date',
-'date'
-)">
-
-<span class="num-val">
-${escapeHTML(t.date)}
-</span>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','date','date')">
+<span class="num-val">${escapeHTML(t.date)}</span>
 </td>
 
 <td>
-
-<strong>
-${escapeHTML(
-p
-?
-p.name
-:
-"غير محدد"
-)}
-</strong>
-
+<strong>${escapeHTML(p?p.name:"غير محدد")}</strong>
 </td>
 
 <td>
-
-<span
-class="${isInc?'income':'expense'}">
-
-${
-isInc
-?
-"دفعة"
-:
-"مصروف"
-}
-
+<span class="${isInc?'income':'expense'}">
+${isInc?'دفعة':'مصروف'}
 </span>
-
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'transactions',
-'${t.id}',
-'category'
-)">
-
-${escapeHTML(
-t.category||"-"
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','category')">
+${escapeHTML(t.category||"-")}
 </td>
 
-<td
-class="${isInc?'income':'expense'}">
-
+<td class="${isInc?'income':'expense'}">
 ${money(t.amount)}
-
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'transactions',
-'${t.id}',
-'note'
-)">
-
-${escapeHTML(
-t.note||"-"
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','note')">
+${escapeHTML(t.note||"-")}
 </td>
 
 <td>
-
-<button
-class="btn blue"
-onclick="editRecord(
-'transactions',
-'${t.id}',
-'date,category,note'
-)">
-
-تعديل
-
-</button>
-
-<button
-class="btn red"
-onclick="deleteTransaction('${t.id}')">
-
-حذف
-
-</button>
-
+<button class="btn blue" onclick="editRecord('transactions','${t.id}','date,category,note')">تعديل</button>
+<button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button>
 </td>
 
 </tr>
@@ -6918,42 +4948,27 @@ content.innerHTML=html;
    الخدمات
 ===================================================== */
 
-function updateServicesDataList(){
+function updateServicesDataList() {
 
-const categoriesSet=
-new Set();
+const categoriesSet = new Set();
 
-db.services.forEach(item=>{
+db.services.forEach(item => {
 
-if(
-item.category &&
-item.category.trim()
-){
+if (item.category && item.category.trim()) {
 
-categoriesSet.add(
-item.category.trim()
-);
+categoriesSet.add(item.category.trim());
 
 }
 
 });
 
-const dataList=
-document.getElementById(
-"servicesList"
-);
+const dataList = document.getElementById("servicesList");
 
-if(dataList){
+if (dataList) {
 
-dataList.innerHTML=
-Array.from(
-categoriesSet
-)
-.map(
-cat=>
+dataList.innerHTML = Array.from(categoriesSet).map(cat => 
 `<option value="${escapeHTML(cat)}">`
-)
-.join("");
+).join("");
 
 }
 
@@ -6961,38 +4976,20 @@ cat=>
 
 function normalizedCategoryKey(value){
 
-const text=
-String(value||"")
-.trim()
-.toLowerCase();
+const text=String(value||"").trim().toLowerCase();
 
 return text
-.replace(
-/[\s\-_.،,]+/g,
-""
-)
-.replace(
-/[أإآ]/g,
-"ا"
-)
-.replace(
-/ة/g,
-"ه"
-)
-.replace(
-/ى/g,
-"ي"
-);
+.replace(/[\s\-_.،,]+/g,"")
+.replace(/[أإآ]/g,"ا")
+.replace(/ة/g,"ه")
+.replace(/ى/g,"ي");
 
 }
 
 function renderServices(){
 
 const records=
-filterBySelectedMonth(
-db.services,
-"services"
-)
+filterBySelectedMonth(db.services,"services")
 .slice()
 .sort(
 (a,b)=>
@@ -7002,20 +4999,17 @@ String(a.date||"")
 )
 );
 
-let totalInc=0;
-let totalExpense=0;
+let totalInc=0,totalExpense=0;
 
 const summary={};
+
 const generalExpenses=[];
 
 records.forEach(s=>{
 
-if(
-s.recordType==="general_expense"
-){
+if(s.recordType==="general_expense"){
 
-const amount=
-Number(s.amount)||0;
+const amount=Number(s.amount)||0;
 
 totalExpense+=amount;
 
@@ -7025,43 +5019,27 @@ return;
 
 }
 
-const collected=
-Number(
-s.collectedAmount
-)||0;
+const collected=Number(s.collectedAmount)||0;
 
 const expense=
 s.expense!==undefined
 ?
-(
-Number(s.expense)||0
-)
+(Number(s.expense)||0)
 :
 Math.max(
 0,
-collected-
-(
-Number(s.profit)||0
-)
+collected-(Number(s.profit)||0)
 );
 
-const profit=
-collected-expense;
+const profit=collected-expense;
 
 totalInc+=collected;
 
 totalExpense+=expense;
 
-const raw=
-String(
-s.category||"عام"
-).trim()||
-"عام";
+const raw=String(s.category||"عام").trim()||"عام";
 
-const key=
-normalizedCategoryKey(
-raw
-);
+const key=normalizedCategoryKey(raw);
 
 if(!summary[key]){
 
@@ -7074,39 +5052,29 @@ profit:0
 
 }
 
-summary[key].collected+=
-collected;
+summary[key].collected+=collected;
 
-summary[key].expense+=
-expense;
+summary[key].expense+=expense;
 
-summary[key].profit+=
-profit;
+summary[key].profit+=profit;
 
 });
 
 const linkedProfit=
 Object.keys(summary)
 .reduce(
-(x,k)=>
-x+summary[k].profit,
+(x,k)=>x+summary[k].profit,
 0
 );
 
 const independentExpense=
-generalExpenses
-.reduce(
-(x,s)=>
-x+
-(
-Number(s.amount)||0
-),
+generalExpenses.reduce(
+(x,s)=>x+(Number(s.amount)||0),
 0
 );
 
 const totalProfit=
-linkedProfit-
-independentExpense;
+linkedProfit-independentExpense;
 
 updateServicesDataList();
 
@@ -7117,9 +5085,7 @@ document.getElementById(
 
 if(filter)
 filter.innerHTML=
-monthFilterHTML(
-"services"
-);
+monthFilterHTML("services");
 
 document.getElementById(
 "servicesTotalIncome"
@@ -7151,37 +5117,24 @@ document.getElementById(
 sumBody.innerHTML=
 Object.keys(summary).length
 ?
-Object.keys(summary)
-.map(k=>`
+Object.keys(summary).map(k=>`
 
 <tr>
 
 <td>
-
-<strong>
-${escapeHTML(
-summary[k].label
-)}
-</strong>
-
+<strong>${escapeHTML(summary[k].label)}</strong>
 </td>
 
 <td class="income">
-${money(
-summary[k].collected
-)}
+${money(summary[k].collected)}
 </td>
 
 <td class="expense">
-${money(
-summary[k].expense
-)}
+${money(summary[k].expense)}
 </td>
 
 <td class="profit-positive">
-${money(
-summary[k].profit
-)}
+${money(summary[k].profit)}
 </td>
 
 </tr>
@@ -7189,19 +5142,13 @@ summary[k].profit
 `).join("")
 :
 `
-
 <tr>
-
 <td colspan="4">
-
 <div class="empty">
 لا توجد بيانات للخدمات في الفترة المحددة
 </div>
-
 </td>
-
 </tr>
-
 `;
 
 const srvBody=
@@ -7211,8 +5158,7 @@ document.getElementById(
 
 const incomeRecords=
 records.filter(
-s=>
-s.recordType!=="general_expense"
+s=>s.recordType!=="general_expense"
 );
 
 srvBody.innerHTML=
@@ -7221,23 +5167,16 @@ incomeRecords.length
 incomeRecords.map(s=>{
 
 const collected=
-Number(
-s.collectedAmount
-)||0;
+Number(s.collectedAmount)||0;
 
 const expense=
 s.expense!==undefined
 ?
-(
-Number(s.expense)||0
-)
+(Number(s.expense)||0)
 :
 Math.max(
 0,
-collected-
-(
-Number(s.profit)||0
-)
+collected-(Number(s.profit)||0)
 );
 
 const profit=
@@ -7247,37 +5186,12 @@ return `
 
 <tr>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'services',
-'${s.id}',
-'date',
-'date'
-)">
-
-<span class="num-val">
-${escapeHTML(s.date)}
-</span>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','date','date')">
+<span class="num-val">${escapeHTML(s.date)}</span>
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'services',
-'${s.id}',
-'category'
-)">
-
-<strong>
-${escapeHTML(
-s.category||"عام"
-)}
-</strong>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','category')">
+<strong>${escapeHTML(s.category||"عام")}</strong>
 </td>
 
 <td class="${profitClass(profit)}">
@@ -7292,43 +5206,13 @@ ${money(collected)}
 ${money(expense)}
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'services',
-'${s.id}',
-'note'
-)">
-
-${escapeHTML(
-s.note||"-"
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','note')">
+${escapeHTML(s.note||"-")}
 </td>
 
 <td>
-
-<button
-class="btn blue"
-onclick="editRecord(
-'services',
-'${s.id}',
-'date,category,collectedAmount,expense,note'
-)">
-
-تعديل
-
-</button>
-
-<button
-class="btn red"
-onclick="deleteService('${s.id}')">
-
-حذف
-
-</button>
-
+<button class="btn blue" onclick="editRecord('services','${s.id}','date,category,collectedAmount,expense,note')">تعديل</button>
+<button class="btn red" onclick="deleteService('${s.id}')">حذف</button>
 </td>
 
 </tr>
@@ -7338,19 +5222,13 @@ onclick="deleteService('${s.id}')">
 }).join("")
 :
 `
-
 <tr>
-
 <td colspan="7">
-
 <div class="empty">
 لا توجد عمليات دخل خدمات في الفترة المحددة
 </div>
-
 </td>
-
 </tr>
-
 `;
 
 const geBody=
@@ -7365,82 +5243,25 @@ generalExpenses.map(s=>`
 
 <tr>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'services',
-'${s.id}',
-'date',
-'date'
-)">
-
-<span class="num-val">
-${escapeHTML(
-s.date||""
-)}
-</span>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','date','date')">
+<span class="num-val">${escapeHTML(s.date||"")}</span>
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'services',
-'${s.id}',
-'category'
-)">
-
-<strong>
-${escapeHTML(
-s.category||"عام"
-)}
-</strong>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','category')">
+<strong>${escapeHTML(s.category||"عام")}</strong>
 </td>
 
 <td class="expense">
 ${money(s.amount)}
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'services',
-'${s.id}',
-'note'
-)">
-
-${escapeHTML(
-s.note||"-"
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','note')">
+${escapeHTML(s.note||"-")}
 </td>
 
 <td>
-
-<button
-class="btn blue"
-onclick="editRecord(
-'services',
-'${s.id}',
-'date,category,amount,note'
-)">
-
-تعديل
-
-</button>
-
-<button
-class="btn red"
-onclick="deleteService('${s.id}')">
-
-حذف
-
-</button>
-
+<button class="btn blue" onclick="editRecord('services','${s.id}','date,category,amount,note')">تعديل</button>
+<button class="btn red" onclick="deleteService('${s.id}')">حذف</button>
 </td>
 
 </tr>
@@ -7448,97 +5269,49 @@ onclick="deleteService('${s.id}')">
 `).join("")
 :
 `
-
 <tr>
-
 <td colspan="5">
-
 <div class="empty">
 لا توجد مصروفات مستقلة للخدمات في الفترة المحددة
 </div>
-
 </td>
-
 </tr>
-
 `;
 
 }
 
-document.getElementById(
-"saveServiceTxBtn"
-).onclick=
-async function(){
+document.getElementById("saveServiceTxBtn").onclick=async function(){
 
 const btn=this;
 
-const date=
-document.getElementById(
-"srvDate"
-).value;
+const date=document.getElementById("srvDate").value;
 
-const category=
-document.getElementById(
-"srvCategory"
-).value.trim();
+const category=document.getElementById("srvCategory").value.trim();
 
-const collectedAmount=
-Number(
-document.getElementById(
-"srvCollectedAmount"
-).value
-);
+const collectedAmount=Number(document.getElementById("srvCollectedAmount").value);
 
-const expense=
-Number(
-document.getElementById(
-"srvExpense"
-).value
-)||0;
+const expense=Number(document.getElementById("srvExpense").value)||0;
 
-const note=
-document.getElementById(
-"srvNote"
-).value.trim();
+const note=document.getElementById("srvNote").value.trim();
 
 if(!date){
-
-alert(
-"اختر التاريخ."
-);
-
+alert("اختر التاريخ.");
 return;
-
 }
 
 if(!category){
-
-alert(
-"أدخل أو اختر اسم الخدمة."
-);
-
+alert("أدخل أو اختر اسم الخدمة.");
 return;
-
 }
 
 if(!(collectedAmount>0)){
-
-alert(
-"أدخل مبلغ دخل صحيح."
-);
-
+alert("أدخل مبلغ دخل صحيح.");
 return;
-
 }
 
 if(expense<0){
-
-alert(
-"أدخل مصروف صحيح."
-);
-
+alert("أدخل مصروف صحيح.");
 return;
-
 }
 
 btn.disabled=true;
@@ -7546,39 +5319,23 @@ btn.disabled=true;
 try{
 
 await addDoc(
-collection(
-firestore,
-"services"
-),
+collection(firestore,"services"),
 {
 date,
 category,
 recordType:"income",
-profit:
-collectedAmount-expense,
+profit:collectedAmount-expense,
 collectedAmount,
 expense,
 note,
-createdAt:
-serverTimestamp()
+createdAt:serverTimestamp()
 }
 );
 
-document.getElementById(
-"srvCategory"
-).value="";
-
-document.getElementById(
-"srvCollectedAmount"
-).value="";
-
-document.getElementById(
-"srvExpense"
-).value="";
-
-document.getElementById(
-"srvNote"
-).value="";
+document.getElementById("srvCategory").value="";
+document.getElementById("srvCollectedAmount").value="";
+document.getElementById("srvExpense").value="";
+document.getElementById("srvNote").value="";
 
 }catch(e){
 
@@ -7592,63 +5349,31 @@ btn.disabled=false;
 
 };
 
-document.getElementById(
-"saveServiceGeneralExpenseBtn"
-).onclick=
-async function(){
+document.getElementById("saveServiceGeneralExpenseBtn").onclick=async function(){
 
 const btn=this;
 
-const date=
-document.getElementById(
-"srvExpenseDate"
-).value;
+const date=document.getElementById("srvExpenseDate").value;
 
-const category=
-document.getElementById(
-"srvExpenseCategory"
-).value.trim();
+const category=document.getElementById("srvExpenseCategory").value.trim();
 
-const amount=
-Number(
-document.getElementById(
-"srvGeneralExpenseAmount"
-).value
-);
+const amount=Number(document.getElementById("srvGeneralExpenseAmount").value);
 
-const note=
-document.getElementById(
-"srvGeneralExpenseNote"
-).value.trim();
+const note=document.getElementById("srvGeneralExpenseNote").value.trim();
 
 if(!date){
-
-alert(
-"اختر التاريخ."
-);
-
+alert("اختر التاريخ.");
 return;
-
 }
 
 if(!category){
-
-alert(
-"أدخل اسم المصروف / التصنيف."
-);
-
+alert("أدخل اسم المصروف / التصنيف.");
 return;
-
 }
 
 if(!(amount>0)){
-
-alert(
-"أدخل مبلغ مصروف صحيح."
-);
-
+alert("أدخل مبلغ مصروف صحيح.");
 return;
-
 }
 
 btn.disabled=true;
@@ -7656,32 +5381,20 @@ btn.disabled=true;
 try{
 
 await addDoc(
-collection(
-firestore,
-"services"
-),
+collection(firestore,"services"),
 {
 recordType:"general_expense",
 date,
 category,
 amount,
 note,
-createdAt:
-serverTimestamp()
+createdAt:serverTimestamp()
 }
 );
 
-document.getElementById(
-"srvExpenseCategory"
-).value="";
-
-document.getElementById(
-"srvGeneralExpenseAmount"
-).value="";
-
-document.getElementById(
-"srvGeneralExpenseNote"
-).value="";
+document.getElementById("srvExpenseCategory").value="";
+document.getElementById("srvGeneralExpenseAmount").value="";
+document.getElementById("srvGeneralExpenseNote").value="";
 
 }catch(e){
 
@@ -7695,25 +5408,13 @@ btn.disabled=false;
 
 };
 
-window.deleteService=
-async function(id){
+window.deleteService=async function(id){
 
-if(
-!confirm(
-"هل تريد حذف هذه العملية؟"
-)
-)
-return;
+if(!confirm("هل تريد حذف هذه العملية؟")) return;
 
 try{
 
-await deleteDoc(
-doc(
-firestore,
-"services",
-id
-)
-);
+await deleteDoc(doc(firestore,"services",id));
 
 }catch(e){
 
@@ -7747,18 +5448,14 @@ let allPropExp=0;
 
 rentals.forEach(r=>{
 
-allRent+=
-Number(r.amount)||0;
+allRent+=Number(r.amount)||0;
 
-allRentExp+=
-Number(r.expenseAmount)||0;
+allRentExp+=Number(r.expenseAmount)||0;
 
 });
 
-propertyExpenses.forEach(
-pe=>
-allPropExp+=
-Number(pe.amount)||0
+propertyExpenses.forEach(pe=>
+allPropExp+=Number(pe.amount)||0
 );
 
 const filter=
@@ -7768,19 +5465,14 @@ document.getElementById(
 
 if(filter)
 filter.innerHTML=
-monthFilterHTML(
-"rentals"
-);
+monthFilterHTML("rentals");
 
 let allRetainedDeposit=0;
 
 rentals.forEach(r=>{
 
-if(
-r.depositStatus!=="refunded"
-)
-allRetainedDeposit+=
-Number(r.depositAmount)||0;
+if(r.depositStatus!=="refunded")
+allRetainedDeposit+=Number(r.depositAmount)||0;
 
 });
 
@@ -7793,8 +5485,7 @@ document.getElementById(
 "allPropertiesExpense"
 ).innerHTML=
 money(
-allRentExp+
-allPropExp
+allRentExp+allPropExp
 );
 
 document.getElementById(
@@ -7803,10 +5494,7 @@ document.getElementById(
 money(
 allRent+
 allRetainedDeposit-
-(
-allRentExp+
-allPropExp
-)
+(allRentExp+allPropExp)
 );
 
 document.getElementById(
@@ -7826,13 +5514,11 @@ currentOpenedPropertyId
 
 document.getElementById(
 "rentalMainView"
-).style.display=
-"block";
+).style.display="block";
 
 document.getElementById(
 "rentalDetailView"
-).style.display=
-"none";
+).style.display="none";
 
 renderPropertiesList();
 
@@ -7862,19 +5548,13 @@ db.propertyExpenses,
 if(!db.properties.length){
 
 tbody.innerHTML=`
-
 <tr>
-
 <td colspan="8">
-
 <div class="empty">
 لا توجد عقارات مضافة حتى الآن
 </div>
-
 </td>
-
 </tr>
-
 `;
 
 return;
@@ -7891,58 +5571,38 @@ let pRef=0;
 let pRet=0;
 
 rentals
-.filter(
-r=>
-r.propertyId===p.id
-)
+.filter(r=>r.propertyId===p.id)
 .forEach(r=>{
 
-pRent+=
-Number(r.amount)||0;
+pRent+=Number(r.amount)||0;
 
-pRentExp+=
-Number(r.expenseAmount)||0;
+pRentExp+=Number(r.expenseAmount)||0;
 
-if(
-r.depositStatus==="refunded"
-)
-pRef+=
-Number(r.depositAmount)||0;
+if(r.depositStatus==="refunded")
+pRef+=Number(r.depositAmount)||0;
 
 else
-pRet+=
-Number(r.depositAmount)||0;
+pRet+=Number(r.depositAmount)||0;
 
 });
 
 propertyExpenses
-.filter(
-pe=>
-pe.propertyId===p.id
-)
+.filter(pe=>pe.propertyId===p.id)
 .forEach(pe=>
-pPropExp+=
-Number(pe.amount)||0
+pPropExp+=Number(pe.amount)||0
 );
 
 const pNet=
 pRent+
 pRet-
-(
-pRentExp+
-pPropExp
-);
+(pRentExp+pPropExp);
 
 return `
 
 <tr>
 
 <td>
-
-<strong>
-${escapeHTML(p.title)}
-</strong>
-
+<strong>${escapeHTML(p.title)}</strong>
 </td>
 
 <td class="income">
@@ -7983,11 +5643,7 @@ onclick="openPropertyDetails('${p.id}')">
 
 <button
 class="btn blue"
-onclick="editRecord(
-'properties',
-'${p.id}',
-'title'
-)">
+onclick="editRecord('properties','${p.id}','title')">
 
 تعديل
 
@@ -8013,10 +5669,7 @@ onclick="deleteProperty('${p.id}')">
 
 }
 
-document.getElementById(
-"savePropertyBtn"
-).onclick=
-async function(){
+document.getElementById("savePropertyBtn").onclick=async function(){
 
 const title=
 document.getElementById(
@@ -8025,9 +5678,7 @@ document.getElementById(
 
 if(!title){
 
-alert(
-"أدخل اسم العقار."
-);
+alert("أدخل اسم العقار.");
 
 return;
 
@@ -8044,8 +5695,7 @@ firestore,
 ),
 {
 title,
-createdAt:
-serverTimestamp()
+createdAt:serverTimestamp()
 }
 );
 
@@ -8065,8 +5715,7 @@ this.disabled=false;
 
 };
 
-window.deleteProperty=
-async function(id){
+window.deleteProperty=async function(id){
 
 if(
 !confirm(
@@ -8090,8 +5739,7 @@ id
 
 db.rentals
 .filter(
-r=>
-r.propertyId===id
+r=>r.propertyId===id
 )
 .forEach(
 r=>
@@ -8106,8 +5754,7 @@ r.id
 
 db.propertyExpenses
 .filter(
-pe=>
-pe.propertyId===id
+pe=>pe.propertyId===id
 )
 .forEach(
 pe=>
@@ -8130,52 +5777,43 @@ alert(e.message);
 
 };
 
-window.openPropertyDetails=
-function(id){
+window.openPropertyDetails=function(id){
 
 currentOpenedPropertyId=id;
 
 document.getElementById(
 "rentalMainView"
-).style.display=
-"none";
+).style.display="none";
 
 document.getElementById(
 "rentalDetailView"
-).style.display=
-"block";
+).style.display="block";
 
 renderRentals();
 
 };
 
-window.closePropertyDetails=
-function(){
+window.closePropertyDetails=function(){
 
 currentOpenedPropertyId=null;
 
 document.getElementById(
 "rentalMainView"
-).style.display=
-"block";
+).style.display="block";
 
 document.getElementById(
 "rentalDetailView"
-).style.display=
-"none";
+).style.display="none";
 
 renderRentals();
 
 };
 
-function renderPropertyDetails(
-propId
-){
+function renderPropertyDetails(propId){
 
 const prop=
 db.properties.find(
-p=>
-p.id===propId
+p=>p.id===propId
 );
 
 if(!prop){
@@ -8189,8 +5827,7 @@ return;
 document.getElementById(
 "currentPropertyName"
 ).textContent=
-"🏢 "+
-prop.title;
+"🏢 "+prop.title;
 
 document.getElementById(
 "rentDate"
@@ -8203,8 +5840,7 @@ document.getElementById(
 const pContracts=
 filterBySelectedMonth(
 db.rentals.filter(
-r=>
-r.propertyId===propId
+r=>r.propertyId===propId
 ),
 "rentals"
 );
@@ -8212,8 +5848,7 @@ r.propertyId===propId
 const pExpenses=
 filterBySelectedMonth(
 db.propertyExpenses.filter(
-pe=>
-pe.propertyId===propId
+pe=>pe.propertyId===propId
 ),
 "rentals"
 );
@@ -8226,45 +5861,32 @@ let pRet=0;
 
 pContracts.forEach(r=>{
 
-pRent+=
-Number(r.amount)||0;
+pRent+=Number(r.amount)||0;
 
-pRentExp+=
-Number(r.expenseAmount)||0;
+pRentExp+=Number(r.expenseAmount)||0;
 
-if(
-r.depositStatus==="refunded"
-)
-pRef+=
-Number(r.depositAmount)||0;
+if(r.depositStatus==="refunded")
+pRef+=Number(r.depositAmount)||0;
 
 else
-pRet+=
-Number(r.depositAmount)||0;
+pRet+=Number(r.depositAmount)||0;
 
 });
 
-pExpenses.forEach(pe=>
-
-pPropExp+=
-Number(pe.amount)||0
-
+pExpenses.forEach(
+pe=>
+pPropExp+=Number(pe.amount)||0
 );
 
 const pNet=
 pRent+
 pRet-
-(
-pRentExp+
-pPropExp
-);
+(pRentExp+pPropExp);
 
 document.getElementById(
 "propTotalRent"
 ).innerHTML=
-money(
-pRent+pRet
-);
+money(pRent+pRet);
 
 document.getElementById(
 "propRentalExpenses"
@@ -8323,65 +5945,23 @@ r.depositStatus==="refunded";
 
 const net=
 Number(r.amount||0)+
-(
-isRef
-?
-0
-:
-deposit
-)-
-Number(
-r.expenseAmount||0
-);
+(isRef?0:deposit)-
+Number(r.expenseAmount||0);
 
 return `
 
 <tr>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'rentals',
-'${r.id}',
-'date',
-'date'
-)">
-
-<span class="num-val">
-${escapeHTML(r.date)}
-</span>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','date','date')">
+<span class="num-val">${escapeHTML(r.date)}</span>
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'rentals',
-'${r.id}',
-'unit'
-)">
-
-${escapeHTML(
-r.unit||"-"
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','unit')">
+${escapeHTML(r.unit||"-")}
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'rentals',
-'${r.id}',
-'tenant'
-)">
-
-${escapeHTML(
-r.tenant||"-"
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','tenant')">
+${escapeHTML(r.tenant||"-")}
 </td>
 
 <td class="income">
@@ -8392,19 +5972,8 @@ ${money(r.amount)}
 ${money(r.depositAmount)}
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'rentals',
-'${r.id}',
-'expenseCategory'
-)">
-
-${escapeHTML(
-r.expenseCategory||"-"
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','expenseCategory')">
+${escapeHTML(r.expenseCategory||"-")}
 </td>
 
 <td class="expense">
@@ -8419,47 +5988,23 @@ ${money(net)}
 
 <button
 class="btn ${isRef?'blue':'orange'}"
-onclick="toggleDeposit(
-'${r.id}',
-'${isRef?'active':'refunded'}'
-)">
+onclick="toggleDeposit('${r.id}','${isRef?'active':'refunded'}')">
 
-${
-isRef
-?
-"تم الاسترداد"
-:
-"مستمر (نشط)"
-}
+${isRef?'تم الاسترداد':'مستمر (نشط)'}
 
 </button>
 
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'rentals',
-'${r.id}',
-'note'
-)">
-
-${escapeHTML(
-r.note||"-"
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','note')">
+${escapeHTML(r.note||"-")}
 </td>
 
 <td>
 
 <button
 class="btn blue"
-onclick="editRecord(
-'rentals',
-'${r.id}',
-'date,unit,tenant,expenseCategory,note'
-)">
+onclick="editRecord('rentals','${r.id}','date,unit,tenant,expenseCategory,note')">
 
 تعديل
 
@@ -8482,19 +6027,13 @@ onclick="deleteRentContract('${r.id}')">
 }).join("")
 :
 `
-
 <tr>
-
 <td colspan="11">
-
 <div class="empty">
 لا توجد عمليات إيجار في الفترة المحددة
 </div>
-
 </td>
-
 </tr>
-
 `;
 
 const expensesBody=
@@ -8509,65 +6048,27 @@ pExpenses.map(pe=>`
 
 <tr>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'property_expenses',
-'${pe.id}',
-'date',
-'date'
-)">
-
-<span class="num-val">
-${escapeHTML(pe.date)}
-</span>
-
+<td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','date','date')">
+<span class="num-val">${escapeHTML(pe.date)}</span>
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'property_expenses',
-'${pe.id}',
-'category'
-)">
-
-${escapeHTML(
-pe.category||"عام"
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','category')">
+${escapeHTML(pe.category||"عام")}
 </td>
 
 <td class="expense">
 ${money(pe.amount)}
 </td>
 
-<td
-class="editable-cell"
-onclick="inlineEditCell(
-this,
-'property_expenses',
-'${pe.id}',
-'note'
-)">
-
-${escapeHTML(
-pe.note||"-"
-)}
-
+<td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','note')">
+${escapeHTML(pe.note||"-")}
 </td>
 
 <td>
 
 <button
 class="btn blue"
-onclick="editRecord(
-'property_expenses',
-'${pe.id}',
-'date,category,note'
-)">
+onclick="editRecord('property_expenses','${pe.id}','date,category,note')">
 
 تعديل
 
@@ -8588,30 +6089,20 @@ onclick="deletePropertyExpense('${pe.id}')">
 `).join("")
 :
 `
-
 <tr>
-
 <td colspan="5">
-
 <div class="empty">
 لا توجد مصاريف شاملة في الفترة المحددة
 </div>
-
 </td>
-
 </tr>
-
 `;
 
 }
 
-document.getElementById(
-"saveRentContractBtn"
-).onclick=
-async function(){
+document.getElementById("saveRentContractBtn").onclick=async function(){
 
-if(!currentOpenedPropertyId)
-return;
+if(!currentOpenedPropertyId) return;
 
 const date=
 document.getElementById(
@@ -8661,9 +6152,7 @@ document.getElementById(
 
 if(!date){
 
-alert(
-"اختر التاريخ."
-);
+alert("اختر التاريخ.");
 
 return;
 
@@ -8684,15 +6173,22 @@ propertyId:
 currentOpenedPropertyId,
 
 date,
+
 unit,
+
 tenant,
+
 amount,
+
 depositAmount,
+
 depositStatus:
 "active",
 
 expenseCategory,
+
 expenseAmount,
+
 note,
 
 createdAt:
@@ -8741,13 +6237,9 @@ this.disabled=false;
 
 };
 
-document.getElementById(
-"savePropertyExpenseBtn"
-).onclick=
-async function(){
+document.getElementById("savePropertyExpenseBtn").onclick=async function(){
 
-if(!currentOpenedPropertyId)
-return;
+if(!currentOpenedPropertyId) return;
 
 const date=
 document.getElementById(
@@ -8771,14 +6263,9 @@ document.getElementById(
 "propertyExpenseNote"
 ).value.trim();
 
-if(
-!date||
-!(amount>0)
-){
+if(!date || !(amount>0)){
 
-alert(
-"أدخل تاريخ ومبلغ صحيح."
-);
+alert("أدخل تاريخ ومبلغ صحيح.");
 
 return;
 
@@ -8799,8 +6286,11 @@ propertyId:
 currentOpenedPropertyId,
 
 date,
+
 category,
+
 amount,
+
 note,
 
 createdAt:
@@ -8833,11 +6323,7 @@ this.disabled=false;
 
 };
 
-window.toggleDeposit=
-async function(
-id,
-newStatus
-){
+window.toggleDeposit=async function(id, newStatus){
 
 try{
 
@@ -8848,8 +6334,7 @@ firestore,
 id
 ),
 {
-depositStatus:
-newStatus
+depositStatus:newStatus
 }
 );
 
@@ -8866,8 +6351,7 @@ alert(e.message);
 
 };
 
-window.deleteRentContract=
-async function(id){
+window.deleteRentContract=async function(id){
 
 if(
 !confirm(
@@ -8894,8 +6378,7 @@ alert(e.message);
 
 };
 
-window.inlineEditCell=
-async function(
+window.inlineEditCell=async function(
 cell,
 collectionName,
 id,
@@ -8903,15 +6386,12 @@ field,
 inputType="text"
 ){
 
-if(
-cell.dataset.editing==="1"
-)
+if(cell.dataset.editing==="1")
 return;
 
 cell.dataset.editing="1";
 
 const sourceMap={
-
 projects:"projects",
 transactions:"transactions",
 office_expenses:"officeExpenses",
@@ -8922,21 +6402,14 @@ properties:"properties",
 rentals:"rentals",
 property_expenses:"propertyExpenses",
 personal_expenses:"personalExpenses"
-
 };
 
 const source=
-db[
-sourceMap[
-collectionName
-]
-]||[];
+db[sourceMap[collectionName]]||[];
 
 const current=
 source.find(
-x=>
-x&&
-x.id===id
+x=>x&&x.id===id
 )||{};
 
 const oldValue=
@@ -8963,9 +6436,7 @@ field
 
 cell.innerHTML="";
 
-cell.appendChild(
-input
-);
+cell.appendChild(input);
 
 input.focus();
 
@@ -8974,11 +6445,9 @@ input.select();
 
 let finished=false;
 
-const finish=
-async save=>{
+const finish=async save=>{
 
-if(finished)
-return;
+if(finished)return;
 
 finished=true;
 
@@ -8986,7 +6455,7 @@ const value=
 input.value;
 
 if(
-save&&
+save &&
 value!==String(oldValue)
 ){
 
@@ -9045,19 +6514,14 @@ finish(false);
 
 input.addEventListener(
 "blur",
-()=>
-finish(true)
+()=>finish(true)
 );
 
 };
 
-function renderAfterInlineEdit(
-collectionName
-){
+function renderAfterInlineEdit(collectionName){
 
-if(
-collectionName==="transactions"
-){
+if(collectionName==="transactions"){
 
 const activeTab=
 document.querySelector(
@@ -9119,15 +6583,13 @@ activeTab.dataset.view
 
 }
 
-window.editRecord=
-async function(
+window.editRecord=async function(
 collectionName,
 id,
 fields
 ){
 
 const sourceMap={
-
 projects:"projects",
 transactions:"transactions",
 office_expenses:"officeExpenses",
@@ -9138,21 +6600,14 @@ properties:"properties",
 rentals:"rentals",
 property_expenses:"propertyExpenses",
 personal_expenses:"personalExpenses"
-
 };
 
 const source=
-db[
-sourceMap[
-collectionName
-]
-]||[];
+db[sourceMap[collectionName]]||[];
 
 const current=
 source.find(
-x=>
-x&&
-x.id===id
+x=>x&&x.id===id
 );
 
 if(!current){
@@ -9270,8 +6725,7 @@ e.message
 
 };
 
-window.deletePropertyExpense=
-async function(id){
+window.deletePropertyExpense=async function(id){
 
 if(
 !confirm(
