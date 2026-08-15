@@ -595,6 +595,14 @@ style="display:none">
 </button>
 
 <button
+class="btn blue"
+id="backupExcelBtn">
+
+💾 نسخة احتياطية Excel
+
+</button>
+
+<button
 class="btn secondary"
 id="logoutBtn">
 
@@ -3098,6 +3106,208 @@ if(el) el.innerHTML=money(i===0?income:i===1?expense:income-expense);
 });
 
 }
+
+/* ================= النسخة الاحتياطية Excel ================= */
+
+function firebaseValueForExcel(value){
+
+if(value===null||value===undefined)return "";
+
+if(typeof value==="object"){
+
+if(
+value &&
+typeof value.toDate==="function"
+){
+
+try{
+return value.toDate().toISOString();
+}catch(e){
+return String(value);
+}
+
+}
+
+try{
+return JSON.stringify(value);
+}catch(e){
+return String(value);
+}
+
+}
+
+return value;
+
+}
+
+function exportFirebaseBackupToExcel(){
+
+if(!auth.currentUser){
+
+alert("يجب تسجيل الدخول أولاً.");
+
+return;
+
+}
+
+const collections=[
+
+{
+name:"المشاريع",
+data:db.projects
+},
+
+{
+name:"عمليات المشاريع",
+data:db.transactions
+},
+
+{
+name:"مصاريف المكتب",
+data:db.officeExpenses
+},
+
+{
+name:"دخل المكتب",
+data:db.officeIncome
+},
+
+{
+name:"المقاولات",
+data:db.contracting
+},
+
+{
+name:"الخدمات",
+data:db.services
+},
+
+{
+name:"العقارات",
+data:db.properties
+},
+
+{
+name:"عمليات الإيجار",
+data:db.rentals
+},
+
+{
+name:"مصاريف العقارات",
+data:db.propertyExpenses
+},
+
+{
+name:"المصاريف الشخصية",
+data:db.personalExpenses
+}
+
+];
+
+const workbook=
+XLSX.utils.book_new();
+
+collections.forEach(item=>{
+
+const rows=
+(item.data||[]).map(record=>{
+
+const row={};
+
+Object.keys(record||{}).forEach(key=>{
+
+row[key]=
+firebaseValueForExcel(record[key]);
+
+});
+
+return row;
+
+});
+
+if(!rows.length){
+
+const sheet=
+XLSX.utils.aoa_to_sheet(
+[["لا توجد بيانات"]]
+);
+
+XLSX.utils.book_append_sheet(
+workbook,
+sheet,
+item.name.slice(0,31)
+);
+
+return;
+
+}
+
+const sheet=
+XLSX.utils.json_to_sheet(rows);
+
+XLSX.utils.book_append_sheet(
+workbook,
+sheet,
+item.name.slice(0,31)
+);
+
+});
+
+const backupDate=
+new Date()
+.toISOString()
+.replace(/[:.]/g,"-")
+.slice(0,19);
+
+XLSX.writeFile(
+workbook,
+`Firebase-Backup-${backupDate}.xlsx`
+);
+
+}
+
+document.getElementById(
+"backupExcelBtn"
+).onclick=
+function(){
+
+const btn=this;
+
+btn.disabled=true;
+
+btn.textContent=
+"جاري تجهيز النسخة...";
+
+try{
+
+exportFirebaseBackupToExcel();
+
+}catch(e){
+
+console.error(
+"Excel Backup Error:",
+e
+);
+
+alert(
+"حدث خطأ أثناء إنشاء النسخة الاحتياطية:\n"+
+e.message
+);
+
+}finally{
+
+setTimeout(()=>{
+
+btn.disabled=false;
+
+btn.textContent=
+"💾 نسخة احتياطية Excel";
+
+},1000);
+
+}
+
+};
 
 /* ================= المقاولات ================= */
 
