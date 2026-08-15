@@ -699,19 +699,6 @@ id="logoutBtn">
 
 </div>
 
-<div class="card" id="fullSiteWallet" style="margin-top:20px">
-<h2>💰 محفظة كامل الموقع</h2>
-<div class="stats" style="margin-top:15px">
-<div class="stat"><small>صافي السيولة الحالية</small><strong id="walletBalance" class="income">0 SAR</strong></div>
-<div class="stat"><small>إجمالي الدخل</small><strong id="walletIncome" class="income">0 SAR</strong></div>
-<div class="stat"><small>إجمالي المصروفات</small><strong id="walletExpense" class="expense">0 SAR</strong></div>
-<div class="stat"><small>الربح / الخسارة</small><strong id="walletProfit">0 SAR</strong></div>
-</div>
-</div>
-
-</div>
-
-
 <!-- ================= المقاولات ================= -->
 <div id="contractingSection" style="display:none">
 <div class="card">
@@ -1118,14 +1105,6 @@ class="tab active"
 data-view="projects">
 
 المشاريع
-
-</button>
-
-<button
-class="tab"
-data-view="dashboard">
-
-ملخص عام
 
 </button>
 
@@ -2402,6 +2381,7 @@ navigateTo("servicesSection");
 document.getElementById(
 "srvDate"
 ).value=today();
+document.getElementById("srvExpenseDate").value=today();
 
 renderServices();
 
@@ -2996,7 +2976,7 @@ console.error("Personal Expenses Firebase Error:", error);
 function updateWallet(){
 let income=0, expense=0; const cats={};
 const add=(type,amount,cat)=>{amount=Number(amount)||0;if(type==="income")income+=amount;else{expense+=amount;const c=cat||"عام";cats[c]=(cats[c]||0)+amount;}};
-db.transactions.forEach(t=>add(t.type,t.amount,t.category)); db.officeIncome.forEach(x=>add("income",x.amount,"دخل المكتب")); db.officeExpenses.forEach(x=>add("expense",x.amount,x.name)); db.contracting.forEach(x=>add(x.type,x.amount,x.category)); db.services.forEach(x=>{income+=Number(x.collectedAmount)||0; expense+=Number(x.expense!==undefined?x.expense:Math.max(0,(Number(x.collectedAmount)||0)-(Number(x.profit)||0)))||0;}); db.rentals.forEach(x=>{income+=Number(x.amount)||0;expense+=Number(x.expenseAmount)||0;}); db.propertyExpenses.forEach(x=>{expense+=Number(x.amount)||0;cats[x.category||"عام"]=(cats[x.category||"عام"]||0)+(Number(x.amount)||0);}); db.personalExpenses.forEach(x=>{expense+=Number(x.amount)||0;cats["مصاريف شخصية"]=(cats["مصاريف شخصية"]||0)+(Number(x.amount)||0);});
+db.transactions.forEach(t=>add(t.type,t.amount,t.category)); db.officeIncome.forEach(x=>add("income",x.amount,"دخل المكتب")); db.officeExpenses.forEach(x=>add("expense",x.amount,x.name)); db.contracting.forEach(x=>add(x.type,x.amount,x.category)); db.services.forEach(x=>{if(x.recordType==="general_expense"){expense+=Number(x.amount)||0;}else{income+=Number(x.collectedAmount)||0;expense+=Number(x.expense!==undefined?x.expense:Math.max(0,(Number(x.collectedAmount)||0)-(Number(x.profit)||0)))||0;}}); db.rentals.forEach(x=>{income+=Number(x.amount)||0;expense+=Number(x.expenseAmount)||0;}); db.propertyExpenses.forEach(x=>{expense+=Number(x.amount)||0;cats[x.category||"عام"]=(cats[x.category||"عام"]||0)+(Number(x.amount)||0);}); db.personalExpenses.forEach(x=>{expense+=Number(x.amount)||0;cats["مصاريف شخصية"]=(cats["مصاريف شخصية"]||0)+(Number(x.amount)||0);});
 ["walletIncome","walletExpense","walletProfit","walletBalance"].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.innerHTML=money(i===0?income:i===1?expense:income-expense);});
 const box=document.getElementById("walletCategories");if(box)box.innerHTML=Object.keys(cats).length?`<table><thead><tr><th>التصنيف</th><th>المجموع</th></tr></thead><tbody>${Object.keys(cats).sort().map(c=>`<tr><td>${escapeHTML(c)}</td><td class="expense">${money(cats[c])}</td></tr>`).join("")}</tbody></table>`:`<div class="empty">لا توجد مصروفات</div>`;
 }
@@ -3608,15 +3588,20 @@ if (dataList) {
 }
 
 
+function normalizedCategoryKey(value){
+const text=String(value||"").trim().toLowerCase();
+return text.replace(/[\s\-_.،,]+/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي");
+}
+
 function renderServices(){
-const records=filterBySelectedMonth(db.services,"services");
+const records=filterBySelectedMonth(db.services,"services").slice().sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
 let totalInc=0,totalExpense=0;const summary={},generalExpenses=[];
 records.forEach(s=>{if(s.recordType==="general_expense"){const amount=Number(s.amount)||0;totalExpense+=amount;generalExpenses.push(s);return;}const collected=Number(s.collectedAmount)||0;const expense=s.expense!==undefined?(Number(s.expense)||0):Math.max(0,collected-(Number(s.profit)||0));const profit=collected-expense;totalInc+=collected;totalExpense+=expense;const raw=String(s.category||"عام").trim()||"عام";const key=normalizedCategoryKey(raw);if(!summary[key])summary[key]={label:raw,collected:0,expense:0,profit:0};summary[key].collected+=collected;summary[key].expense+=expense;summary[key].profit+=profit;});
 const linkedProfit=Object.keys(summary).reduce((x,k)=>x+summary[k].profit,0),independentExpense=generalExpenses.reduce((x,s)=>x+(Number(s.amount)||0),0),totalProfit=linkedProfit-independentExpense;
 updateServicesDataList();const filter=document.getElementById("servicesMonthFilter");if(filter)filter.innerHTML=monthFilterHTML("services");document.getElementById("servicesTotalIncome").innerHTML=money(totalInc);document.getElementById("servicesTotalExpense").innerHTML=money(totalExpense);document.getElementById("servicesNetProfit").innerHTML=money(totalProfit);document.getElementById("servicesCategoryCount").textContent=formatNum(Object.keys(summary).length);
 const sumBody=document.getElementById("servicesSummaryBody");sumBody.innerHTML=Object.keys(summary).length?Object.keys(summary).map(k=>`<tr><td><strong>${escapeHTML(summary[k].label)}</strong></td><td class="income">${money(summary[k].collected)}</td><td class="expense">${money(summary[k].expense)}</td><td class="profit-positive">${money(summary[k].profit)}</td></tr>`).join(""):`<tr><td colspan="4"><div class="empty">لا توجد بيانات للخدمات في الفترة المحددة</div></td></tr>`;
-const srvBody=document.getElementById("servicesBody"),incomeRecords=records.filter(s=>s.recordType!=="general_expense");srvBody.innerHTML=incomeRecords.length?incomeRecords.map(s=>{const collected=Number(s.collectedAmount)||0,expense=s.expense!==undefined?(Number(s.expense)||0):Math.max(0,collected-(Number(s.profit)||0)),profit=collected-expense;return `<tr><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','date','date')"><span class="num-val">${escapeHTML(s.date)}</span></td><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','category')"><strong>${escapeHTML(s.category||"عام")}</strong></td><td class="${profitClass(profit)}">${money(profit)}</td><td class="income">${money(collected)}</td><td class="expense">${money(expense)}</td><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','note')">${escapeHTML(s.note||"-")}</td><td><button class="btn blue" onclick="editRecord('services','${s.id}','date,category,note')">تعديل</button> <button class="btn red" onclick="deleteService('${s.id}')">حذف</button></td></tr>`;}).join(""):`<tr><td colspan="7"><div class="empty">لا توجد عمليات دخل خدمات في الفترة المحددة</div></td></tr>`;
-const geBody=document.getElementById("servicesGeneralExpensesBody");geBody.innerHTML=generalExpenses.length?generalExpenses.map(s=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','date','date')"><span class="num-val">${escapeHTML(s.date||"")}</span></td><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','category')"><strong>${escapeHTML(s.category||"عام")}</strong></td><td class="expense">${money(s.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','note')">${escapeHTML(s.note||"-")}</td><td><button class="btn blue" onclick="editRecord('services','${s.id}','date,category,note')">تعديل</button> <button class="btn red" onclick="deleteService('${s.id}')">حذف</button></td></tr>`).join(""):`<tr><td colspan="5"><div class="empty">لا توجد مصروفات مستقلة للخدمات في الفترة المحددة</div></td></tr>`;
+const srvBody=document.getElementById("servicesBody"),incomeRecords=records.filter(s=>s.recordType!=="general_expense");srvBody.innerHTML=incomeRecords.length?incomeRecords.map(s=>{const collected=Number(s.collectedAmount)||0,expense=s.expense!==undefined?(Number(s.expense)||0):Math.max(0,collected-(Number(s.profit)||0)),profit=collected-expense;return `<tr><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','date','date')"><span class="num-val">${escapeHTML(s.date)}</span></td><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','category')"><strong>${escapeHTML(s.category||"عام")}</strong></td><td class="${profitClass(profit)}">${money(profit)}</td><td class="income">${money(collected)}</td><td class="expense">${money(expense)}</td><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','note')">${escapeHTML(s.note||"-")}</td><td><button class="btn blue" onclick="editRecord('services','${s.id}','date,category,collectedAmount,expense,note')">تعديل</button> <button class="btn red" onclick="deleteService('${s.id}')">حذف</button></td></tr>`;}).join(""):`<tr><td colspan="7"><div class="empty">لا توجد عمليات دخل خدمات في الفترة المحددة</div></td></tr>`;
+const geBody=document.getElementById("servicesGeneralExpensesBody");geBody.innerHTML=generalExpenses.length?generalExpenses.map(s=>`<tr><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','date','date')"><span class="num-val">${escapeHTML(s.date||"")}</span></td><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','category')"><strong>${escapeHTML(s.category||"عام")}</strong></td><td class="expense">${money(s.amount)}</td><td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','note')">${escapeHTML(s.note||"-")}</td><td><button class="btn blue" onclick="editRecord('services','${s.id}','date,category,amount,note')">تعديل</button> <button class="btn red" onclick="deleteService('${s.id}')">حذف</button></td></tr>`).join(""):`<tr><td colspan="5"><div class="empty">لا توجد مصروفات مستقلة للخدمات في الفترة المحددة</div></td></tr>`;
 }
 
 document.getElementById("saveServiceTxBtn").onclick=async function(){
@@ -3887,8 +3872,11 @@ const source=db[sourceMap[collectionName]]||[];const current=source.find(x=>x&&x
 if(!current){alert("لم يتم العثور على البيانات.");return;}
 const updates={};
 for(const field of fields.split(",")){
-let label=field;if(field==="date")label="التاريخ";else if(field==="name")label="الاسم / البند";else if(field==="category")label="التصنيف";else if(field==="title")label="اسم العقار";else if(field==="note")label="الملاحظات";else if(field==="unit")label="الوحدة";else if(field==="tenant")label="المستأجر";else if(field==="expenseCategory")label="تصنيف المصروف";
-const val=prompt(`تعديل ${label}:`,current[field]??"");if(val===null)return;updates[field]=val;
+let label=field;if(field==="date")label="التاريخ";else if(field==="name")label="الاسم / البند";else if(field==="category")label="التصنيف";else if(field==="title")label="اسم العقار";else if(field==="note")label="الملاحظات";else if(field==="unit")label="الوحدة";else if(field==="tenant")label="المستأجر";else if(field==="expenseCategory")label="تصنيف المصروف";else if(field==="amount")label="المبلغ";else if(field==="collectedAmount")label="المبلغ المحصل";else if(field==="expense")label="المصروف";
+const val=prompt(`تعديل ${label}:`,current[field]??"");if(val===null)return;
+if(field==="amount"||field==="collectedAmount"||field==="expense"){
+const num=Number(val);if(!(num>=0)){alert("أدخل مبلغ صحيح.");return;}updates[field]=num;
+}else{updates[field]=val;}
 }
 try{await updateDoc(doc(firestore,collectionName,id),updates);renderAfterInlineEdit(collectionName);}catch(e){alert("تعذر التعديل: "+e.message);}
 };
