@@ -4518,50 +4518,75 @@ financialReportRow(["الصافي بعد المصاريف الشخصية",financ
 
 async function generateFinancialReportPDF(){
 
+const button=document.getElementById("generateFinancialReportBtn");
+
+/* نوقف الزر مباشرة حتى يظهر للمستخدم أن التصدير بدأ */
+button.disabled=true;
+button.textContent="جاري إنشاء التقرير...";
+
+let wrapper=null;
+
+try{
+
 if(!auth.currentUser){
-alert("يجب تسجيل الدخول أولاً.");
-return;
+throw new Error("يجب تسجيل الدخول أولاً.");
 }
 
-const button=document.getElementById("generateFinancialReportBtn");
+if(typeof html2pdf !== "function"){
+throw new Error("مكتبة إنشاء PDF لم يتم تحميلها. تأكد من وجود اتصال بالإنترنت ثم أعد فتح الصفحة.");
+}
+
+/* بناء التقرير داخل try حتى تظهر أي مشكلة بدل أن يبدو الزر وكأنه لا يعمل */
 const range=getFinancialReportDateRange();
 const data=financialReportBuildData(range);
 
-const wrapper=document.createElement("div");
-wrapper.style.position="absolute";
+wrapper=document.createElement("div");
+
+/* نضع التقرير داخل الصفحة نفسها بدل إزاحته خارج الشاشة،
+   لأن html2canvas قد يلتقط الإحداثيات بشكل خاطئ عند إخفائه خارج الشاشة. */
+wrapper.style.position="fixed";
 wrapper.style.left="0";
 wrapper.style.top="0";
 wrapper.style.width="210mm";
+wrapper.style.height="auto";
 wrapper.style.margin="0";
 wrapper.style.padding="0";
-wrapper.style.background="#fff";
-wrapper.style.zIndex="999999";
+wrapper.style.background="#ffffff";
+wrapper.style.zIndex="2147483647";
 wrapper.style.pointerEvents="none";
-wrapper.style.opacity="1";
 wrapper.style.direction="rtl";
+wrapper.style.visibility="visible";
+wrapper.style.opacity="1";
+
+/* نخلي العنصر بعيد عن المستخدم بصريًا بدون استخدام left سالب */
+wrapper.style.transform="translateX(-100%)";
 
 wrapper.innerHTML=financialReportBuildHTML(data);
 document.body.appendChild(wrapper);
 
-button.disabled=true;
-button.textContent="جاري إنشاء التقرير...";
-
-try{
-
+/* انتظار اكتمال الرسم قبل التصوير */
 await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
 
 const reportElement=wrapper.querySelector(".financial-report");
 
+if(!reportElement){
+throw new Error("تعذر تجهيز محتوى التقرير.");
+}
+
 const options={
 margin:0,
 filename:`التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf`,
-image:{type:"jpeg",quality:1},
+image:{
+ type:"jpeg",
+ quality:1
+},
 html2canvas:{
 scale:3.5,
 useCORS:true,
 allowTaint:false,
 backgroundColor:"#ffffff",
 logging:false,
+removeContainer:true,
 windowWidth:794,
 windowHeight:1123,
 scrollX:0,
@@ -4578,18 +4603,25 @@ mode:["css","legacy"]
 }
 };
 
-await html2pdf().set(options).from(reportElement).save();
+await html2pdf()
+.set(options)
+.from(reportElement)
+.save();
 
 document.getElementById("financialReportModal").style.display="none";
 
 }catch(error){
 
 console.error("Financial Report PDF Error:",error);
-alert("تعذر إنشاء التقرير PDF:\n"+error.message);
+
+alert("تعذر إنشاء التقرير PDF:\n"+(error?.message||error));
 
 }finally{
 
-if(wrapper.parentNode) wrapper.parentNode.removeChild(wrapper);
+if(wrapper && wrapper.parentNode){
+wrapper.parentNode.removeChild(wrapper);
+}
+
 button.disabled=false;
 button.textContent="📄 إنشاء التقرير PDF";
 
