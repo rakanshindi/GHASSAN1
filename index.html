@@ -13,6 +13,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 
 *{
@@ -507,141 +511,96 @@ margin-top:20px;
 flex-wrap:wrap
 }
 
-/* ================= تنسيق التقرير للطباعة ================= */
-
 .financial-report{
 width:210mm;
-min-height:297mm;
 background:#fff;
 color:#17202a;
-font-family:Arial,Tahoma,"Segoe UI",sans-serif;
-padding:13mm 12mm 12mm;
-direction:rtl;
-font-size:11px;
-line-height:1.55;
--webkit-print-color-adjust:exact;
-print-color-adjust:exact
+font-family:Arial,Tahoma,sans-serif;
+padding:15mm;
+direction:rtl
 }
 
 .financial-report *{
-box-sizing:border-box;
--webkit-print-color-adjust:exact;
-print-color-adjust:exact
+box-sizing:border-box
 }
 
 .report-cover{
-min-height:272mm;
+min-height:245mm;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-page-break-after:always;
-break-after:page;
-page-break-inside:avoid;
-break-inside:avoid
+page-break-after:always
 }
 
 .report-cover-title{
-font-size:31px;
+font-size:30px;
 font-weight:900;
 color:#17324d;
-margin-bottom:9px;
-letter-spacing:-.3px
+margin-bottom:12px
 }
 
 .report-cover-subtitle{
 font-size:17px;
 color:#667085;
-margin-bottom:34px
+margin-bottom:35px
 }
 
 .report-cover-box{
 border:1px solid #d7dce2;
 border-radius:16px;
-padding:24px 42px;
-min-width:130mm;
-background:#fff;
-box-shadow:0 1px 4px rgba(0,0,0,.02)
+padding:25px 45px;
+min-width:130mm
 }
 
 .report-cover-box div{
-margin:9px 0;
+margin:10px 0;
 font-size:14px
 }
 
 .report-section{
-margin-bottom:17px;
-page-break-inside:avoid;
-break-inside:avoid
+margin-bottom:22px;
+page-break-inside:avoid
 }
 
 .report-section-title{
-font-size:19px;
+font-size:18px;
 font-weight:900;
 color:#17324d;
 border-bottom:2px solid #17324d;
-padding-bottom:6px;
-margin-bottom:10px;
-line-height:1.35;
-page-break-after:avoid;
-break-after:avoid
+padding-bottom:7px;
+margin-bottom:12px
 }
 
 .report-text{
 font-size:11px;
-line-height:1.85;
-color:#344054;
-margin:5px 0 0
+line-height:1.8;
+color:#344054
 }
 
 .report-table{
 width:100%;
 border-collapse:collapse;
-table-layout:auto;
-margin-top:8px;
-page-break-inside:auto;
-break-inside:auto
-}
-
-.report-table thead{
-display:table-header-group
-}
-
-.report-table tbody{
-display:table-row-group
-}
-
-.report-table tr{
-page-break-inside:avoid;
-break-inside:avoid
+margin-top:10px
 }
 
 .report-table th,
 .report-table td{
 border:1px solid #d9dee5;
-padding:6px 7px;
+padding:7px 8px;
 font-size:10px;
-text-align:right;
-vertical-align:middle;
-line-height:1.45;
-word-break:normal;
-overflow-wrap:anywhere
+text-align:right
 }
 
 .report-table th{
 background:#17324d;
 color:#fff;
-font-weight:900;
-white-space:nowrap
+font-weight:900
 }
 
 .report-table tr:nth-child(even) td{
 background:#f8fafc
-}
-
-.report-table td:first-child{
-font-weight:700
 }
 
 .report-number{
@@ -654,19 +613,14 @@ display:inline-block
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:8px;
-margin-bottom:13px;
-page-break-inside:avoid;
-break-inside:avoid
+margin-bottom:15px
 }
 
 .report-kpi{
 border:1px solid #e1e6ec;
 border-radius:10px;
-padding:9px;
-background:#f8fafc;
-min-height:45px;
-page-break-inside:avoid;
-break-inside:avoid
+padding:10px;
+background:#f8fafc
 }
 
 .report-kpi-label{
@@ -677,9 +631,7 @@ color:#667085
 .report-kpi-value{
 font-size:15px;
 font-weight:900;
-margin-top:4px;
-line-height:1.2;
-white-space:nowrap
+margin-top:5px
 }
 
 .report-income{
@@ -698,65 +650,17 @@ color:#17324d
 background:#fff7ed;
 border:1px solid #fed7aa;
 border-radius:10px;
-padding:10px 12px;
+padding:10px;
 font-size:10px;
-line-height:1.8;
-page-break-inside:avoid;
-break-inside:avoid
+line-height:1.8
 }
 
 .report-footer-note{
 font-size:9px;
 color:#667085;
 border-top:1px solid #e5e7eb;
-padding-top:8px;
-margin-top:16px;
-page-break-inside:avoid;
-break-inside:avoid
-}
-
-@page{
-size:A4 portrait;
-margin:0
-}
-
-@media print{
-.financial-report{
-width:210mm;
-min-height:297mm;
-padding:13mm 12mm 12mm
-}
-}
-
-@page{
-size:A4 portrait;
-margin:0;
-}
-
-.financial-report{
-width:210mm !important;
-min-height:297mm;
-margin:0 !important;
-box-sizing:border-box !important;
-direction:rtl !important;
-text-align:right;
-overflow:visible !important;
-}
-
-.financial-report .report-section,
-.financial-report .report-kpi,
-.financial-report .report-table{
-break-inside:avoid;
-page-break-inside:avoid;
-}
-
-.financial-report .report-table thead{
-display:table-header-group;
-}
-
-.financial-report .report-table tr{
-break-inside:avoid;
-page-break-inside:avoid;
+padding-top:10px;
+margin-top:20px
 }
 
 @media(max-width:900px){
@@ -5275,13 +5179,23 @@ financialReportBuildData(range);
 const wrapper=
 document.createElement("div");
 
-wrapper.style.position="absolute";
+/*
+   مهم:
+   يتم رسم التقرير داخل الصفحة في موضع طبيعي ومرئي،
+   ثم يتم تحويله إلى صورة PNG عالية الدقة.
+   هذا يمنع مشكلة انزياح النص العربي أو قصه عند html2canvas.
+*/
+
+wrapper.style.position="fixed";
 wrapper.style.left="0";
 wrapper.style.top="0";
 wrapper.style.width="210mm";
-wrapper.style.background="#fff";
-wrapper.style.opacity="0";
+wrapper.style.margin="0";
+wrapper.style.padding="0";
+wrapper.style.background="#ffffff";
+wrapper.style.zIndex="2147483647";
 wrapper.style.pointerEvents="none";
+wrapper.style.overflow="visible";
 
 wrapper.innerHTML=
 financialReportBuildHTML(data);
@@ -5294,70 +5208,202 @@ button.textContent="جاري إنشاء التقرير...";
 try{
 
 await new Promise(resolve=>
-setTimeout(resolve,700)
+requestAnimationFrame(()=>{
+requestAnimationFrame(resolve);
+})
 );
-
-if(document.fonts && document.fonts.ready){
-await document.fonts.ready;
-}
 
 const reportElement=
 wrapper.querySelector(
 ".financial-report"
 );
 
-/* تثبيت مقاس واتجاه التقرير قبل التصوير حتى لا ينزلق محتوى RTL إلى اليسار */
+if(!reportElement){
+
+throw new Error("تعذر العثور على محتوى التقرير.");
+
+}
+
+/*
+   تثبيت مقاس التقرير أثناء التصوير.
+   210mm = عرض A4.
+*/
+
 reportElement.style.width="210mm";
-reportElement.style.minHeight="297mm";
+reportElement.style.minWidth="210mm";
+reportElement.style.maxWidth="210mm";
 reportElement.style.margin="0";
-reportElement.style.padding="15mm";
+reportElement.style.background="#ffffff";
 reportElement.style.direction="rtl";
-reportElement.style.textAlign="right";
 
-const options={
+/*
+   تحويل التقرير بالكامل إلى صورة عالية الدقة.
+   scale = 3 يعطي دقة مناسبة جدًا للطباعة.
+*/
 
-margin:0,
-
-filename:
-`التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf`,
-
-image:{
-type:"png"
-},
-
-html2canvas:{
-scale:3.5,
+const canvas=
+await html2canvas(
+reportElement,
+{
+scale:3,
 useCORS:true,
 allowTaint:false,
 backgroundColor:"#ffffff",
 logging:false,
 imageTimeout:0,
-windowWidth:794,
-windowHeight:1123,
+removeContainer:true,
 scrollX:0,
 scrollY:0,
-letterRendering:true
-},
+width:reportElement.scrollWidth,
+height:reportElement.scrollHeight,
+windowWidth:reportElement.scrollWidth,
+windowHeight:reportElement.scrollHeight
+}
+);
 
-jsPDF:{
+if(
+!canvas ||
+!canvas.width ||
+!canvas.height
+){
+
+throw new Error("تعذر تحويل التقرير إلى صورة.");
+
+}
+
+/*
+   إنشاء PDF جديد، ثم وضع صورة التقرير داخله.
+   بهذه الطريقة لا يتم وضع النص العربي كعناصر PDF،
+   بل يتم إدخاله كصورة واضحة، وبالتالي لا يحدث انزياح
+   أو تداخل في النص.
+*/
+
+const jspdfNamespace=
+window.jspdf;
+
+if(
+!jspdfNamespace ||
+!jspdfNamespace.jsPDF
+){
+
+throw new Error("مكتبة إنشاء PDF غير متوفرة.");
+
+}
+
+const {jsPDF}=
+jspdfNamespace;
+
+const pdf=
+new jsPDF(
+{
 unit:"mm",
 format:"a4",
 orientation:"portrait",
-compress:true,
-putOnlyUsedFonts:true
-},
+compress:true
+}
+);
 
-pagebreak:{
-mode:["css","legacy"],
-avoid:[".report-section",".report-kpi",".report-warning",".report-table tr"]
+const pageWidth=210;
+const pageHeight=297;
+
+/*
+   نحسب ارتفاع الجزء الذي يساوي صفحة A4 كاملة
+   بناءً على عرض الصورة الحقيقي.
+*/
+
+const pageHeightPx=
+Math.floor(
+canvas.width*
+(pageHeight/pageWidth)
+);
+
+let sourceY=0;
+let pageNumber=0;
+
+while(sourceY<canvas.height){
+
+const remaining=
+canvas.height-sourceY;
+
+const sliceHeight=
+Math.min(
+pageHeightPx,
+remaining
+);
+
+const pageCanvas=
+document.createElement("canvas");
+
+pageCanvas.width=
+canvas.width;
+
+pageCanvas.height=
+sliceHeight;
+
+const pageContext=
+pageCanvas.getContext("2d");
+
+pageContext.imageSmoothingEnabled=true;
+pageContext.imageSmoothingQuality="high";
+
+pageContext.fillStyle="#ffffff";
+pageContext.fillRect(
+0,
+0,
+pageCanvas.width,
+pageCanvas.height
+);
+
+pageContext.drawImage(
+canvas,
+0,
+sourceY,
+canvas.width,
+sliceHeight,
+0,
+0,
+pageCanvas.width,
+sliceHeight
+);
+
+const imageData=
+pageCanvas.toDataURL(
+"image/png"
+);
+
+const imageHeight=
+(sliceHeight/canvas.width)*
+pageWidth;
+
+if(pageNumber>0){
+
+pdf.addPage();
+
 }
 
-};
+pdf.addImage(
+imageData,
+"PNG",
+0,
+0,
+pageWidth,
+imageHeight,
+undefined,
+"FAST"
+);
 
-await html2pdf()
-.set(options)
-.from(reportElement)
-.save();
+sourceY+=sliceHeight;
+pageNumber++;
+
+}
+
+/*
+   حفظ الملف.
+*/
+
+pdf.save(
+`التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf`
+);
 
 document.getElementById(
 "financialReportModal"
@@ -5377,10 +5423,16 @@ error.message
 
 }finally{
 
-document.body.removeChild(wrapper);
+if(wrapper.parentNode){
+
+wrapper.parentNode.removeChild(wrapper);
+
+}
 
 button.disabled=false;
-button.textContent="📄 إنشاء التقرير PDF";
+
+button.textContent=
+"📄 إنشاء التقرير PDF";
 
 }
 
@@ -5390,6 +5442,7 @@ document.getElementById(
 "generateFinancialReportBtn"
 ).onclick=
 generateFinancialReportPDF;
+
 
 /* ================= النسخة الاحتياطية الكاملة Excel ================= */
 
