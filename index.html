@@ -5158,7 +5158,7 @@ financialReportEsc(data.personalExpenses.length)
 
 }
 
-async async function generateFinancialReportPDF(){
+async function generateFinancialReportPDF(){
 
 if(!auth.currentUser){
 
@@ -5168,11 +5168,210 @@ return;
 
 }
 
-const button=
-document.getElementById(
-"generateFinancialReportBtn"
-).onclick=
-generateFinancialReportPDF;
+const button=document.getElementById("generateFinancialReportBtn");
+const range=getFinancialReportDateRange();
+const data=financialReportBuildData(range);
+
+button.disabled=true;
+button.textContent="جاري إنشاء التقرير...";
+
+let staging=null;
+
+try{
+
+/*
+   مهم للجوال:
+   لا يتم تصوير التقرير الكامل كـCanvas واحد، ولا يتم وضعه خارج الشاشة.
+   يتم تصوير كل قسم داخل مساحة صفحة A4 صغيرة، ثم تقسيم القسم الطويل إلى لقطات
+   مستقلة. هذا يمنع تجاوز حد Canvas في iPhone/Safari الذي كان ينتج صفحات بيضاء.
+*/
+
+staging=document.createElement("div");
+staging.style.position="absolute";
+staging.style.left="0";
+staging.style.top="0";
+staging.style.width="794px";
+staging.style.minWidth="794px";
+staging.style.background="#fff";
+staging.style.zIndex="999999";
+staging.style.pointerEvents="none";
+staging.style.overflow="visible";
+staging.style.fontFamily="Arial,Tahoma,sans-serif";
+
+staging.innerHTML=financialReportBuildHTML(data);
+document.body.appendChild(staging);
+
+afterPaint();
+
+async function afterPaint(){
+return new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+}
+
+const reportElement=staging.querySelector(".financial-report");
+
+if(!reportElement){
+throw new Error("تعذر تجهيز التقرير.");
+}
+
+const reportParts=[
+reportElement.querySelector(".report-cover"),
+...reportElement.querySelectorAll(".report-section")
+].filter(Boolean);
+
+if(!reportParts.length){
+throw new Error("لا توجد أقسام قابلة للطباعة في التقرير.");
+}
+
+const pdf=new jspdf.jsPDF({
+unit:"mm",
+format:"a4",
+orientation:"portrait",
+compress:true
+});
+
+const pageWidth=210;
+const pageHeight=297;
+const margin=15;
+const contentWidth=pageWidth-(margin*2);
+const contentHeight=pageHeight-(margin*2);
+
+/* 96 CSS px تقريبًا لكل 25.4mm */
+const pageWidthPx=794;
+const pageHeightPx=1123;
+
+const canvasScale=1;
+let firstPage=true;
+
+for(const part of reportParts){
+
+const pageHost=document.createElement("div");
+pageHost.className="financial-report";
+pageHost.style.position="absolute";
+pageHost.style.left="0";
+pageHost.style.top="0";
+pageHost.style.width="794px";
+pageHost.style.minWidth="794px";
+pageHost.style.height=pageHeightPx+"px";
+pageHost.style.minHeight=pageHeightPx+"px";
+pageHost.style.padding="57px";
+pageHost.style.margin="0";
+pageHost.style.background="#fff";
+pageHost.style.color="#17202a";
+pageHost.style.overflow="hidden";
+pageHost.style.direction="rtl";
+pageHost.style.fontFamily="Arial,Tahoma,sans-serif";
+pageHost.style.boxSizing="border-box";
+
+const clone=part.cloneNode(true);
+clone.style.margin="0";
+clone.style.pageBreakBefore="auto";
+clone.style.breakBefore="auto";
+clone.style.pageBreakAfter="auto";
+clone.style.breakAfter="auto";
+clone.style.pageBreakInside="auto";
+clone.style.breakInside="auto";
+clone.style.width="100%";
+clone.style.minWidth="0";
+
+pageHost.appendChild(clone);
+document.body.appendChild(pageHost);
+
+await afterPaint();
+
+/* ارتفاع المحتوى الحقيقي قبل القص */
+const contentHeightPx=Math.max(
+1,
+Math.ceil(clone.scrollHeight||clone.getBoundingClientRect().height||1)
+);
+
+const viewportHeightPx=pageHeightPx-114;
+
+let offset=0;
+
+while(offset<contentHeightPx){
+
+clone.style.transform=`translateY(-${offset}px)`;
+clone.style.transformOrigin="top right";
+
+await afterPaint();
+
+const canvas=await html2canvas(pageHost,{
+scale:canvasScale,
+width:pageWidthPx,
+height:pageHeightPx,
+windowWidth:pageWidthPx,
+windowHeight:pageHeightPx,
+useCORS:true,
+allowTaint:false,
+backgroundColor:"#ffffff",
+logging:false,
+foreignObjectRendering:false,
+scrollX:0,
+scrollY:0
+});
+
+if(!canvas || !canvas.width || !canvas.height){
+throw new Error("تعذر رسم صفحة من التقرير.");
+}
+
+if(!firstPage){
+pdf.addPage();
+}
+firstPage=false;
+
+const imageData=canvas.toDataURL("image/jpeg",0.94);
+
+pdf.addImage(
+imageData,
+"JPEG",
+0,
+0,
+pageWidth,
+pageHeight,
+undefined,
+"FAST"
+);
+
+/* لا نكرر نفس الجزء بلا نهاية */
+if(contentHeightPx<=viewportHeightPx){
+break;
+}
+
+offset+=viewportHeightPx;
+
+}
+
+document.body.removeChild(pageHost);
+
+}
+
+pdf.save(`التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf`);
+
+document.getElementById("financialReportModal").style.display="none";
+
+}catch(error){
+
+console.error("Financial Report PDF Error:",error);
+
+alert(
+"تعذر إنشاء التقرير PDF:\n"+
+(error&&error.message?error.message:error)
+);
+
+}finally{
+
+if(staging&&staging.parentNode){
+staging.parentNode.removeChild(staging);
+}
+
+button.disabled=false;
+button.textContent="📄 إنشاء التقرير PDF";
+
+}
+
+}
+
+document.getElementById("generateFinancialReportBtn").onclick=generateFinancialReportPDF;
 
 /* ================= النسخة الاحتياطية الكاملة Excel ================= */
 
