@@ -12,6 +12,8 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 
@@ -4541,7 +4543,7 @@ return;
 }
 
 button.disabled=true;
-button.textContent="جاري إنشاء التقرير...";
+button.textContent="جاري تجهيز التقرير...";
 
 let wrapper=null;
 
@@ -4551,23 +4553,34 @@ if(!auth.currentUser){
 throw new Error("يجب تسجيل الدخول أولاً.");
 }
 
-if(typeof window.html2pdf!=="function"){
-throw new Error("مكتبة إنشاء PDF غير محملة. تأكد من الاتصال بالإنترنت ثم أعد فتح الصفحة.");
+if(typeof window.html2canvas!=="function"){
+throw new Error("مكتبة تحويل التقرير إلى صورة غير محملة. تأكد من الاتصال بالإنترنت ثم أعد فتح الصفحة.");
+}
+
+if(!window.jspdf || typeof window.jspdf.jsPDF!=="function"){
+throw new Error("مكتبة PDF غير محملة. تأكد من الاتصال بالإنترنت ثم أعد فتح الصفحة.");
 }
 
 const range=getFinancialReportDateRange();
 const data=financialReportBuildData(range);
 
+/*
+  طريقة التصدير الجديدة:
+  كل .report-page يتم تصويره كصورة مستقلة عالية الدقة،
+  ثم توضع الصورة مباشرة على صفحة A4 واحدة في jsPDF.
+  بهذه الطريقة لا يوجد html2pdf pagination ولا إعادة حساب RTL
+  ولا انحراف للمحتوى إلى اليسار.
+*/
 wrapper=document.createElement("div");
-wrapper.style.position="absolute";
-wrapper.style.left="0";
+wrapper.style.position="fixed";
+wrapper.style.left="-100000px";
 wrapper.style.top="0";
 wrapper.style.width="210mm";
 wrapper.style.minWidth="210mm";
 wrapper.style.margin="0";
 wrapper.style.padding="0";
 wrapper.style.background="#ffffff";
-wrapper.style.zIndex="999999";
+wrapper.style.zIndex="-1";
 wrapper.style.pointerEvents="none";
 wrapper.style.direction="rtl";
 wrapper.style.overflow="visible";
@@ -4591,40 +4604,86 @@ if(!reportElement){
 throw new Error("تعذر تجهيز محتوى التقرير المالي.");
 }
 
-if(!reportElement.innerHTML.trim()){
-throw new Error("محتوى التقرير المالي فارغ.");
+const pages=Array.from(reportElement.querySelectorAll(":scope > .report-page"));
+
+if(!pages.length){
+throw new Error("لم يتم العثور على صفحات التقرير.");
 }
 
-const options={
-margin:0,
-filename:`التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf`,
-image:{type:"png"},
-html2canvas:{
-scale:3,
+const {jsPDF}=window.jspdf;
+const pdf=new jsPDF({
+unit:"mm",
+format:"a4",
+orientation:"portrait",
+compress:true,
+putOnlyUsedFonts:true
+});
+
+const A4_WIDTH_MM=210;
+const A4_HEIGHT_MM=297;
+const RENDER_SCALE=3.5;
+
+for(let i=0;i<pages.length;i++){
+
+const page=pages[i];
+
+button.textContent=`جاري تجهيز التقرير... ${i+1} / ${pages.length}`;
+
+/*
+  نعطي الصفحة عرضها الحقيقي قبل التصوير.
+  لا نستخدم width:794px ولا windowWidth ثابت،
+  لأن ذلك كان سبب انزياح التقرير في النسخ السابقة.
+*/
+page.style.width="210mm";
+page.style.height="297mm";
+page.style.minWidth="210mm";
+page.style.minHeight="297mm";
+page.style.maxWidth="210mm";
+page.style.maxHeight="297mm";
+page.style.margin="0";
+page.style.transform="none";
+page.style.left="0";
+page.style.right="auto";
+
+const canvas=await window.html2canvas(page,{
+scale:RENDER_SCALE,
 useCORS:true,
 allowTaint:false,
 backgroundColor:"#ffffff",
 logging:false,
 removeContainer:true,
+foreignObjectRendering:false,
+imageTimeout:15000,
 scrollX:0,
 scrollY:0,
-windowWidth:794,
-windowHeight:Math.max(1123,reportElement.scrollHeight),
-width:794,
-letterRendering:true
-},
-jsPDF:{
-unit:"mm",
-format:"a4",
-orientation:"portrait",
-compress:true
-},
-pagebreak:{
-mode:["css","legacy"]
-}
-};
+windowWidth:Math.max(document.documentElement.clientWidth,1024),
+windowHeight:Math.max(document.documentElement.clientHeight,1200)
+});
 
-await html2pdf().set(options).from(reportElement).save();
+const imageData=canvas.toDataURL("image/png",1.0);
+
+if(i>0){
+pdf.addPage("a4","portrait");
+}
+
+pdf.addImage(
+imageData,
+"PNG",
+0,
+0,
+A4_WIDTH_MM,
+A4_HEIGHT_MM,
+undefined,
+"FAST"
+);
+
+/* تحرير الذاكرة بعد كل صفحة */
+canvas.width=1;
+canvas.height=1;
+
+}
+
+pdf.save(`التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf`);
 
 document.getElementById("financialReportModal").style.display="none";
 
