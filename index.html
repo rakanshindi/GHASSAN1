@@ -570,6 +570,12 @@ page-break-before:always;
 break-before:page
 }
 
+.report-subsection{
+margin-bottom:18px;
+page-break-inside:auto;
+break-inside:auto
+}
+
 .report-section-title{
 font-size:18px;
 font-weight:900;
@@ -4177,302 +4183,150 @@ function financialReportBuildHTML(data){
 const range=data.range;
 
 const businessMargin=
-data.totalBusinessIncome?
-data.businessProfit/data.totalBusinessIncome*100:
-0;
+ data.totalBusinessIncome?
+ data.businessProfit/data.totalBusinessIncome*100:
+ 0;
 
 const expenseRatio=
-data.totalBusinessIncome?
-data.totalBusinessExpense/data.totalBusinessIncome*100:
-0;
+ data.totalBusinessIncome?
+ data.totalBusinessExpense/data.totalBusinessIncome*100:
+ 0;
 
 const projectRows=
-data.projects
-.map(p=>{
+ data.projects
+ .map(p=>{
 
-let inc=0;
-let exp=0;
+  let inc=0;
+  let exp=0;
 
-data.transactions
-.filter(t=>t.projectId===p.id)
-.forEach(t=>{
+  data.transactions
+  .filter(t=>t.projectId===p.id)
+  .forEach(t=>{
 
-if(t.type==="income")
-inc+=Number(t.amount)||0;
-else
-exp+=Number(t.amount)||0;
+   if(t.type==="income") inc+=Number(t.amount)||0;
+   else exp+=Number(t.amount)||0;
 
-});
+  });
 
-const net=inc-exp;
+  const net=inc-exp;
 
-return financialReportRow([
-
-financialReportEsc(p.name),
-
-financialReportMoney(inc),
-
-financialReportMoney(exp),
-
-financialReportMoney(net),
-
-p.status==="closed"?
-"مغلق":
-"مفتوح"
-
-]);
-
-})
-.filter(row=>row);
+  return financialReportRow([
+   financialReportEsc(p.name),
+   financialReportMoney(inc),
+   financialReportMoney(exp),
+   financialReportMoney(net),
+   p.status==="closed"?"مغلق":"مفتوح"
+  ]);
+ })
+ .filter(row=>row);
 
 const transactionCategories={};
 
 data.transactions.forEach(t=>{
-
-if(t.type==="expense"){
-
-financialReportAddCategory(
-transactionCategories,
-t.category,
-t.amount
-);
-
-}
-
+ if(t.type==="expense"){
+  financialReportAddCategory(transactionCategories,t.category,t.amount);
+ }
 });
 
 const officeExpenseCategories={};
 
 data.officeExpenses.forEach(x=>{
-
-financialReportAddCategory(
-officeExpenseCategories,
-x.name,
-x.amount
-);
-
+ financialReportAddCategory(officeExpenseCategories,x.name,x.amount);
 });
 
-const incomeSourceRows=[
-
-financialReportRow([
-"المشاريع",
-financialReportMoney(data.projectIncome),
-financialReportPercent(
-data.totalBusinessIncome?
-data.projectIncome/data.totalBusinessIncome*100:
-0
-)
-]),
-
-financialReportRow([
-"دخل المكتب",
-financialReportMoney(data.officeIncomeTotal),
-financialReportPercent(
-data.totalBusinessIncome?
-data.officeIncomeTotal/data.totalBusinessIncome*100:
-0
-)
-]),
-
-financialReportRow([
-"المقاولات",
-financialReportMoney(data.contractingIncome),
-financialReportPercent(
-data.totalBusinessIncome?
-data.contractingIncome/data.totalBusinessIncome*100:
-0
-)
-]),
-
-financialReportRow([
-"الخدمات",
-financialReportMoney(data.servicesIncome),
-financialReportPercent(
-data.totalBusinessIncome?
-data.servicesIncome/data.totalBusinessIncome*100:
-0
-)
-]),
-
-financialReportRow([
-"إيجارات العقارات",
-financialReportMoney(data.rentalIncome),
-financialReportPercent(
-data.totalBusinessIncome?
-data.rentalIncome/data.totalBusinessIncome*100:
-0
-)
-])
-
-];
-
-const expenseSourceRows=[
-
-financialReportRow([
-"مصاريف المشاريع",
-financialReportMoney(data.projectExpense),
-financialReportPercent(
-data.totalBusinessExpense?
-data.projectExpense/data.totalBusinessExpense*100:
-0
-)
-]),
-
-financialReportRow([
-"مصاريف المكتب",
-financialReportMoney(data.officeExpenseTotal),
-financialReportPercent(
-data.totalBusinessExpense?
-data.officeExpenseTotal/data.totalBusinessExpense*100:
-0
-)
-]),
-
-financialReportRow([
-"مصاريف المقاولات",
-financialReportMoney(data.contractingExpense),
-financialReportPercent(
-data.totalBusinessExpense?
-data.contractingExpense/data.totalBusinessExpense*100:
-0
-)
-]),
-
-financialReportRow([
-"مصاريف الخدمات",
-financialReportMoney(data.servicesExpense),
-financialReportPercent(
-data.totalBusinessExpense?
-data.servicesExpense/data.totalBusinessExpense*100:
-0
-)
-]),
-
-financialReportRow([
-"مصاريف الإيجارات والعقارات",
-financialReportMoney(
-data.rentalExpense+
-data.propertyExpenseTotal
-),
-financialReportPercent(
-data.totalBusinessExpense?
-(data.rentalExpense+data.propertyExpenseTotal)/
-data.totalBusinessExpense*100:
-0
-)
-])
-
-];
-
 const contractingIncomeRows=
-financialReportSortedCategories(
-data.contractingIncomeCategories
-).map(x=>
-financialReportRow([
-financialReportEsc(x.label),
-financialReportMoney(x.total)
-])
-);
+ financialReportSortedCategories(data.contractingIncomeCategories).map(x=>
+  financialReportRow([
+   financialReportEsc(x.label),
+   financialReportMoney(x.total)
+  ])
+ );
 
 const contractingExpenseRows=
-financialReportSortedCategories(
-data.contractingExpenseCategories
-).map(x=>
-financialReportRow([
-financialReportEsc(x.label),
-financialReportMoney(x.total)
-])
-);
+ financialReportSortedCategories(data.contractingExpenseCategories).map(x=>
+  financialReportRow([
+   financialReportEsc(x.label),
+   financialReportMoney(x.total)
+  ])
+ );
 
 const serviceRows=
-Object.values(data.servicesCategories)
-.sort((a,b)=>b.profit-a.profit)
-.map(x=>
-financialReportRow([
-financialReportEsc(x.label),
-financialReportMoney(x.income),
-financialReportMoney(x.expense),
-financialReportMoney(x.profit)
-])
-);
+ Object.values(data.servicesCategories)
+ .sort((a,b)=>b.profit-a.profit)
+ .map(x=>
+  financialReportRow([
+   financialReportEsc(x.label),
+   financialReportMoney(x.income),
+   financialReportMoney(x.expense),
+   financialReportMoney(x.profit)
+  ])
+ );
 
 const propertyRows=
-Object.entries(data.rentalByProperty)
-.sort((a,b)=>
-(b[1].income-b[1].expense)-
-(a[1].income-a[1].expense)
-)
-.map(([name,x])=>
-financialReportRow([
-financialReportEsc(name),
-financialReportMoney(x.income),
-financialReportMoney(x.expense),
-financialReportMoney(
-x.income-x.expense
-),
-financialReportMoney(x.activeDeposits)
-])
-);
+ Object.entries(data.rentalByProperty)
+ .sort((a,b)=>(b[1].income-b[1].expense)-(a[1].income-a[1].expense))
+ .map(([name,x])=>
+  financialReportRow([
+   financialReportEsc(name),
+   financialReportMoney(x.income),
+   financialReportMoney(x.expense),
+   financialReportMoney(x.income-x.expense),
+   financialReportMoney(x.activeDeposits)
+  ])
+ );
 
 const projectCategoryRows=
-financialReportSortedCategories(
-transactionCategories
-).map(x=>
-financialReportRow([
-financialReportEsc(x.label),
-financialReportMoney(x.total)
-])
-);
+ financialReportSortedCategories(transactionCategories).map(x=>
+  financialReportRow([
+   financialReportEsc(x.label),
+   financialReportMoney(x.total)
+  ])
+ );
 
 const officeCategoryRows=
-financialReportSortedCategories(
-officeExpenseCategories
-).map(x=>
-financialReportRow([
-financialReportEsc(x.label),
-financialReportMoney(x.total)
-])
-);
+ financialReportSortedCategories(officeExpenseCategories).map(x=>
+  financialReportRow([
+   financialReportEsc(x.label),
+   financialReportMoney(x.total)
+  ])
+ );
 
 const propertyCategoryRows=
-financialReportSortedCategories(
-data.propertyExpenseCategories
-).map(x=>
-financialReportRow([
-financialReportEsc(x.label),
-financialReportMoney(x.total)
-])
-);
+ financialReportSortedCategories(data.propertyExpenseCategories).map(x=>
+  financialReportRow([
+   financialReportEsc(x.label),
+   financialReportMoney(x.total)
+  ])
+ );
 
 const personalRows=
-data.personalExpenses
-.sort(
-(a,b)=>
-String(b.date||"")
-.localeCompare(
-String(a.date||"")
-)
-)
-.map(x=>
-financialReportRow([
-financialReportEsc(x.date),
-financialReportEsc(x.note||"-"),
-financialReportMoney(x.amount)
-])
-);
+ data.personalExpenses
+ .slice()
+ .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))
+ .map(x=>
+  financialReportRow([
+   financialReportEsc(x.date),
+   financialReportEsc(x.note||"-"),
+   financialReportMoney(x.amount)
+  ])
+ );
 
-const activeDepositCurrent=
-data.currentActiveDeposits;
+const officeProfit=
+ data.officeIncomeTotal-data.officeExpenseTotal;
 
-const reportCash=
-data.totalBusinessIncome-
-data.totalBusinessExpense;
+const contractingProfit=
+ data.contractingIncome-data.contractingExpense;
 
-const reportStatus=
-data.businessProfit>=0?
-"النشاط حقق صافي ربح خلال الفترة.":
-"النشاط حقق صافي خسارة خلال الفترة.";
+const projectsProfit=
+ data.projectIncome-data.projectExpense;
+
+const servicesProfit=
+ data.servicesIncome-data.servicesExpense;
+
+const rentalsProfit=
+ data.rentalIncome-data.rentalExpense-data.propertyExpenseTotal;
+
+const activeDepositCurrent=data.currentActiveDeposits;
 
 return `
 
@@ -4480,678 +4334,349 @@ return `
 
 <div class="report-cover">
 
-<div class="report-cover-title">
-التقرير المالي الشامل
-</div>
-
-<div class="report-cover-subtitle">
-نظام الإدارة الشامل
-</div>
+<div class="report-cover-title">التقرير المالي الشامل</div>
+<div class="report-cover-subtitle">نظام الإدارة الشامل</div>
 
 <div class="report-cover-box">
-
-<div>
-<strong>الفترة المالية:</strong>
-${financialReportEsc(range.label)}
-</div>
-
-<div>
-<strong>من:</strong>
-${financialReportEsc(range.start)}
-</div>
-
-<div>
-<strong>إلى:</strong>
-${financialReportEsc(range.end)}
-</div>
-
-<div>
-<strong>تاريخ إصدار التقرير:</strong>
-${financialReportEsc(
-new Date().toLocaleDateString("ar-SA")
-)}
+<div><strong>الفترة المالية:</strong> ${financialReportEsc(range.label)}</div>
+<div><strong>من:</strong> ${financialReportEsc(range.start)}</div>
+<div><strong>إلى:</strong> ${financialReportEsc(range.end)}</div>
+<div><strong>تاريخ إصدار التقرير:</strong> ${financialReportEsc(new Date().toLocaleDateString("ar-SA"))}</div>
 </div>
 
 </div>
 
-</div>
-
+<!-- ================= المكتب ================= -->
 <div class="report-section">
 
-<div class="report-section-title">
-1. الملخص التنفيذي
-</div>
+<div class="report-section-title">🏢 المكتب</div>
 
 <div class="report-kpis">
-
-<div class="report-kpi">
-<div class="report-kpi-label">إجمالي دخل النشاط</div>
-<div class="report-kpi-value report-income">
-${financialReportMoney(data.totalBusinessIncome)}
-</div>
+<div class="report-kpi"><div class="report-kpi-label">دخل المكتب</div><div class="report-kpi-value report-income">${financialReportMoney(data.officeIncomeTotal)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">مصاريف المكتب</div><div class="report-kpi-value report-expense">${financialReportMoney(data.officeExpenseTotal)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">صافي المكتب</div><div class="report-kpi-value report-profit">${financialReportMoney(officeProfit)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">عدد عمليات الدخل</div><div class="report-kpi-value">${financialReportEsc(data.officeIncome.length)}</div></div>
 </div>
 
-<div class="report-kpi">
-<div class="report-kpi-label">إجمالي مصروفات النشاط</div>
-<div class="report-kpi-value report-expense">
-${financialReportMoney(data.totalBusinessExpense)}
-</div>
-</div>
-
-<div class="report-kpi">
-<div class="report-kpi-label">صافي الربح</div>
-<div class="report-kpi-value report-profit">
-${financialReportMoney(data.businessProfit)}
-</div>
-</div>
-
-<div class="report-kpi">
-<div class="report-kpi-label">هامش صافي الربح</div>
-<div class="report-kpi-value">
-${financialReportPercent(businessMargin)}
-</div>
-</div>
-
-</div>
-
-<p class="report-text">
-${reportStatus}
-بلغ إجمالي دخل النشاط
-<strong>${financialReportMoney(data.totalBusinessIncome)}</strong>
-مقابل مصروفات قدرها
-<strong>${financialReportMoney(data.totalBusinessExpense)}</strong>
-ليكون صافي النتيجة
-<strong>${financialReportMoney(data.businessProfit)}</strong>.
-</p>
-
-</div>
-
-<div class="report-section">
-
-<div class="report-section-title">
-2. قائمة الدخل
-</div>
-
+<div class="report-subsection">
+<div class="report-section-title">ملخص المكتب</div>
 ${financialReportTable([
-
-financialReportRow([
-"إجمالي الإيرادات",
-financialReportMoney(data.totalBusinessIncome)
-]),
-
-financialReportRow([
-"إجمالي مصروفات النشاط",
-financialReportMoney(data.totalBusinessExpense)
-]),
-
-financialReportRow([
-"صافي الربح / الخسارة",
-financialReportMoney(data.businessProfit)
-]),
-
-financialReportRow([
-"هامش صافي الربح",
-financialReportPercent(businessMargin)
-]),
-
-financialReportRow([
-"نسبة المصروفات إلى الإيرادات",
-financialReportPercent(expenseRatio)
-])
-
+ financialReportRow(["دخل المكتب",financialReportMoney(data.officeIncomeTotal)]),
+ financialReportRow(["مصاريف المكتب",financialReportMoney(data.officeExpenseTotal)]),
+ financialReportRow(["صافي المكتب",financialReportMoney(officeProfit)]),
+ financialReportRow(["عدد عمليات الدخل",financialReportEsc(data.officeIncome.length)]),
+ financialReportRow(["عدد المصروفات",financialReportEsc(data.officeExpenses.length)])
 ],["البيان","القيمة"])}
-
 </div>
 
-<div class="report-section">
-
-<div class="report-section-title">
-3. تحليل الإيرادات حسب النشاط
+<div class="report-subsection">
+<div class="report-section-title">مصروفات المكتب حسب البند</div>
+${financialReportTable(officeCategoryRows,["البند","إجمالي المصروف"])}
 </div>
 
+<div class="report-subsection">
+<div class="report-section-title">جميع عمليات دخل المكتب</div>
 ${financialReportTable(
-incomeSourceRows,
-["مصدر الإيراد","المبلغ","النسبة"]
+ data.officeIncome.map(x=>financialReportRow([
+  financialReportEsc(x.date),
+  financialReportEsc(x.name||"-"),
+  financialReportMoney(x.amount),
+  financialReportEsc(x.note||"-")
+ ])),
+ ["التاريخ","الاسم","المبلغ","الملاحظات"]
 )}
-
 </div>
 
-<div class="report-section">
-
-<div class="report-section-title">
-4. تحليل المصروفات حسب النشاط
-</div>
-
+<div class="report-subsection">
+<div class="report-section-title">جميع مصروفات المكتب</div>
 ${financialReportTable(
-expenseSourceRows,
-["مصدر المصروف","المبلغ","النسبة"]
+ data.officeExpenses.map(x=>financialReportRow([
+  financialReportEsc(x.date),
+  financialReportEsc(x.name||"-"),
+  financialReportMoney(x.amount),
+  financialReportEsc(x.note||"-")
+ ])),
+ ["التاريخ","البند","المبلغ","الملاحظات"]
 )}
+</div>
 
 </div>
 
+<!-- ================= المقاولات ================= -->
 <div class="report-section">
 
-<div class="report-section-title">
-5. المشاريع
+<div class="report-section-title">🏢 المقاولات</div>
+
+<div class="report-kpis">
+<div class="report-kpi"><div class="report-kpi-label">إجمالي الدخل</div><div class="report-kpi-value report-income">${financialReportMoney(data.contractingIncome)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">إجمالي المصروف</div><div class="report-kpi-value report-expense">${financialReportMoney(data.contractingExpense)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">صافي الربح</div><div class="report-kpi-value report-profit">${financialReportMoney(contractingProfit)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">عدد العمليات</div><div class="report-kpi-value">${financialReportEsc(data.contracting.length)}</div></div>
 </div>
 
-<p class="report-text">
-عدد المشاريع المسجلة في النظام:
-<strong>${financialReportEsc(data.projectsCount)}</strong>
-</p>
-
-${financialReportTable(
-projectRows,
-["المشروع","الدخل","المصروف","الصافي","الحالة"]
-)}
-
-</div>
-
-<div class="report-section">
-
-<div class="report-section-title">
-6. مصروفات المشاريع حسب التصنيف
-</div>
-
-${financialReportTable(
-projectCategoryRows,
-["التصنيف","إجمالي المصروف"]
-)}
-
-</div>
-
-<div class="report-section">
-
-<div class="report-section-title">
-7. المكتب
-</div>
-
+<div class="report-subsection">
+<div class="report-section-title">ملخص المقاولات</div>
 ${financialReportTable([
-
-financialReportRow([
-"دخل المكتب",
-financialReportMoney(data.officeIncomeTotal)
-]),
-
-financialReportRow([
-"مصاريف المكتب",
-financialReportMoney(data.officeExpenseTotal)
-]),
-
-financialReportRow([
-"صافي المكتب",
-financialReportMoney(
-data.officeIncomeTotal-
-data.officeExpenseTotal
-)
-])
-
+ financialReportRow(["دخل المقاولات",financialReportMoney(data.contractingIncome)]),
+ financialReportRow(["مصروفات المقاولات",financialReportMoney(data.contractingExpense)]),
+ financialReportRow(["صافي المقاولات",financialReportMoney(contractingProfit)]),
+ financialReportRow(["عدد العمليات",financialReportEsc(data.contracting.length)])
 ],["البيان","القيمة"])}
-
 </div>
 
-<div class="report-section">
-
-<div class="report-section-title">
-8. مصروفات المكتب حسب البند
+<div class="report-subsection">
+<div class="report-section-title">ملخص تصنيف الدخل</div>
+${financialReportTable(contractingIncomeRows,["التصنيف","إجمالي الدخل"])}
 </div>
 
+<div class="report-subsection">
+<div class="report-section-title">ملخص تصنيف المصروفات</div>
+${financialReportTable(contractingExpenseRows,["التصنيف","إجمالي المصروف"])}
+</div>
+
+<div class="report-subsection">
+<div class="report-section-title">جميع عمليات المقاولات</div>
 ${financialReportTable(
-officeCategoryRows,
-["البند","إجمالي المصروف"]
+ data.contracting.map(x=>financialReportRow([
+  financialReportEsc(x.date),
+  financialReportEsc(x.type==="income"?"دخل":"مصروف"),
+  financialReportEsc(x.name||"-"),
+  financialReportEsc(x.category||"عام"),
+  financialReportMoney(x.amount),
+  financialReportEsc(x.note||"-")
+ ])),
+ ["التاريخ","النوع","الاسم / البند","التصنيف","المبلغ","البيان"]
 )}
+</div>
 
 </div>
 
+<!-- ================= المشاريع ================= -->
 <div class="report-section">
 
-<div class="report-section-title">
-9. المقاولات
+<div class="report-section-title">🏗️ المشاريع</div>
+
+<div class="report-kpis">
+<div class="report-kpi"><div class="report-kpi-label">إجمالي الدخل</div><div class="report-kpi-value report-income">${financialReportMoney(data.projectIncome)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">إجمالي المصروف</div><div class="report-kpi-value report-expense">${financialReportMoney(data.projectExpense)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">صافي الربح</div><div class="report-kpi-value report-profit">${financialReportMoney(projectsProfit)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">عدد المشاريع</div><div class="report-kpi-value">${financialReportEsc(data.projectsCount)}</div></div>
 </div>
 
+<div class="report-subsection">
+<div class="report-section-title">ملخص المشاريع</div>
 ${financialReportTable([
-
-financialReportRow([
-"دخل المقاولات",
-financialReportMoney(data.contractingIncome)
-]),
-
-financialReportRow([
-"مصروفات المقاولات",
-financialReportMoney(data.contractingExpense)
-]),
-
-financialReportRow([
-"صافي المقاولات",
-financialReportMoney(
-data.contractingIncome-
-data.contractingExpense
-)
-])
-
+ financialReportRow(["إجمالي الدخل",financialReportMoney(data.projectIncome)]),
+ financialReportRow(["إجمالي المصروفات",financialReportMoney(data.projectExpense)]),
+ financialReportRow(["صافي الربح",financialReportMoney(projectsProfit)]),
+ financialReportRow(["عدد المشاريع",financialReportEsc(data.projectsCount)]),
+ financialReportRow(["عدد العمليات",financialReportEsc(data.transactions.length)])
 ],["البيان","القيمة"])}
-
 </div>
 
-<div class="report-section">
-
-<div class="report-section-title">
-10. دخل المقاولات حسب التصنيف
+<div class="report-subsection">
+<div class="report-section-title">بيانات كل مشروع</div>
+${financialReportTable(projectRows,["المشروع","الدخل","المصروف","الصافي","الحالة"])}
 </div>
 
+<div class="report-subsection">
+<div class="report-section-title">مصروفات المشاريع حسب التصنيف</div>
+${financialReportTable(projectCategoryRows,["التصنيف","إجمالي المصروف"])}
+</div>
+
+<div class="report-subsection">
+<div class="report-section-title">جميع عمليات المشاريع</div>
 ${financialReportTable(
-contractingIncomeRows,
-["التصنيف","إجمالي الدخل"]
+ data.transactions.map(x=>financialReportRow([
+  financialReportEsc(x.date),
+  financialReportEsc(x.type==="income"?"دخل":"مصروف"),
+  financialReportEsc(x.category||"عام"),
+  financialReportMoney(x.amount),
+  financialReportEsc(x.note||"-"),
+  financialReportEsc((data.projects.find(p=>p.id===x.projectId)||{}).name||"-")
+ ])),
+ ["التاريخ","النوع","التصنيف","المبلغ","البيان","المشروع"]
 )}
+</div>
 
 </div>
 
+<!-- ================= دخل الخدمات ================= -->
 <div class="report-section">
 
-<div class="report-section-title">
-11. مصروفات المقاولات حسب التصنيف
+<div class="report-section-title">🛠️ دخل الخدمات</div>
+
+<div class="report-kpis">
+<div class="report-kpi"><div class="report-kpi-label">إجمالي الدخل</div><div class="report-kpi-value report-income">${financialReportMoney(data.servicesIncome)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">إجمالي المصروف</div><div class="report-kpi-value report-expense">${financialReportMoney(data.servicesExpense)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">صافي الربح</div><div class="report-kpi-value report-profit">${financialReportMoney(servicesProfit)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">عدد العمليات</div><div class="report-kpi-value">${financialReportEsc(data.services.length)}</div></div>
 </div>
 
-${financialReportTable(
-contractingExpenseRows,
-["التصنيف","إجمالي المصروف"]
-)}
-
-</div>
-
-<div class="report-section">
-
-<div class="report-section-title">
-12. الخدمات
-</div>
-
+<div class="report-subsection">
+<div class="report-section-title">ملخص دخل الخدمات</div>
 ${financialReportTable([
-
-financialReportRow([
-"إجمالي دخل الخدمات",
-financialReportMoney(data.servicesIncome)
-]),
-
-financialReportRow([
-"إجمالي مصروفات الخدمات",
-financialReportMoney(data.servicesExpense)
-]),
-
-financialReportRow([
-"صافي الخدمات",
-financialReportMoney(
-data.servicesIncome-
-data.servicesExpense
-)
-])
-
+ financialReportRow(["إجمالي دخل الخدمات",financialReportMoney(data.servicesIncome)]),
+ financialReportRow(["إجمالي مصروفات الخدمات",financialReportMoney(data.servicesExpense)]),
+ financialReportRow(["صافي الخدمات",financialReportMoney(servicesProfit)]),
+ financialReportRow(["عدد العمليات",financialReportEsc(data.services.length)])
 ],["البيان","القيمة"])}
-
 </div>
 
-<div class="report-section">
-
-<div class="report-section-title">
-13. ربحية الخدمات حسب التصنيف
+<div class="report-subsection">
+<div class="report-section-title">ربحية الخدمات حسب التصنيف</div>
+${financialReportTable(serviceRows,["الخدمة","الدخل","المصروف","الربح"])}
 </div>
 
+<div class="report-subsection">
+<div class="report-section-title">جميع عمليات الخدمات</div>
 ${financialReportTable(
-serviceRows,
-["الخدمة","الدخل","المصروف","الربح"]
+ data.services.filter(x=>x.recordType!=="general_expense").map(x=>financialReportRow([
+  financialReportEsc(x.date),
+  financialReportEsc(x.category||"عام"),
+  financialReportMoney(x.collectedAmount),
+  financialReportMoney(x.expense),
+  financialReportMoney((Number(x.collectedAmount)||0)-(Number(x.expense)||0)),
+  financialReportEsc(x.note||"-")
+ ])),
+ ["التاريخ","الخدمة","المبلغ المحصل","المصروف","الربح","البيان"]
 )}
+</div>
+
+<div class="report-subsection">
+<div class="report-section-title">المصروفات المستقلة للخدمات</div>
+${financialReportTable(
+ data.servicesGeneralExpenses.map(x=>financialReportRow([
+  financialReportEsc(x.date),
+  financialReportEsc(x.category||"عام"),
+  financialReportMoney(x.amount),
+  financialReportEsc(x.note||"-")
+ ])),
+ ["التاريخ","المصروف / التصنيف","المبلغ","البيان"]
+)}
+</div>
 
 </div>
 
+<!-- ================= إيجارات العقارات ================= -->
 <div class="report-section">
 
-<div class="report-section-title">
-14. إيجارات العقارات
+<div class="report-section-title">🔑 إيجارات العقارات</div>
+
+<div class="report-kpis">
+<div class="report-kpi"><div class="report-kpi-label">إجمالي الإيجارات</div><div class="report-kpi-value report-income">${financialReportMoney(data.rentalIncome)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">مصاريف الإيجارات والعقارات</div><div class="report-kpi-value report-expense">${financialReportMoney(data.rentalExpense+data.propertyExpenseTotal)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">صافي الربح</div><div class="report-kpi-value report-profit">${financialReportMoney(rentalsProfit)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">عدد العقارات</div><div class="report-kpi-value">${financialReportEsc(data.propertiesCount)}</div></div>
 </div>
 
+<div class="report-subsection">
+<div class="report-section-title">ملخص إيجارات العقارات</div>
 ${financialReportTable([
-
-financialReportRow([
-"إجمالي دخل الإيجارات",
-financialReportMoney(data.rentalIncome)
-]),
-
-financialReportRow([
-"مصاريف عمليات الإيجار",
-financialReportMoney(data.rentalExpense)
-]),
-
-financialReportRow([
-"مصاريف العقارات الشاملة",
-financialReportMoney(data.propertyExpenseTotal)
-]),
-
-financialReportRow([
-"صافي ربح الإيجارات والعقارات",
-financialReportMoney(
-data.rentalIncome-
-data.rentalExpense-
-data.propertyExpenseTotal
-)
-]),
-
-financialReportRow([
-"التأمينات النشطة خلال الفترة",
-financialReportMoney(data.activeDeposits)
-]),
-
-financialReportRow([
-"التأمينات المستردة خلال الفترة",
-financialReportMoney(data.refundedDeposits)
-])
-
+ financialReportRow(["إجمالي دخل الإيجارات",financialReportMoney(data.rentalIncome)]),
+ financialReportRow(["مصاريف عمليات الإيجار",financialReportMoney(data.rentalExpense)]),
+ financialReportRow(["مصاريف العقارات الشاملة",financialReportMoney(data.propertyExpenseTotal)]),
+ financialReportRow(["صافي ربح الإيجارات والعقارات",financialReportMoney(rentalsProfit)]),
+ financialReportRow(["التأمينات النشطة خلال الفترة",financialReportMoney(data.activeDeposits)]),
+ financialReportRow(["التأمينات المستردة خلال الفترة",financialReportMoney(data.refundedDeposits)]),
+ financialReportRow(["عدد العقارات",financialReportEsc(data.propertiesCount)]),
+ financialReportRow(["عدد عمليات الإيجار",financialReportEsc(data.rentals.length)])
 ],["البيان","القيمة"])}
-
 </div>
 
-<div class="report-section">
-
-<div class="report-section-title">
-15. تحليل العقارات
+<div class="report-subsection">
+<div class="report-section-title">تحليل العقارات</div>
+${financialReportTable(propertyRows,["العقار","الإيجارات","المصروفات","الصافي","التأمينات النشطة"])}
 </div>
 
+<div class="report-subsection">
+<div class="report-section-title">مصروفات العقارات حسب التصنيف</div>
+${financialReportTable(propertyCategoryRows,["التصنيف","إجمالي المصروف"])}
+</div>
+
+<div class="report-subsection">
+<div class="report-section-title">جميع عمليات الإيجار</div>
 ${financialReportTable(
-propertyRows,
-["العقار","الإيجارات","المصروفات","الصافي","التأمينات النشطة"]
+ data.rentals.map(x=>{
+  const property=db.properties.find(p=>p.id===x.propertyId);
+  return financialReportRow([
+   financialReportEsc(x.date),
+   financialReportEsc(property?property.title:"غير محدد"),
+   financialReportEsc(x.unit||"-"),
+   financialReportEsc(x.tenant||"-"),
+   financialReportMoney(x.amount),
+   financialReportMoney(x.depositAmount),
+   financialReportMoney(x.expenseAmount),
+   financialReportMoney((Number(x.amount)||0)-(Number(x.expenseAmount)||0)),
+   financialReportEsc(x.depositStatus==="refunded"?"مسترد":"نشط"),
+   financialReportEsc(x.note||"-")
+  ]);
+ }),
+ ["التاريخ","العقار","الوحدة","المستأجر","الإيجار","التأمين","مصروف العملية","الصافي","حالة التأمين","الملاحظات"]
 )}
-
 </div>
 
-<div class="report-section">
-
-<div class="report-section-title">
-16. مصروفات العقارات حسب التصنيف
-</div>
-
+<div class="report-subsection">
+<div class="report-section-title">جميع المصاريف الشاملة للعقارات</div>
 ${financialReportTable(
-propertyCategoryRows,
-["التصنيف","إجمالي المصروف"]
+ data.propertyExpenses.map(x=>financialReportRow([
+  financialReportEsc(x.date),
+  financialReportEsc(x.category||"عام"),
+  financialReportMoney(x.amount),
+  financialReportEsc(x.note||"-")
+ ])),
+ ["التاريخ","التصنيف","المبلغ","الملاحظات"]
 )}
+</div>
+
+<div class="report-subsection">
+<div class="report-warning">
+التأمينات النشطة معروضة بشكل مستقل عن الإيرادات التشغيلية لأنها مبالغ مرتبطة بالتزامات تجاه المستأجرين وليست إيرادًا تشغيليًا.
+<br><br>
+<strong>التأمينات النشطة الحالية في النظام:</strong> ${financialReportMoney(activeDepositCurrent)}
+<br>
+<strong>التأمينات المستردة الحالية في النظام:</strong> ${financialReportMoney(data.currentRefundedDeposits)}
+</div>
+</div>
 
 </div>
 
+<!-- ================= المصاريف الشخصية ================= -->
 <div class="report-section">
 
-<div class="report-section-title">
-17. المصاريف الشخصية
+<div class="report-section-title">💳 المصاريف الشخصية</div>
+
+<div class="report-kpis">
+<div class="report-kpi"><div class="report-kpi-label">إجمالي المصاريف الشخصية</div><div class="report-kpi-value report-expense">${financialReportMoney(data.personalExpenseTotal)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">عدد المصروفات</div><div class="report-kpi-value">${financialReportEsc(data.personalExpenses.length)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">المصاريف التشغيلية للنشاط</div><div class="report-kpi-value">${financialReportMoney(data.totalBusinessExpense)}</div></div>
+<div class="report-kpi"><div class="report-kpi-label">الصافي بعد المصاريف الشخصية</div><div class="report-kpi-value report-profit">${financialReportMoney(data.totalAfterPersonal)}</div></div>
 </div>
 
-<p class="report-text">
+<div class="report-subsection">
+<div class="report-section-title">ملخص المصاريف الشخصية</div>
+${financialReportTable([
+ financialReportRow(["إجمالي المصاريف الشخصية",financialReportMoney(data.personalExpenseTotal)]),
+ financialReportRow(["عدد المصروفات",financialReportEsc(data.personalExpenses.length)]),
+ financialReportRow(["الصافي بعد المصاريف الشخصية",financialReportMoney(data.totalAfterPersonal)])
+],["البيان","القيمة"])}
+</div>
+
+<div class="report-subsection">
+<div class="report-section-title">جميع المصاريف الشخصية</div>
+${financialReportTable(personalRows,["التاريخ","البيان","المبلغ"])}
+</div>
+
+<div class="report-subsection">
+<div class="report-warning">
 المصاريف الشخصية معروضة بشكل مستقل عن نتيجة نشاط الأعمال حتى لا تختلط بالمصروفات التشغيلية للنشاط.
-</p>
-
-${financialReportTable([
-
-financialReportRow([
-"إجمالي المصاريف الشخصية",
-financialReportMoney(data.personalExpenseTotal)
-])
-
-],["البيان","القيمة"])}
-
-${financialReportTable(
-personalRows,
-["التاريخ","البيان","المبلغ"]
-)}
-
 </div>
-
-<div class="report-section">
-
-<div class="report-section-title">
-18. التدفق النقدي المحسوب من البيانات المسجلة
 </div>
-
-${financialReportTable([
-
-financialReportRow([
-"إجمالي الأموال الداخلة المسجلة",
-financialReportMoney(data.totalBusinessIncome)
-]),
-
-financialReportRow([
-"إجمالي الأموال الخارجة المسجلة",
-financialReportMoney(data.totalBusinessExpense)
-]),
-
-financialReportRow([
-"صافي الحركة النقدية المسجلة",
-financialReportMoney(reportCash)
-]),
-
-financialReportRow([
-"المصاريف الشخصية المسجلة بشكل مستقل",
-financialReportMoney(data.personalExpenseTotal)
-]),
-
-financialReportRow([
-"الصافي بعد المصاريف الشخصية",
-financialReportMoney(data.totalAfterPersonal)
-])
-
-],["البيان","القيمة"])}
-
-</div>
-
-<div class="report-section">
-
-<div class="report-section-title">
-19. الودائع والتأمينات
-</div>
-
-${financialReportTable([
-
-financialReportRow([
-"التأمينات النشطة الحالية في النظام",
-financialReportMoney(activeDepositCurrent)
-]),
-
-financialReportRow([
-"التأمينات التي تم استردادها في النظام",
-financialReportMoney(data.currentRefundedDeposits)
-])
-
-],["البيان","القيمة"])}
-
-<div class="report-warning">
-
-التأمينات النشطة تم عرضها بشكل مستقل عن الإيرادات التشغيلية لأنها مبالغ مرتبطة بالتزامات تجاه المستأجرين وليست إيرادًا تشغيليًا في التقرير.
-
-</div>
-
-</div>
-
-<div class="report-section">
-
-<div class="report-section-title">
-20. المؤشرات المالية الرئيسية
-</div>
-
-${financialReportTable([
-
-financialReportRow([
-"نموذج هامش صافي الربح",
-financialReportPercent(businessMargin)
-]),
-
-financialReportRow([
-"نسبة المصروفات إلى الإيرادات",
-financialReportPercent(expenseRatio)
-]),
-
-financialReportRow([
-"عدد المشاريع",
-financialReportEsc(data.projectsCount)
-]),
-
-financialReportRow([
-"عدد العقارات",
-financialReportEsc(data.propertiesCount)
-]),
-
-financialReportRow([
-"عدد عمليات المشاريع",
-financialReportEsc(data.transactions.length)
-]),
-
-financialReportRow([
-"عدد عمليات المقاولات",
-financialReportEsc(data.contracting.length)
-]),
-
-financialReportRow([
-"عدد عمليات الخدمات",
-financialReportEsc(data.services.length)
-]),
-
-financialReportRow([
-"عدد عمليات الإيجار",
-financialReportEsc(data.rentals.length)
-]),
-
-financialReportRow([
-"عدد المصروفات الشخصية",
-financialReportEsc(data.personalExpenses.length)
-])
-
-],["المؤشر","النتيجة"])}
-
-</div>
-
-<div class="report-section">
-
-<div class="report-section-title">
-21. التحليل المالي الإداري
-</div>
-
-<p class="report-text">
-
-• النتيجة التشغيلية للفترة:
-<strong>${financialReportMoney(data.businessProfit)}</strong>.
-
-<br>
-
-• هامش صافي الربح:
-<strong>${financialReportPercent(businessMargin)}</strong>.
-
-<br>
-
-• أكبر مصدر دخل هو:
-<strong>${
-[
-["المشاريع",data.projectIncome],
-["المكتب",data.officeIncomeTotal],
-["المقاولات",data.contractingIncome],
-["الخدمات",data.servicesIncome],
-["الإيجارات",data.rentalIncome]
-]
-.sort((a,b)=>b[1]-a[1])[0][0]
-}</strong>
-بمبلغ
-<strong>${financialReportMoney(
-[
-["المشاريع",data.projectIncome],
-["المكتب",data.officeIncomeTotal],
-["المقاولات",data.contractingIncome],
-["الخدمات",data.servicesIncome],
-["الإيجارات",data.rentalIncome]
-]
-.sort((a,b)=>b[1]-a[1])[0][1]
-)}</strong>.
-
-<br>
-
-• أكبر مصدر مصروف هو:
-<strong>${
-[
-["المشاريع",data.projectExpense],
-["المكتب",data.officeExpenseTotal],
-["المقاولات",data.contractingExpense],
-["الخدمات",data.servicesExpense],
-["الإيجارات والعقارات",data.rentalExpense+data.propertyExpenseTotal]
-]
-.sort((a,b)=>b[1]-a[1])[0][0]
-}</strong>
-بمبلغ
-<strong>${financialReportMoney(
-[
-["المشاريع",data.projectExpense],
-["المكتب",data.officeExpenseTotal],
-["المقاولات",data.contractingExpense],
-["الخدمات",data.servicesExpense],
-["الإيجارات والعقارات",data.rentalExpense+data.propertyExpenseTotal]
-]
-.sort((a,b)=>b[1]-a[1])[0][1]
-)}</strong>.
-
-<br>
-
-• يجب متابعة التأمينات النشطة باعتبارها مبالغ مرتبطة بعقود الإيجار وليست أرباحًا تشغيلية.
-
-<br>
-
-• المصاريف الشخصية مفصولة في التقرير عن مصروفات النشاط حتى تكون قراءة ربحية النشاط واضحة.
-
-</p>
-
-</div>
-
-<div class="report-section">
-
-<div class="report-section-title">
-22. الأصول والالتزامات وحقوق الملكية
-</div>
-
-<div class="report-warning">
-
-النظام الحالي يحتوي على بيانات الدخل والمصروفات والإيجارات والتأمينات والمشاريع والخدمات، لكنه لا يحتوي على سجل مستقل للأصول الثابتة والقروض وحقوق الملكية. لذلك لم يتم اختراع أرقام غير موجودة في النظام.
-
-<br><br>
-
-المبلغ النقدي المحسوب من العمليات المسجلة خلال الفترة:
-<strong>${financialReportMoney(reportCash)}</strong>.
-
-<br><br>
-
-التأمينات النشطة:
-<strong>${financialReportMoney(activeDepositCurrent)}</strong>
-وتُعرض منفصلة باعتبارها التزامًا محتملًا مرتبطًا بالمستأجرين.
-
-</div>
-
-</div>
-
-<div class="report-section">
-
-<div class="report-section-title">
-23. الخلاصة
-</div>
-
-<p class="report-text">
-
-خلال الفترة
-<strong>${financialReportEsc(range.label)}</strong>
-بلغ إجمالي دخل النشاط
-<strong>${financialReportMoney(data.totalBusinessIncome)}</strong>
-وبلغ إجمالي مصروفات النشاط
-<strong>${financialReportMoney(data.totalBusinessExpense)}</strong>
-وبذلك بلغ صافي الربح
-<strong>${financialReportMoney(data.businessProfit)}</strong>.
-
-كما تم فصل المصاريف الشخصية عن النشاط، وإظهار التأمينات النشطة بشكل مستقل، وتحليل الدخل والمصروفات حسب الأقسام والتصنيفات والعقارات والخدمات والمشاريع.
-
-</p>
 
 </div>
 
 <div class="report-footer-note">
-
 هذا التقرير تم إنشاؤه تلقائيًا من البيانات المسجلة في نظام الإدارة وFirebase للفترة المحددة. لا يتم إنشاء أو افتراض أي أرقام غير موجودة في البيانات.
-
 </div>
 
 </div>
