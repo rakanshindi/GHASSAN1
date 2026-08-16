@@ -507,96 +507,141 @@ margin-top:20px;
 flex-wrap:wrap
 }
 
+/* ================= تنسيق التقرير للطباعة ================= */
+
 .financial-report{
 width:210mm;
+min-height:297mm;
 background:#fff;
 color:#17202a;
-font-family:Arial,Tahoma,sans-serif;
-padding:15mm;
-direction:rtl
+font-family:Arial,Tahoma,"Segoe UI",sans-serif;
+padding:13mm 12mm 12mm;
+direction:rtl;
+font-size:11px;
+line-height:1.55;
+-webkit-print-color-adjust:exact;
+print-color-adjust:exact
 }
 
 .financial-report *{
-box-sizing:border-box
+box-sizing:border-box;
+-webkit-print-color-adjust:exact;
+print-color-adjust:exact
 }
 
 .report-cover{
-min-height:245mm;
+min-height:272mm;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-page-break-after:always
+page-break-after:always;
+break-after:page;
+page-break-inside:avoid;
+break-inside:avoid
 }
 
 .report-cover-title{
-font-size:30px;
+font-size:31px;
 font-weight:900;
 color:#17324d;
-margin-bottom:12px
+margin-bottom:9px;
+letter-spacing:-.3px
 }
 
 .report-cover-subtitle{
 font-size:17px;
 color:#667085;
-margin-bottom:35px
+margin-bottom:34px
 }
 
 .report-cover-box{
 border:1px solid #d7dce2;
 border-radius:16px;
-padding:25px 45px;
-min-width:130mm
+padding:24px 42px;
+min-width:130mm;
+background:#fff;
+box-shadow:0 1px 4px rgba(0,0,0,.02)
 }
 
 .report-cover-box div{
-margin:10px 0;
+margin:9px 0;
 font-size:14px
 }
 
 .report-section{
-margin-bottom:22px;
-page-break-inside:avoid
+margin-bottom:17px;
+page-break-inside:avoid;
+break-inside:avoid
 }
 
 .report-section-title{
-font-size:18px;
+font-size:19px;
 font-weight:900;
 color:#17324d;
 border-bottom:2px solid #17324d;
-padding-bottom:7px;
-margin-bottom:12px
+padding-bottom:6px;
+margin-bottom:10px;
+line-height:1.35;
+page-break-after:avoid;
+break-after:avoid
 }
 
 .report-text{
 font-size:11px;
-line-height:1.8;
-color:#344054
+line-height:1.85;
+color:#344054;
+margin:5px 0 0
 }
 
 .report-table{
 width:100%;
 border-collapse:collapse;
-margin-top:10px
+table-layout:auto;
+margin-top:8px;
+page-break-inside:auto;
+break-inside:auto
+}
+
+.report-table thead{
+display:table-header-group
+}
+
+.report-table tbody{
+display:table-row-group
+}
+
+.report-table tr{
+page-break-inside:avoid;
+break-inside:avoid
 }
 
 .report-table th,
 .report-table td{
 border:1px solid #d9dee5;
-padding:7px 8px;
+padding:6px 7px;
 font-size:10px;
-text-align:right
+text-align:right;
+vertical-align:middle;
+line-height:1.45;
+word-break:normal;
+overflow-wrap:anywhere
 }
 
 .report-table th{
 background:#17324d;
 color:#fff;
-font-weight:900
+font-weight:900;
+white-space:nowrap
 }
 
 .report-table tr:nth-child(even) td{
 background:#f8fafc
+}
+
+.report-table td:first-child{
+font-weight:700
 }
 
 .report-number{
@@ -609,14 +654,19 @@ display:inline-block
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:8px;
-margin-bottom:15px
+margin-bottom:13px;
+page-break-inside:avoid;
+break-inside:avoid
 }
 
 .report-kpi{
 border:1px solid #e1e6ec;
 border-radius:10px;
-padding:10px;
-background:#f8fafc
+padding:9px;
+background:#f8fafc;
+min-height:45px;
+page-break-inside:avoid;
+break-inside:avoid
 }
 
 .report-kpi-label{
@@ -627,7 +677,9 @@ color:#667085
 .report-kpi-value{
 font-size:15px;
 font-weight:900;
-margin-top:5px
+margin-top:4px;
+line-height:1.2;
+white-space:nowrap
 }
 
 .report-income{
@@ -646,17 +698,34 @@ color:#17324d
 background:#fff7ed;
 border:1px solid #fed7aa;
 border-radius:10px;
-padding:10px;
+padding:10px 12px;
 font-size:10px;
-line-height:1.8
+line-height:1.8;
+page-break-inside:avoid;
+break-inside:avoid
 }
 
 .report-footer-note{
 font-size:9px;
 color:#667085;
 border-top:1px solid #e5e7eb;
-padding-top:10px;
-margin-top:20px
+padding-top:8px;
+margin-top:16px;
+page-break-inside:avoid;
+break-inside:avoid
+}
+
+@page{
+size:A4 portrait;
+margin:0
+}
+
+@media print{
+.financial-report{
+width:210mm;
+min-height:297mm;
+padding:13mm 12mm 12mm
+}
 }
 
 @media(max-width:900px){
@@ -5192,8 +5261,12 @@ button.textContent="جاري إنشاء التقرير...";
 try{
 
 await new Promise(resolve=>
-setTimeout(resolve,500)
+setTimeout(resolve,700)
 );
+
+if(document.fonts && document.fonts.ready){
+await document.fonts.ready;
+}
 
 const reportElement=
 wrapper.querySelector(
@@ -5208,26 +5281,32 @@ filename:
 `التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf`,
 
 image:{
-type:"jpeg",
-quality:0.98
+type:"png"
 },
 
 html2canvas:{
-scale:2,
+scale:3.5,
 useCORS:true,
+allowTaint:false,
 backgroundColor:"#ffffff",
-logging:false
+logging:false,
+imageTimeout:0,
+windowWidth:794,
+windowHeight:1123,
+letterRendering:true
 },
 
 jsPDF:{
 unit:"mm",
 format:"a4",
 orientation:"portrait",
-compress:true
+compress:true,
+putOnlyUsedFonts:true
 },
 
 pagebreak:{
-mode:["css","legacy"]
+mode:["css","legacy"],
+avoid:[".report-section",".report-kpi",".report-warning",".report-table tr"]
 }
 
 };
