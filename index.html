@@ -3781,15 +3781,15 @@ function financialReportBuildData(range){
 
 /* حماية التقرير من أي مجموعة Firebase لم تصل بعد أو كانت غير معرفة */
 const safeDb={
-projects:Array.isArray(db?.projects)?safeDb.projects:[],
-transactions:Array.isArray(db?.transactions)?safeDb.transactions:[],
-officeExpenses:Array.isArray(db?.officeExpenses)?safeDb.officeExpenses:[],
-officeIncome:Array.isArray(db?.officeIncome)?safeDb.officeIncome:[],
-contracting:Array.isArray(db?.contracting)?safeDb.contracting:[],
-services:Array.isArray(db?.services)?safeDb.services:[],
+projects:Array.isArray(db?.projects)?db.projects:[],
+transactions:Array.isArray(db?.transactions)?db.transactions:[],
+officeExpenses:Array.isArray(db?.officeExpenses)?db.officeExpenses:[],
+officeIncome:Array.isArray(db?.officeIncome)?db.officeIncome:[],
+contracting:Array.isArray(db?.contracting)?db.contracting:[],
+services:Array.isArray(db?.services)?db.services:[],
 properties:Array.isArray(db?.properties)?db.properties:[],
-rentals:Array.isArray(db?.rentals)?safeDb.rentals:[],
-propertyExpenses:Array.isArray(db?.propertyExpenses)?safeDb.propertyExpenses:[],
+rentals:Array.isArray(db?.rentals)?db.rentals:[],
+propertyExpenses:Array.isArray(db?.propertyExpenses)?db.propertyExpenses:[],
 personalExpenses:Array.isArray(db?.personalExpenses)?safeDb.personalExpenses:[]
 };
 
