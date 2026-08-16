@@ -521,15 +521,13 @@ box-sizing:border-box
 }
 
 .report-cover{
-height:245mm;
 min-height:245mm;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-page-break-after:always;
-break-after:page
+page-break-after:always
 }
 
 .report-cover-title{
@@ -559,8 +557,7 @@ font-size:14px
 
 .report-section{
 margin-bottom:22px;
-page-break-inside:auto;
-break-inside:auto
+page-break-inside:avoid
 }
 
 .report-section-title{
@@ -5177,12 +5174,11 @@ financialReportBuildData(range);
 const wrapper=
 document.createElement("div");
 
-wrapper.style.position="absolute";
-wrapper.style.left="0";
+wrapper.style.position="fixed";
+wrapper.style.left="-100000px";
 wrapper.style.top="0";
 wrapper.style.background="#fff";
 wrapper.style.zIndex="-1";
-wrapper.style.width="210mm";
 
 wrapper.innerHTML=
 financialReportBuildHTML(data);
@@ -5230,9 +5226,7 @@ compress:true
 },
 
 pagebreak:{
-mode:["css"],
-before:".report-section",
-avoid:".report-table"
+mode:["css","legacy"]
 }
 
 };
@@ -6161,21 +6155,21 @@ headers,
 );
 
 backupExcelColumnWidths(
-sheet,
-headers,
-rows
+ sheet,
+ headers,
+ rows
 );
 
 backupExcelFormatSheet(
-sheet,
-headers,
-rows.length
+ sheet,
+ headers,
+ rows.length
 );
 
 backupExcelApplyNumberFormats(
-sheet,
-headers,
-rows.length
+ sheet,
+ headers,
+ rows.length
 );
 
 XLSX.utils.book_append_sheet(
@@ -6214,12 +6208,12 @@ const data={
 
 const documentId=
 String(
-data.__documentId||""
+ data.__documentId||""
 );
 
 const documentPath=
 String(
-data.__documentPath||""
+ data.__documentPath||""
 );
 
 delete data.__documentId;
@@ -6231,9 +6225,9 @@ try{
 
 json=
 JSON.stringify(
-data,
-null,
-2
+ data,
+ null,
+ 2
 );
 
 }catch(e){
