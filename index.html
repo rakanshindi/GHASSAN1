@@ -5182,11 +5182,14 @@ financialReportBuildData(range);
 const wrapper=
 document.createElement("div");
 
-wrapper.style.position="fixed";
-wrapper.style.left="-100000px";
+wrapper.style.position="absolute";
+wrapper.style.left="0";
 wrapper.style.top="0";
+wrapper.style.width="210mm";
+wrapper.style.minHeight="297mm";
 wrapper.style.background="#fff";
-wrapper.style.zIndex="-1";
+wrapper.style.zIndex="1";
+wrapper.style.pointerEvents="none";
 
 wrapper.innerHTML=
 financialReportBuildHTML(data);
@@ -5223,7 +5226,17 @@ html2canvas:{
 scale:2,
 useCORS:true,
 backgroundColor:"#ffffff",
-logging:false
+logging:false,
+scrollX:0,
+scrollY:0,
+windowWidth:Math.max(
+window.innerWidth,
+reportElement.scrollWidth
+),
+windowHeight:Math.max(
+window.innerHeight,
+reportElement.scrollHeight
+)
 },
 
 jsPDF:{
