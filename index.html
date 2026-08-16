@@ -5182,13 +5182,16 @@ financialReportBuildData(range);
 const wrapper=
 document.createElement("div");
 
+/* تجهيز التقرير داخل مساحة فعلية قابلة للرسم على الجوال
+   بدل وضعه خارج الشاشة، لأن html2canvas على بعض الجوالات
+   يرجع Canvas أبيض عندما يكون العنصر خارج نطاق العرض. */
 wrapper.style.position="absolute";
 wrapper.style.left="0";
 wrapper.style.top="0";
 wrapper.style.width="210mm";
-wrapper.style.minHeight="297mm";
+wrapper.style.minWidth="210mm";
 wrapper.style.background="#fff";
-wrapper.style.zIndex="1";
+wrapper.style.zIndex="999999";
 wrapper.style.pointerEvents="none";
 
 wrapper.innerHTML=
@@ -5227,16 +5230,10 @@ scale:2,
 useCORS:true,
 backgroundColor:"#ffffff",
 logging:false,
+windowWidth:794,
+windowHeight:Math.max(1123,reportElement.scrollHeight),
 scrollX:0,
-scrollY:0,
-windowWidth:Math.max(
-window.innerWidth,
-reportElement.scrollWidth
-),
-windowHeight:Math.max(
-window.innerHeight,
-reportElement.scrollHeight
-)
+scrollY:0
 },
 
 jsPDF:{
