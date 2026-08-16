@@ -3779,57 +3779,71 @@ ${cells.map(cell=>`<td>${cell}</td>`).join("")}
 
 function financialReportBuildData(range){
 
+/* حماية التقرير من أي مجموعة Firebase لم تصل بعد أو كانت غير معرفة */
+const safeDb={
+projects:Array.isArray(db?.projects)?safeDb.projects:[],
+transactions:Array.isArray(db?.transactions)?safeDb.transactions:[],
+officeExpenses:Array.isArray(db?.officeExpenses)?safeDb.officeExpenses:[],
+officeIncome:Array.isArray(db?.officeIncome)?safeDb.officeIncome:[],
+contracting:Array.isArray(db?.contracting)?safeDb.contracting:[],
+services:Array.isArray(db?.services)?safeDb.services:[],
+properties:Array.isArray(db?.properties)?db.properties:[],
+rentals:Array.isArray(db?.rentals)?safeDb.rentals:[],
+propertyExpenses:Array.isArray(db?.propertyExpenses)?safeDb.propertyExpenses:[],
+personalExpenses:Array.isArray(db?.personalExpenses)?safeDb.personalExpenses:[]
+};
+
 const projects=
 financialReportFilter(
-db.projects,
+safeDb.projects,
 range
 );
 
 const transactions=
 financialReportFilter(
-db.transactions,
+safeDb.transactions,
 range
 );
 
 const officeExpenses=
 financialReportFilter(
-db.officeExpenses,
+safeDb.officeExpenses,
 range
 );
 
 const officeIncome=
 financialReportFilter(
-db.officeIncome,
+safeDb.officeIncome,
 range
 );
 
 const contracting=
 financialReportFilter(
-db.contracting,
+safeDb.contracting,
 range
 );
 
 const services=
 financialReportFilter(
-db.services,
+safeDb.services,
 range
 );
 
 const rentals=
 financialReportFilter(
-db.rentals,
+safeDb.rentals,
 range
 );
 
 const propertyExpenses=
 financialReportFilter(
-db.propertyExpenses,
+safeDb.propertyExpenses,
 range
 );
 
 const personalExpenses=
 financialReportFilter(
-db.personalExpenses,
+safeDb.personalExpenses,
 range
 );
 
@@ -3979,7 +3993,7 @@ else
 activeDeposits+=deposit;
 
 const property=
-db.properties.find(
+safeDb.properties.find(
 p=>p.id===r.propertyId
 );
 
@@ -4075,7 +4089,7 @@ allRecordedIncome-
 allRecordedExpense;
 
 const currentActiveDeposits=
-db.rentals.reduce(
+safeDb.rentals.reduce(
 (total,r)=>{
 
 if(r.depositStatus!=="refunded"){
@@ -4092,7 +4106,7 @@ return total;
 );
 
 const currentRefundedDeposits=
-db.rentals.reduce(
+safeDb.rentals.reduce(
 (total,r)=>{
 
 if(r.depositStatus==="refunded"){
@@ -4118,6 +4132,7 @@ officeExpenses,
 officeIncome,
 contracting,
 services,
+properties:safeDb.properties,
 rentals,
 propertyExpenses,
 personalExpenses,
@@ -4163,8 +4178,8 @@ netRecorded,
 currentActiveDeposits,
 currentRefundedDeposits,
 
-projectsCount:db.projects.length,
-propertiesCount:db.properties.length
+projectsCount:safeDb.projects.length,
+propertiesCount:safeDb.properties.length
 
 };
 
@@ -4520,7 +4535,11 @@ async function generateFinancialReportPDF(){
 
 const button=document.getElementById("generateFinancialReportBtn");
 
-/* نوقف الزر مباشرة حتى يظهر للمستخدم أن التصدير بدأ */
+if(!button){
+alert("تعذر العثور على زر إنشاء التقرير PDF.");
+return;
+}
+
 button.disabled=true;
 button.textContent="جاري إنشاء التقرير...";
 
@@ -4532,65 +4551,67 @@ if(!auth.currentUser){
 throw new Error("يجب تسجيل الدخول أولاً.");
 }
 
-if(typeof html2pdf !== "function"){
-throw new Error("مكتبة إنشاء PDF لم يتم تحميلها. تأكد من وجود اتصال بالإنترنت ثم أعد فتح الصفحة.");
+if(typeof window.html2pdf!=="function"){
+throw new Error("مكتبة إنشاء PDF غير محملة. تأكد من الاتصال بالإنترنت ثم أعد فتح الصفحة.");
 }
 
-/* بناء التقرير داخل try حتى تظهر أي مشكلة بدل أن يبدو الزر وكأنه لا يعمل */
 const range=getFinancialReportDateRange();
 const data=financialReportBuildData(range);
 
 wrapper=document.createElement("div");
-
-/* نضع التقرير داخل الصفحة نفسها بدل إزاحته خارج الشاشة،
-   لأن html2canvas قد يلتقط الإحداثيات بشكل خاطئ عند إخفائه خارج الشاشة. */
-wrapper.style.position="fixed";
+wrapper.style.position="absolute";
 wrapper.style.left="0";
 wrapper.style.top="0";
 wrapper.style.width="210mm";
-wrapper.style.height="auto";
+wrapper.style.minWidth="210mm";
 wrapper.style.margin="0";
 wrapper.style.padding="0";
 wrapper.style.background="#ffffff";
-wrapper.style.zIndex="2147483647";
+wrapper.style.zIndex="999999";
 wrapper.style.pointerEvents="none";
 wrapper.style.direction="rtl";
-wrapper.style.visibility="visible";
-wrapper.style.opacity="1";
-
-/* نخلي العنصر بعيد عن المستخدم بصريًا بدون استخدام left سالب */
-wrapper.style.transform="translateX(-100%)";
+wrapper.style.overflow="visible";
 
 wrapper.innerHTML=financialReportBuildHTML(data);
 document.body.appendChild(wrapper);
 
-/* انتظار اكتمال الرسم قبل التصوير */
-await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+await new Promise(resolve=>{
+requestAnimationFrame(()=>{
+requestAnimationFrame(resolve);
+});
+});
+
+if(document.fonts && document.fonts.ready){
+await document.fonts.ready;
+}
 
 const reportElement=wrapper.querySelector(".financial-report");
 
 if(!reportElement){
-throw new Error("تعذر تجهيز محتوى التقرير.");
+throw new Error("تعذر تجهيز محتوى التقرير المالي.");
+}
+
+if(!reportElement.innerHTML.trim()){
+throw new Error("محتوى التقرير المالي فارغ.");
 }
 
 const options={
 margin:0,
 filename:`التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf`,
-image:{
- type:"jpeg",
- quality:1
-},
+image:{type:"png"},
 html2canvas:{
-scale:3.5,
+scale:3,
 useCORS:true,
 allowTaint:false,
 backgroundColor:"#ffffff",
 logging:false,
 removeContainer:true,
-windowWidth:794,
-windowHeight:1123,
 scrollX:0,
-scrollY:0
+scrollY:0,
+windowWidth:794,
+windowHeight:Math.max(1123,reportElement.scrollHeight),
+width:794,
+letterRendering:true
 },
 jsPDF:{
 unit:"mm",
@@ -4603,18 +4624,14 @@ mode:["css","legacy"]
 }
 };
 
-await html2pdf()
-.set(options)
-.from(reportElement)
-.save();
+await html2pdf().set(options).from(reportElement).save();
 
 document.getElementById("financialReportModal").style.display="none";
 
 }catch(error){
 
 console.error("Financial Report PDF Error:",error);
-
-alert("تعذر إنشاء التقرير PDF:\n"+(error?.message||error));
+alert("تعذر إنشاء التقرير PDF:\n"+(error?.message||String(error)));
 
 }finally{
 
