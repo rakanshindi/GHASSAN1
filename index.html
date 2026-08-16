@@ -557,7 +557,15 @@ font-size:14px
 
 .report-section{
 margin-bottom:22px;
-page-break-inside:avoid
+page-break-inside:auto;
+break-inside:auto
+}
+
+/* كل قسم من التقرير يبدأ في صفحة PDF مستقلة،
+   بينما يسمح محتوى القسم نفسه بالامتداد لأكثر من صفحة عند الحاجة */
+.report-section + .report-section{
+page-break-before:always;
+break-before:page
 }
 
 .report-section-title{
@@ -5174,13 +5182,11 @@ financialReportBuildData(range);
 const wrapper=
 document.createElement("div");
 
-wrapper.style.position="absolute";
-wrapper.style.left="0";
+wrapper.style.position="fixed";
+wrapper.style.left="-100000px";
 wrapper.style.top="0";
-wrapper.style.width="210mm";
 wrapper.style.background="#fff";
-wrapper.style.zIndex="99999";
-wrapper.style.pointerEvents="none";
+wrapper.style.zIndex="-1";
 
 wrapper.innerHTML=
 financialReportBuildHTML(data);
@@ -5217,11 +5223,7 @@ html2canvas:{
 scale:2,
 useCORS:true,
 backgroundColor:"#ffffff",
-logging:false,
-scrollX:0,
-scrollY:0,
-windowWidth:document.documentElement.scrollWidth,
-windowHeight:document.documentElement.scrollHeight
+logging:false
 },
 
 jsPDF:{
