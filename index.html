@@ -5182,15 +5182,12 @@ financialReportBuildData(range);
 const wrapper=
 document.createElement("div");
 
-/* مهم للجوال: يجب أن يكون التقرير داخل مساحة مرئية وقابلة للرسم
-   أثناء عمل html2canvas، ولا يتم وضعه خارج الشاشة أو خلف الصفحة. */
-wrapper.style.position="fixed";
+wrapper.style.position="absolute";
 wrapper.style.left="0";
 wrapper.style.top="0";
 wrapper.style.width="210mm";
-wrapper.style.minHeight="297mm";
 wrapper.style.background="#fff";
-wrapper.style.zIndex="99999";
+wrapper.style.zIndex="9998";
 wrapper.style.pointerEvents="none";
 
 wrapper.innerHTML=
@@ -5225,12 +5222,12 @@ quality:0.98
 },
 
 html2canvas:{
-scale:2,
+scale:window.devicePixelRatio>1?2:1.5,
 useCORS:true,
 backgroundColor:"#ffffff",
 logging:false,
-windowWidth:794,
-windowHeight:1123,
+windowWidth:document.documentElement.clientWidth,
+windowHeight:document.documentElement.clientHeight,
 scrollX:0,
 scrollY:0
 },
