@@ -521,6 +521,7 @@ box-sizing:border-box
 }
 
 .report-cover{
+height:245mm;
 min-height:245mm;
 display:flex;
 flex-direction:column;
@@ -548,8 +549,7 @@ margin-bottom:35px
 border:1px solid #d7dce2;
 border-radius:16px;
 padding:25px 45px;
-min-width:130mm;
-box-shadow:0 8px 25px rgba(23,50,77,.06)
+min-width:130mm
 }
 
 .report-cover-box div{
@@ -559,37 +559,22 @@ font-size:14px
 
 .report-section{
 margin-bottom:22px;
-page-break-inside:avoid;
-break-inside:avoid;
-page-break-before:always;
-break-before:page;
-padding-top:2mm
+page-break-inside:auto;
+break-inside:auto
 }
 
 .report-section-title{
-font-size:19px;
+font-size:18px;
 font-weight:900;
 color:#17324d;
-border-bottom:3px solid #17324d;
-padding-bottom:8px;
-margin-bottom:15px;
-position:relative
-}
-
-.report-section-title:after{
-content:"";
-display:block;
-width:55px;
-height:3px;
-background:#2563eb;
-position:absolute;
-bottom:-3px;
-right:0
+border-bottom:2px solid #17324d;
+padding-bottom:7px;
+margin-bottom:12px
 }
 
 .report-text{
 font-size:11px;
-line-height:1.9;
+line-height:1.8;
 color:#344054
 }
 
@@ -602,7 +587,7 @@ margin-top:10px
 .report-table th,
 .report-table td{
 border:1px solid #d9dee5;
-padding:8px 9px;
+padding:7px 8px;
 font-size:10px;
 text-align:right
 }
@@ -626,16 +611,15 @@ display:inline-block
 .report-kpis{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:9px;
-margin-bottom:17px
+gap:8px;
+margin-bottom:15px
 }
 
 .report-kpi{
-border:1px solid #dfe5ec;
-border-radius:11px;
-padding:11px;
-background:#f8fafc;
-box-shadow:0 3px 10px rgba(23,50,77,.04)
+border:1px solid #e1e6ec;
+border-radius:10px;
+padding:10px;
+background:#f8fafc
 }
 
 .report-kpi-label{
@@ -676,135 +660,6 @@ color:#667085;
 border-top:1px solid #e5e7eb;
 padding-top:10px;
 margin-top:20px
-}
-
-/* ================= الرسوم البيانية للتقرير ================= */
-
-.report-chart{
-border:1px solid #e1e6ec;
-border-radius:12px;
-padding:13px;
-background:#fff;
-margin-top:12px
-}
-
-.report-chart-title{
-font-size:12px;
-font-weight:900;
-color:#17324d;
-margin-bottom:12px
-}
-
-.report-chart-row{
-display:grid;
-grid-template-columns:42mm 1fr 27mm;
-gap:8px;
-align-items:center;
-margin:8px 0
-}
-
-.report-chart-label{
-font-size:9px;
-font-weight:800;
-color:#344054;
-overflow:hidden;
-text-overflow:ellipsis;
-white-space:nowrap
-}
-
-.report-chart-track{
-height:11px;
-background:#eef2f6;
-border-radius:20px;
-overflow:hidden
-}
-
-.report-chart-bar{
-height:100%;
-border-radius:20px;
-background:#2563eb
-}
-
-.report-chart-value{
-font-size:9px;
-font-weight:900;
-text-align:left;
-direction:ltr
-}
-
-.report-summary-chart{
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:10px;
-align-items:end;
-height:65mm;
-padding:12px;
-border:1px solid #e1e6ec;
-border-radius:12px;
-background:#fff
-}
-
-.report-summary-chart-item{
-height:100%;
-display:flex;
-flex-direction:column;
-justify-content:flex-end;
-align-items:center;
-gap:6px
-}
-
-.report-summary-chart-bar-wrap{
-height:48mm;
-width:24mm;
-display:flex;
-align-items:flex-end;
-justify-content:center;
-background:#f8fafc;
-border-radius:8px 8px 3px 3px
-}
-
-.report-summary-chart-bar{
-width:15mm;
-min-height:2px;
-border-radius:6px 6px 0 0;
-background:#17324d
-}
-
-.report-summary-chart-label{
-font-size:9px;
-font-weight:800;
-text-align:center
-}
-
-.report-summary-chart-value{
-font-size:9px;
-font-weight:900;
-direction:ltr
-}
-
-.report-comparison{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:12px
-}
-
-.report-comparison-card{
-border:1px solid #dfe5ec;
-border-radius:11px;
-padding:12px;
-background:#f8fafc
-}
-
-.report-comparison-label{
-font-size:9px;
-color:#667085;
-margin-bottom:5px
-}
-
-.report-comparison-value{
-font-size:14px;
-font-weight:900
 }
 
 @media(max-width:900px){
@@ -1178,6 +1033,8 @@ id="closeFinancialReportBtn">
 
 </div>
 
+<!-- ================= ملخص تصنيف الدخل ================= -->
+
 <div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
 <h3>📈 ملخص تصنيف الدخل</h3>
@@ -1202,6 +1059,8 @@ id="closeFinancialReportBtn">
 </div>
 
 </div>
+
+<!-- ================= ملخص تصنيف المصروفات ================= -->
 
 <div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
@@ -3745,49 +3604,6 @@ label
 
 }
 
-function getFinancialReportPreviousRange(range){
-
-const type=financialReportPeriodType.value;
-
-let startDate=new Date(range.start+"T00:00:00");
-let endDate=new Date(range.end+"T00:00:00");
-
-const months=
-(
-endDate.getFullYear()-startDate.getFullYear()
-)*12+
-(
-endDate.getMonth()-startDate.getMonth()
-)+1;
-
-const previousEnd=
-new Date(
-startDate.getFullYear(),
-startDate.getMonth(),
-0
-);
-
-const previousStart=
-new Date(
-previousEnd.getFullYear(),
-previousEnd.getMonth()-(months-1),
-1
-);
-
-const pad=n=>String(n).padStart(2,"0");
-
-return {
-start:
-`${previousStart.getFullYear()}-${pad(previousStart.getMonth()+1)}-${pad(previousStart.getDate())}`,
-end:
-`${previousEnd.getFullYear()}-${pad(previousEnd.getMonth()+1)}-${pad(previousEnd.getDate())}`,
-label:
-`الفترة السابقة (${previousStart.getFullYear()}-${pad(previousStart.getMonth()+1)} إلى ${previousEnd.getFullYear()}-${pad(previousEnd.getMonth()+1)})`,
-type
-};
-
-}
-
 function financialReportFilter(items,range){
 
 return items.filter(item=>{
@@ -3953,102 +3769,6 @@ ${cells.map(cell=>`<td>${cell}</td>`).join("")}
 </tr>
 
 `;
-
-}
-
-function financialReportGetPeriodTotals(range){
-
-const transactions=
-financialReportFilter(db.transactions,range);
-
-const officeExpenses=
-financialReportFilter(db.officeExpenses,range);
-
-const officeIncome=
-financialReportFilter(db.officeIncome,range);
-
-const contracting=
-financialReportFilter(db.contracting,range);
-
-const services=
-financialReportFilter(db.services,range);
-
-const rentals=
-financialReportFilter(db.rentals,range);
-
-const propertyExpenses=
-financialReportFilter(db.propertyExpenses,range);
-
-let income=0;
-let expense=0;
-
-transactions.forEach(x=>{
-if(x.type==="income") income+=Number(x.amount)||0;
-else expense+=Number(x.amount)||0;
-});
-
-officeIncome.forEach(x=>{
-income+=Number(x.amount)||0;
-});
-
-officeExpenses.forEach(x=>{
-expense+=Number(x.amount)||0;
-});
-
-contracting.forEach(x=>{
-if(x.type==="income") income+=Number(x.amount)||0;
-else expense+=Number(x.amount)||0;
-});
-
-services.forEach(x=>{
-
-if(x.recordType==="general_expense"){
-
-expense+=Number(x.amount)||0;
-
-}else{
-
-income+=Number(x.collectedAmount)||0;
-
-expense+=
-x.expense!==undefined
-?
-Number(x.expense)||0
-:
-Math.max(
-0,
-(Number(x.collectedAmount)||0)-
-(Number(x.profit)||0)
-);
-
-}
-
-});
-
-rentals.forEach(x=>{
-
-income+=Number(x.amount)||0;
-expense+=Number(x.expenseAmount)||0;
-
-});
-
-propertyExpenses.forEach(x=>{
-expense+=Number(x.amount)||0;
-});
-
-return {
-income,
-expense,
-profit:income-expense,
-hasData:
-transactions.length+
-officeExpenses.length+
-officeIncome.length+
-contracting.length+
-services.length+
-rentals.length+
-propertyExpenses.length>0
-};
 
 }
 
@@ -4383,18 +4103,9 @@ return total;
 0
 );
 
-const previousRange=
-getFinancialReportPreviousRange(range);
-
-const previousTotals=
-financialReportGetPeriodTotals(previousRange);
-
 return {
 
 range,
-
-previousRange,
-previousTotals,
 
 projects,
 transactions,
@@ -4535,108 +4246,117 @@ x.amount
 
 });
 
-const incomeSources=[
-["المشاريع",data.projectIncome],
-["دخل المكتب",data.officeIncomeTotal],
-["المقاولات",data.contractingIncome],
-["الخدمات",data.servicesIncome],
-["إيجارات العقارات",data.rentalIncome]
-];
-
-const expenseSources=[
-["مصاريف المشاريع",data.projectExpense],
-["مصاريف المكتب",data.officeExpenseTotal],
-["مصاريف المقاولات",data.contractingExpense],
-["مصاريف الخدمات",data.servicesExpense],
-["مصاريف الإيجارات والعقارات",data.rentalExpense+data.propertyExpenseTotal]
-];
-
-const incomeSourceRows=incomeSources.map(x=>
+const incomeSourceRows=[
 
 financialReportRow([
-financialReportEsc(x[0]),
-financialReportMoney(x[1]),
+"المشاريع",
+financialReportMoney(data.projectIncome),
 financialReportPercent(
 data.totalBusinessIncome?
-x[1]/data.totalBusinessIncome*100:
+data.projectIncome/data.totalBusinessIncome*100:
 0
 )
-])
-
-);
-
-const expenseSourceRows=expenseSources.map(x=>
+]),
 
 financialReportRow([
-financialReportEsc(x[0]),
-financialReportMoney(x[1]),
+"دخل المكتب",
+financialReportMoney(data.officeIncomeTotal),
 financialReportPercent(
-data.totalBusinessExpense?
-x[1]/data.totalBusinessExpense*100:
+data.totalBusinessIncome?
+data.officeIncomeTotal/data.totalBusinessIncome*100:
+0
+)
+]),
+
+financialReportRow([
+"المقاولات",
+financialReportMoney(data.contractingIncome),
+financialReportPercent(
+data.totalBusinessIncome?
+data.contractingIncome/data.totalBusinessIncome*100:
+0
+)
+]),
+
+financialReportRow([
+"الخدمات",
+financialReportMoney(data.servicesIncome),
+financialReportPercent(
+data.totalBusinessIncome?
+data.servicesIncome/data.totalBusinessIncome*100:
+0
+)
+]),
+
+financialReportRow([
+"إيجارات العقارات",
+financialReportMoney(data.rentalIncome),
+financialReportPercent(
+data.totalBusinessIncome?
+data.rentalIncome/data.totalBusinessIncome*100:
 0
 )
 ])
 
-);
+];
 
-const maxIncomeSource=
-Math.max(
-...incomeSources.map(x=>Number(x[1])||0),
-1
-);
+const expenseSourceRows=[
 
-const incomeChartRows=
-incomeSources
-.filter(x=>(Number(x[1])||0)>0)
-.map(x=>`
+financialReportRow([
+"مصاريف المشاريع",
+financialReportMoney(data.projectExpense),
+financialReportPercent(
+data.totalBusinessExpense?
+data.projectExpense/data.totalBusinessExpense*100:
+0
+)
+]),
 
-<div class="report-chart-row">
+financialReportRow([
+"مصاريف المكتب",
+financialReportMoney(data.officeExpenseTotal),
+financialReportPercent(
+data.totalBusinessExpense?
+data.officeExpenseTotal/data.totalBusinessExpense*100:
+0
+)
+]),
 
-<div class="report-chart-label">
-${financialReportEsc(x[0])}
-</div>
+financialReportRow([
+"مصاريف المقاولات",
+financialReportMoney(data.contractingExpense),
+financialReportPercent(
+data.totalBusinessExpense?
+data.contractingExpense/data.totalBusinessExpense*100:
+0
+)
+]),
 
-<div class="report-chart-track">
-<div
-class="report-chart-bar"
-style="width:${Math.max(2,(Number(x[1])||0)/maxIncomeSource*100)}%">
-</div>
-</div>
+financialReportRow([
+"مصاريف الخدمات",
+financialReportMoney(data.servicesExpense),
+financialReportPercent(
+data.totalBusinessExpense?
+data.servicesExpense/data.totalBusinessExpense*100:
+0
+)
+]),
 
-<div class="report-chart-value">
-${financialReportMoney(x[1])}
-</div>
+financialReportRow([
+"مصاريف الإيجارات والعقارات",
+financialReportMoney(
+data.rentalExpense+
+data.propertyExpenseTotal
+),
+financialReportPercent(
+data.totalBusinessExpense?
+(data.rentalExpense+data.propertyExpenseTotal)/
+data.totalBusinessExpense*100:
+0
+)
+])
 
-</div>
-
-`)
-.join("");
-
-const chartTotal=
-Math.max(
-data.totalBusinessIncome,
-data.totalBusinessExpense,
-Math.abs(data.businessProfit),
-1
-);
-
-const chartIncomeHeight=
-Math.max(
-2,
-data.totalBusinessIncome/chartTotal*100
-);
-
-const chartExpenseHeight=
-Math.max(
-2,
-data.totalBusinessExpense/chartTotal*100
-);
-
-const chartProfitHeight=
-Math.max(
-2,
-Math.abs(data.businessProfit)/chartTotal*100
-);
+];
 
 const contractingIncomeRows=
 financialReportSortedCategories(
@@ -4720,7 +4440,6 @@ financialReportMoney(x.total)
 
 const personalRows=
 data.personalExpenses
-.slice()
 .sort(
 (a,b)=>
 String(b.date||"")
@@ -4747,49 +4466,6 @@ const reportStatus=
 data.businessProfit>=0?
 "النشاط حقق صافي ربح خلال الفترة.":
 "النشاط حقق صافي خسارة خلال الفترة.";
-
-const comparison=
-data.previousTotals.hasData
-?
-`
-<div class="report-comparison">
-
-<div class="report-comparison-card">
-<div class="report-comparison-label">دخل الفترة الحالية</div>
-<div class="report-comparison-value report-income">
-${financialReportMoney(data.totalBusinessIncome)}
-</div>
-</div>
-
-<div class="report-comparison-card">
-<div class="report-comparison-label">دخل الفترة السابقة</div>
-<div class="report-comparison-value">
-${financialReportMoney(data.previousTotals.income)}
-</div>
-</div>
-
-<div class="report-comparison-card">
-<div class="report-comparison-label">مصروف الفترة الحالية</div>
-<div class="report-comparison-value report-expense">
-${financialReportMoney(data.totalBusinessExpense)}
-</div>
-</div>
-
-<div class="report-comparison-card">
-<div class="report-comparison-label">مصروف الفترة السابقة</div>
-<div class="report-comparison-value">
-${financialReportMoney(data.previousTotals.expense)}
-</div>
-</div>
-
-</div>
-`
-:
-`
-<div class="report-warning">
-لا توجد بيانات كافية في الفترة السابقة لإجراء مقارنة مالية موثوقة، لذلك لم يتم اختراع أو تقدير أي أرقام للمقارنة.
-</div>
-`;
 
 return `
 
@@ -4872,20 +4548,13 @@ ${financialReportPercent(businessMargin)}
 </div>
 
 <p class="report-text">
-
 ${reportStatus}
-
 بلغ إجمالي دخل النشاط
 <strong>${financialReportMoney(data.totalBusinessIncome)}</strong>
 مقابل مصروفات قدرها
 <strong>${financialReportMoney(data.totalBusinessExpense)}</strong>
 ليكون صافي النتيجة
 <strong>${financialReportMoney(data.businessProfit)}</strong>.
-
-<br><br>
-
-يعتمد هذا الملخص على العمليات المسجلة فعليًا خلال الفترة المحددة، مع فصل المصاريف الشخصية والتأمينات عن النتيجة التشغيلية.
-
 </p>
 
 </div>
@@ -4925,75 +4594,6 @@ financialReportPercent(expenseRatio)
 
 ],["البيان","القيمة"])}
 
-<div class="report-chart">
-
-<div class="report-chart-title">
-📊 مقارنة الدخل والمصروف وصافي الربح
-</div>
-
-<div class="report-summary-chart">
-
-<div class="report-summary-chart-item">
-
-<div class="report-summary-chart-bar-wrap">
-<div
-class="report-summary-chart-bar"
-style="height:${chartIncomeHeight}%">
-</div>
-</div>
-
-<div class="report-summary-chart-label">
-الدخل
-</div>
-
-<div class="report-summary-chart-value">
-${financialReportMoney(data.totalBusinessIncome)}
-</div>
-
-</div>
-
-<div class="report-summary-chart-item">
-
-<div class="report-summary-chart-bar-wrap">
-<div
-class="report-summary-chart-bar"
-style="height:${chartExpenseHeight}%">
-</div>
-</div>
-
-<div class="report-summary-chart-label">
-المصروف
-</div>
-
-<div class="report-summary-chart-value">
-${financialReportMoney(data.totalBusinessExpense)}
-</div>
-
-</div>
-
-<div class="report-summary-chart-item">
-
-<div class="report-summary-chart-bar-wrap">
-<div
-class="report-summary-chart-bar"
-style="height:${chartProfitHeight}%">
-</div>
-</div>
-
-<div class="report-summary-chart-label">
-صافي الربح / الخسارة
-</div>
-
-<div class="report-summary-chart-value">
-${financialReportMoney(data.businessProfit)}
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 </div>
 
 <div class="report-section">
@@ -5006,20 +4606,6 @@ ${financialReportTable(
 incomeSourceRows,
 ["مصدر الإيراد","المبلغ","النسبة"]
 )}
-
-<div class="report-chart">
-
-<div class="report-chart-title">
-📈 توزيع الإيرادات حسب النشاط
-</div>
-
-${incomeChartRows||`
-<div class="empty">
-لا توجد إيرادات خلال الفترة المحددة
-</div>
-`}
-
-</div>
 
 </div>
 
@@ -5039,17 +4625,7 @@ expenseSourceRows,
 <div class="report-section">
 
 <div class="report-section-title">
-5. المقارنة مع الفترة السابقة
-</div>
-
-${comparison}
-
-</div>
-
-<div class="report-section">
-
-<div class="report-section-title">
-6. المشاريع
+5. المشاريع
 </div>
 
 <p class="report-text">
@@ -5067,7 +4643,7 @@ projectRows,
 <div class="report-section">
 
 <div class="report-section-title">
-7. مصروفات المشاريع حسب التصنيف
+6. مصروفات المشاريع حسب التصنيف
 </div>
 
 ${financialReportTable(
@@ -5080,7 +4656,7 @@ projectCategoryRows,
 <div class="report-section">
 
 <div class="report-section-title">
-8. المكتب
+7. المكتب
 </div>
 
 ${financialReportTable([
@@ -5110,7 +4686,7 @@ data.officeExpenseTotal
 <div class="report-section">
 
 <div class="report-section-title">
-9. مصروفات المكتب حسب البند
+8. مصروفات المكتب حسب البند
 </div>
 
 ${financialReportTable(
@@ -5123,7 +4699,7 @@ officeCategoryRows,
 <div class="report-section">
 
 <div class="report-section-title">
-10. المقاولات
+9. المقاولات
 </div>
 
 ${financialReportTable([
@@ -5153,7 +4729,7 @@ data.contractingExpense
 <div class="report-section">
 
 <div class="report-section-title">
-11. دخل المقاولات حسب التصنيف
+10. دخل المقاولات حسب التصنيف
 </div>
 
 ${financialReportTable(
@@ -5166,7 +4742,7 @@ contractingIncomeRows,
 <div class="report-section">
 
 <div class="report-section-title">
-12. مصروفات المقاولات حسب التصنيف
+11. مصروفات المقاولات حسب التصنيف
 </div>
 
 ${financialReportTable(
@@ -5179,7 +4755,7 @@ contractingExpenseRows,
 <div class="report-section">
 
 <div class="report-section-title">
-13. الخدمات
+12. الخدمات
 </div>
 
 ${financialReportTable([
@@ -5209,7 +4785,7 @@ data.servicesExpense
 <div class="report-section">
 
 <div class="report-section-title">
-14. ربحية الخدمات حسب التصنيف
+13. ربحية الخدمات حسب التصنيف
 </div>
 
 ${financialReportTable(
@@ -5222,7 +4798,7 @@ serviceRows,
 <div class="report-section">
 
 <div class="report-section-title">
-15. إيجارات العقارات
+14. إيجارات العقارات
 </div>
 
 ${financialReportTable([
@@ -5268,7 +4844,7 @@ financialReportMoney(data.refundedDeposits)
 <div class="report-section">
 
 <div class="report-section-title">
-16. تحليل العقارات
+15. تحليل العقارات
 </div>
 
 ${financialReportTable(
@@ -5281,7 +4857,7 @@ propertyRows,
 <div class="report-section">
 
 <div class="report-section-title">
-17. مصروفات العقارات حسب التصنيف
+16. مصروفات العقارات حسب التصنيف
 </div>
 
 ${financialReportTable(
@@ -5294,7 +4870,7 @@ propertyCategoryRows,
 <div class="report-section">
 
 <div class="report-section-title">
-18. المصاريف الشخصية
+17. المصاريف الشخصية
 </div>
 
 <p class="report-text">
@@ -5320,7 +4896,7 @@ personalRows,
 <div class="report-section">
 
 <div class="report-section-title">
-19. ملخص الحركة النقدية
+18. التدفق النقدي المحسوب من البيانات المسجلة
 </div>
 
 ${financialReportTable([
@@ -5357,7 +4933,7 @@ financialReportMoney(data.totalAfterPersonal)
 <div class="report-section">
 
 <div class="report-section-title">
-20. الودائع والتأمينات
+19. الودائع والتأمينات
 </div>
 
 ${financialReportTable([
@@ -5385,13 +4961,13 @@ financialReportMoney(data.currentRefundedDeposits)
 <div class="report-section">
 
 <div class="report-section-title">
-21. المؤشرات المالية الرئيسية
+20. المؤشرات المالية الرئيسية
 </div>
 
 ${financialReportTable([
 
 financialReportRow([
-"هامش صافي الربح",
+"نموذج هامش صافي الربح",
 financialReportPercent(businessMargin)
 ]),
 
@@ -5442,7 +5018,7 @@ financialReportEsc(data.personalExpenses.length)
 <div class="report-section">
 
 <div class="report-section-title">
-22. التحليل المالي الإداري
+21. التحليل المالي الإداري
 </div>
 
 <p class="report-text">
@@ -5459,14 +5035,24 @@ financialReportEsc(data.personalExpenses.length)
 
 • أكبر مصدر دخل هو:
 <strong>${
-incomeSources
-.slice()
+[
+["المشاريع",data.projectIncome],
+["المكتب",data.officeIncomeTotal],
+["المقاولات",data.contractingIncome],
+["الخدمات",data.servicesIncome],
+["الإيجارات",data.rentalIncome]
+]
 .sort((a,b)=>b[1]-a[1])[0][0]
 }</strong>
 بمبلغ
 <strong>${financialReportMoney(
-incomeSources
-.slice()
+[
+["المشاريع",data.projectIncome],
+["المكتب",data.officeIncomeTotal],
+["المقاولات",data.contractingIncome],
+["الخدمات",data.servicesIncome],
+["الإيجارات",data.rentalIncome]
+]
 .sort((a,b)=>b[1]-a[1])[0][1]
 )}</strong>.
 
@@ -5474,14 +5060,24 @@ incomeSources
 
 • أكبر مصدر مصروف هو:
 <strong>${
-expenseSources
-.slice()
+[
+["المشاريع",data.projectExpense],
+["المكتب",data.officeExpenseTotal],
+["المقاولات",data.contractingExpense],
+["الخدمات",data.servicesExpense],
+["الإيجارات والعقارات",data.rentalExpense+data.propertyExpenseTotal]
+]
 .sort((a,b)=>b[1]-a[1])[0][0]
 }</strong>
 بمبلغ
 <strong>${financialReportMoney(
-expenseSources
-.slice()
+[
+["المشاريع",data.projectExpense],
+["المكتب",data.officeExpenseTotal],
+["المقاولات",data.contractingExpense],
+["الخدمات",data.servicesExpense],
+["الإيجارات والعقارات",data.rentalExpense+data.propertyExpenseTotal]
+]
 .sort((a,b)=>b[1]-a[1])[0][1]
 )}</strong>.
 
@@ -5493,10 +5089,6 @@ expenseSources
 
 • المصاريف الشخصية مفصولة في التقرير عن مصروفات النشاط حتى تكون قراءة ربحية النشاط واضحة.
 
-<br>
-
-• قراءة المؤشرات يجب أن تعتمد على البيانات المسجلة فعليًا خلال الفترة، دون افتراض عمليات أو أرقام غير موجودة.
-
 </p>
 
 </div>
@@ -5504,7 +5096,7 @@ expenseSources
 <div class="report-section">
 
 <div class="report-section-title">
-23. الأصول والالتزامات وحقوق الملكية
+22. الأصول والالتزامات وحقوق الملكية
 </div>
 
 <div class="report-warning">
@@ -5529,7 +5121,7 @@ expenseSources
 <div class="report-section">
 
 <div class="report-section-title">
-24. الخلاصة الإدارية
+23. الخلاصة
 </div>
 
 <p class="report-text">
@@ -5539,26 +5131,11 @@ expenseSources
 بلغ إجمالي دخل النشاط
 <strong>${financialReportMoney(data.totalBusinessIncome)}</strong>
 وبلغ إجمالي مصروفات النشاط
-<strong>${financialReportMoney(data.totalBusinessExpense)}</strong>.
+<strong>${financialReportMoney(data.totalBusinessExpense)}</strong>
+وبذلك بلغ صافي الربح
+<strong>${financialReportMoney(data.businessProfit)}</strong>.
 
-وبناءً على العمليات المسجلة، بلغ صافي النتيجة التشغيلية
-<strong>${financialReportMoney(data.businessProfit)}</strong>
-وبلغ هامش صافي الربح
-<strong>${financialReportPercent(businessMargin)}</strong>.
-
-<br><br>
-
-تم تحليل مصادر الدخل والمصروفات بحسب أقسام النظام، مع إظهار المشاريع والمكتب والمقاولات والخدمات وإيجارات العقارات بشكل منفصل. كما تم عرض المصاريف الشخصية بصورة مستقلة حتى لا تؤثر على قراءة أداء النشاط.
-
-<br><br>
-
-أما التأمينات النشطة، فقد تم إبقاؤها خارج الإيرادات التشغيلية وعرضها بشكل مستقل لأنها مبالغ مرتبطة بالتزامات عقود الإيجار وليست ربحًا تشغيليًا.
-
-<br><br>
-
-وبذلك يقدم التقرير صورة إدارية أوضح عن:
-<strong>حجم الإيرادات، مستوى المصروفات، صافي الربح، توزيع مصادر الدخل، أكبر مصادر المصروفات، والحركة النقدية المسجلة</strong>
-خلال الفترة المحددة.
+كما تم فصل المصاريف الشخصية عن النشاط، وإظهار التأمينات النشطة بشكل مستقل، وتحليل الدخل والمصروفات حسب الأقسام والتصنيفات والعقارات والخدمات والمشاريع.
 
 </p>
 
@@ -5600,11 +5177,12 @@ financialReportBuildData(range);
 const wrapper=
 document.createElement("div");
 
-wrapper.style.position="fixed";
-wrapper.style.left="-100000px";
+wrapper.style.position="absolute";
+wrapper.style.left="0";
 wrapper.style.top="0";
 wrapper.style.background="#fff";
 wrapper.style.zIndex="-1";
+wrapper.style.width="210mm";
 
 wrapper.innerHTML=
 financialReportBuildHTML(data);
@@ -5652,7 +5230,9 @@ compress:true
 },
 
 pagebreak:{
-mode:["css","legacy"]
+mode:["css"],
+before:".report-section",
+avoid:".report-table"
 }
 
 };
@@ -6581,21 +6161,21 @@ headers,
 );
 
 backupExcelColumnWidths(
- sheet,
- headers,
- rows
+sheet,
+headers,
+rows
 );
 
 backupExcelFormatSheet(
- sheet,
- headers,
- rows.length
+sheet,
+headers,
+rows.length
 );
 
 backupExcelApplyNumberFormats(
- sheet,
- headers,
- rows.length
+sheet,
+headers,
+rows.length
 );
 
 XLSX.utils.book_append_sheet(
@@ -6634,12 +6214,12 @@ const data={
 
 const documentId=
 String(
- data.__documentId||""
+data.__documentId||""
 );
 
 const documentPath=
 String(
- data.__documentPath||""
+data.__documentPath||""
 );
 
 delete data.__documentId;
@@ -6651,9 +6231,9 @@ try{
 
 json=
 JSON.stringify(
- data,
- null,
- 2
+data,
+null,
+2
 );
 
 }catch(e){
