@@ -5182,13 +5182,276 @@ financialReportBuildData(range);
 const wrapper=
 document.createElement("div");
 
-wrapper.style.position="absolute";
+wrapper.style.position="fixed";
 wrapper.style.left="0";
 wrapper.style.top="0";
 wrapper.style.width="210mm";
+wrapper.style.maxWidth="none";
 wrapper.style.background="#fff";
-wrapper.style.zIndex="9998";
+wrapper.style.zIndex="10000";
 wrapper.style.pointerEvents="none";
+wrapper.style.overflow="visible";
+
+wrapper.innerHTML=
+financialReportBuildHTML(data);
+
+document.body.appendChild(wrapper);
+
+button.disabled=true;
+button.textContent="جاري إنشاء التقرير...";
+
+try{
+
+await new Promise(resolve=>
+requestAnimationFrame(()=>
+requestAnimationFrame(resolve)
+)
+);
+
+const reportElement=
+wrapper.querySelector(
+".financial-report"
+);
+
+if(!reportElement){
+
+throw new Error("تعذر تجهيز التقرير.");
+
+}
+
+const canvasScale=
+window.innerWidth<=800 ? 1 : 1.5;
+
+const canvasOptions={
+
+scale:canvasScale,
+
+useCORS:true,
+
+allowTaint:false,
+
+backgroundColor:"#ffffff",
+
+logging:false,
+
+foreignObjectRendering:false,
+
+windowWidth:Math.max(
+794,
+Math.ceil(reportElement.scrollWidth||794)
+),
+
+windowHeight:Math.max(
+1123,
+Math.ceil(reportElement.scrollHeight||1123)
+),
+
+scrollX:0,
+scrollY:0,
+
+onclone:function(clonedDocument){
+
+const clonedBody=clonedDocument.body;
+
+if(clonedBody){
+
+clonedBody.style.width="210mm";
+clonedBody.style.minWidth="210mm";
+clonedBody.style.margin="0";
+clonedBody.style.padding="0";
+clonedBody.style.overflow="visible";
+
+}
+
+const clonedReport=
+clonedDocument.querySelector(
+".financial-report"
+);
+
+if(clonedReport){
+
+clonedReport.style.width="210mm";
+clonedReport.style.minWidth="210mm";
+clonedReport.style.margin="0";
+clonedReport.style.padding="15mm";
+
+}
+
+}
+
+};
+
+const pdf=new jspdf.jsPDF({
+
+unit:"mm",
+format:"a4",
+orientation:"portrait",
+compress:true
+
+});
+
+const pageWidth=210;
+const pageHeight=297;
+const margin=15;
+const contentWidth=pageWidth-(margin*2);
+const contentHeight=pageHeight-(margin*2);
+
+const reportParts=[
+reportElement.querySelector(".report-cover"),
+...reportElement.querySelectorAll(".report-section")
+].filter(Boolean);
+
+if(!reportParts.length){
+
+throw new Error("لا توجد أقسام قابلة للطباعة في التقرير.");
+
+}
+
+let isFirstPage=true;
+
+for(const part of reportParts){
+
+const partCanvas=
+await html2canvas(
+part,
+canvasOptions
+);
+
+if(!partCanvas.width || !partCanvas.height){
+
+throw new Error("تعذر رسم أحد أقسام التقرير.");
+
+}
+
+const sourceWidth=partCanvas.width;
+const sourceHeight=partCanvas.height;
+const pixelsPerMm=sourceWidth/contentWidth;
+const pageSourceHeight=Math.max(
+1,
+Math.floor(contentHeight*pixelsPerMm)
+);
+
+let sourceY=0;
+
+while(sourceY<sourceHeight){
+
+if(!isFirstPage){
+
+pdf.addPage();
+
+}
+
+isFirstPage=false;
+
+const sliceHeight=Math.min(
+pageSourceHeight,
+sourceHeight-sourceY
+);
+
+const sliceCanvas=document.createElement("canvas");
+
+sliceCanvas.width=sourceWidth;
+sliceCanvas.height=sliceHeight;
+
+const sliceContext=
+sliceCanvas.getContext("2d");
+
+sliceContext.fillStyle="#ffffff";
+sliceContext.fillRect(
+0,
+0,
+sourceWidth,
+sliceHeight
+);
+
+sliceContext.drawImage(
+partCanvas,
+0,
+sourceY,
+sourceWidth,
+sliceHeight,
+0,
+0,
+sourceWidth,
+sliceHeight
+);
+
+const imageData=
+canvasScale===1
+?
+sliceCanvas.toDataURL("image/jpeg",0.94)
+:
+sliceCanvas.toDataURL("image/jpeg",0.96);
+
+const renderedHeight=
+(sliceHeight/sourceWidth)*contentWidth;
+
+pdf.addImage(
+imageData,
+"JPEG",
+margin,
+margin,
+contentWidth,
+renderedHeight,
+undefined,
+"FAST"
+);
+
+sourceY+=sliceHeight;
+
+}
+
+}
+
+pdf.save(
+`التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf`
+);
+
+document.getElementById(
+"financialReportModal"
+).style.display="none";
+
+}catch(error){
+
+console.error(
+"Financial Report PDF Error:",
+error
+);
+
+alert(
+"تعذر إنشاء التقرير PDF:\n"+
+error.message
+);
+
+}finally{
+
+document.body.removeChild(wrapper);
+
+button.disabled=false;
+button.textContent="📄 إنشاء التقرير PDF";
+
+}
+
+}
+
+document.getElementById(
+"generateFinancialReportBtn"
+);
+
+const range=
+getFinancialReportDateRange();
+
+const data=
+financialReportBuildData(range);
+
+const wrapper=
+document.createElement("div");
+
+wrapper.style.position="fixed";
+wrapper.style.left="-100000px";
+wrapper.style.top="0";
+wrapper.style.background="#fff";
+wrapper.style.zIndex="-1";
 
 wrapper.innerHTML=
 financialReportBuildHTML(data);
@@ -5222,14 +5485,10 @@ quality:0.98
 },
 
 html2canvas:{
-scale:window.devicePixelRatio>1?2:1.5,
+scale:2,
 useCORS:true,
 backgroundColor:"#ffffff",
-logging:false,
-windowWidth:document.documentElement.clientWidth,
-windowHeight:document.documentElement.clientHeight,
-scrollX:0,
-scrollY:0
+logging:false
 },
 
 jsPDF:{
