@@ -11,8 +11,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
 
@@ -558,7 +561,13 @@ font-size:14px
 
 .report-section{
 margin-bottom:22px;
-page-break-inside:avoid
+page-break-inside:auto;
+break-inside:auto
+}
+
+.report-section + .report-section{
+page-break-before:always;
+break-before:page
 }
 
 .report-section-title{
@@ -5175,338 +5184,160 @@ financialReportBuildData(range);
 button.disabled=true;
 button.textContent="جاري إنشاء التقرير...";
 
-let staging=null;
+let renderHost=null;
 
 try{
 
-if(
-typeof window.html2canvas!=="function"
-){
-
-throw new Error(
-"مكتبة html2canvas غير محملة."
-);
-
+if(typeof window.html2canvas!=="function"){
+throw new Error("مكتبة html2canvas غير محملة. تأكد من اتصال الإنترنت ثم أعد تحميل الصفحة.");
 }
 
-if(
-!window.jspdf ||
-typeof window.jspdf.jsPDF!=="function"
-){
-
-throw new Error(
-"مكتبة jsPDF غير محملة."
-);
-
+if(!window.jspdf || typeof window.jspdf.jsPDF!=="function"){
+throw new Error("مكتبة jsPDF غير محملة. تأكد من اتصال الإنترنت ثم أعد تحميل الصفحة.");
 }
 
-const reportHTML=
-financialReportBuildHTML(data);
-
-const source=
-document.createElement("div");
-
-source.innerHTML=
-reportHTML;
-
-const reportElement=
-source.querySelector(
-".financial-report"
-);
-
-if(!reportElement){
-
-throw new Error(
-"تعذر تجهيز التقرير المالي."
-);
-
-}
-
-/*
- * يتم تصوير الغلاف وكل قسم بشكل مستقل.
- * هذا يمنع إنشاء Canvas ضخم واحد، وهو السبب
- * الرئيسي للصفحات البيضاء على الجوال.
- */
-
-staging=
-document.createElement("div");
-
-staging.style.position="fixed";
-staging.style.left="0";
-staging.style.top="0";
-staging.style.width="794px";
-staging.style.minWidth="794px";
-staging.style.maxWidth="794px";
-staging.style.background="#ffffff";
-staging.style.padding="0";
-staging.style.margin="0";
-staging.style.zIndex="1";
-staging.style.pointerEvents="none";
-staging.style.overflow="visible";
-
-document.body.appendChild(staging);
-
-const pdf=
-new window.jspdf.jsPDF({
-
+const pdf=new window.jspdf.jsPDF({
 unit:"mm",
 format:"a4",
 orientation:"portrait",
 compress:true
-
 });
 
 const pageWidth=210;
 const pageHeight=297;
+const pageMargin=0;
 
-function addCanvasToCurrentPDFPage(canvas){
+renderHost=document.createElement("div");
+renderHost.style.position="absolute";
+renderHost.style.left="0";
+renderHost.style.top="0";
+renderHost.style.width="210mm";
+renderHost.style.background="#ffffff";
+renderHost.style.pointerEvents="none";
+renderHost.style.zIndex="0";
+renderHost.style.direction="rtl";
+renderHost.innerHTML=financialReportBuildHTML(data);
 
-const canvasWidth=
-canvas.width;
+document.body.appendChild(renderHost);
 
-const canvasHeight=
-canvas.height;
+await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
 
-if(!canvasWidth || !canvasHeight){
+const reportElement=renderHost.querySelector(".financial-report");
 
-throw new Error(
-"تعذر رسم أحد أجزاء التقرير."
-);
-
+if(!reportElement){
+throw new Error("تعذر تجهيز التقرير المالي.");
 }
 
-const pagePixelHeight=
-Math.max(
-1,
-Math.floor(
-canvasWidth*
-(pageHeight/pageWidth)
-)
-);
+const sections=[
+reportElement.querySelector(".report-cover"),
+...Array.from(reportElement.querySelectorAll(".report-section"))
+].filter(Boolean);
 
-let sourceY=0;
-let firstSlice=true;
-
-while(sourceY<canvasHeight){
-
-const sliceHeight=
-Math.min(
-pagePixelHeight,
-canvasHeight-sourceY
-);
-
-const slice=
-document.createElement("canvas");
-
-slice.width=canvasWidth;
-slice.height=sliceHeight;
-
-const ctx=
-slice.getContext("2d");
-
-if(!ctx){
-
-throw new Error(
-"تعذر تجهيز صورة صفحة التقرير."
-);
-
+if(!sections.length){
+throw new Error("لا توجد أقسام داخل التقرير.");
 }
 
+let firstPage=true;
+
+for(const section of sections){
+
+const clone=section.cloneNode(true);
+
+clone.style.width="210mm";
+clone.style.minHeight="0";
+clone.style.height="auto";
+clone.style.margin="0";
+clone.style.padding=section.classList.contains("report-cover")?"15mm":"15mm";
+clone.style.background="#ffffff";
+clone.style.boxSizing="border-box";
+clone.style.position="relative";
+clone.style.display=section.classList.contains("report-cover")?"flex":"block";
+clone.style.visibility="visible";
+clone.style.opacity="1";
+
+const pageHost=document.createElement("div");
+pageHost.style.position="absolute";
+pageHost.style.left="0";
+pageHost.style.top="0";
+pageHost.style.width="210mm";
+pageHost.style.background="#ffffff";
+pageHost.style.pointerEvents="none";
+pageHost.style.zIndex="1";
+pageHost.appendChild(clone);
+renderHost.appendChild(pageHost);
+
+await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+
+const canvas=await window.html2canvas(clone,{
+scale:Math.min(1.5,Math.max(1,window.devicePixelRatio||1)),
+useCORS:true,
+allowTaint:false,
+backgroundColor:"#ffffff",
+logging:false,
+windowWidth:Math.max(clone.scrollWidth,document.documentElement.clientWidth,800),
+windowHeight:Math.max(clone.scrollHeight,document.documentElement.clientHeight,1000),
+scrollX:0,
+scrollY:0
+});
+
+pageHost.remove();
+
+const usableWidth=pageWidth-(pageMargin*2);
+const usableHeight=pageHeight-(pageMargin*2);
+const imageWidth=usableWidth;
+const pxPerMm=canvas.width/imageWidth;
+const maxSliceHeightPx=Math.max(1,Math.floor(usableHeight*pxPerMm));
+
+let offsetY=0;
+let sliceIndex=0;
+
+while(offsetY<canvas.height){
+
+const sliceHeight=Math.min(maxSliceHeightPx,canvas.height-offsetY);
+
+const sliceCanvas=document.createElement("canvas");
+sliceCanvas.width=canvas.width;
+sliceCanvas.height=sliceHeight;
+
+const ctx=sliceCanvas.getContext("2d");
 ctx.fillStyle="#ffffff";
-
-ctx.fillRect(
-0,
-0,
-slice.width,
-slice.height
-);
-
+ctx.fillRect(0,0,sliceCanvas.width,sliceCanvas.height);
 ctx.drawImage(
 canvas,
-0,
-sourceY,
-canvasWidth,
-sliceHeight,
-0,
-0,
-canvasWidth,
-sliceHeight
+0,offsetY,canvas.width,sliceHeight,
+0,0,canvas.width,sliceHeight
 );
 
-const imageData=
-slice.toDataURL(
-"image/jpeg",
-0.92
-);
-
-const renderedHeight=
-sliceHeight/canvasWidth*pageWidth;
-
-if(!firstSlice){
-
+if(!firstPage){
 pdf.addPage();
-
 }
 
+const imageHeight=sliceHeight/pxPerMm;
 pdf.addImage(
-imageData,
+sliceCanvas.toDataURL("image/jpeg",0.95),
 "JPEG",
-0,
-0,
-pageWidth,
-renderedHeight,
+pageMargin,
+pageMargin,
+imageWidth,
+imageHeight,
 undefined,
 "FAST"
 );
 
-firstSlice=false;
-sourceY+=sliceHeight;
+firstPage=false;
+offsetY+=sliceHeight;
+sliceIndex++;
 
 }
 
-}
-
-async function renderReportPart(
-part,
-includeFooter
-){
-
-staging.innerHTML="";
-
-const shell=
-document.createElement("div");
-
-shell.className="financial-report";
-
-shell.style.width="794px";
-shell.style.minWidth="794px";
-shell.style.maxWidth="794px";
-shell.style.padding="56.7px";
-shell.style.margin="0";
-shell.style.background="#ffffff";
-shell.style.color="#17202a";
-shell.style.direction="rtl";
-
-shell.appendChild(
-part.cloneNode(true)
-);
-
-if(
-includeFooter
-){
-
-const footer=
-reportElement.querySelector(
-".report-footer-note"
-);
-
-if(footer){
-
-shell.appendChild(
-footer.cloneNode(true)
-);
+canvas.width=1;
+canvas.height=1;
 
 }
 
-}
-
-staging.appendChild(shell);
-
-await new Promise(resolve=>
-requestAnimationFrame(()=>
-requestAnimationFrame(resolve)
-)
+pdf.save(
+`التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf`
 );
-
-return await window.html2canvas(
-shell,
-{
-
-scale:1,
-useCORS:true,
-allowTaint:true,
-backgroundColor:"#ffffff",
-logging:false,
-width:794,
-windowWidth:794,
-scrollX:0,
-scrollY:0
-}
-);
-
-}
-
-/* الصفحة الأولى: الغلاف */
-
-const cover=
-reportElement.querySelector(
-".report-cover"
-);
-
-if(cover){
-
-const coverCanvas=
-await renderReportPart(
-cover,
-false
-);
-
-addCanvasToCurrentPDFPage(
-coverCanvas
-);
-
-}
-
-/* كل قسم يبدأ صفحة مستقلة */
-
-const sections=
-Array.from(
-reportElement.querySelectorAll(
-".report-section"
-)
-);
-
-if(!sections.length){
-
-throw new Error(
-"لم يتم العثور على أقسام التقرير."
-);
-
-}
-
-for(
-let index=0;
-index<sections.length;
-index++
-){
-
-const section=
-sections[index];
-
-/*
- * يبدأ كل قسم في صفحة PDF جديدة.
- * إذا كان القسم أطول من صفحة A4،
- * يتم تقسيمه تلقائيًا إلى صفحات إضافية.
- */
-
-pdf.addPage();
-
-const sectionCanvas=
-await renderReportPart(
-section,
-index===sections.length-1
-);
-
-addCanvasToCurrentPDFPage(
-sectionCanvas
-);
-
-}
-
-const filename=
-`التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf`;
-
-pdf.save(filename);
 
 document.getElementById(
 "financialReportModal"
@@ -5526,15 +5357,8 @@ error.message
 
 }finally{
 
-if(
-staging &&
-staging.parentNode
-){
-
-staging.parentNode.removeChild(
-staging
-);
-
+if(renderHost && renderHost.parentNode){
+renderHost.parentNode.removeChild(renderHost);
 }
 
 button.disabled=false;
