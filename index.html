@@ -4566,7 +4566,7 @@ const data=financialReportBuildData(range);
 
 /*
   طريقة التصدير الجديدة:
-  كل .report-page يتم تصويره كصورة مستقلة عالية الدقة،
+  كل .report-page يتم تصويره كصورة مستقلة بدقة عالية وسرعة أفضل،
   ثم توضع الصورة مباشرة على صفحة A4 واحدة في jsPDF.
   بهذه الطريقة لا يوجد html2pdf pagination ولا إعادة حساب RTL
   ولا انحراف للمحتوى إلى اليسار.
@@ -4621,7 +4621,7 @@ putOnlyUsedFonts:true
 
 const A4_WIDTH_MM=210;
 const A4_HEIGHT_MM=297;
-const RENDER_SCALE=3.5;
+const RENDER_SCALE=2.0;
 
 for(let i=0;i<pages.length;i++){
 
@@ -4660,7 +4660,7 @@ windowWidth:Math.max(document.documentElement.clientWidth,1024),
 windowHeight:Math.max(document.documentElement.clientHeight,1200)
 });
 
-const imageData=canvas.toDataURL("image/png",1.0);
+const imageData=canvas.toDataURL("image/jpeg",0.94);
 
 if(i>0){
 pdf.addPage("a4","portrait");
@@ -4668,7 +4668,7 @@ pdf.addPage("a4","portrait");
 
 pdf.addImage(
 imageData,
-"PNG",
+"JPEG",
 0,
 0,
 A4_WIDTH_MM,
