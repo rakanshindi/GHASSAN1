@@ -6031,7 +6031,9 @@ ${escapeHTML(x.category||"-")}
 </td>
 
 <td class="editable-cell ${x.type==="income"?'income':'expense'}" onclick="inlineEditCell(this,'contracting','${x.id}','amount','number')">
+
 ${money(x.amount)}
+
 </td>
 
 <td
@@ -6156,59 +6158,6 @@ btn.textContent="حفظ العملية";
 
 };
 
-window.editContracting=async function(id){
-
-const item=db.contracting.find(x=>x.id===id);
-
-if(!item)return;
-
-const date=prompt("التاريخ (YYYY-MM-DD):",item.date||"");
-
-if(date===null)return;
-
-const name=prompt("الاسم / البند:",item.name||item.category||"");
-
-if(name===null)return;
-
-const category=prompt("التصنيف:",item.category||"");
-
-if(category===null)return;
-
-const amountText=prompt("المبلغ:",String(item.amount??""));
-
-if(amountText===null)return;
-
-const amount=Number(amountText);
-
-if(!date||!name||!(amount>0)){
-alert("البيانات غير صحيحة.");
-return;
-}
-
-const note=prompt("البيان:",item.note||"");
-
-if(note===null)return;
-
-try{
-
-await updateDoc(
-doc(firestore,"contracting",id),
-{
-date,
-name,
-category,
-amount,
-note
-}
-);
-
-}catch(e){
-
-alert(e.message);
-
-}
-
-};
 
 window.deleteContracting=async function(id){
 
@@ -6342,9 +6291,7 @@ const rows=group.items.map(item=>`
 <span class="num-val">${escapeHTML(item.date)}</span>
 </td>
 
-<td class="editable-cell expense" onclick="inlineEditCell(this,'personal_expenses','${item.id}','amount','number')">
-${money(item.amount)}
-</td>
+<td class="editable-cell expense" onclick="inlineEditCell(this,'office_expenses','${item.id}','amount','number')">${money(item.amount)}</td>
 
 <td class="editable-cell" onclick="inlineEditCell(this,'personal_expenses','${item.id}','note')">
 ${escapeHTML(item.note||"")}
@@ -6556,9 +6503,7 @@ incomeBody.innerHTML=incomes.length?incomes.map(item=>`
 <strong>${escapeHTML(item.name)}</strong>
 </td>
 
-<td class="editable-cell income" onclick="inlineEditCell(this,'office_income','${item.id}','amount','number')">
-${money(item.amount)}
-</td>
+<td class="editable-cell income" onclick="inlineEditCell(this,'office_income','${item.id}','amount','number')">${money(item.amount)}</td>
 
 <td class="editable-cell" onclick="inlineEditCell(this,'office_income','${item.id}','note')">
 ${escapeHTML(item.note||"")}
@@ -6589,9 +6534,7 @@ tbody.innerHTML=expenses.length?expenses.map(item=>`
 <strong>${escapeHTML(item.name)}</strong>
 </td>
 
-<td class="editable-cell expense" onclick="inlineEditCell(this,'personal_expenses','${item.id}','amount','number')">
-${money(item.amount)}
-</td>
+<td class="editable-cell expense" onclick="inlineEditCell(this,'office_expenses','${item.id}','amount','number')">${money(item.amount)}</td>
 
 <td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','note')">
 ${escapeHTML(item.note||"")}
@@ -6755,54 +6698,6 @@ this.disabled=false;
 
 };
 
-window.editOfficeIncome=async function(id){
-
-const item=db.officeIncome.find(x=>x.id===id);
-
-if(!item)return;
-
-const date=prompt("التاريخ (YYYY-MM-DD):",item.date||"");
-
-if(date===null)return;
-
-const name=prompt("اسم الدخل:",item.name||"");
-
-if(name===null)return;
-
-const amountText=prompt("المبلغ:",String(item.amount??""));
-
-if(amountText===null)return;
-
-const amount=Number(amountText);
-
-if(!date||!name||!(amount>0)){
-alert("البيانات غير صحيحة.");
-return;
-}
-
-const note=prompt("الملاحظات:",item.note||"");
-
-if(note===null)return;
-
-try{
-
-await updateDoc(
-doc(firestore,"office_income",id),
-{
-date,
-name,
-amount,
-note
-}
-);
-
-}catch(e){
-
-alert(e.message);
-
-}
-
-};
 
 window.deleteOfficeIncome=async function(id){
 
@@ -6822,54 +6717,6 @@ alert(e.message);
 
 };
 
-window.editOfficeExpense=async function(id){
-
-const item=db.officeExpenses.find(x=>x.id===id);
-
-if(!item)return;
-
-const date=prompt("التاريخ (YYYY-MM-DD):",item.date||"");
-
-if(date===null)return;
-
-const name=prompt("اسم البند / المسمى:",item.name||"");
-
-if(name===null)return;
-
-const amountText=prompt("المبلغ:",String(item.amount??""));
-
-if(amountText===null)return;
-
-const amount=Number(amountText);
-
-if(!date||!name||!(amount>0)){
-alert("البيانات غير صحيحة.");
-return;
-}
-
-const note=prompt("الملاحظات:",item.note||"");
-
-if(note===null)return;
-
-try{
-
-await updateDoc(
-doc(firestore,"office_expenses",id),
-{
-date,
-name,
-amount,
-note
-}
-);
-
-}catch(e){
-
-alert(e.message);
-
-}
-
-};
 
 window.deleteOfficeExpense=
 async function(id){
@@ -7034,7 +6881,7 @@ html+=`
 <strong>${escapeHTML(p.name)}</strong>
 </td>
 
-<td>
+<td class="editable-cell" onclick="inlineEditCell(this,'projects','${p.id}','category')">
 ${escapeHTML(p.category||"عام")}
 </td>
 
@@ -8087,11 +7934,11 @@ return `
 ${money(profit)}
 </td>
 
-<td class="income">
+<td class="editable-cell income" onclick="inlineEditCell(this,'services','${s.id}','collectedAmount','number')">
 ${money(collected)}
 </td>
 
-<td class="expense">
+<td class="editable-cell expense" onclick="inlineEditCell(this,'services','${s.id}','expense','number')">
 ${money(expense)}
 </td>
 
@@ -8140,7 +7987,7 @@ generalExpenses.map(s=>`
 <strong>${escapeHTML(s.category||"عام")}</strong>
 </td>
 
-<td class="expense">
+<td class="editable-cell expense" onclick="inlineEditCell(this,'services','${s.id}','amount','number')">
 ${money(s.amount)}
 </td>
 
@@ -8869,13 +8716,19 @@ ${money(net)}
 
 <td>
 
-<button
+${
+deposit > 0
+?
+`<button
 class="btn ${isRef?'blue':'orange'}"
 onclick="toggleDeposit('${r.id}','${isRef?'active':'refunded'}')">
 
 ${isRef?'تم الاسترداد':'مستمر (نشط)'}
 
-</button>
+</button>`
+:
+""
+}
 
 </td>
 
@@ -9340,9 +9193,16 @@ Number(rawValue)
 :
 rawValue;
 
+const oldComparable=
+numericFields.includes(field)
+?
+Number(oldValue)||0
+:
+String(oldValue??"");
+
 if(
 save &&
-value!==oldValue
+value!==oldComparable
 ){
 
 if(
@@ -9351,7 +9211,9 @@ numericFields.includes(field) &&
 ){
 
 alert("أدخل مبلغ صحيح.");
-finished=true;
+
+finished=false;
+cell.dataset.editing="0";
 renderAfterInlineEdit(collectionName);
 return;
 
