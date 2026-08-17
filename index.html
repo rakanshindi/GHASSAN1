@@ -8833,6 +8833,8 @@ pContracts.map(r=>{
 const deposit=
 Number(r.depositAmount)||0;
 
+const hasDeposit=deposit>0;
+
 const isRef=
 r.depositStatus==="refunded";
 
@@ -8879,6 +8881,8 @@ ${money(net)}
 
 <td>
 
+${hasDeposit ? `
+
 <button
 class="btn ${isRef?'blue':'orange'}"
 onclick="toggleDeposit('${r.id}','${isRef?'active':'refunded'}')">
@@ -8886,6 +8890,8 @@ onclick="toggleDeposit('${r.id}','${isRef?'active':'refunded'}')">
 ${isRef?'تم الاسترداد':'مستمر (نشط)'}
 
 </button>
+
+` : ""}
 
 </td>
 
