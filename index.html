@@ -6030,10 +6030,8 @@ ${escapeHTML(x.category||"-")}
 
 </td>
 
-<td class="${x.type==="income"?'income':'expense'}">
-
+<td class="editable-cell ${x.type==="income"?'income':'expense'}" onclick="inlineEditCell(this,'contracting','${x.id}','amount','number')">
 ${money(x.amount)}
-
 </td>
 
 <td
@@ -6046,13 +6044,7 @@ ${escapeHTML(x.note||"-")}
 
 <td>
 
-<button
-class="btn blue"
-onclick="editContracting('${x.id}')">
 
-تعديل
-
-</button>
 
 <button
 class="btn red"
@@ -6350,14 +6342,16 @@ const rows=group.items.map(item=>`
 <span class="num-val">${escapeHTML(item.date)}</span>
 </td>
 
-<td class="expense">${money(item.amount)}</td>
+<td class="editable-cell expense" onclick="inlineEditCell(this,'personal_expenses','${item.id}','amount','number')">
+${money(item.amount)}
+</td>
 
 <td class="editable-cell" onclick="inlineEditCell(this,'personal_expenses','${item.id}','note')">
 ${escapeHTML(item.note||"")}
 </td>
 
 <td>
-<button class="btn blue" onclick="editRecord('personal_expenses','${item.id}','date,note')">تعديل</button>
+
 <button class="btn red" onclick="deletePersonalExpense('${item.id}')">حذف</button>
 </td>
 
@@ -6562,14 +6556,16 @@ incomeBody.innerHTML=incomes.length?incomes.map(item=>`
 <strong>${escapeHTML(item.name)}</strong>
 </td>
 
-<td class="income">${money(item.amount)}</td>
+<td class="editable-cell income" onclick="inlineEditCell(this,'office_income','${item.id}','amount','number')">
+${money(item.amount)}
+</td>
 
 <td class="editable-cell" onclick="inlineEditCell(this,'office_income','${item.id}','note')">
 ${escapeHTML(item.note||"")}
 </td>
 
 <td>
-<button class="btn blue" onclick="editOfficeIncome('${item.id}')">تعديل</button>
+
 <button class="btn red" onclick="deleteOfficeIncome('${item.id}')">حذف</button>
 </td>
 
@@ -6593,14 +6589,16 @@ tbody.innerHTML=expenses.length?expenses.map(item=>`
 <strong>${escapeHTML(item.name)}</strong>
 </td>
 
-<td class="expense">${money(item.amount)}</td>
+<td class="editable-cell expense" onclick="inlineEditCell(this,'personal_expenses','${item.id}','amount','number')">
+${money(item.amount)}
+</td>
 
 <td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','note')">
 ${escapeHTML(item.note||"")}
 </td>
 
 <td>
-<button class="btn blue" onclick="editOfficeExpense('${item.id}')">تعديل</button>
+
 <button class="btn red" onclick="deleteOfficeExpense('${item.id}')">حذف</button>
 </td>
 
@@ -7032,7 +7030,7 @@ html+=`
 
 <tr>
 
-<td>
+<td class="editable-cell" onclick="inlineEditCell(this,'projects','${p.id}','name')">
 <strong>${escapeHTML(p.name)}</strong>
 </td>
 
@@ -7064,9 +7062,7 @@ ${p.status==="closed"?'<span class="expense">مغلق</span>':'<span class="inco
 التفاصيل
 </button>
 
-<button class="btn blue" onclick="editRecord('projects','${p.id}','name')">
-تعديل
-</button>
+
 
 <button class="btn orange" onclick="toggleProjectStatus('${p.id}')">
 ${p.status==="closed"?'فتح المشروع':'إغلاق المشروع'}
@@ -7424,7 +7420,7 @@ ${isInc?'دفعة':'مصروف'}
 ${escapeHTML(t.category||"-")}
 </td>
 
-<td class="${isInc?'income':'expense'}">
+<td class="editable-cell ${isInc?'income':'expense'}" onclick="inlineEditCell(this,'transactions','${t.id}','amount','number')">
 ${money(t.amount)}
 </td>
 
@@ -7433,7 +7429,7 @@ ${escapeHTML(t.note||"-")}
 </td>
 
 <td>
-<button class="btn blue" onclick="editRecord('transactions','${t.id}','date,category,note')">تعديل</button>
+
 <button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button>
 </td>
 
@@ -7682,7 +7678,7 @@ ${isInc?'دفعة':'مصروف'}
 ${escapeHTML(t.category||"-")}
 </td>
 
-<td class="${isInc?'income':'expense'}">
+<td class="editable-cell ${isInc?'income':'expense'}" onclick="inlineEditCell(this,'transactions','${t.id}','amount','number')">
 ${money(t.amount)}
 </td>
 
@@ -7691,7 +7687,7 @@ ${escapeHTML(t.note||"-")}
 </td>
 
 <td>
-<button class="btn blue" onclick="editRecord('transactions','${t.id}','date,category,note')">تعديل</button>
+
 <button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button>
 </td>
 
@@ -8104,7 +8100,7 @@ ${escapeHTML(s.note||"-")}
 </td>
 
 <td>
-<button class="btn blue" onclick="editRecord('services','${s.id}','date,category,collectedAmount,expense,note')">تعديل</button>
+
 <button class="btn red" onclick="deleteService('${s.id}')">حذف</button>
 </td>
 
@@ -8153,7 +8149,7 @@ ${escapeHTML(s.note||"-")}
 </td>
 
 <td>
-<button class="btn blue" onclick="editRecord('services','${s.id}','date,category,amount,note')">تعديل</button>
+
 <button class="btn red" onclick="deleteService('${s.id}')">حذف</button>
 </td>
 
@@ -8494,7 +8490,7 @@ return `
 
 <tr>
 
-<td>
+<td class="editable-cell" onclick="inlineEditCell(this,'properties','${p.id}','title')">
 <strong>${escapeHTML(p.title)}</strong>
 </td>
 
@@ -8534,13 +8530,7 @@ onclick="openPropertyDetails('${p.id}')">
 
 </button>
 
-<button
-class="btn blue"
-onclick="editRecord('properties','${p.id}','title')">
 
-تعديل
-
-</button>
 
 <button
 class="btn red"
@@ -8833,8 +8823,6 @@ pContracts.map(r=>{
 const deposit=
 Number(r.depositAmount)||0;
 
-const hasDeposit=deposit>0;
-
 const isRef=
 r.depositStatus==="refunded";
 
@@ -8859,11 +8847,11 @@ ${escapeHTML(r.unit||"-")}
 ${escapeHTML(r.tenant||"-")}
 </td>
 
-<td class="income">
+<td class="editable-cell income" onclick="inlineEditCell(this,'rentals','${r.id}','amount','number')">
 ${money(r.amount)}
 </td>
 
-<td>
+<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','depositAmount','number')">
 ${money(r.depositAmount)}
 </td>
 
@@ -8871,7 +8859,7 @@ ${money(r.depositAmount)}
 ${escapeHTML(r.expenseCategory||"-")}
 </td>
 
-<td class="expense">
+<td class="editable-cell expense" onclick="inlineEditCell(this,'rentals','${r.id}','expenseAmount','number')">
 ${money(r.expenseAmount)}
 </td>
 
@@ -8881,8 +8869,6 @@ ${money(net)}
 
 <td>
 
-${hasDeposit ? `
-
 <button
 class="btn ${isRef?'blue':'orange'}"
 onclick="toggleDeposit('${r.id}','${isRef?'active':'refunded'}')">
@@ -8890,8 +8876,6 @@ onclick="toggleDeposit('${r.id}','${isRef?'active':'refunded'}')">
 ${isRef?'تم الاسترداد':'مستمر (نشط)'}
 
 </button>
-
-` : ""}
 
 </td>
 
@@ -8901,13 +8885,7 @@ ${escapeHTML(r.note||"-")}
 
 <td>
 
-<button
-class="btn blue"
-onclick="editRecord('rentals','${r.id}','date,unit,tenant,expenseCategory,note')">
 
-تعديل
-
-</button>
 
 <button
 class="btn red"
@@ -8955,7 +8933,7 @@ pExpenses.map(pe=>`
 ${escapeHTML(pe.category||"عام")}
 </td>
 
-<td class="expense">
+<td class="editable-cell expense" onclick="inlineEditCell(this,'property_expenses','${pe.id}','amount','number')">
 ${money(pe.amount)}
 </td>
 
@@ -8965,13 +8943,7 @@ ${escapeHTML(pe.note||"-")}
 
 <td>
 
-<button
-class="btn blue"
-onclick="editRecord('property_expenses','${pe.id}','date,category,note')">
 
-تعديل
-
-</button>
 
 <button
 class="btn red"
@@ -9350,13 +9322,40 @@ if(finished)return;
 
 finished=true;
 
-const value=
+const rawValue=
 input.value;
+
+const numericFields=[
+"amount",
+"collectedAmount",
+"expense",
+"expenseAmount",
+"depositAmount"
+];
+
+const value=
+numericFields.includes(field)
+?
+Number(rawValue)
+:
+rawValue;
 
 if(
 save &&
-value!==String(oldValue)
+value!==oldValue
 ){
+
+if(
+numericFields.includes(field) &&
+!(value>=0)
+){
+
+alert("أدخل مبلغ صحيح.");
+finished=true;
+renderAfterInlineEdit(collectionName);
+return;
+
+}
 
 try{
 
