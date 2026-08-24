@@ -2278,6 +2278,19 @@ placeholder="مثال: شقة 101">
 
 <div class="field">
 
+<label>تصنيف الإيجار</label>
+
+<input
+id="rentCategory"
+list="rentalCategoriesList"
+placeholder="مثال: بوكينق، جاردن، شهري...">
+
+<datalist id="rentalCategoriesList"></datalist>
+
+</div>
+
+<div class="field">
+
 <label>اسم المستأجر</label>
 
 <input
@@ -2434,6 +2447,41 @@ id="savePropertyExpenseBtn">
 
 </div>
 
+<div
+class="card"
+style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+
+<h3>
+📊 ملخص تصنيفات الإيجار داخل العقار
+</h3>
+
+<p class="muted">
+كل تصنيف تكتبه في الشقق يُحفظ تلقائيًا، والتصنيف نفسه لا يتكرر في الملخص ويتم جمع إجمالي دخله.
+</p>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>تصنيف الإيجار</th>
+<th>عدد الوحدات</th>
+<th>عدد العقود</th>
+<th>إجمالي الإيجار</th>
+</tr>
+
+</thead>
+
+<tbody id="rentalCategoriesSummaryBody"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
 <h3>
 📋 عمليات إيجارات هذا العقار
 </h3>
@@ -2448,6 +2496,7 @@ id="savePropertyExpenseBtn">
 
 <th>التاريخ</th>
 <th>الوحدة</th>
+<th>تصنيف الإيجار</th>
 <th>المستأجر</th>
 <th>الإيجار</th>
 <th>التأمين</th>
@@ -7332,6 +7381,8 @@ alert(e.message);
 
 function renderRentals(){
 
+renderRentalCategoriesList();
+
 const rentals=
 filterBySelectedMonth(
 db.rentals,
@@ -7705,6 +7756,38 @@ renderRentals();
 
 };
 
+function renderRentalCategoriesList(){
+
+const list=document.getElementById("rentalCategoriesList");
+
+if(!list) return;
+
+const unique={};
+
+db.rentals.forEach(r=>{
+
+const raw=String(r.rentalCategory||"").trim();
+
+if(!raw) return;
+
+const key=normalizedCategoryKey(raw);
+
+if(!unique[key]){
+
+unique[key]=raw;
+
+}
+
+});
+
+list.innerHTML=
+Object.values(unique)
+.sort((a,b)=>a.localeCompare(b,"ar"))
+.map(category=>`<option value="${escapeHTML(category)}"></option>`)
+.join("");
+
+}
+
 function renderPropertyDetails(propId){
 
 const prop=
@@ -7719,6 +7802,8 @@ closePropertyDetails();
 return;
 
 }
+
+renderRentalCategoriesList();
 
 document.getElementById(
 "currentPropertyName"
@@ -7823,6 +7908,90 @@ formatNum(
 pExpenses.length
 );
 
+/* ===== ملخص تصنيفات الإيجار داخل العقار ===== */
+
+const rentalCategorySummary={};
+
+pContracts.forEach(r=>{
+
+const raw=String(r.rentalCategory||"").trim();
+
+if(!raw) return;
+
+const key=normalizedCategoryKey(raw);
+
+if(!rentalCategorySummary[key]){
+
+rentalCategorySummary[key]={
+label:raw,
+units:new Set(),
+contracts:0,
+total:0
+};
+
+}
+
+const item=rentalCategorySummary[key];
+
+item.contracts+=1;
+item.total+=Number(r.amount)||0;
+
+const unitName=String(r.unit||"").trim();
+
+if(unitName){
+
+item.units.add(normalizedCategoryKey(unitName));
+
+}
+
+});
+
+const rentalCategorySummaryBody=
+document.getElementById(
+"rentalCategoriesSummaryBody"
+);
+
+const rentalCategoryRows=
+Object.values(rentalCategorySummary)
+.sort((a,b)=>b.total-a.total);
+
+rentalCategorySummaryBody.innerHTML=
+rentalCategoryRows.length
+?
+rentalCategoryRows.map(item=>`
+
+<tr>
+
+<td>
+<strong>${escapeHTML(item.label)}</strong>
+</td>
+
+<td>
+${formatNum(item.units.size)}
+</td>
+
+<td>
+${formatNum(item.contracts)}
+</td>
+
+<td class="income">
+${money(item.total)}
+</td>
+
+</tr>
+
+`).join("")
+:
+`
+<tr>
+<td colspan="4">
+<div class="empty">
+لا توجد تصنيفات إيجار مسجلة لهذا العقار في الفترة المحددة
+</div>
+</td>
+</tr>
+`;
+
 const contractsBody=
 document.getElementById(
 "rentContractsBody"
@@ -7854,6 +8023,10 @@ return `
 
 <td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','unit')">
 ${escapeHTML(r.unit||"-")}
+</td>
+
+<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','rentalCategory')">
+${escapeHTML(r.rentalCategory||"-")}
 </td>
 
 <td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','tenant')">
@@ -7924,7 +8097,7 @@ onclick="deleteRentContract('${r.id}')">
 :
 `
 <tr>
-<td colspan="11">
+<td colspan="12">
 <div class="empty">
 لا توجد عمليات إيجار في الفترة المحددة
 </div>
@@ -8004,6 +8177,11 @@ document.getElementById(
 "rentUnit"
 ).value.trim();
 
+const rentalCategory=
+document.getElementById(
+"rentCategory"
+).value.trim();
+
 const tenant=
 document.getElementById(
 "rentTenant"
@@ -8066,6 +8244,8 @@ date,
 
 unit,
 
+rentalCategory,
+
 tenant,
 
 amount,
@@ -8089,6 +8269,10 @@ serverTimestamp()
 
 document.getElementById(
 "rentUnit"
+).value="";
+
+document.getElementById(
+"rentCategory"
 ).value="";
 
 document.getElementById(
