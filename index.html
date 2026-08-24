@@ -1211,11 +1211,35 @@ class="expense">
 <div class="stat">
 
 <small>
+إجمالي الإيرادات الشخصية
+</small>
+
+<strong id="personalTotalIncome" class="income">
+0 SAR
+</strong>
+
+</div>
+
+<div class="stat">
+
+<small>
 عدد بنود المصاريف
 </small>
 
 <strong id="personalExpenseCount">
 0
+</strong>
+
+</div>
+
+<div class="stat">
+
+<small>
+صافي الشخصي
+</small>
+
+<strong id="personalNetBalance">
+0 SAR
 </strong>
 
 </div>
@@ -1281,8 +1305,41 @@ id="savePersonalExpenseBtn">
 
 </div>
 
+<div
+class="card"
+style="background:#f0fdf4;border:1px solid #bbf7d0;margin-bottom:20px">
+
 <h3>
-📅 المصاريف الشهرية (مجمعة حسب الشهر الميلادي)
+➕ إضافة إيراد شخصي
+</h3>
+
+<div class="grid">
+
+<div class="field">
+<label>الإيراد</label>
+<input id="perIncName" placeholder="مثال: راتب، تحويل، مبلغ مستلم...">
+</div>
+
+<div class="field">
+<label>المبلغ (SAR)</label>
+<input id="perIncAmount" type="number" min="0" step="0.01" placeholder="0">
+</div>
+
+<div class="field full">
+<label>الملاحظة</label>
+<input id="perIncNote" placeholder="تفاصيل الإيراد...">
+</div>
+
+<div class="full">
+<button class="btn green" id="savePersonalIncomeBtn">حفظ الإيراد</button>
+</div>
+
+</div>
+
+</div>
+
+<h3>
+📅 المصاريف والإيرادات الشهرية (مجمعة حسب الشهر الميلادي)
 </h3>
 
 <div id="personalMonthlyContainer"></div>
@@ -2528,7 +2585,8 @@ services:[],
 properties:[],
 rentals:[],
 propertyExpenses:[],
-personalExpenses:[]
+personalExpenses:[],
+personalIncome:[]
 
 };
 
@@ -2548,6 +2606,7 @@ let unsubscribeProperties=null;
 let unsubscribeRentals=null;
 let unsubscribePropertyExpenses=null;
 let unsubscribePersonalExpenses=null;
+let unsubscribePersonalIncome=null;
 
 const categories=[
 
@@ -2946,6 +3005,7 @@ if(unsubscribeProperties) unsubscribeProperties();
 if(unsubscribeRentals) unsubscribeRentals();
 if(unsubscribePropertyExpenses) unsubscribePropertyExpenses();
 if(unsubscribePersonalExpenses) unsubscribePersonalExpenses();
+if(unsubscribePersonalIncome) unsubscribePersonalIncome();
 
 await signOut(auth);
 
@@ -2993,6 +3053,7 @@ if(unsubscribeProperties) unsubscribeProperties();
 if(unsubscribeRentals) unsubscribeRentals();
 if(unsubscribePropertyExpenses) unsubscribePropertyExpenses();
 if(unsubscribePersonalExpenses) unsubscribePersonalExpenses();
+if(unsubscribePersonalIncome) unsubscribePersonalIncome();
 
 /* المشاريع */
 
@@ -3360,9 +3421,49 @@ error=>{
 console.error("Personal Expenses Firebase Error:", error)
 });
 
+/* الإيرادات الشخصية */
+
+unsubscribePersonalIncome=
+onSnapshot(
+collection(
+firestore,
+"personal_income"
+),
+
+snapshot=>{
+
+db.personalIncome=
+snapshot.docs.map(
+item=>({
+id:item.id,
+...item.data()
+})
+);
+
+db.personalIncome.sort(
+(a,b)=>
+String(b.date||"")
+.localeCompare(
+String(a.date||"")
+)
+);
+
+if(document.getElementById("personalSection").style.display==="block"){
+renderPersonal();
+}
+updateWallet();
+
+},
+
+error=>{
+console.error("Personal Income Firebase Error:", error)
+});
+
 }
 
 function updateWallet(){
+
+if(!Array.isArray(db.personalIncome)) db.personalIncome=[];
 
 let income=0, expense=0;
 
@@ -3401,6 +3502,10 @@ expense+=Number(x.amount)||0;
 
 db.personalExpenses.forEach(x=>{
 expense+=Number(x.amount)||0;
+});
+
+db.personalIncome.forEach(x=>{
+income+=Number(x.amount)||0;
 });
 
 ["walletIncome","walletExpense","walletProfit","walletBalance"].forEach((id,i)=>{
@@ -3797,7 +3902,8 @@ services:Array.isArray(db?.services)?db.services:[],
 properties:Array.isArray(db?.properties)?db.properties:[],
 rentals:Array.isArray(db?.rentals)?db.rentals:[],
 propertyExpenses:Array.isArray(db?.propertyExpenses)?db.propertyExpenses:[],
-personalExpenses:Array.isArray(db?.personalExpenses)?db.personalExpenses:[]
+personalExpenses:Array.isArray(db?.personalExpenses)?db.personalExpenses:[],
+personalIncome:Array.isArray(db?.personalIncome)?db.personalIncome:[]
 };
 
 const projects=
@@ -3851,6 +3957,12 @@ range
 const personalExpenses=
 financialReportFilter(
 safeDb.personalExpenses,
+range
+);
+
+const personalIncome=
+financialReportFilter(
+safeDb.personalIncome,
 range
 );
 
@@ -4058,6 +4170,12 @@ Number(x.amount)||0;
 
 });
 
+let personalIncomeTotal=0;
+
+personalIncome.forEach(x=>{
+personalIncomeTotal+=Number(x.amount)||0;
+});
+
 const totalBusinessIncome=
 projectIncome+
 officeIncomeTotal+
@@ -4082,11 +4200,10 @@ totalBusinessExpense+
 personalExpenseTotal;
 
 const totalAfterPersonal=
-totalBusinessIncome-
-totalAllExpense;
+totalBusinessIncome+personalIncomeTotal-totalAllExpense;
 
 const allRecordedIncome=
-totalBusinessIncome;
+totalBusinessIncome+personalIncomeTotal;
 
 const allRecordedExpense=
 totalAllExpense;
@@ -4143,6 +4260,7 @@ properties:safeDb.properties,
 rentals,
 propertyExpenses,
 personalExpenses,
+personalIncome,
 
 projectIncome,
 projectExpense,
@@ -4170,6 +4288,7 @@ propertyExpenseTotal,
 propertyExpenseCategories,
 
 personalExpenseTotal,
+personalIncomeTotal,
 
 totalBusinessIncome,
 totalBusinessExpense,
@@ -4261,8 +4380,20 @@ const personalRows=data.personalExpenses
 .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")) )
 .map(x=>financialReportRow([
 financialReportEsc(x.date),
+"مصروف",
 financialReportEsc(x.note||"-"),
 financialReportMoney(x.amount)
+]));
+
+const personalIncomeRows=data.personalIncome
+.slice()
+.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")) )
+.map(x=>financialReportRow([
+financialReportEsc(x.date),
+"إيراد",
+financialReportEsc(x.name||"-"),
+financialReportMoney(x.amount),
+financialReportEsc(x.note||"-")
 ]));
 
 const officeIncomeRows=data.officeIncome.map(x=>financialReportRow([
@@ -4526,10 +4657,13 @@ ${kpi("الصافي بعد المصاريف الشخصية",financialReportMoney
 </div>
 <div class="report-section"><div class="report-section-title">ملخص المصاريف الشخصية</div>${table([
 financialReportRow(["إجمالي المصاريف الشخصية",financialReportMoney(data.personalExpenseTotal)]),
+financialReportRow(["إجمالي الإيرادات الشخصية",financialReportMoney(data.personalIncomeTotal)]),
 financialReportRow(["عدد المصروفات",financialReportEsc(data.personalExpenses.length)]),
+financialReportRow(["عدد الإيرادات",financialReportEsc(data.personalIncome.length)]),
 financialReportRow(["الصافي بعد المصاريف الشخصية",financialReportMoney(data.totalAfterPersonal)])
 ],["البيان","القيمة"])}</div>
-<div class="report-section"><div class="report-section-title">جميع المصاريف الشخصية</div>${table(personalRows,["التاريخ","البيان","المبلغ"])}</div>
+<div class="report-section"><div class="report-section-title">جميع المصاريف الشخصية</div>${table(personalRows,["التاريخ","النوع","البيان","المبلغ"])}</div>
+<div class="report-section"><div class="report-section-title">جميع الإيرادات الشخصية</div>${table(personalIncomeRows,["التاريخ","النوع","الإيراد","المبلغ","الملاحظة"])}</div>
 <div class="report-note">المصاريف الشخصية معروضة بشكل مستقل عن نتيجة نشاط الأعمال حتى لا تختلط بالمصروفات التشغيلية للنشاط.</div>
 </div>
 
@@ -5141,13 +5275,41 @@ userEmail:auth.currentUser.email||""
 
 }
 
+async function addPersonalIncomeToFirebase(data){
+
+if(!auth.currentUser)
+throw new Error(
+"لا يوجد مستخدم مسجل دخول حاليًا."
+);
+
+await addDoc(
+collection(
+firestore,
+"personal_income"
+),
+{
+date:today(),
+name:data.name||"",
+amount:Number(data.amount)||0,
+note:data.note||"",
+createdAt:serverTimestamp(),
+createdBy:auth.currentUser.uid,
+userEmail:auth.currentUser.email||""
+}
+);
+
+}
+
 function renderPersonal(){
 
 const records=filterBySelectedMonth(db.personalExpenses,"personal");
+const incomeRecords=filterBySelectedMonth(db.personalIncome,"personal");
 
 let total=0;
+let incomeTotal=0;
 
 const grouped={};
+const incomeGrouped={};
 
 records.forEach(item=>{
 
@@ -5160,8 +5322,22 @@ const monthKey=(item.date&&item.date.length>=7)?item.date.substring(0,7):"غير
 if(!grouped[monthKey]) grouped[monthKey]={total:0,items:[]};
 
 grouped[monthKey].total+=amt;
-
 grouped[monthKey].items.push(item);
+
+});
+
+incomeRecords.forEach(item=>{
+
+const amt=Number(item.amount)||0;
+
+incomeTotal+=amt;
+
+const monthKey=(item.date&&item.date.length>=7)?item.date.substring(0,7):"غير محدد";
+
+if(!incomeGrouped[monthKey]) incomeGrouped[monthKey]={total:0,items:[]};
+
+incomeGrouped[monthKey].total+=amt;
+incomeGrouped[monthKey].items.push(item);
 
 });
 
@@ -5170,16 +5346,19 @@ const filter=document.getElementById("personalMonthFilter");
 if(filter) filter.innerHTML=monthFilterHTML("personal");
 
 document.getElementById("personalTotalExpense").innerHTML=money(total);
-
+document.getElementById("personalTotalIncome").innerHTML=money(incomeTotal);
 document.getElementById("personalExpenseCount").textContent=formatNum(records.length);
+document.getElementById("personalNetBalance").innerHTML=money(incomeTotal-total);
 
 const container=document.getElementById("personalMonthlyContainer");
 
-const sortedMonths=Object.keys(grouped).sort((a,b)=>b.localeCompare(a));
+const expenseMonths=Object.keys(grouped);
+const incomeMonths=Object.keys(incomeGrouped);
+const sortedMonths=[...new Set([...expenseMonths,...incomeMonths])].sort((a,b)=>b.localeCompare(a));
 
 if(!sortedMonths.length){
 
-container.innerHTML=`<div class="empty">لا توجد مصاريف شخصية في الفترة المحددة.</div>`;
+container.innerHTML=`<div class="empty">لا توجد مصاريف أو إيرادات شخصية في الفترة المحددة.</div>`;
 
 return;
 
@@ -5187,9 +5366,10 @@ return;
 
 container.innerHTML=sortedMonths.map(month=>{
 
-const group=grouped[month];
+const group=grouped[month]||{total:0,items:[]};
+const incomeGroup=incomeGrouped[month]||{total:0,items:[]};
 
-const rows=group.items.map(item=>`
+const expenseRows=group.items.map(item=>`
 
 <tr>
 
@@ -5197,7 +5377,7 @@ const rows=group.items.map(item=>`
 <span class="num-val">${escapeHTML(item.date)}</span>
 </td>
 
-<td class="editable-cell expense" onclick="inlineEditCell(this,'office_expenses','${item.id}','amount','number')">${money(item.amount)}</td>
+<td class="editable-cell expense" onclick="inlineEditCell(this,'personal_expenses','${item.id}','amount','number')">${money(item.amount)}</td>
 
 <td class="editable-cell" onclick="inlineEditCell(this,'personal_expenses','${item.id}','note')">
 ${escapeHTML(item.note||"")}
@@ -5206,6 +5386,32 @@ ${escapeHTML(item.note||"")}
 <td>
 
 <button class="btn red" onclick="deletePersonalExpense('${item.id}')">حذف</button>
+</td>
+
+</tr>
+
+`).join("");
+
+const incomeRows=incomeGroup.items.map(item=>`
+
+<tr>
+
+<td class="editable-cell" onclick="inlineEditCell(this,'personal_income','${item.id}','name')">
+${escapeHTML(item.name||"-")}
+</td>
+
+<td class="editable-cell income" onclick="inlineEditCell(this,'personal_income','${item.id}','amount','number')">${money(item.amount)}</td>
+
+<td class="editable-cell" onclick="inlineEditCell(this,'personal_income','${item.id}','note')">
+${escapeHTML(item.note||"")}
+</td>
+
+<td class="editable-cell" onclick="inlineEditCell(this,'personal_income','${item.id}','date','date')">
+<span class="num-val">${escapeHTML(item.date)}</span>
+</td>
+
+<td>
+<button class="btn red" onclick="deletePersonalIncome('${item.id}')">حذف</button>
 </td>
 
 </tr>
@@ -5224,34 +5430,48 @@ return `
 الميلادي
 </h4>
 
-<div class="expense">
-المجموع: ${money(group.total)}
+<div>
+<span class="expense">المصروفات: ${money(group.total)}</span>
+&nbsp; | &nbsp;
+<span class="income">الإيرادات: ${money(incomeGroup.total)}</span>
+&nbsp; | &nbsp;
+<strong class="${profitClass(incomeGroup.total-group.total)}">الصافي: ${money(incomeGroup.total-group.total)}</strong>
 </div>
 
 </div>
 
+${group.items.length?`
+<h4 style="margin:12px 0 8px">📉 المصاريف</h4>
 <div class="table-wrap">
-
 <table>
-
 <thead>
-
 <tr>
 <th>التاريخ</th>
 <th>المصروف</th>
 <th>الملاحظة</th>
 <th>إجراء</th>
 </tr>
-
 </thead>
-
-<tbody>
-${rows}
-</tbody>
-
+<tbody>${expenseRows}</tbody>
 </table>
+</div>`:""}
 
-</div>
+${incomeGroup.items.length?`
+<h4 style="margin:18px 0 8px">📈 الإيرادات</h4>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>الإيراد</th>
+<th>المبلغ</th>
+<th>الملاحظة</th>
+<th>التاريخ</th>
+<th>إجراء</th>
+</tr>
+</thead>
+<tbody>${incomeRows}</tbody>
+</table>
+</div>`:""}
 
 </div>
 
@@ -5288,7 +5508,6 @@ return;
 }
 
 btn.disabled = true;
-
 btn.textContent = "جاري الحفظ...";
 
 try {
@@ -5296,7 +5515,6 @@ try {
 await addPersonalExpenseToFirebase({ date, amount, note });
 
 document.getElementById("perExpAmount").value = "";
-
 document.getElementById("perExpNote").value = "";
 
 } catch(e) {
@@ -5315,6 +5533,36 @@ btn.textContent = "حفظ المصروف الشخصي";
 
 };
 
+document.getElementById("savePersonalIncomeBtn").onclick = async function(){
+
+const btn=this;
+const name=document.getElementById("perIncName").value.trim();
+const amount=Number(document.getElementById("perIncAmount").value);
+const note=document.getElementById("perIncNote").value.trim();
+
+if(!(amount>0)){
+alert("أدخل مبلغ إيراد صحيح.");
+return;
+}
+
+btn.disabled=true;
+btn.textContent="جاري الحفظ...";
+
+try{
+await addPersonalIncomeToFirebase({name,amount,note});
+document.getElementById("perIncName").value="";
+document.getElementById("perIncAmount").value="";
+document.getElementById("perIncNote").value="";
+}catch(e){
+console.error(e);
+alert("حدث خطأ أثناء حفظ الإيراد:\n"+e.message);
+}finally{
+btn.disabled=false;
+btn.textContent="حفظ الإيراد";
+}
+
+};
+
 window.deletePersonalExpense = async function(id){
 
 if(!confirm("هل تريد حذف هذا المصروف؟")) return;
@@ -5327,6 +5575,18 @@ await deleteDoc(doc(firestore, "personal_expenses", id));
 
 alert("حدث خطأ أثناء الحذف:\n" + e.message);
 
+}
+
+};
+
+window.deletePersonalIncome = async function(id){
+
+if(!confirm("هل تريد حذف هذا الإيراد؟")) return;
+
+try {
+await deleteDoc(doc(firestore,"personal_income",id));
+} catch(e) {
+alert("حدث خطأ أثناء حذف الإيراد:\n"+e.message);
 }
 
 };
@@ -5440,7 +5700,7 @@ tbody.innerHTML=expenses.length?expenses.map(item=>`
 <strong>${escapeHTML(item.name)}</strong>
 </td>
 
-<td class="editable-cell expense" onclick="inlineEditCell(this,'office_expenses','${item.id}','amount','number')">${money(item.amount)}</td>
+<td class="editable-cell expense" onclick="inlineEditCell(this,'personal_expenses','${item.id}','amount','number')">${money(item.amount)}</td>
 
 <td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','note')">
 ${escapeHTML(item.note||"")}
@@ -8031,7 +8291,8 @@ services:"services",
 properties:"properties",
 rentals:"rentals",
 property_expenses:"propertyExpenses",
-personal_expenses:"personalExpenses"
+personal_expenses:"personalExpenses",
+personal_income:"personalIncome"
 };
 
 const source=
@@ -8226,7 +8487,8 @@ collectionName==="property_expenses"
 renderRentals();
 
 }else if(
-collectionName==="personal_expenses"
+collectionName==="personal_expenses"||
+collectionName==="personal_income"
 ){
 
 renderPersonal();
@@ -8265,7 +8527,8 @@ services:"services",
 properties:"properties",
 rentals:"rentals",
 property_expenses:"propertyExpenses",
-personal_expenses:"personalExpenses"
+personal_expenses:"personalExpenses",
+personal_income:"personalIncome"
 };
 
 const source=
