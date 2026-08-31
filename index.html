@@ -533,6 +533,55 @@ background:#fff;
 min-width:190px
 }
 
+/* ===== فلتر مصاريف المكتب: شهري / ربع سنوي / نصف سنوي / سنوي ===== */
+.office-period-filter{
+padding:14px;
+}
+
+.office-filter-row{
+display:grid;
+grid-template-columns:1.4fr 1fr 1fr 1fr;
+gap:10px;
+align-items:end;
+}
+
+.office-filter-title{
+font-weight:900;
+font-size:14px;
+padding-bottom:12px;
+}
+
+.office-filter-field label{
+display:block;
+font-weight:800;
+font-size:12px;
+margin-bottom:5px;
+}
+
+.office-filter-field select{
+width:100%;
+min-width:0;
+}
+
+@media(max-width:700px){
+.office-filter-row{
+grid-template-columns:1fr 1fr;
+}
+.office-filter-title{
+grid-column:1/-1;
+padding-bottom:0;
+}
+}
+
+@media(max-width:430px){
+.office-filter-row{
+grid-template-columns:1fr;
+}
+.office-filter-title{
+grid-column:auto;
+}
+}
+
 .editable-cell{
 cursor:pointer;
 transition:background .15s ease
@@ -2815,7 +2864,7 @@ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
 }
 
 const selectedMonths={
-office:"all",
+office:"monthly:"+currentMonthKey(),
 contracting:"all",
 projects:"all",
 services:"all",
@@ -2828,9 +2877,106 @@ const arabicMonths=[
 "يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"
 ];
 
+function officePeriodFilterHTML(){
+
+const currentYear=new Date().getFullYear();
+const selected=String(selectedMonths.office||("monthly:"+currentMonthKey()));
+
+let type="monthly";
+let year=currentYear;
+let value=String(new Date().getMonth()+1);
+
+if(selected.startsWith("monthly:")){
+type="monthly";
+const parts=selected.split(":")[1]||currentMonthKey();
+year=Number(parts.slice(0,4))||currentYear;
+value=Number(parts.slice(5,7))||1;
+}else if(selected.startsWith("quarterly:")){
+type="quarterly";
+const parts=selected.split(":")[1]||`${currentYear}-1`;
+year=Number(parts.slice(0,4))||currentYear;
+value=Number(parts.slice(5))||1;
+}else if(selected.startsWith("halfyearly:")){
+type="halfyearly";
+const parts=selected.split(":")[1]||`${currentYear}-1`;
+year=Number(parts.slice(0,4))||currentYear;
+value=Number(parts.slice(5))||1;
+}else if(selected.startsWith("yearly:")){
+type="yearly";
+year=Number(selected.split(":")[1])||currentYear;
+value=1;
+}else if(selected==="all"){
+type="all";
+year=currentYear;
+value=1;
+}
+
+const years=[];
+for(let y=currentYear-10;y<=currentYear+10;y++) years.push(y);
+
+let periodOptions="";
+
+if(type==="monthly"){
+periodOptions=arabicMonths.map((name,i)=>
+`<option value="${i+1}" ${value===i+1?"selected":""}>${name}</option>`
+).join("");
+}else if(type==="quarterly"){
+periodOptions=`
+<option value="1" ${value===1?"selected":""}>الربع الأول — يناير إلى مارس</option>
+<option value="2" ${value===2?"selected":""}>الربع الثاني — أبريل إلى يونيو</option>
+<option value="3" ${value===3?"selected":""}>الربع الثالث — يوليو إلى سبتمبر</option>
+<option value="4" ${value===4?"selected":""}>الربع الرابع — أكتوبر إلى ديسمبر</option>
+`;
+}else if(type==="halfyearly"){
+periodOptions=`
+<option value="1" ${value===1?"selected":""}>النصف الأول — يناير إلى يونيو</option>
+<option value="2" ${value===2?"selected":""}>النصف الثاني — يوليو إلى ديسمبر</option>
+`;
+}else if(type==="yearly"){
+periodOptions=`<option value="1">السنة كاملة</option>`;
+}else{
+periodOptions=`<option value="1">كل البيانات المحفوظة</option>`;
+}
+
+return `
+<div class="card month-filter office-period-filter">
+<div class="office-filter-row">
+<div class="office-filter-title">📅 عرض مصاريف المكتب حسب:</div>
+
+<div class="office-filter-field">
+<label>نوع العرض</label>
+<select id="officePeriodType" onchange="changeOfficePeriodType(this.value)">
+<option value="monthly" ${type==="monthly"?"selected":""}>شهري</option>
+<option value="quarterly" ${type==="quarterly"?"selected":""}>ربع سنوي</option>
+<option value="halfyearly" ${type==="halfyearly"?"selected":""}>نصف سنوي</option>
+<option value="yearly" ${type==="yearly"?"selected":""}>سنوي</option>
+<option value="all" ${type==="all"?"selected":""}>كل البيانات المحفوظة</option>
+</select>
+</div>
+
+<div class="office-filter-field">
+<label>السنة</label>
+<select id="officePeriodYear" onchange="changeOfficePeriodYear(this.value)">
+${years.map(y=>`<option value="${y}" ${year===y?"selected":""}>${y}</option>`).join("")}
+</select>
+</div>
+
+<div class="office-filter-field" id="officePeriodValueWrap" ${type==="yearly"||type==="all"?'style="display:none"':""}>
+<label id="officePeriodValueLabel">${type==="quarterly"?"الربع":type==="halfyearly"?"النصف":"الشهر"}</label>
+<select id="officePeriodValue" onchange="changeOfficePeriodValue(this.value)">
+${periodOptions}
+</select>
+</div>
+</div>
+</div>`;
+}
+
 function monthFilterHTML(key){
+if(key==="office") return officePeriodFilterHTML();
+
 const currentYear=new Date().getFullYear();
 const value=selectedMonths[key]||currentMonthKey();
+
 return `
 <div class="card month-filter">
 <span class="month-filter-label">📅 عرض:</span>
@@ -2843,6 +2989,98 @@ return `<option value="${month}" ${value===month?"selected":""}>${name} ${curren
 </select>
 </div>`;
 }
+
+function getOfficePeriodSelection(){
+
+const type=document.getElementById("officePeriodType")?.value||"monthly";
+const year=Number(document.getElementById("officePeriodYear")?.value)||new Date().getFullYear();
+const value=Number(document.getElementById("officePeriodValue")?.value)||1;
+
+if(type==="all") return "all";
+if(type==="yearly") return `yearly:${year}`;
+if(type==="quarterly") return `quarterly:${year}-${value}`;
+if(type==="halfyearly") return `halfyearly:${year}-${value}`;
+
+return `monthly:${year}-${String(value).padStart(2,"0")}`;
+}
+
+window.changeOfficePeriod=function(){
+
+selectedMonths.office=getOfficePeriodSelection();
+renderOffice();
+
+};
+
+window.changeOfficePeriodType=function(type){
+
+const currentYear=new Date().getFullYear();
+let value=1;
+
+if(type==="monthly"){
+value=Number(String(selectedMonths.office||"").split("-").pop())||new Date().getMonth()+1;
+}else if(type==="quarterly"){
+value=1;
+}else if(type==="halfyearly"){
+value=1;
+}
+
+const year=Number(document.getElementById("officePeriodYear")?.value)||currentYear;
+
+if(type==="all"){
+selectedMonths.office="all";
+}else if(type==="yearly"){
+selectedMonths.office=`yearly:${year}`;
+}else if(type==="quarterly"){
+selectedMonths.office=`quarterly:${year}-${value}`;
+}else if(type==="halfyearly"){
+selectedMonths.office=`halfyearly:${year}-${value}`;
+}else{
+selectedMonths.office=`monthly:${year}-${String(value).padStart(2,"0")}`;
+}
+
+renderOffice();
+
+};
+
+window.changeOfficePeriodYear=function(year){
+
+const type=document.getElementById("officePeriodType")?.value||"monthly";
+const value=Number(document.getElementById("officePeriodValue")?.value)||1;
+const selectedYear=Number(year)||new Date().getFullYear();
+
+if(type==="all"){
+selectedMonths.office="all";
+}else if(type==="yearly"){
+selectedMonths.office=`yearly:${selectedYear}`;
+}else if(type==="quarterly"){
+selectedMonths.office=`quarterly:${selectedYear}-${value}`;
+}else if(type==="halfyearly"){
+selectedMonths.office=`halfyearly:${selectedYear}-${value}`;
+}else{
+selectedMonths.office=`monthly:${selectedYear}-${String(value).padStart(2,"0")}`;
+}
+
+renderOffice();
+
+};
+
+window.changeOfficePeriodValue=function(value){
+
+const type=document.getElementById("officePeriodType")?.value||"monthly";
+const year=Number(document.getElementById("officePeriodYear")?.value)||new Date().getFullYear();
+const selectedValue=Number(value)||1;
+
+if(type==="quarterly"){
+selectedMonths.office=`quarterly:${year}-${selectedValue}`;
+}else if(type==="halfyearly"){
+selectedMonths.office=`halfyearly:${year}-${selectedValue}`;
+}else{
+selectedMonths.office=`monthly:${year}-${String(selectedValue).padStart(2,"0")}`;
+}
+
+renderOffice();
+
+};
 
 window.changeMonthFilter=function(key,value){
 selectedMonths[key]=value;
@@ -2858,7 +3096,59 @@ else render("projects");
 }
 };
 
+function filterByOfficePeriod(items){
+
+const selected=String(selectedMonths.office||("monthly:"+currentMonthKey()));
+
+if(selected==="all") return Array.isArray(items)?items:[];
+
+const parts=selected.split(":");
+const type=parts[0];
+const value=parts[1]||"";
+const year=Number(value.slice(0,4));
+
+if(!Number.isFinite(year)) return [];
+
+if(type==="yearly"){
+return items.filter(item=>String(item.date||"").slice(0,4)===String(year));
+}
+
+if(type==="monthly"){
+return items.filter(item=>String(item.date||"").slice(0,7)===value);
+}
+
+if(type==="quarterly"){
+const quarter=Number(value.slice(5));
+const startMonth=(quarter-1)*3+1;
+const endMonth=startMonth+2;
+
+return items.filter(item=>{
+const date=String(item.date||"");
+if(date.slice(0,4)!==String(year)) return false;
+const month=Number(date.slice(5,7));
+return month>=startMonth&&month<=endMonth;
+});
+}
+
+if(type==="halfyearly"){
+const half=Number(value.slice(5));
+const startMonth=half===1?1:7;
+const endMonth=half===1?6:12;
+
+return items.filter(item=>{
+const date=String(item.date||"");
+if(date.slice(0,4)!==String(year)) return false;
+const month=Number(date.slice(5,7));
+return month>=startMonth&&month<=endMonth;
+});
+}
+
+return [];
+}
+
 function filterBySelectedMonth(items,key){
+if(key==="office") return filterByOfficePeriod(items);
+
 const selected=selectedMonths[key]||"all";
 if(selected==="all") return Array.isArray(items)?items:[];
 return items.filter(item=>String(item.date||"").slice(0,7)===selected);
@@ -9136,4 +9426,3 @@ alert(e.message);
 </body>
 
 </html>
-  
