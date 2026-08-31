@@ -392,6 +392,166 @@ margin-bottom:15px;
 flex-wrap:wrap
 }
 
+
+/* ===== تنظيم مصاريف المكتب: سنة ← شهر ← العمليات ===== */
+
+.office-year-group{
+background:#fff;
+border:1px solid #e2e8f0;
+border-radius:14px;
+margin-bottom:12px;
+overflow:hidden
+}
+
+.office-year-header{
+width:100%;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+padding:15px 16px;
+background:#f8fafc;
+color:#111827;
+border:0;
+border-radius:0;
+font-size:16px;
+font-weight:900;
+text-align:right
+}
+
+.office-year-header:hover{
+background:#f1f5f9
+}
+
+.office-year-header .office-year-main{
+display:flex;
+align-items:center;
+gap:9px
+}
+
+.office-year-header .office-year-arrow{
+font-size:14px;
+width:20px;
+text-align:center
+}
+
+.office-year-header .office-year-meta{
+display:flex;
+align-items:center;
+gap:12px;
+font-size:13px;
+font-weight:800;
+color:#667085;
+flex-wrap:wrap
+}
+
+.office-year-header .office-year-total{
+color:#b91c1c
+}
+
+.office-year-content{
+padding:12px;
+border-top:1px solid #e2e8f0
+}
+
+.office-month-group{
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:12px;
+margin-bottom:10px;
+overflow:hidden
+}
+
+.office-month-group:last-child{
+margin-bottom:0
+}
+
+.office-month-header{
+width:100%;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+padding:12px 14px;
+background:#fff;
+color:#111827;
+border:0;
+border-radius:0;
+font-size:14px;
+font-weight:900;
+text-align:right
+}
+
+.office-month-header:hover{
+background:#f8fafc
+}
+
+.office-month-main{
+display:flex;
+align-items:center;
+gap:8px
+}
+
+.office-month-arrow{
+font-size:13px;
+width:18px;
+text-align:center
+}
+
+.office-month-meta{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:12px;
+font-weight:800;
+color:#667085;
+flex-wrap:wrap
+}
+
+.office-month-total{
+color:#b91c1c
+}
+
+.office-month-content{
+padding:0 10px 10px;
+background:#f8fafc
+}
+
+.office-month-content .table-wrap{
+background:#fff;
+border:1px solid #edf0f3;
+border-radius:10px
+}
+
+.office-month-empty{
+padding:18px;
+text-align:center;
+color:#667085;
+background:#fff;
+border:1px solid #edf0f3;
+border-radius:10px
+}
+
+@media(max-width:700px){
+.office-year-header,
+.office-month-header{
+align-items:flex-start
+}
+
+.office-year-header .office-year-meta,
+.office-month-meta{
+justify-content:flex-end
+}
+
+.office-year-header{
+font-size:14px
+}
+
+.office-month-header{
+font-size:13px
+}
+}
+
 .month-group-card{
 background:#f8fafc;
 border:1px solid #e2e8f0;
@@ -2723,6 +2883,9 @@ function currentMonthKey(){
 const d=new Date();
 return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
 }
+
+const officeExpandedYears={};
+const officeExpandedMonths={};
 
 const selectedMonths={
 office:"all",
@@ -5698,29 +5861,213 @@ auth.currentUser.email||""
 
 }
 
+function officeMonthName(monthNumber){
+return arabicMonths[Number(monthNumber)-1]||"";
+}
+
+function officeBuildExpenseRows(items){
+return items.map(item=>`
+
+<tr>
+<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','date','date')">
+<span class="num-val">${escapeHTML(item.date)}</span>
+</td>
+
+<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','name')">
+<strong>${escapeHTML(item.name)}</strong>
+</td>
+
+<td class="editable-cell expense" onclick="inlineEditCell(this,'office_expenses','${item.id}','amount','number')">
+${money(item.amount)}
+</td>
+
+<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','note')">
+${escapeHTML(item.note||"")}
+</td>
+
+<td>
+<button class="btn red" onclick="deleteOfficeExpense('${item.id}')">حذف</button>
+</td>
+</tr>
+
+`).join("");
+}
+
+function officeExpenseTable(items){
+if(!items.length){
+return `<div class="office-month-empty">لا توجد مصاريف في هذا الشهر</div>`;
+}
+
+return `
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>التاريخ</th>
+<th>اسم البند</th>
+<th>المبلغ</th>
+<th>الملاحظات</th>
+<th>إجراء</th>
+</tr>
+</thead>
+<tbody>
+${officeBuildExpenseRows(items)}
+</tbody>
+</table>
+</div>
+`;
+}
+
+window.toggleOfficeYear=function(year){
+officeExpandedYears[year]=!officeExpandedYears[year];
+renderOffice();
+};
+
+window.toggleOfficeMonth=function(year,monthKey){
+officeExpandedMonths[`${year}-${monthKey}`]=
+!officeExpandedMonths[`${year}-${monthKey}`];
+renderOffice();
+};
+
+function officeRenderGroupedExpenses(expenses){
+
+if(!expenses.length){
+return `<div class="empty">لا توجد مصاريف مكتب في البيانات المحفوظة</div>`;
+}
+
+const groups={};
+
+expenses.forEach(item=>{
+const date=String(item.date||"");
+const year=date.slice(0,4);
+const month=date.slice(5,7);
+
+if(!year||!month)return;
+
+if(!groups[year])groups[year]={};
+if(!groups[year][month])groups[year][month]=[];
+groups[year][month].push(item);
+});
+
+const years=Object.keys(groups).sort((a,b)=>Number(b)-Number(a));
+
+return years.map(year=>{
+
+const months=Object.keys(groups[year]).sort((a,b)=>Number(b)-Number(a));
+
+const yearItems=months.flatMap(month=>groups[year][month]);
+const yearTotal=yearItems.reduce(
+(total,item)=>total+(Number(item.amount)||0),0
+);
+
+const yearOpen=officeExpandedYears[year]===true;
+
+return `
+<div class="office-year-group">
+
+<button
+type="button"
+class="office-year-header"
+onclick="toggleOfficeYear('${year}')">
+
+<div class="office-year-main">
+<span class="office-year-arrow">${yearOpen?"▼":"▶"}</span>
+<span>📅 ${escapeHTML(year)}</span>
+</div>
+
+<div class="office-year-meta">
+<span>${formatNum(yearItems.length)} عملية</span>
+<span class="office-year-total">${money(yearTotal)}</span>
+</div>
+
+</button>
+
+${yearOpen?`
+<div class="office-year-content">
+
+${months.map(month=>{
+
+const monthItems=groups[year][month];
+const monthKey=`${year}-${month}`;
+const monthOpen=officeExpandedMonths[monthKey]===true;
+const monthTotal=monthItems.reduce(
+(total,item)=>total+(Number(item.amount)||0),0
+);
+
+return `
+<div class="office-month-group">
+
+<button
+type="button"
+class="office-month-header"
+onclick="toggleOfficeMonth('${year}','${month}')">
+
+<div class="office-month-main">
+<span class="office-month-arrow">${monthOpen?"▼":"▶"}</span>
+<span>${escapeHTML(officeMonthName(Number(month)))}</span>
+</div>
+
+<div class="office-month-meta">
+<span>${formatNum(monthItems.length)} عملية</span>
+<span class="office-month-total">${money(monthTotal)}</span>
+</div>
+
+</button>
+
+${monthOpen?`
+<div class="office-month-content">
+${officeExpenseTable(monthItems)}
+</div>
+`:""}
+
+</div>
+`;
+
+}).join("")}
+
+</div>
+`:""}
+
+</div>
+`;
+
+}).join("");
+}
+
 function renderOffice(){
 
-const expenses=filterBySelectedMonth(db.officeExpenses,"office");
+const allExpenses=Array.isArray(db.officeExpenses)?db.officeExpenses:[];
+const allIncomes=Array.isArray(db.officeIncome)?db.officeIncome:[];
 
-const incomes=filterBySelectedMonth(db.officeIncome,"office");
+const selected=selectedMonths.office||"all";
+
+const expenses=selected==="all"
+?allExpenses
+:filterBySelectedMonth(allExpenses,"office");
+
+const incomes=selected==="all"
+?allIncomes
+:filterBySelectedMonth(allIncomes,"office");
 
 let total=0,incomeTotal=0;
 
 expenses.forEach(item=>total+=Number(item.amount)||0);
-
-incomes.forEach(x=>incomeTotal+=Number(x.amount)||0);
+incomes.forEach(item=>incomeTotal+=Number(item.amount)||0);
 
 const filter=document.getElementById("officeMonthFilter");
 
 if(filter) filter.innerHTML=monthFilterHTML("office");
 
-document.getElementById("officeTotalExpense").innerHTML=money(total);
+const totalEl=document.getElementById("officeTotalExpense");
+if(totalEl) totalEl.innerHTML=money(total);
 
 const officeIncomeEl=document.getElementById("officeTotalIncome");
-
 if(officeIncomeEl) officeIncomeEl.innerHTML=money(incomeTotal);
 
-document.getElementById("officeExpenseCount").textContent=formatNum(expenses.length);
+const countEl=document.getElementById("officeExpenseCount");
+if(countEl) countEl.textContent=formatNum(expenses.length);
+
+/* ===== دخل المكتب يبقى كما هو ===== */
 
 const incomeBody=document.getElementById("officeIncomeBody");
 
@@ -5738,14 +6085,15 @@ incomeBody.innerHTML=incomes.length?incomes.map(item=>`
 <strong>${escapeHTML(item.name)}</strong>
 </td>
 
-<td class="editable-cell income" onclick="inlineEditCell(this,'office_income','${item.id}','amount','number')">${money(item.amount)}</td>
+<td class="editable-cell income" onclick="inlineEditCell(this,'office_income','${item.id}','amount','number')">
+${money(item.amount)}
+</td>
 
 <td class="editable-cell" onclick="inlineEditCell(this,'office_income','${item.id}','note')">
 ${escapeHTML(item.note||"")}
 </td>
 
 <td>
-
 <button class="btn red" onclick="deleteOfficeIncome('${item.id}')">حذف</button>
 </td>
 
@@ -5755,146 +6103,96 @@ ${escapeHTML(item.note||"")}
 
 }
 
+/* ===== مصاريف المكتب: سنة ← شهر ← العمليات ===== */
+
 const tbody=document.getElementById("officeExpensesBody");
 
-tbody.innerHTML=expenses.length?expenses.map(item=>`
+if(tbody){
 
+if(selected==="all"){
+
+tbody.innerHTML=`
 <tr>
-
-<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','date','date')">
-<span class="num-val">${escapeHTML(item.date)}</span>
+<td colspan="5" style="padding:0;border:0">
+${officeRenderGroupedExpenses(expenses)}
 </td>
-
-<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','name')">
-<strong>${escapeHTML(item.name)}</strong>
-</td>
-
-<td class="editable-cell expense" onclick="inlineEditCell(this,'personal_expenses','${item.id}','amount','number')">${money(item.amount)}</td>
-
-<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','note')">
-${escapeHTML(item.note||"")}
-</td>
-
-<td>
-
-<button class="btn red" onclick="deleteOfficeExpense('${item.id}')">حذف</button>
-</td>
-
 </tr>
+`;
 
-`).join(""):`<tr><td colspan="5"><div class="empty">لا توجد مصاريف مكتب في الفترة المحددة</div></td></tr>`;
+}else{
+
+tbody.innerHTML=expenses.length
+?officeBuildExpenseRows(expenses)
+:`<tr><td colspan="5"><div class="empty">لا توجد مصاريف مكتب في الفترة المحددة</div></td></tr>`;
 
 }
 
-document.getElementById(
-"saveOfficeExpenseBtn"
-).onclick=
-async function(){
+}
+
+/* ===== حفظ المصروف ===== */
+
+document.getElementById("saveOfficeExpenseBtn").onclick=async function(){
 
 const btn=this;
 
-const date=
-document.getElementById(
-"offExpDate"
-).value;
-
-const name=
-document.getElementById(
-"offExpName"
-).value.trim();
-
-const amount=
-Number(
-document.getElementById(
-"offExpAmount"
-).value
-);
-
-const note=
-document.getElementById(
-"offExpNote"
-).value.trim();
+const date=document.getElementById("offExpDate").value;
+const name=document.getElementById("offExpName").value.trim();
+const amount=Number(document.getElementById("offExpAmount").value);
+const note=document.getElementById("offExpNote").value.trim();
 
 if(!date){
-
 alert("اختر التاريخ.");
-
 return;
-
 }
 
 if(!name){
-
 alert("أدخل اسم البند.");
-
 return;
-
 }
 
 if(!(amount>0)){
-
 alert("أدخل مبلغ صحيح.");
-
 return;
-
 }
 
 btn.disabled=true;
-
-btn.textContent=
-"جاري الحفظ...";
+btn.textContent="جاري الحفظ...";
 
 try{
 
 await addOfficeExpenseToFirebase({
-
 date,
 name,
 amount,
 note
-
 });
 
-document.getElementById(
-"offExpName"
-).value="";
-
-document.getElementById(
-"offExpAmount"
-).value="";
-
-document.getElementById(
-"offExpNote"
-).value="";
+document.getElementById("offExpName").value="";
+document.getElementById("offExpAmount").value="";
+document.getElementById("offExpNote").value="";
 
 }catch(e){
 
 console.error(e);
 
-alert(
-"حدث خطأ أثناء الحفظ:\n"+
-e.message
-);
+alert("حدث خطأ أثناء الحفظ:\n"+e.message);
 
 }finally{
 
 btn.disabled=false;
-
-btn.textContent=
-"حفظ المصروف";
+btn.textContent="حفظ المصروف";
 
 }
 
 };
 
+/* ===== حفظ دخل المكتب ===== */
+
 document.getElementById("saveOfficeIncomeBtn").onclick=async function(){
 
 const date=document.getElementById("offIncDate").value;
-
 const name=document.getElementById("offIncName").value.trim();
-
 const amount=Number(document.getElementById("offIncAmount").value);
-
 const note=document.getElementById("offIncNote").value.trim();
 
 if(!date||!name||!(amount>0)){
@@ -5933,7 +6231,6 @@ this.disabled=false;
 
 };
 
-
 window.deleteOfficeIncome=async function(id){
 
 if(!confirm("هل تريد حذف هذا الدخل؟"))return;
@@ -5952,33 +6249,19 @@ alert(e.message);
 
 };
 
+window.deleteOfficeExpense=async function(id){
 
-window.deleteOfficeExpense=
-async function(id){
-
-if(
-!confirm(
-"هل تريد حذف هذا المصروف؟"
-)
-)
-return;
+if(!confirm("هل تريد حذف هذا المصروف؟"))return;
 
 try{
 
 await deleteDoc(
-doc(
-firestore,
-"office_expenses",
-id
-)
+doc(firestore,"office_expenses",id)
 );
 
 }catch(e){
 
-alert(
-"حدث خطأ أثناء الحذف:\n"+
-e.message
-);
+alert("حدث خطأ أثناء الحذف:\n"+e.message);
 
 }
 
