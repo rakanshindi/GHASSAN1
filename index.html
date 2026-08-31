@@ -500,6 +500,16 @@ padding:10px 4px 2px
 font-weight:900
 }
 
+.personal-more-btn{
+margin:10px auto 4px;
+display:flex;
+min-width:140px;
+}
+
+.personal-extra-row{
+display:none;
+}
+
 .month-filter{
 display:flex;
 align-items:center;
@@ -5449,6 +5459,31 @@ userEmail:auth.currentUser.email||""
 
 }
 
+function personalRowsWithMore(rows, limit, moreId, buttonId, buttonLabel){
+
+const visibleRows=rows.slice(0,limit);
+const extraRows=rows.slice(limit);
+
+return {
+rows:visibleRows.join("")+extraRows.map(row=>row.replace("<tr>",`<tr class="personal-extra-row" data-more-group="${moreId}">`)).join(""),
+button:extraRows.length?`<button type="button" class="btn secondary personal-more-btn" id="${buttonId}" onclick="togglePersonalMore('${moreId}','${buttonId}')">${buttonLabel} (${extraRows.length})</button>`:""
+};
+
+}
+
+window.togglePersonalMore=function(groupId,buttonId){
+
+const rows=document.querySelectorAll(`[data-more-group="${groupId}"]`);
+const button=document.getElementById(buttonId);
+
+if(!rows.length||!button) return;
+
+const opening=rows[0].style.display!="table-row";
+rows.forEach(row=>{row.style.display=opening?"table-row":"none";});
+button.textContent=opening?"إخفاء التفاصيل":"عرض المزيد ("+rows.length+")";
+
+};
+
 function renderPersonal(){
 
 const records=filterBySelectedMonth(db.personalExpenses,"personal");
@@ -5590,7 +5625,7 @@ ${months.map(month=>{
 const group=grouped[month]||{total:0,items:[]};
 const incomeGroup=incomeGrouped[month]||{total:0,items:[]};
 
-const expenseRows=group.items.map(item=>`
+const expenseRowList=group.items.map(item=>`
 
 <tr>
 
@@ -5613,9 +5648,9 @@ ${escapeHTML(item.note||"")}
 
 </tr>
 
-`).join("");
+`);
 
-const incomeRows=incomeGroup.items.map(item=>`
+const incomeRowList=incomeGroup.items.map(item=>`
 
 <tr>
 
@@ -5641,7 +5676,7 @@ ${escapeHTML(item.note||"")}
 
 </tr>
 
-`).join("");
+`);
 
 const monthLabel=/^\\d{4}-\\d{2}$/.test(month)
 ?`${arabicMonths[Number(month.slice(5,7))-1]||month} ${month.slice(0,4)}`
@@ -5650,6 +5685,9 @@ const monthLabel=/^\\d{4}-\\d{2}$/.test(month)
 const monthNet=(Number(incomeGroup.total)||0)-(Number(group.total)||0);
 const safeMonthKey=month.replace(/[^0-9A-Za-z\u0600-\u06FF_-]/g,"_");
 const monthDomKey=`${safeYearKey}_${safeMonthKey}`;
+
+const expenseRowsData=personalRowsWithMore(expenseRowList,5,`exp_${monthDomKey}`,`exp_more_${monthDomKey}`,"عرض المزيد");
+const incomeRowsData=personalRowsWithMore(incomeRowList,5,`inc_${monthDomKey}`,`inc_more_${monthDomKey}`,"عرض المزيد");
 
 return `
 
@@ -5687,9 +5725,10 @@ ${group.items.length?`
 <th>إجراء</th>
 </tr>
 </thead>
-<tbody>${expenseRows}</tbody>
+<tbody>${expenseRowsData.rows}</tbody>
 </table>
-</div>`:""}
+</div>
+${expenseRowsData.button}`:""}
 
 ${incomeGroup.items.length?`
 <h4 style="margin:18px 0 8px">📈 الإيرادات</h4>
@@ -5704,9 +5743,10 @@ ${incomeGroup.items.length?`
 <th>إجراء</th>
 </tr>
 </thead>
-<tbody>${incomeRows}</tbody>
+<tbody>${incomeRowsData.rows}</tbody>
 </table>
-</div>`:""}
+</div>
+${incomeRowsData.button}`:""}
 
 </div>
 
@@ -9096,3 +9136,4 @@ alert(e.message);
 </body>
 
 </html>
+  
