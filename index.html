@@ -3241,13 +3241,15 @@ updateWallet();
 window.openOffice=function(){
 
 selectedMonths.office="all";
+
+navigateTo("officeSection");
+
 document.getElementById("offExpDate").value=today();
 document.getElementById("offIncDate").value=today();
 
 renderOffice();
 
 };
-
 window.openContracting=function(){
 navigateTo("contractingSection");
 document.getElementById("conDate").value=today();
