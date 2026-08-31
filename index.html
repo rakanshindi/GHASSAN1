@@ -2725,12 +2725,12 @@ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
 }
 
 const selectedMonths={
-office:currentMonthKey(),
-contracting:currentMonthKey(),
-projects:currentMonthKey(),
-services:currentMonthKey(),
-rentals:currentMonthKey(),
-personal:currentMonthKey()
+office:"all",
+contracting:"all",
+projects:"all",
+services:"all",
+rentals:"all",
+personal:"all"
 };
 
 const arabicMonths=[
@@ -2749,7 +2749,7 @@ ${arabicMonths.map((name,i)=>{
 const month=`${currentYear}-${String(i+1).padStart(2,"0")}`;
 return `<option value="${month}" ${value===month?"selected":""}>${name} ${currentYear}</option>`;
 }).join("")}
-<option value="all" ${value==="all"?"selected":""}>كامل السنة ${currentYear}</option>
+<option value="all" ${value==="all"?"selected":""}>كل البيانات المحفوظة</option>
 </select>
 </div>`;
 }
@@ -2769,9 +2769,8 @@ else render("projects");
 };
 
 function filterBySelectedMonth(items,key){
-const selected=selectedMonths[key]||currentMonthKey();
-const currentYear=String(new Date().getFullYear());
-if(selected==="all") return items.filter(item=>String(item.date||"").slice(0,4)===currentYear);
+const selected=selectedMonths[key]||"all";
+if(selected==="all") return Array.isArray(items)?items:[];
 return items.filter(item=>String(item.date||"").slice(0,7)===selected);
 }
 
