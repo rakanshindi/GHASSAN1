@@ -1,22 +1,22 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
+\<!doctype html>
+\<html lang="ar" dir="rtl">
 
-<head>
+\<head>
 
-<meta charset="utf-8">
+\<meta charset="utf-8">
 
-<meta name="viewport" content="width=device-width,initial-scale=1">
+\<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>إدارة المكتب والمشاريع والعقارات والمصاريف</title>
+\<title>إدارة المكتب والمشاريع والعقارات والمصاريف\</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+\<script src="[https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js](https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js)">\</script>
+\<script src="[https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js](https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js)">\</script>
+\<script src="[https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js](https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js)">\</script>
 
-<style>
+\<style>
 
-*{
-box-sizing:border-box
+\*{
+box-sizing\:border-box
 }
 
 body{
@@ -28,16 +28,16 @@ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif
 
 .wrap{
 max-width:1100px;
-margin:auto;
+margin\:auto;
 padding:18px
 }
 
 .top{
-display:flex;
-justify-content:space-between;
-align-items:center;
+display\:flex;
+justify-content\:space-between;
+align-items\:center;
 gap:12px;
-flex-wrap:wrap;
+flex-wrap\:wrap;
 margin-bottom:15px
 }
 
@@ -57,18 +57,18 @@ border:0;
 border-radius:10px;
 padding:11px 15px;
 font-weight:800;
-cursor:pointer;
+cursor\:pointer;
 background:#0f172a;
-color:white;
-display:inline-flex;
-align-items:center;
-justify-content:center;
+color\:white;
+display\:inline-flex;
+align-items\:center;
+justify-content\:center;
 gap:6px
 }
 
-button:disabled{
+button\:disabled{
 opacity:.65;
-cursor:not-allowed
+cursor\:not-allowed
 }
 
 .btn.secondary{
@@ -103,8 +103,8 @@ box-shadow:0 4px 16px rgba(0,0,0,.04)
 }
 
 .stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
+display\:grid;
+grid-template-columns\:repeat(4,1fr);
 gap:12px
 }
 
@@ -119,21 +119,21 @@ color:#667085
 }
 
 .stat strong{
-display:block;
+display\:block;
 font-size:23px;
 margin-top:7px;
-direction:ltr;
-text-align:right
+direction\:ltr;
+text-align\:right
 }
 
 .grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
+display\:grid;
+grid-template-columns\:repeat(2,1fr);
 gap:12px
 }
 
 .field label{
-display:block;
+display\:block;
 font-weight:800;
 font-size:13px;
 margin-bottom:6px
@@ -155,15 +155,15 @@ grid-column:1/-1
 }
 
 .tabs{
-display:flex;
+display\:flex;
 gap:8px;
-overflow-x:auto;
+overflow-x\:auto;
 padding-bottom:5px;
 margin-bottom:15px
 }
 
 .tab{
-white-space:nowrap;
+white-space\:nowrap;
 background:#fff;
 color:#111827;
 border:1px solid #d7dce2
@@ -175,21 +175,21 @@ color:#fff
 }
 
 .table-wrap{
-overflow-x:auto;
+overflow-x\:auto;
 width:100%;
--webkit-overflow-scrolling:touch
+-webkit-overflow-scrolling\:touch
 }
 
 table{
 width:100%;
-border-collapse:collapse;
+border-collapse\:collapse;
 min-width:650px
 }
 
 th,td{
 padding:10px 8px;
 border-bottom:1px solid #edf0f3;
-text-align:right;
+text-align\:right;
 font-size:13px
 }
 
@@ -198,9 +198,9 @@ background:#f8fafc
 }
 
 .num-val{
-direction:ltr;
-unicode-bidi:bidi-override;
-display:inline-block
+direction\:ltr;
+unicode-bidi\:bidi-override;
+display\:inline-block
 }
 
 .income{
@@ -228,12 +228,12 @@ color:#667085
 }
 
 .editable-cell{
-cursor:pointer;
-transition:background .15s ease;
+cursor\:pointer;
+transition\:background .15s ease;
 border-radius:6px
 }
 
-.editable-cell:hover{
+.editable-cell\:hover{
 background:#f1f5f9
 }
 
@@ -246,13 +246,13 @@ border-radius:7px;
 padding:0 7px;
 font-size:13px;
 background:#fff;
-outline:none
+outline\:none
 }
 
 .actions{
-display:flex;
+display\:flex;
 gap:7px;
-flex-wrap:wrap
+flex-wrap\:wrap
 }
 
 .notice{
@@ -266,7 +266,7 @@ font-size:13px
 
 .empty{
 padding:25px;
-text-align:center;
+text-align\:center;
 color:#667085
 }
 
@@ -289,7 +289,7 @@ margin-bottom:14px
 }
 
 .login-field label{
-display:block;
+display\:block;
 font-weight:800;
 font-size:13px;
 margin-bottom:6px
@@ -311,19 +311,19 @@ padding:10px;
 border-radius:10px;
 font-size:13px;
 margin-bottom:12px;
-display:none
+display\:none
 }
 
 .user-bar{
-display:flex;
-align-items:center;
+display\:flex;
+align-items\:center;
 gap:8px;
-flex-wrap:wrap
+flex-wrap\:wrap
 }
 
 .portal-selection{
-display:grid;
-grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+display\:grid;
+grid-template-columns\:repeat(auto-fit, minmax(200px, 1fr));
 gap:15px;
 margin-top:30px
 }
@@ -333,15 +333,15 @@ background:#fff;
 border:2px solid #e6e9ee;
 border-radius:18px;
 padding:25px 15px;
-text-align:center;
-cursor:pointer;
-transition:all .2s ease;
+text-align\:center;
+cursor\:pointer;
+transition\:all .2s ease;
 box-shadow:0 4px 16px rgba(0,0,0,.04)
 }
 
-.portal-card:hover{
+.portal-card\:hover{
 border-color:#0f172a;
-transform:translateY(-3px);
+transform\:translateY(-3px);
 box-shadow:0 8px 24px rgba(0,0,0,.08)
 }
 
@@ -358,12 +358,12 @@ font-size:13px
 
 .portal-icon{
 font-size:38px;
-display:block;
+display\:block;
 margin-bottom:10px
 }
 
 .save-status{
-display:none;
+display\:none;
 padding:10px;
 border-radius:10px;
 margin-top:10px;
@@ -372,24 +372,24 @@ font-weight:700
 }
 
 .save-status.success{
-display:block;
+display\:block;
 background:#f0fdf4;
 color:#15803d;
 border:1px solid #bbf7d0
 }
 
 .save-status.error{
-display:block;
+display\:block;
 background:#fef2f2;
 color:#b91c1c;
 border:1px solid #fecaca
 }
 
 .section-nav{
-display:flex;
+display\:flex;
 gap:10px;
 margin-bottom:15px;
-flex-wrap:wrap
+flex-wrap\:wrap
 }
 
 .month-group-card{
@@ -401,9 +401,9 @@ margin-bottom:15px
 }
 
 .month-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
+display\:flex;
+justify-content\:space-between;
+align-items\:center;
 border-bottom:2px solid #cbd5e1;
 padding-bottom:8px;
 margin-bottom:12px
@@ -421,10 +421,10 @@ font-weight:800
 }
 
 .month-filter{
-display:flex;
-align-items:center;
+display\:flex;
+align-items\:center;
 gap:10px;
-flex-wrap:wrap;
+flex-wrap\:wrap;
 margin-bottom:15px
 }
 
@@ -444,11 +444,11 @@ min-width:190px
 }
 
 .editable-cell{
-cursor:pointer;
-transition:background .15s ease
+cursor\:pointer;
+transition\:background .15s ease
 }
 
-.editable-cell:hover{
+.editable-cell\:hover{
 background:#f1f5f9
 }
 
@@ -463,23 +463,23 @@ font-size:13px;
 background:#fff
 }
 
-/* ================= تقرير PDF ================= */
+/\* ================= تقرير PDF ================= \*/
 
 .report-modal{
-position:fixed;
+position\:fixed;
 inset:0;
-background:rgba(15,23,42,.65);
+background\:rgba(15,23,42,.65);
 z-index:9999;
-display:none;
-align-items:center;
-justify-content:center;
+display\:none;
+align-items\:center;
+justify-content\:center;
 padding:20px;
-overflow:auto
+overflow\:auto
 }
 
 .report-modal-card{
 background:#fff;
-width:min(600px,100%);
+width\:min(600px,100%);
 border-radius:18px;
 padding:22px;
 box-shadow:0 20px 60px rgba(0,0,0,.25)
@@ -488,7 +488,7 @@ box-shadow:0 20px 60px rgba(0,0,0,.25)
 .report-modal-card h2{margin-top:0}
 
 .report-period-grid{
-display:grid;
+display\:grid;
 grid-template-columns:1fr 1fr;
 gap:12px
 }
@@ -496,50 +496,50 @@ gap:12px
 .report-period-grid .full{grid-column:1/-1}
 
 .report-modal-actions{
-display:flex;
+display\:flex;
 gap:10px;
-justify-content:flex-start;
+justify-content\:flex-start;
 margin-top:20px;
-flex-wrap:wrap
+flex-wrap\:wrap
 }
 
-/* ===== شكل التقرير النهائي: A4 ثابت بنفس ترتيب النموذج المرجعي ===== */
+/\* ===== شكل التقرير النهائي: A4 ثابت بنفس ترتيب النموذج المرجعي ===== \*/
 .financial-report{
 width:210mm;
 background:#fff;
 color:#17202a;
-font-family:Tahoma,Arial,"Segoe UI",sans-serif;
-direction:rtl;
--webkit-font-smoothing:antialiased;
-text-rendering:optimizeLegibility;
+font-family\:Tahoma,Arial,"Segoe UI",sans-serif;
+direction\:rtl;
+-webkit-font-smoothing\:antialiased;
+text-rendering\:optimizeLegibility;
 padding:0;
 margin:0;
 }
 
-.financial-report *{box-sizing:border-box}
+.financial-report \*{box-sizing\:border-box}
 
 .report-page{
 width:210mm;
 height:297mm;
 padding:13mm 13mm 11mm 13mm;
 background:#fff;
-position:relative;
-overflow:hidden;
-page-break-after:always;
-break-after:page;
+position\:relative;
+overflow\:hidden;
+page-break-after\:always;
+break-after\:page;
 }
 
-.report-page:last-child{
-page-break-after:auto;
-break-after:auto
+.report-page\:last-child{
+page-break-after\:auto;
+break-after\:auto
 }
 
 .report-cover-page{
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
+display\:flex;
+flex-direction\:column;
+justify-content\:center;
+align-items\:center;
+text-align\:center;
 }
 
 .report-cover-title{
@@ -568,8 +568,8 @@ background:#fff
 margin:9px 0;
 font-size:14px;
 line-height:1.8;
-white-space:normal;
-overflow-wrap:anywhere
+white-space\:normal;
+overflow-wrap\:anywhere
 }
 
 .report-page-header{
@@ -580,13 +580,13 @@ color:#17324d;
 border-bottom:2px solid #17324d;
 padding-bottom:7px;
 margin:0 0 12px;
-text-align:right
+text-align\:right
 }
 
 .report-section{
 margin:0 0 12px;
-page-break-inside:avoid;
-break-inside:avoid
+page-break-inside\:avoid;
+break-inside\:avoid
 }
 
 .report-section-title{
@@ -597,7 +597,7 @@ color:#17324d;
 border-bottom:2px solid #17324d;
 padding-bottom:5px;
 margin:0 0 8px;
-text-align:right
+text-align\:right
 }
 
 .report-text{
@@ -609,10 +609,10 @@ margin:4px 0
 
 .report-table{
 width:100%;
-border-collapse:collapse;
-table-layout:fixed;
+border-collapse\:collapse;
+table-layout\:fixed;
 margin:6px 0 0;
-direction:rtl
+direction\:rtl
 }
 
 .report-table th,
@@ -621,16 +621,16 @@ border:1px solid #d9dee5;
 padding:6px 7px;
 font-size:10px;
 line-height:1.55;
-text-align:right;
-vertical-align:top;
-word-break:normal;
-overflow-wrap:anywhere;
-white-space:normal;
-word-wrap:break-word;
-word-break:normal;
-overflow-wrap:anywhere;
-white-space:normal;
-word-wrap:break-word;
+text-align\:right;
+vertical-align\:top;
+word-break\:normal;
+overflow-wrap\:anywhere;
+white-space\:normal;
+word-wrap\:break-word;
+word-break\:normal;
+overflow-wrap\:anywhere;
+white-space\:normal;
+word-wrap\:break-word;
 }
 
 .report-table th{
@@ -639,22 +639,22 @@ color:#fff;
 font-weight:900
 }
 
-.report-table tr:nth-child(even) td{background:#f8fafc}
+.report-table tr\:nth-child(even) td{background:#f8fafc}
 
-.report-table thead{display:table-header-group}
-.report-table tr{page-break-inside:avoid;break-inside:avoid}
+.report-table thead{display\:table-header-group}
+.report-table tr{page-break-inside\:avoid;break-inside\:avoid}
 
 .report-number{
-direction:ltr;
-unicode-bidi:isolate;
-display:inline-block;
-white-space:nowrap;
-text-align:left
+direction\:ltr;
+unicode-bidi\:isolate;
+display\:inline-block;
+white-space\:nowrap;
+text-align\:left
 }
 
 .report-kpis{
-display:grid;
-grid-template-columns:repeat(4,1fr);
+display\:grid;
+grid-template-columns\:repeat(4,1fr);
 gap:7px;
 margin:0 0 11px
 }
@@ -665,14 +665,14 @@ border:1px solid #e1e6ec;
 border-radius:10px;
 padding:8px 7px;
 background:#f8fafc;
-text-align:center
+text-align\:center
 }
 
 .report-kpi-label{
 font-size:8.5px;
 line-height:1.45;
-white-space:normal;
-overflow-wrap:anywhere;
+white-space\:normal;
+overflow-wrap\:anywhere;
 color:#667085
 }
 
@@ -681,7 +681,7 @@ font-size:14px;
 line-height:1.35;
 font-weight:900;
 margin-top:4px;
-white-space:nowrap
+white-space\:nowrap
 }
 
 .report-income{color:#15803d}
@@ -709,7 +709,7 @@ margin-top:8px
 }
 
 .report-empty{
-text-align:center!important;
+text-align\:center!important;
 color:#667085
 }
 
@@ -723,1846 +723,1845 @@ margin-top:8px
 
 @media print{
 .financial-report{width:210mm}
-.report-page{box-shadow:none}
+.report-page{box-shadow\:none}
 }
 
-</style>
+\</style>
 
-</head>
+\</head>
 
-<body>
+\<body>
 
-<!-- ================= تسجيل الدخول ================= -->
+\<!-- ================= تسجيل الدخول ================= -->
 
-<div id="loginScreen" style="display:none">
+\<div id="loginScreen" style="display\:none">
 
-<div class="login-card">
+\<div class="login-card">
 
-<h2>🔐 تسجيل الدخول</h2>
+\<h2>🔐 تسجيل الدخول\</h2>
 
-<p class="muted">
+\<p class="muted">
 سجل الدخول للوصول إلى بيانات المشاريع والدخل والمصاريف.
-</p>
+\</p>
 
-<div id="loginError" class="login-error"></div>
+\<div id="loginError" class="login-error">\</div>
 
-<div class="login-field">
+\<div class="login-field">
 
-<label>البريد الإلكتروني</label>
+\<label>البريد الإلكتروني\</label>
 
-<input
+\<input
 id="loginEmail"
 type="email"
 autocomplete="username"
 placeholder="البريد الإلكتروني">
 
-</div>
+\</div>
 
-<div class="login-field">
+\<div class="login-field">
 
-<label>كلمة المرور</label>
+\<label>كلمة المرور\</label>
 
-<input
+\<input
 id="loginPassword"
 type="password"
 autocomplete="current-password"
 placeholder="كلمة المرور">
 
-</div>
+\</div>
 
-<button
+\<button
 class="btn green"
 id="loginButton"
 style="width:100%">
 
 دخول
 
-</button>
+\</button>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<!-- ================= التطبيق ================= -->
+\<!-- ================= التطبيق ================= -->
 
-<div id="app" style="display:none">
+\<div id="app" style="display\:none">
 
-<div class="wrap">
+\<div class="wrap">
 
-<div class="top">
+\<div class="top">
 
-<div class="brand">
+\<div class="brand">
 
-<h1>📊 نظام الإدارة الشامل</h1>
+\<h1>📊 نظام الإدارة الشامل\</h1>
 
-<p>
+\<p>
 المكتب والمشاريع ودخل الخدمات وإيجارات العقارات والمصاريف الشخصية
-</p>
+\</p>
 
-</div>
+\</div>
 
-<div class="actions">
+\<div class="actions">
 
-<div class="user-bar">
+\<div class="user-bar">
 
-<span
+\<span
 id="currentUser"
 class="muted"
 style="font-size:12px">
-</span>
+\</span>
 
-<button
+\<button
 class="btn secondary"
 id="homeBtn"
-style="display:none">
+style="display\:none">
 
 🏠 الرئيسية
 
-</button>
+\</button>
 
-<button
+\<button
 class="btn blue"
 id="financialReportBtn">
 
 📊 التقرير المالي الكامل PDF
 
-</button>
+\</button>
 
-<button
+\<button
 class="btn secondary"
 id="logoutBtn">
 
 تسجيل خروج
 
-</button>
+\</button>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div class="notice">
+\<div class="notice">
 
 البيانات تحفظ تلقائيًا في Firebase Cloud Firestore ويمكن الوصول إليها من أي جهاز بعد تسجيل الدخول.
 
-</div>
+\</div>
 
-<!-- ================= نافذة التقرير المالي ================= -->
+\<!-- ================= نافذة التقرير المالي ================= -->
 
-<div
+\<div
 id="financialReportModal"
 class="report-modal">
 
-<div class="report-modal-card">
+\<div class="report-modal-card">
 
-<h2>📊 التقرير المالي الكامل</h2>
+\<h2>📊 التقرير المالي الكامل\</h2>
 
-<p class="muted">
+\<p class="muted">
 اختر الفترة التي تريد إصدار التقرير عنها، وسيتم جمع بيانات الموقع بالكامل تلقائيًا.
-</p>
+\</p>
 
-<div class="report-period-grid">
+\<div class="report-period-grid">
 
-<div class="field">
+\<div class="field">
 
-<label>نوع الفترة</label>
+\<label>نوع الفترة\</label>
 
-<select id="financialReportPeriodType">
+\<select id="financialReportPeriodType">
 
-<option value="monthly">شهري</option>
-<option value="quarterly">ربع سنوي</option>
-<option value="halfyearly">نصف سنوي</option>
-<option value="yearly">سنوي</option>
+\<option value="monthly">شهري\</option>
+\<option value="quarterly">ربع سنوي\</option>
+\<option value="halfyearly">نصف سنوي\</option>
+\<option value="yearly">سنوي\</option>
 
-</select>
+\</select>
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>السنة</label>
+\<label>السنة\</label>
 
-<select id="financialReportYear"></select>
+\<select id="financialReportYear">\</select>
 
-</div>
+\</div>
 
-<div
+\<div
 class="field full"
 id="financialReportPeriodField">
 
-<label id="financialReportPeriodLabel">الشهر</label>
+\<label id="financialReportPeriodLabel">الشهر\</label>
 
-<select id="financialReportPeriodValue"></select>
+\<select id="financialReportPeriodValue">\</select>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div class="report-modal-actions">
+\<div class="report-modal-actions">
 
-<button
+\<button
 class="btn green"
 id="generateFinancialReportBtn">
 
 📄 إنشاء التقرير PDF
 
-</button>
+\</button>
 
-<button
+\<button
 class="btn secondary"
 id="closeFinancialReportBtn">
 
 إلغاء
 
-</button>
+\</button>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<!-- ================= الرئيسية ================= -->
+\<!-- ================= الرئيسية ================= -->
 
-<div id="portalScreen" style="display:block">
+\<div id="portalScreen" style="display\:block">
 
-<div class="portal-selection">
+\<div class="portal-selection">
 
-<div class="portal-card" id="selectOffice">
+\<div class="portal-card" id="selectOffice">
 
-<span class="portal-icon">🏢</span>
+\<span class="portal-icon">🏢\</span>
 
-<h2>المكتب</h2>
+\<h2>المكتب\</h2>
 
-<p>
+\<p>
 إدارة دخل ومصاريف المكتب
-</p>
+\</p>
 
-</div>
+\</div>
 
-<div class="portal-card" id="selectContracting">
-<span class="portal-icon">🏢</span>
-<h2>المقاولات</h2>
-<p>إدارة دخل ومصروف وربح المقاولات</p>
+\<div class="portal-card" id="selectContracting">
+\<span class="portal-icon">🏢\</span>
+\<h2>المقاولات\</h2>
+\<p>إدارة دخل ومصروف وربح المقاولات\</p>
 
-</div>
+\</div>
 
-<div class="portal-card" id="selectProjects">
+\<div class="portal-card" id="selectProjects">
 
-<span class="portal-icon">🏗️</span>
+\<span class="portal-icon">🏗️\</span>
 
-<h2>المشاريع</h2>
+\<h2>المشاريع\</h2>
 
-<p>
+\<p>
 متابعة مصاريف ودفعات المشاريع
-</p>
+\</p>
 
-</div>
+\</div>
 
-<div class="portal-card" id="selectServices">
+\<div class="portal-card" id="selectServices">
 
-<span class="portal-icon">🛠️</span>
+\<span class="portal-icon">🛠️\</span>
 
-<h2>دخل الخدمات</h2>
+\<h2>دخل الخدمات\</h2>
 
-<p>
+\<p>
 متابعة أرباح الخدمات وتصنيفها
-</p>
+\</p>
 
-</div>
+\</div>
 
-<div class="portal-card" id="selectRentals">
+\<div class="portal-card" id="selectRentals">
 
-<span class="portal-icon">🔑</span>
+\<span class="portal-icon">🔑\</span>
 
-<h2>إيجارات العقارات</h2>
+\<h2>إيجارات العقارات\</h2>
 
-<p>
+\<p>
 إدارة العقارات والوحدات والتأمين
-</p>
+\</p>
 
-</div>
+\</div>
 
-<div class="portal-card" id="selectPersonal">
+\<div class="portal-card" id="selectPersonal">
 
-<span class="portal-icon">💳</span>
+\<span class="portal-icon">💳\</span>
 
-<h2>المصاريف الشخصية</h2>
+\<h2>المصاريف الشخصية\</h2>
 
-<p>
+\<p>
 متابعة المصاريف الشخصية والشهرية
-</p>
+\</p>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div class="card" id="mainWallet" style="margin-top:15px">
-<h2>💰 المحفظة</h2>
-<div class="stats">
-<div class="stat"><small>إجمالي الدخل</small><strong id="walletIncome" class="income">0 SAR</strong></div>
-<div class="stat"><small>إجمالي المصروف</small><strong id="walletExpense" class="expense">0 SAR</strong></div>
-<div class="stat"><small>الربح / الخسارة</small><strong id="walletProfit">0 SAR</strong></div>
-<div class="stat"><small>الرصيد</small><strong id="walletBalance">0 SAR</strong></div>
-</div>
-</div>
+\<div class="card" id="mainWallet" style="margin-top:15px">
+\<h2>💰 المحفظة\</h2>
+\<div class="stats">
+\<div class="stat">\<small>إجمالي الدخل\</small>\<strong id="walletIncome" class="income">0 SAR\</strong>\</div>
+\<div class="stat">\<small>إجمالي المصروف\</small>\<strong id="walletExpense" class="expense">0 SAR\</strong>\</div>
+\<div class="stat">\<small>الربح / الخسارة\</small>\<strong id="walletProfit">0 SAR\</strong>\</div>
+\<div class="stat">\<small>الرصيد\</small>\<strong id="walletBalance">0 SAR\</strong>\</div>
+\</div>
+\</div>
 
-</div>
+\</div>
 
-<!-- ================= المقاولات ================= -->
+\<!-- ================= المقاولات ================= -->
 
-<div id="contractingSection" style="display:none">
+\<div id="contractingSection" style="display\:none">
 
-<div class="card">
+\<div class="card">
 
-<div class="section-nav">
-<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
-<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
-</div>
+\<div class="section-nav">
+\<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة\</button>
+\<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية\</button>
+\</div>
 
-<h2>🏢 المقاولات</h2>
+\<h2>🏢 المقاولات\</h2>
 
-<div id="contractingMonthFilter"></div>
+\<div id="contractingMonthFilter">\</div>
 
-<div class="stats" style="margin-bottom:20px">
+\<div class="stats" style="margin-bottom:20px">
 
-<div class="stat">
-<small>إجمالي الدخل</small>
-<strong id="contractingIncome" class="income">0 SAR</strong>
-</div>
+\<div class="stat">
+\<small>إجمالي الدخل\</small>
+\<strong id="contractingIncome" class="income">0 SAR\</strong>
+\</div>
 
-<div class="stat">
-<small>إجمالي المصروف</small>
-<strong id="contractingExpense" class="expense">0 SAR</strong>
-</div>
+\<div class="stat">
+\<small>إجمالي المصروف\</small>
+\<strong id="contractingExpense" class="expense">0 SAR\</strong>
+\</div>
 
-<div class="stat">
-<small>صافي الربح</small>
-<strong id="contractingProfit">0 SAR</strong>
-</div>
+\<div class="stat">
+\<small>صافي الربح\</small>
+\<strong id="contractingProfit">0 SAR\</strong>
+\</div>
 
-</div>
+\</div>
 
-<!-- ================= ملخص تصنيف الدخل ================= -->
+\<!-- ================= ملخص تصنيف الدخل ================= -->
 
-<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+\<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>📈 ملخص تصنيف الدخل</h3>
+\<h3>📈 ملخص تصنيف الدخل\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
-<th>التصنيف</th>
-<th>إجمالي الدخل</th>
-</tr>
+\<tr>
+\<th>التصنيف\</th>
+\<th>إجمالي الدخل\</th>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody id="contractingIncomeSummaryBody"></tbody>
+\<tbody id="contractingIncomeSummaryBody">\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<!-- ================= ملخص تصنيف المصروفات ================= -->
+\<!-- ================= ملخص تصنيف المصروفات ================= -->
 
-<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+\<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>📉 ملخص تصنيف المصروفات</h3>
+\<h3>📉 ملخص تصنيف المصروفات\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
-<th>التصنيف</th>
-<th>إجمالي المصروف</th>
-</tr>
+\<tr>
+\<th>التصنيف\</th>
+\<th>إجمالي المصروف\</th>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody id="contractingExpenseSummaryBody"></tbody>
+\<tbody id="contractingExpenseSummaryBody">\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+\<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>➕ إضافة عملية مقاولات</h3>
+\<h3>➕ إضافة عملية مقاولات\</h3>
 
-<div class="grid">
+\<div class="grid">
 
-<div class="field">
-<label>النوع</label>
-<select id="conType">
-<option value="income">دخل</option>
-<option value="expense">مصروف</option>
-</select>
-</div>
+\<div class="field">
+\<label>النوع\</label>
+\<select id="conType">
+\<option value="income">دخل\</option>
+\<option value="expense">مصروف\</option>
+\</select>
+\</div>
 
-<div class="field">
-<label>التاريخ</label>
-<input id="conDate" type="date">
-</div>
+\<div class="field">
+\<label>التاريخ\</label>
+\<input id="conDate" type="date">
+\</div>
 
-<div class="field">
-<label>الاسم / البند</label>
-<input id="conName" placeholder="مثال: عقد، دفعة، مواد، أجور...">
-</div>
+\<div class="field">
+\<label>الاسم / البند\</label>
+\<input id="conName" placeholder="مثال: عقد، دفعة، مواد، أجور...">
+\</div>
 
-<div class="field">
-<label>المبلغ (SAR)</label>
-<input id="conAmount" type="number" min="0" step="0.01" placeholder="0">
-</div>
+\<div class="field">
+\<label>المبلغ (SAR)\</label>
+\<input id="conAmount" type="number" min="0" step="0.01" placeholder="0">
+\</div>
 
-<div class="field">
-<label>التصنيف</label>
-<input id="conCategory" list="contractingCategoriesList" placeholder="مواد، أجور، دفعة...">
-<datalist id="contractingCategoriesList"></datalist>
-</div>
+\<div class="field">
+\<label>التصنيف\</label>
+\<input id="conCategory" list="contractingCategoriesList" placeholder="مواد، أجور، دفعة...">
+\<datalist id="contractingCategoriesList">\</datalist>
+\</div>
 
-<div class="field full">
-<label>البيان</label>
-<input id="conNote" placeholder="بيان إضافي...">
-</div>
+\<div class="field full">
+\<label>البيان\</label>
+\<input id="conNote" placeholder="بيان إضافي...">
+\</div>
 
-<div class="full">
-<button class="btn green" id="saveContractingBtn">حفظ العملية</button>
-</div>
+\<div class="full">
+\<button class="btn green" id="saveContractingBtn">حفظ العملية\</button>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<h3>📋 عمليات المقاولات</h3>
+\<h3>📋 عمليات المقاولات\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
-<th>التاريخ</th>
-<th>النوع</th>
-<th>الاسم / البند</th>
-<th>التصنيف</th>
-<th>المبلغ</th>
-<th>البيان</th>
-<th>إجراء</th>
-</tr>
+\<tr>
+\<th>التاريخ\</th>
+\<th>النوع\</th>
+\<th>الاسم / البند\</th>
+\<th>التصنيف\</th>
+\<th>المبلغ\</th>
+\<th>البيان\</th>
+\<th>إجراء\</th>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody id="contractingBody"></tbody>
+\<tbody id="contractingBody">\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<!-- ================= المصاريف الشخصية ================= -->
+\<!-- ================= المصاريف الشخصية ================= -->
 
-<div id="personalSection" style="display:none">
+\<div id="personalSection" style="display\:none">
 
-<div class="card">
+\<div class="card">
 
-<div class="section-nav">
-<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
-<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
-</div>
+\<div class="section-nav">
+\<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة\</button>
+\<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية\</button>
+\</div>
 
-<h2>💳 المصاريف الشخصية</h2>
-<div id="personalMonthFilter"></div>
+\<h2>💳 المصاريف الشخصية\</h2>
+\<div id="personalMonthFilter">\</div>
 
-<div class="stats" style="margin-bottom:20px">
+\<div class="stats" style="margin-bottom:20px">
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 إجمالي المصاريف الشخصية
-</small>
+\</small>
 
-<strong
+\<strong
 id="personalTotalExpense"
 class="expense">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 إجمالي الإيرادات الشخصية
-</small>
+\</small>
 
-<strong id="personalTotalIncome" class="income">
+\<strong id="personalTotalIncome" class="income">
 0 SAR
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 عدد بنود المصاريف
-</small>
+\</small>
 
-<strong id="personalExpenseCount">
+\<strong id="personalExpenseCount">
 0
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 صافي الشخصي
-</small>
+\</small>
 
-<strong id="personalNetBalance">
+\<strong id="personalNetBalance">
 0 SAR
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div
+\<div
 class="card"
 style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>
+\<h3>
 ➕ إضافة مصروف شخصي جديد
-</h3>
+\</h3>
 
-<div class="grid">
+\<div class="grid">
 
-<div class="field">
+\<div class="field">
 
-<label>التاريخ</label>
+\<label>التاريخ\</label>
 
-<input
+\<input
 id="perExpDate"
 type="date">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>المصروف (SAR)</label>
+\<label>المصروف (SAR)\</label>
 
-<input
+\<input
 id="perExpAmount"
 type="number"
 min="0"
 step="0.01"
 placeholder="0">
 
-</div>
+\</div>
 
-<div class="field full">
+\<div class="field full">
 
-<label>الملاحظة / البيان</label>
+\<label>الملاحظة / البيان\</label>
 
-<input
+\<input
 id="perExpNote"
 placeholder="تفاصيل المصروف...">
 
-</div>
+\</div>
 
-<div class="full">
+\<div class="full">
 
-<button
+\<button
 class="btn red"
 id="savePersonalExpenseBtn">
 
 حفظ المصروف الشخصي
 
-</button>
+\</button>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div
+\<div
 class="card"
 style="background:#f0fdf4;border:1px solid #bbf7d0;margin-bottom:20px">
 
-<h3>
+\<h3>
 ➕ إضافة إيراد شخصي
-</h3>
+\</h3>
 
-<div class="grid">
+\<div class="grid">
 
-<div class="field">
-<label>الإيراد</label>
-<input id="perIncName" placeholder="مثال: راتب، تحويل، مبلغ مستلم...">
-</div>
+\<div class="field">
+\<label>الإيراد\</label>
+\<input id="perIncName" placeholder="مثال: راتب، تحويل، مبلغ مستلم...">
+\</div>
 
-<div class="field">
-<label>المبلغ (SAR)</label>
-<input id="perIncAmount" type="number" min="0" step="0.01" placeholder="0">
-</div>
+\<div class="field">
+\<label>المبلغ (SAR)\</label>
+\<input id="perIncAmount" type="number" min="0" step="0.01" placeholder="0">
+\</div>
 
-<div class="field full">
-<label>الملاحظة</label>
-<input id="perIncNote" placeholder="تفاصيل الإيراد...">
-</div>
+\<div class="field full">
+\<label>الملاحظة\</label>
+\<input id="perIncNote" placeholder="تفاصيل الإيراد...">
+\</div>
 
-<div class="full">
-<button class="btn green" id="savePersonalIncomeBtn">حفظ الإيراد</button>
-</div>
+\<div class="full">
+\<button class="btn green" id="savePersonalIncomeBtn">حفظ الإيراد\</button>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<h3>
+\<h3>
 📅 المصاريف والإيرادات الشهرية (مجمعة حسب الشهر الميلادي)
-</h3>
+\</h3>
 
-<div id="personalMonthlyContainer"></div>
+\<div id="personalMonthlyContainer">\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<!-- ================= المكتب ================= -->
+\<!-- ================= المكتب ================= -->
 
-<div id="officeSection" style="display:none">
+\<div id="officeSection" style="display\:none">
 
-<div class="card">
+\<div class="card">
 
-<div class="section-nav">
-<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
-<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
-</div>
+\<div class="section-nav">
+\<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة\</button>
+\<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية\</button>
+\</div>
 
-<h2>🏢 مصاريف المكتب</h2>
-<div id="officeMonthFilter"></div>
+\<h2>🏢 مصاريف المكتب\</h2>
+\<div id="officeMonthFilter">\</div>
 
-<div class="stats" style="margin-bottom:20px">
+\<div class="stats" style="margin-bottom:20px">
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 إجمالي مصاريف المكتب
-</small>
+\</small>
 
-<strong
+\<strong
 id="officeTotalExpense"
 class="expense">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 عدد بنود المصاريف
-</small>
+\</small>
 
-<strong id="officeExpenseCount">
+\<strong id="officeExpenseCount">
 0
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
-<small>إجمالي دخل المكتب</small>
-<strong id="officeTotalIncome" class="income">0 SAR</strong>
-</div>
+\<div class="stat">
+\<small>إجمالي دخل المكتب\</small>
+\<strong id="officeTotalIncome" class="income">0 SAR\</strong>
+\</div>
 
-</div>
+\</div>
 
-<div
+\<div
 class="card"
 style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>➕ إضافة دخل مكتب</h3>
+\<h3>➕ إضافة دخل مكتب\</h3>
 
-<div class="grid">
+\<div class="grid">
 
-<div class="field">
-<label>التاريخ</label>
-<input id="offIncDate" type="date">
-</div>
+\<div class="field">
+\<label>التاريخ\</label>
+\<input id="offIncDate" type="date">
+\</div>
 
-<div class="field">
-<label>اسم الدخل</label>
-<input id="offIncName" placeholder="مثال: أتعاب، استشارة، خدمة...">
-</div>
+\<div class="field">
+\<label>اسم الدخل\</label>
+\<input id="offIncName" placeholder="مثال: أتعاب، استشارة، خدمة...">
+\</div>
 
-<div class="field">
-<label>المبلغ (SAR)</label>
-<input id="offIncAmount" type="number" min="0" step="0.01" placeholder="0">
-</div>
+\<div class="field">
+\<label>المبلغ (SAR)\</label>
+\<input id="offIncAmount" type="number" min="0" step="0.01" placeholder="0">
+\</div>
 
-<div class="field">
-<label>ملاحظات</label>
-<input id="offIncNote" placeholder="بيان إضافي...">
-</div>
+\<div class="field">
+\<label>ملاحظات\</label>
+\<input id="offIncNote" placeholder="بيان إضافي...">
+\</div>
 
-<div class="full">
-<button class="btn green" id="saveOfficeIncomeBtn">حفظ الدخل</button>
-</div>
+\<div class="full">
+\<button class="btn green" id="saveOfficeIncomeBtn">حفظ الدخل\</button>
+\</div>
 
-</div>
+\</div>
 
-<h3>➕ إضافة مصروف مكتب</h3>
+\<h3>➕ إضافة مصروف مكتب\</h3>
 
-<div class="grid">
+\<div class="grid">
 
-<div class="field">
+\<div class="field">
 
-<label>التاريخ</label>
+\<label>التاريخ\</label>
 
-<input
+\<input
 id="offExpDate"
 type="date">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>اسم البند / المسمى</label>
+\<label>اسم البند / المسمى\</label>
 
-<input
+\<input
 id="offExpName"
 placeholder="مثال: إيجار المكتب، كهرباء، أدوات مكتبية...">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>المبلغ (SAR)</label>
+\<label>المبلغ (SAR)\</label>
 
-<input
+\<input
 id="offExpAmount"
 type="number"
 min="0"
 step="0.01"
 placeholder="0">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>ملاحظات</label>
+\<label>ملاحظات\</label>
 
-<input
+\<input
 id="offExpNote"
 placeholder="بيان إضافي...">
 
-</div>
+\</div>
 
-<div class="full">
+\<div class="full">
 
-<button
+\<button
 class="btn red"
 id="saveOfficeExpenseBtn">
 
 حفظ المصروف
 
-</button>
+\</button>
 
-<div
+\<div
 id="officeSaveStatus"
 class="save-status">
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<h3>
+\<h3>
 📋 قائمة مصاريف المكتب
-</h3>
+\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
+\<tr>
 
-<th>التاريخ</th>
-<th>اسم البند</th>
-<th>المبلغ</th>
-<th>الملاحظات</th>
-<th>إجراء</th>
+\<th>التاريخ\</th>
+\<th>اسم البند\</th>
+\<th>المبلغ\</th>
+\<th>الملاحظات\</th>
+\<th>إجراء\</th>
 
-</tr>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody id="officeExpensesBody"></tbody>
+\<tbody id="officeExpensesBody">\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-<h3>📋 قائمة دخل المكتب</h3>
+\<h3>📋 قائمة دخل المكتب\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
-<th>التاريخ</th>
-<th>الاسم</th>
-<th>المبلغ</th>
-<th>الملاحظات</th>
-<th>إجراء</th>
-</tr>
+\<tr>
+\<th>التاريخ\</th>
+\<th>الاسم\</th>
+\<th>المبلغ\</th>
+\<th>الملاحظات\</th>
+\<th>إجراء\</th>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody id="officeIncomeBody"></tbody>
+\<tbody id="officeIncomeBody">\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<!-- ================= المشاريع ================= -->
+\<!-- ================= المشاريع ================= -->
 
-<div id="projectsSection" style="display:none">
+\<div id="projectsSection" style="display\:none">
 
-<div class="section-nav">
-<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
-<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
-</div>
+\<div class="section-nav">
+\<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة\</button>
+\<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية\</button>
+\</div>
 
-<div
+\<div
 class="stats"
 id="mainStats">
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 إجمالي الدخل (الدفعات)
-</small>
+\</small>
 
-<strong
+\<strong
 id="totalIncome"
 class="income">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 إجمالي المصاريف
-</small>
+\</small>
 
-<strong
+\<strong
 id="totalExpense"
 class="expense">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 المتبقي (صافي الربح)
-</small>
+\</small>
 
-<strong id="netProfit">
+\<strong id="netProfit">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 عدد المشاريع
-</small>
+\</small>
 
-<strong id="projectCount">
+\<strong id="projectCount">
 0
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div
+\<div
 class="card"
 style="margin-top:15px">
 
-<div
+\<div
 class="tabs"
 id="tabs">
 
-<button
+\<button
 class="tab active"
 data-view="projects">
 
 المشاريع
 
-</button>
+\</button>
 
-<button
+\<button
 class="tab"
 data-view="transactions">
 
 جميع العمليات
 
-</button>
+\</button>
 
-</div>
+\</div>
 
-<div id="content"></div>
+\<div id="content">\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<!-- ================= الخدمات ================= -->
+\<!-- ================= الخدمات ================= -->
 
-<div id="servicesSection" style="display:none">
+\<div id="servicesSection" style="display\:none">
 
-<div class="card">
+\<div class="card">
 
-<div class="section-nav">
-<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
-<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
-</div>
+\<div class="section-nav">
+\<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة\</button>
+\<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية\</button>
+\</div>
 
-<h2>🛠️ دخل الخدمات</h2>
-<div id="servicesMonthFilter"></div>
+\<h2>🛠️ دخل الخدمات\</h2>
+\<div id="servicesMonthFilter">\</div>
 
-<div
+\<div
 class="stats"
 style="margin-bottom:20px">
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 إجمالي الدخل الشامل
-</small>
+\</small>
 
-<strong
+\<strong
 id="servicesTotalIncome"
 class="income">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 إجمالي المصاريف
-</small>
+\</small>
 
-<strong
+\<strong
 id="servicesTotalExpense"
 class="expense">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 صافي الربح الشامل
-</small>
+\</small>
 
-<strong id="servicesNetProfit">
+\<strong id="servicesNetProfit">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 عدد الخدمات
-</small>
+\</small>
 
-<strong id="servicesCategoryCount">
+\<strong id="servicesCategoryCount">
 0
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div
+\<div
 class="card"
 style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>
+\<h3>
 ➕ إضافة عملية خدمة جديدة
-</h3>
+\</h3>
 
-<div class="grid">
+\<div class="grid">
 
-<div class="field">
+\<div class="field">
 
-<label>التاريخ</label>
+\<label>التاريخ\</label>
 
-<input
+\<input
 id="srvDate"
 type="date">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>اسم الخدمة / التصنيف</label>
+\<label>اسم الخدمة / التصنيف\</label>
 
-<input
+\<input
 id="srvCategory"
 list="servicesList"
 placeholder="اكتب أو اختر خدمة">
 
-<datalist id="servicesList"></datalist>
+\<datalist id="servicesList">\</datalist>
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>الدخل / المبلغ المحصل (SAR)</label>
+\<label>الدخل / المبلغ المحصل (SAR)\</label>
 
-<input
+\<input
 id="srvCollectedAmount"
 type="number"
 min="0"
 step="0.01"
 placeholder="0">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>المصروف (SAR)</label>
+\<label>المصروف (SAR)\</label>
 
-<input
+\<input
 id="srvExpense"
 type="number"
 min="0"
 step="0.01"
 placeholder="0">
 
-</div>
+\</div>
 
-<div class="field full">
+\<div class="field full">
 
-<label>
+\<label>
 البيان / ملاحظة
-</label>
+\</label>
 
-<input
+\<input
 id="srvNote"
 placeholder="تفاصيل العملية...">
 
-</div>
+\</div>
 
-<div class="full">
+\<div class="full">
 
-<button
+\<button
 class="btn green"
 id="saveServiceTxBtn">
 
 حفظ العملية
 
-</button>
+\</button>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div class="card" style="background:#fff7ed;border:1px solid #fed7aa;margin-bottom:20px">
+\<div class="card" style="background:#fff7ed;border:1px solid #fed7aa;margin-bottom:20px">
 
-<h3>➕ إضافة مصروفات الخدمات المستقلة</h3>
+\<h3>➕ إضافة مصروفات الخدمات المستقلة\</h3>
 
-<div class="grid">
+\<div class="grid">
 
-<div class="field">
-<label>التاريخ</label>
-<input id="srvExpenseDate" type="date">
-</div>
+\<div class="field">
+\<label>التاريخ\</label>
+\<input id="srvExpenseDate" type="date">
+\</div>
 
-<div class="field">
-<label>اسم المصروف / التصنيف</label>
-<input id="srvExpenseCategory" placeholder="مثال: بنزين، أدوات، نقل...">
-</div>
+\<div class="field">
+\<label>اسم المصروف / التصنيف\</label>
+\<input id="srvExpenseCategory" placeholder="مثال: بنزين، أدوات، نقل...">
+\</div>
 
-<div class="field">
-<label>مبلغ المصروف (SAR)</label>
-<input id="srvGeneralExpenseAmount" type="number" min="0" step="0.01" placeholder="0">
-</div>
+\<div class="field">
+\<label>مبلغ المصروف (SAR)\</label>
+\<input id="srvGeneralExpenseAmount" type="number" min="0" step="0.01" placeholder="0">
+\</div>
 
-<div class="field full">
-<label>البيان / ملاحظة</label>
-<input id="srvGeneralExpenseNote" placeholder="تفاصيل المصروف...">
-</div>
+\<div class="field full">
+\<label>البيان / ملاحظة\</label>
+\<input id="srvGeneralExpenseNote" placeholder="تفاصيل المصروف...">
+\</div>
 
-<div class="full">
-<button class="btn red" id="saveServiceGeneralExpenseBtn">حفظ المصروف</button>
-</div>
+\<div class="full">
+\<button class="btn red" id="saveServiceGeneralExpenseBtn">حفظ المصروف\</button>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<h3>
+\<h3>
 📊 ملخص الأرباح حسب نوع الخدمة
-</h3>
+\</h3>
 
-<div
+\<div
 class="table-wrap"
 style="margin-bottom:25px">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
+\<tr>
 
-<th>الخدمة</th>
-<th>إجمالي المبلغ المحصل</th>
-<th>إجمالي المصروف</th>
-<th>إجمالي الربح</th>
+\<th>الخدمة\</th>
+\<th>إجمالي المبلغ المحصل\</th>
+\<th>إجمالي المصروف\</th>
+\<th>إجمالي الربح\</th>
 
-</tr>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody id="servicesSummaryBody"></tbody>
+\<tbody id="servicesSummaryBody">\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-<h3>
+\<h3>
 📋 سجل جميع عمليات الخدمات
-</h3>
+\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
+\<tr>
 
-<th>التاريخ</th>
-<th>الخدمة</th>
-<th>الربح</th>
-<th>المبلغ المحصل</th>
-<th>المصروف</th>
-<th>البيان</th>
-<th>إجراء</th>
+\<th>التاريخ\</th>
+\<th>الخدمة\</th>
+\<th>الربح\</th>
+\<th>المبلغ المحصل\</th>
+\<th>المصروف\</th>
+\<th>البيان\</th>
+\<th>إجراء\</th>
 
-</tr>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody id="servicesBody"></tbody>
+\<tbody id="servicesBody">\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-<h3>📋 المصروفات المستقلة للخدمات</h3>
+\<h3>📋 المصروفات المستقلة للخدمات\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
-<tr>
-<th>التاريخ</th>
-<th>المصروف / التصنيف</th>
-<th>المبلغ</th>
-<th>البيان</th>
-<th>إجراء</th>
-</tr>
-</thead>
+\<thead>
+\<tr>
+\<th>التاريخ\</th>
+\<th>المصروف / التصنيف\</th>
+\<th>المبلغ\</th>
+\<th>البيان\</th>
+\<th>إجراء\</th>
+\</tr>
+\</thead>
 
-<tbody id="servicesGeneralExpensesBody"></tbody>
+\<tbody id="servicesGeneralExpensesBody">\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<!-- ================= العقارات ================= -->
+\<!-- ================= العقارات ================= -->
 
-<div id="rentalsSection" style="display:none">
+\<div id="rentalsSection" style="display\:none">
 
-<div class="card">
+\<div class="card">
 
-<div class="section-nav">
-<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة</button>
-<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية</button>
-</div>
+\<div class="section-nav">
+\<button class="btn secondary" onclick="goBack()">← رجوع للصفحة السابقة\</button>
+\<button class="btn secondary" onclick="showPortal()">🏠 الرئيسية\</button>
+\</div>
 
-<h2>🔑 إدارة إيجارات العقارات</h2>
-<div id="rentalsMonthFilter"></div>
+\<h2>🔑 إدارة إيجارات العقارات\</h2>
+\<div id="rentalsMonthFilter">\</div>
 
-<div
-id="rentalOverviewStats"
+\<div
 class="stats"
 style="margin-bottom:20px">
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 إجمالي إيجارات العقارات
-</small>
+\</small>
 
-<strong
+\<strong
 id="allPropertiesRent"
 class="income">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 إجمالي مصاريف العقارات
-</small>
+\</small>
 
-<strong
+\<strong
 id="allPropertiesExpense"
 class="expense">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 صافي ربح العقارات
-</small>
+\</small>
 
-<strong id="allPropertiesNetProfit">
+\<strong id="allPropertiesNetProfit">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 عدد العقارات
-</small>
+\</small>
 
-<strong id="allPropertiesCount">
+\<strong id="allPropertiesCount">
 0
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div id="rentalMainView">
+\<div id="rentalMainView">
 
-<div
+\<div
 class="card"
 style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>
+\<h3>
 ➕ إضافة عقار جديد
-</h3>
+\</h3>
 
-<div class="grid">
+\<div class="grid">
 
-<div class="field">
+\<div class="field">
 
-<label>اسم العقار</label>
+\<label>اسم العقار\</label>
 
-<input
+\<input
 id="propertyTitle"
 placeholder="مثال: عمارة النزهة، مجمع الياسمين...">
 
-</div>
+\</div>
 
-<div style="align-self:end">
+\<div style="align-self\:end">
 
-<button
+\<button
 class="btn green"
 id="savePropertyBtn">
 
 إضافة العقار
 
-</button>
+\</button>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<h3>
+\<h3>
 📋 قائمة العقارات
-</h3>
+\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
+\<tr>
 
-<th>اسم العقار</th>
-<th>إجمالي الإيجارات</th>
-<th>مصاريف الإيجار</th>
-<th>مصاريف العقار</th>
-<th>صافي الربح</th>
-<th>التأمينات المستردة</th>
-<th>التأمينات النشطة</th>
-<th>إجراء</th>
+\<th>اسم العقار\</th>
+\<th>إجمالي الإيجارات\</th>
+\<th>مصاريف الإيجار\</th>
+\<th>مصاريف العقار\</th>
+\<th>صافي الربح\</th>
+\<th>التأمينات المستردة\</th>
+\<th>التأمينات النشطة\</th>
+\<th>إجراء\</th>
 
-</tr>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody id="propertiesListBody"></tbody>
+\<tbody id="propertiesListBody">\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div
+\<div
 id="rentalDetailView"
-style="display:none">
+style="display\:none">
 
-<div
-style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:15px">
+\<div
+style="display\:flex;justify-content\:space-between;align-items\:center;flex-wrap\:wrap;gap:10px;margin-bottom:15px">
 
-<h2 id="currentPropertyName">
+\<h2 id="currentPropertyName">
 اسم العقار
-</h2>
+\</h2>
 
-<button
+\<button
 class="btn secondary"
 onclick="closePropertyDetails()">
 
 ← العودة لقائمة العقارات
 
-</button>
+\</button>
 
-</div>
+\</div>
 
-<div
+\<div
 class="stats"
 style="margin-bottom:20px">
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 إجمالي المبلغ
-</small>
+\</small>
 
-<strong
+\<strong
 id="propTotalRent"
 class="income">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 مصاريف عمليات الإيجار
-</small>
+\</small>
 
-<strong
+\<strong
 id="propRentalExpenses"
 class="expense">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 مصاريف العقار الشاملة
-</small>
+\</small>
 
-<strong
+\<strong
 id="propGeneralExpenses"
 class="expense">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 صافي ربح العقار
-</small>
+\</small>
 
-<strong id="propNetProfit">
+\<strong id="propNetProfit">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div
+\<div
 class="stats"
 style="margin-bottom:20px">
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 التأمينات المستردة
-</small>
+\</small>
 
-<strong
+\<strong
 id="propTotalRefunded"
 style="color:#2563eb">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 التأمينات المتبقية
-</small>
+\</small>
 
-<strong
+\<strong
 id="propTotalRetained"
 style="color:#d97706">
 
 0 SAR
 
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 عدد العقود
-</small>
+\</small>
 
-<strong id="propContractsCount">
+\<strong id="propContractsCount">
 0
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-<div class="stat">
+\<div class="stat">
 
-<small>
+\<small>
 عدد المصاريف الشاملة
-</small>
+\</small>
 
-<strong id="propGeneralExpenseCount">
+\<strong id="propGeneralExpenseCount">
 0
-</strong>
+\</strong>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div
+\<div
 class="card"
 style="background:#f0fdf4;border:1px solid #bbf7d0;margin-bottom:20px">
 
-<h3>
+\<h3>
 ➕ تسجيل عقد / عملية إيجار جديدة
-</h3>
+\</h3>
 
-<div class="grid">
+\<div class="grid">
 
-<div class="field">
+\<div class="field">
 
-<label>التاريخ</label>
+\<label>التاريخ\</label>
 
-<input
+\<input
 id="rentDate"
 type="date">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>المسمى / رقم الوحدة</label>
+\<label>المسمى / رقم الوحدة\</label>
 
-<input
+\<input
 id="rentUnit"
 placeholder="مثال: شقة 101">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>تصنيف الإيجار</label>
+\<label>تصنيف الإيجار\</label>
 
-<input
+\<input
 id="rentCategory"
 list="rentalCategoriesList"
 placeholder="مثال: بوكينق، جاردن، شهري...">
 
-<datalist id="rentalCategoriesList"></datalist>
+\<datalist id="rentalCategoriesList">\</datalist>
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>اسم المستأجر</label>
+\<label>اسم المستأجر\</label>
 
-<input
+\<input
 id="rentTenant"
 placeholder="اسم المستأجر...">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>مبلغ الإيجار (SAR)</label>
+\<label>مبلغ الإيجار (SAR)\</label>
 
-<input
+\<input
 id="rentAmount"
 type="number"
 min="0"
 step="0.01"
 placeholder="0">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>مبلغ التأمين</label>
+\<label>مبلغ التأمين\</label>
 
-<input
+\<input
 id="rentDeposit"
 type="number"
 min="0"
 step="0.01"
 placeholder="0">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>تصنيف مصروف عملية الإيجار</label>
+\<label>تصنيف مصروف عملية الإيجار\</label>
 
-<input
+\<input
 id="rentExpenseCategory"
 placeholder="مثال: صيانة، كهرباء، سباكة...">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>مبلغ مصروف عملية الإيجار</label>
+\<label>مبلغ مصروف عملية الإيجار\</label>
 
-<input
+\<input
 id="rentExpenseAmount"
 type="number"
 min="0"
 step="0.01"
 placeholder="0">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>ملاحظات</label>
+\<label>ملاحظات\</label>
 
-<input
+\<input
 id="rentNote"
 placeholder="ملاحظات العقد...">
 
-</div>
+\</div>
 
-<div class="full">
+\<div class="full">
 
-<button
+\<button
 class="btn green"
 id="saveRentContractBtn">
 
 تسجيل العقد
 
-</button>
+\</button>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div
+\<div
 class="card"
 style="background:#fff7ed;border:1px solid #fed7aa;margin-bottom:20px">
 
-<h3>
+\<h3>
 ➕ إضافة مصروف شامل للعقار
-</h3>
+\</h3>
 
-<p class="muted">
+\<p class="muted">
 هذا المصروف يخص العقار كاملًا وليس عملية إيجار معينة.
-</p>
+\</p>
 
-<div class="grid">
+\<div class="grid">
 
-<div class="field">
+\<div class="field">
 
-<label>التاريخ</label>
+\<label>التاريخ\</label>
 
-<input
+\<input
 id="propertyExpenseDate"
 type="date">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>نوع / تصنيف المصروف</label>
+\<label>نوع / تصنيف المصروف\</label>
 
-<input
+\<input
 id="propertyExpenseCategory"
 placeholder="مثال: صيانة العمارة، حارس، كهرباء، نظافة...">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>المبلغ (SAR)</label>
+\<label>المبلغ (SAR)\</label>
 
-<input
+\<input
 id="propertyExpenseAmount"
 type="number"
 min="0"
 step="0.01"
 placeholder="0">
 
-</div>
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>ملاحظات</label>
+\<label>ملاحظات\</label>
 
-<input
+\<input
 id="propertyExpenseNote"
 placeholder="بيان إضافي...">
 
-</div>
+\</div>
 
-<div class="full">
+\<div class="full">
 
-<button
+\<button
 class="btn orange"
 id="savePropertyExpenseBtn">
 
 حفظ مصروف العقار
 
-</button>
+\</button>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div
+\<div
 class="card"
 style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>
+\<h3>
 📊 ملخص تصنيفات الإيجار داخل العقار
-</h3>
+\</h3>
 
-<p class="muted">
+\<p class="muted">
 كل تصنيف تكتبه في الشقق يُحفظ تلقائيًا، والتصنيف نفسه لا يتكرر في الملخص ويتم جمع إجمالي دخله.
-</p>
+\</p>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
-<th>تصنيف الإيجار</th>
-<th>عدد الوحدات</th>
-<th>عدد العقود</th>
-<th>إجمالي الإيجار</th>
-</tr>
+\<tr>
+\<th>تصنيف الإيجار\</th>
+\<th>عدد الوحدات\</th>
+\<th>عدد العقود\</th>
+\<th>إجمالي الإيجار\</th>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody id="rentalCategoriesSummaryBody"></tbody>
+\<tbody id="rentalCategoriesSummaryBody">\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<h3>
+\<h3>
 📋 عمليات إيجارات هذا العقار
-</h3>
+\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
+\<tr>
 
-<th>التاريخ</th>
-<th>الوحدة</th>
-<th>تصنيف الإيجار</th>
-<th>المستأجر</th>
-<th>الإيجار</th>
-<th>التأمين</th>
-<th>تصنيف المصروف</th>
-<th>مصروف العملية</th>
-<th>صافي العملية</th>
-<th>حالة التأمين</th>
-<th>الملاحظات</th>
-<th>إجراء</th>
+\<th>التاريخ\</th>
+\<th>الوحدة\</th>
+\<th>تصنيف الإيجار\</th>
+\<th>المستأجر\</th>
+\<th>الإيجار\</th>
+\<th>التأمين\</th>
+\<th>تصنيف المصروف\</th>
+\<th>مصروف العملية\</th>
+\<th>صافي العملية\</th>
+\<th>حالة التأمين\</th>
+\<th>الملاحظات\</th>
+\<th>إجراء\</th>
 
-</tr>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody id="rentContractsBody"></tbody>
+\<tbody id="rentContractsBody">\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-<h3 style="margin-top:25px">
+\<h3 style="margin-top:25px">
 📋 المصاريف الشاملة للعقار
-</h3>
+\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
+\<tr>
 
-<th>التاريخ</th>
-<th>التصنيف</th>
-<th>المبلغ</th>
-<th>الملاحظات</th>
-<th>إجراء</th>
+\<th>التاريخ\</th>
+\<th>التصنيف\</th>
+\<th>المبلغ\</th>
+\<th>الملاحظات\</th>
+\<th>إجراء\</th>
 
-</tr>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody id="propertyExpensesBody"></tbody>
+\<tbody id="propertyExpensesBody">\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<script type="module">
+\<script type="module">
 
-/* ================= FIREBASE ================= */
+/\* ================= FIREBASE ================= \*/
 
 import {
 initializeApp
 }
 from
-"https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+"[https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js](https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js)";
 
 import {
 getAuth,
@@ -2571,7 +2570,7 @@ onAuthStateChanged,
 signOut
 }
 from
-"https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+"[https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js](https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js)";
 
 import {
 getFirestore,
@@ -2586,12 +2585,12 @@ serverTimestamp,
 getDocs
 }
 from
-"https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+"[https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js](https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js)";
 
 const firebaseConfig = {
 
 apiKey:
-"AIzaSyDvk_d5RB5pzbWcaqWUEa6V_I7qnAQwwRM",
+"AIzaSyDvk\_d5RB5pzbWcaqWUEa6V\_I7qnAQwwRM",
 
 authDomain:
 "ghassan-f0a60.firebaseapp.com",
@@ -2606,7 +2605,7 @@ messagingSenderId:
 "1052504371272",
 
 appId:
-"1:1052504371272:web:81e5accd7a8456a709687d",
+"1:1052504371272\:web:81e5accd7a8456a709687d",
 
 measurementId:
 "G-LK0437M2ZJ"
@@ -2622,7 +2621,7 @@ getAuth(firebaseApp);
 const firestore =
 getFirestore(firebaseApp);
 
-/* ================= البيانات ================= */
+/\* ================= البيانات ================= \*/
 
 let db = {
 
@@ -2670,7 +2669,7 @@ const categories=[
 
 ];
 
-/* ================= الأدوات ================= */
+/\* ================= الأدوات ================= \*/
 
 function money(number){
 
@@ -2682,7 +2681,7 @@ maximumFractionDigits: 2
 }
 ).format(Number(number)||0);
 
-return `<span class="num-val">${formatted} SAR</span>`;
+return \`\<span class="num-val">${formatted} SAR\</span>\`;
 
 }
 
@@ -2722,16 +2721,16 @@ return new Date()
 
 function currentMonthKey(){
 const d=new Date();
-return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+return \`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}\`;
 }
 
 const selectedMonths={
-office:currentMonthKey(),
-contracting:currentMonthKey(),
-projects:currentMonthKey(),
-services:currentMonthKey(),
-rentals:currentMonthKey(),
-personal:currentMonthKey()
+office\:currentMonthKey(),
+contracting\:currentMonthKey(),
+projects\:currentMonthKey(),
+services\:currentMonthKey(),
+rentals\:currentMonthKey(),
+personal\:currentMonthKey()
 };
 
 const arabicMonths=[
@@ -2742,20 +2741,20 @@ const arabicMonths=[
 function monthFilterHTML(key){
 const currentYear=new Date().getFullYear();
 const value=selectedMonths[key]||currentMonthKey();
-return `
-<div class="card month-filter">
-<span class="month-filter-label">📅 عرض:</span>
-<select id="${key}MonthSelect" onchange="changeMonthFilter('${key}',this.value)">
+return \`
+\<div class="card month-filter">
+\<span class="month-filter-label">📅 عرض:\</span>
+\<select id="${key}MonthSelect" onchange="changeMonthFilter('${key}',this.value)">
 ${arabicMonths.map((name,i)=>{
-const month=`${currentYear}-${String(i+1).padStart(2,"0")}`;
-return `<option value="${month}" ${value===month?"selected":""}>${name} ${currentYear}</option>`;
+const month=\`${currentYear}-${String(i+1).padStart(2,"0")}\`;
+return \`\<option value="${month}" ${value===month?"selected":""}>${name} ${currentYear}\</option>\`;
 }).join("")}
-<option value="all" ${value==="all"?"selected":""}>كامل السنة ${currentYear}</option>
-</select>
-</div>`;
+\<option value="all" ${value==="all"?"selected":""}>كامل السنة ${currentYear}\</option>
+\</select>
+\</div>\`;
 }
 
-window.changeMonthFilter=function(key,value){
+window\.changeMonthFilter=function(key,value){
 selectedMonths[key]=value;
 if(key==="office") renderOffice();
 else if(key==="contracting") renderContracting();
@@ -2786,7 +2785,7 @@ return Number(value)>=0
 
 }
 
-/* ================= التنقل والدخول ================= */
+/\* ================= التنقل والدخول ================= \*/
 
 function navigateTo(screenId) {
 
@@ -2816,7 +2815,7 @@ homeBtn.style.display = (screenId === "portalScreen") ? "none" : "inline-flex";
 
 }
 
-window.goBack = function() {
+window\.goBack = function() {
 
 if (pageHistory.length > 1) {
 pageHistory.pop();
@@ -2847,7 +2846,7 @@ showPortal();
 
 }
 
-window.showPortal=function(){
+window\.showPortal=function(){
 
 currentOpenedProjectId=null;
 
@@ -2860,7 +2859,7 @@ updateWallet();
 
 };
 
-window.openOffice=function(){
+window\.openOffice=function(){
 
 navigateTo("officeSection");
 
@@ -2871,13 +2870,13 @@ renderOffice();
 
 };
 
-window.openContracting=function(){
+window\.openContracting=function(){
 navigateTo("contractingSection");
 document.getElementById("conDate").value=today();
 renderContracting();
 };
 
-window.openProjects=function(){
+window\.openProjects=function(){
 
 navigateTo("projectsSection");
 
@@ -2885,7 +2884,7 @@ render("projects");
 
 };
 
-window.openServices=function(){
+window\.openServices=function(){
 
 navigateTo("servicesSection");
 
@@ -2899,7 +2898,7 @@ renderServices();
 
 };
 
-window.openRentals=function(){
+window\.openRentals=function(){
 
 navigateTo("rentalsSection");
 
@@ -2907,7 +2906,7 @@ renderRentals();
 
 };
 
-window.openPersonal=function(){
+window\.openPersonal=function(){
 
 navigateTo("personalSection");
 
@@ -3089,7 +3088,7 @@ showLogin();
 }
 );
 
-/* ================= FIREBASE LISTENERS ================= */
+/\* ================= FIREBASE LISTENERS ================= \*/
 
 function startFirebaseListeners(){
 
@@ -3105,7 +3104,7 @@ if(unsubscribePropertyExpenses) unsubscribePropertyExpenses();
 if(unsubscribePersonalExpenses) unsubscribePersonalExpenses();
 if(unsubscribePersonalIncome) unsubscribePersonalIncome();
 
-/* المشاريع */
+/\* المشاريع \*/
 
 unsubscribeProjects=
 onSnapshot(
@@ -3119,7 +3118,7 @@ snapshot=>{
 db.projects=
 snapshot.docs.map(
 item=>({
-id:item.id,
+id\:item.id,
 ...item.data()
 })
 );
@@ -3151,7 +3150,7 @@ console.error("Projects Firebase Error:", error);
 }
 );
 
-/* العمليات */
+/\* العمليات \*/
 
 unsubscribeTransactions=
 onSnapshot(
@@ -3165,7 +3164,7 @@ snapshot=>{
 db.transactions=
 snapshot.docs.map(
 item=>({
-id:item.id,
+id\:item.id,
 ...item.data()
 })
 );
@@ -3205,13 +3204,13 @@ console.error("Transactions Firebase Error:", error);
 }
 );
 
-/* المكتب */
+/\* المكتب \*/
 
 unsubscribeOffice=
 onSnapshot(
 collection(
 firestore,
-"office_expenses"
+"office\_expenses"
 ),
 
 snapshot=>{
@@ -3219,7 +3218,7 @@ snapshot=>{
 db.officeExpenses=
 snapshot.docs.map(
 item=>({
-id:item.id,
+id\:item.id,
 ...item.data()
 })
 );
@@ -3249,10 +3248,10 @@ console.error("Office Firebase Error:", error);
 }
 );
 
-/* دخل المكتب */
+/\* دخل المكتب \*/
 
-unsubscribeOfficeIncome=onSnapshot(collection(firestore,"office_income"),snapshot=>{
-db.officeIncome=snapshot.docs.map(item=>({id:item.id,...item.data()}));
+unsubscribeOfficeIncome=onSnapshot(collection(firestore,"office\_income"),snapshot=>{
+db.officeIncome=snapshot.docs.map(item=>({id\:item.id,...item.data()}));
 db.officeIncome.sort(
 (a,b)=>
 String(b.date||"")
@@ -3264,10 +3263,10 @@ if(document.getElementById("officeSection").style.display==="block") renderOffic
 updateWallet();
 },error=>console.error("Office Income Firebase Error:",error));
 
-/* المقاولات */
+/\* المقاولات \*/
 
 unsubscribeContracting=onSnapshot(collection(firestore,"contracting"),snapshot=>{
-db.contracting=snapshot.docs.map(item=>({id:item.id,...item.data()}));
+db.contracting=snapshot.docs.map(item=>({id\:item.id,...item.data()}));
 db.contracting.sort(
 (a,b)=>
 String(b.date||"")
@@ -3279,7 +3278,7 @@ if(document.getElementById("contractingSection").style.display==="block") render
 updateWallet();
 },error=>console.error("Contracting Firebase Error:",error));
 
-/* الخدمات */
+/\* الخدمات \*/
 
 unsubscribeServices=
 onSnapshot(
@@ -3293,7 +3292,7 @@ snapshot=>{
 db.services=
 snapshot.docs.map(
 item=>({
-id:item.id,
+id\:item.id,
 ...item.data()
 })
 );
@@ -3316,7 +3315,7 @@ console.error("Services Firebase Error:", error);
 }
 );
 
-/* العقارات */
+/\* العقارات \*/
 
 unsubscribeProperties=
 onSnapshot(
@@ -3330,7 +3329,7 @@ snapshot=>{
 db.properties=
 snapshot.docs.map(
 item=>({
-id:item.id,
+id\:item.id,
 ...item.data()
 })
 );
@@ -3345,7 +3344,7 @@ console.error("Properties Firebase Error:", error);
 }
 );
 
-/* عمليات الإيجار */
+/\* عمليات الإيجار \*/
 
 unsubscribeRentals=
 onSnapshot(
@@ -3359,7 +3358,7 @@ snapshot=>{
 db.rentals=
 snapshot.docs.map(
 item=>({
-id:item.id,
+id\:item.id,
 ...item.data()
 })
 );
@@ -3391,13 +3390,13 @@ console.error("Rentals Firebase Error:", error);
 }
 );
 
-/* مصاريف العقارات الشاملة */
+/\* مصاريف العقارات الشاملة \*/
 
 unsubscribePropertyExpenses=
 onSnapshot(
 collection(
 firestore,
-"property_expenses"
+"property\_expenses"
 ),
 
 snapshot=>{
@@ -3405,7 +3404,7 @@ snapshot=>{
 db.propertyExpenses=
 snapshot.docs.map(
 item=>({
-id:item.id,
+id\:item.id,
 ...item.data()
 })
 );
@@ -3435,13 +3434,13 @@ console.error("Property Expenses Firebase Error:", error);
 }
 );
 
-/* المصاريف الشخصية */
+/\* المصاريف الشخصية \*/
 
 unsubscribePersonalExpenses=
 onSnapshot(
 collection(
 firestore,
-"personal_expenses"
+"personal\_expenses"
 ),
 
 snapshot=>{
@@ -3449,7 +3448,7 @@ snapshot=>{
 db.personalExpenses=
 snapshot.docs.map(
 item=>({
-id:item.id,
+id\:item.id,
 ...item.data()
 })
 );
@@ -3471,13 +3470,13 @@ error=>{
 console.error("Personal Expenses Firebase Error:", error)
 });
 
-/* الإيرادات الشخصية */
+/\* الإيرادات الشخصية \*/
 
 unsubscribePersonalIncome=
 onSnapshot(
 collection(
 firestore,
-"personal_income"
+"personal\_income"
 ),
 
 snapshot=>{
@@ -3485,7 +3484,7 @@ snapshot=>{
 db.personalIncome=
 snapshot.docs.map(
 item=>({
-id:item.id,
+id\:item.id,
 ...item.data()
 })
 );
@@ -3532,11 +3531,11 @@ db.officeExpenses.forEach(x=>add("expense",x.amount));
 db.contracting.forEach(x=>add(x.type,x.amount));
 
 db.services.forEach(x=>{
-if(x.recordType==="general_expense"){
+if(x.recordType==="general\_expense"){
 expense+=Number(x.amount)||0;
 }else{
 income+=Number(x.collectedAmount)||0;
-expense+=Number(x.expense!==undefined?x.expense:Math.max(0,(Number(x.collectedAmount)||0)-(Number(x.profit)||0)))||0;
+expense+=Number(x.expense!==undefined?x.expense\:Math.max(0,(Number(x.collectedAmount)||0)-(Number(x.profit)||0)))||0;
 }
 });
 
@@ -3560,12 +3559,12 @@ income+=Number(x.amount)||0;
 
 ["walletIncome","walletExpense","walletProfit","walletBalance"].forEach((id,i)=>{
 const el=document.getElementById(id);
-if(el) el.innerHTML=money(i===0?income:i===1?expense:income-expense);
+if(el) el.innerHTML=money(i===0?income\:i===1?expense\:income-expense);
 });
 
 }
 
-/* ================= التقرير المالي الكامل PDF ================= */
+/\* ================= التقرير المالي الكامل PDF ================= \*/
 
 const financialReportPeriodType=
 document.getElementById("financialReportPeriodType");
@@ -3588,7 +3587,7 @@ financialReportYear.innerHTML="";
 for(let y=currentYear;y>=currentYear-10;y--){
 
 financialReportYear.innerHTML+=
-`<option value="${y}">${y}</option>`;
+\`\<option value="${y}">${y}\</option>\`;
 
 }
 
@@ -3609,7 +3608,7 @@ financialReportPeriodLabel.textContent="الشهر";
 arabicMonths.forEach((month,index)=>{
 
 financialReportPeriodValue.innerHTML+=
-`<option value="${index+1}">${month}</option>`;
+\`\<option value="${index+1}">${month}\</option>\`;
 
 });
 
@@ -3617,35 +3616,35 @@ financialReportPeriodValue.innerHTML+=
 
 financialReportPeriodLabel.textContent="الربع";
 
-financialReportPeriodValue.innerHTML=`
+financialReportPeriodValue.innerHTML=\`
 
-<option value="1">الربع الأول — يناير إلى مارس</option>
-<option value="2">الربع الثاني — أبريل إلى يونيو</option>
-<option value="3">الربع الثالث — يوليو إلى سبتمبر</option>
-<option value="4">الربع الرابع — أكتوبر إلى ديسمبر</option>
+\<option value="1">الربع الأول — يناير إلى مارس\</option>
+\<option value="2">الربع الثاني — أبريل إلى يونيو\</option>
+\<option value="3">الربع الثالث — يوليو إلى سبتمبر\</option>
+\<option value="4">الربع الرابع — أكتوبر إلى ديسمبر\</option>
 
-`;
+\`;
 
 }else if(type==="halfyearly"){
 
 financialReportPeriodLabel.textContent="النصف";
 
-financialReportPeriodValue.innerHTML=`
+financialReportPeriodValue.innerHTML=\`
 
-<option value="1">النصف الأول — يناير إلى يونيو</option>
-<option value="2">النصف الثاني — يوليو إلى ديسمبر</option>
+\<option value="1">النصف الأول — يناير إلى يونيو\</option>
+\<option value="2">النصف الثاني — يوليو إلى ديسمبر\</option>
 
-`;
+\`;
 
 }else{
 
 financialReportLabelFallback();
 
-financialReportPeriodValue.innerHTML=`
+financialReportPeriodValue.innerHTML=\`
 
-<option value="1">السنة كاملة</option>
+\<option value="1">السنة كاملة\</option>
 
-`;
+\`;
 
 }
 
@@ -3706,7 +3705,7 @@ endMonth=value;
 
 }else if(type==="quarterly"){
 
-startMonth=(value-1)*3+1;
+startMonth=(value-1)\*3+1;
 endMonth=startMonth+2;
 
 }else if(type==="halfyearly"){
@@ -3726,7 +3725,7 @@ endMonth=12;
 }
 
 const start=
-`${year}-${String(startMonth).padStart(2,"0")}-01`;
+\`${year}-${String(startMonth).padStart(2,"0")}-01\`;
 
 const lastDay=
 new Date(
@@ -3736,29 +3735,29 @@ endMonth,
 ).getDate();
 
 const end=
-`${year}-${String(endMonth).padStart(2,"0")}-${String(lastDay).padStart(2,"0")}`;
+\`${year}-${String(endMonth).padStart(2,"0")}-${String(lastDay).padStart(2,"0")}\`;
 
 let label="";
 
 if(type==="monthly"){
 
 label=
-`${arabicMonths[value-1]} ${year}`;
+\`${arabicMonths[value-1]} ${year}\`;
 
 }else if(type==="quarterly"){
 
 label=
-`الربع ${["الأول","الثاني","الثالث","الرابع"][value-1]} ${year}`;
+\`الربع ${["الأول","الثاني","الثالث","الرابع"][value-1]} ${year}\`;
 
 }else if(type==="halfyearly"){
 
 label=
-`النصف ${value===1?"الأول":"الثاني"} ${year}`;
+\`النصف ${value===1?"الأول":"الثاني"} ${year}\`;
 
 }else{
 
 label=
-`السنة المالية ${year}`;
+\`السنة المالية ${year}\`;
 
 }
 
@@ -3847,7 +3846,7 @@ normalizedCategoryKey(raw);
 if(!target[key]){
 
 target[key]={
-label:raw,
+label\:raw,
 total:0
 };
 
@@ -3871,93 +3870,96 @@ function financialReportTable(rows,headers){
 
 if(!rows.length){
 
-return `
+return \`
 
-<table class="report-table">
+\<table class="report-table">
 
-<thead>
-<tr>
-${headers.map(h=>`<th>${financialReportEsc(h)}</th>`).join("")}
-</tr>
-</thead>
+\<thead>
+\<tr>
+${headers.map(h=>\`\<th>${financialReportEsc(h)}\</th>\`).join("")}
+\</tr>
+\</thead>
 
-<tbody>
+\<tbody>
 
-<tr>
+\<tr>
 
-<td colspan="${headers.length}">
+\<td colspan="${headers.length}">
 لا توجد بيانات خلال الفترة المحددة
-</td>
+\</td>
 
-</tr>
+\</tr>
 
-</tbody>
+\</tbody>
 
-</table>
+\</table>
 
-`;
+\`;
 
 }
 
-return `
+return \`
 
-<table class="report-table">
+\<table class="report-table">
 
-<thead>
+\<thead>
 
-<tr>
+\<tr>
 
-${headers.map(h=>`<th>${financialReportEsc(h)}</th>`).join("")}
+${headers.map(h=>\`\<th>${financialReportEsc(h)}\</th>\`).join("")}
 
-</tr>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody>
+\<tbody>
 
 ${rows.join("")}
 
-</tbody>
+\</tbody>
 
-</table>
+\</table>
 
-`;
+\`;
 
 }
 
 function financialReportRow(cells){
 
-return `
+return \`
 
-<tr>
+\<tr>
 
-${cells.map(cell=>`<td>${cell}</td>`).join("")}
+${cells.map(cell=>\`\<td>${cell}\</td>\`).join("")}
 
-</tr>
+\</tr>
 
-`;
+\`;
 
 }
 
 function financialReportBuildData(range){
 
-/* حماية التقرير من أي مجموعة Firebase لم تصل بعد أو كانت غير معرفة */
+/\* حماية التقرير من أي مجموعة Firebase لم تصل بعد أو كانت غير معرفة \*/
 const safeDb={
-projects:Array.isArray(db?.projects)?db.projects:[],
-transactions:Array.isArray(db?.transactions)?db.transactions:[],
-officeExpenses:Array.isArray(db?.officeExpenses)?db.officeExpenses:[],
-officeIncome:Array.isArray(db?.officeIncome)?db.officeIncome:[],
-contracting:Array.isArray(db?.contracting)?db.contracting:[],
-services:Array.isArray(db?.services)?db.services:[],
-properties:Array.isArray(db?.properties)?db.properties:[],
-rentals:Array.isArray(db?.rentals)?db.rentals:[],
-propertyExpenses:Array.isArray(db?.propertyExpenses)?db.propertyExpenses:[],
-personalExpenses:Array.isArray(db?.personalExpenses)?db.personalExpenses:[],
-personalIncome:Array.isArray(db?.personalIncome)?db.personalIncome:[]
+projects\:Array.isArray(db?.projects)?db.projects:[],
+transactions\:Array.isArray(db?.transactions)?db.transactions:[],
+officeExpenses\:Array.isArray(db?.officeExpenses)?db.officeExpenses:[],
+officeIncome\:Array.isArray(db?.officeIncome)?db.officeIncome:[],
+contracting\:Array.isArray(db?.contracting)?db.contracting:[],
+services\:Array.isArray(db?.services)?db.services:[],
+properties\:Array.isArray(db?.properties)?db.properties:[],
+rentals\:Array.isArray(db?.rentals)?db.rentals:[],
+propertyExpenses\:Array.isArray(db?.propertyExpenses)?db.propertyExpenses:[],
+personalExpenses\:Array.isArray(db?.personalExpenses)?db.personalExpenses:[],
+personalIncome\:Array.isArray(db?.personalIncome)?db.personalIncome:[]
 };
 
 const projects=
-safeDb.projects.slice();
+financialReportFilter(
+safeDb.projects,
+range
+);
 
 const transactions=
 financialReportFilter(
@@ -4080,7 +4082,7 @@ const servicesGeneralExpenses=[];
 
 services.forEach(x=>{
 
-if(x.recordType==="general_expense"){
+if(x.recordType==="general\_expense"){
 
 const amount=
 Number(x.amount)||0;
@@ -4118,7 +4120,7 @@ normalizedCategoryKey(raw);
 if(!servicesCategories[key]){
 
 servicesCategories[key]={
-label:raw,
+label\:raw,
 income:0,
 expense:0,
 profit:0
@@ -4303,7 +4305,7 @@ officeExpenses,
 officeIncome,
 contracting,
 services,
-properties:safeDb.properties,
+properties\:safeDb.properties,
 rentals,
 propertyExpenses,
 personalExpenses,
@@ -4351,8 +4353,8 @@ netRecorded,
 currentActiveDeposits,
 currentRefundedDeposits,
 
-projectsCount:safeDb.projects.length,
-propertiesCount:safeDb.properties.length
+projectsCount\:safeDb.projects.length,
+propertiesCount\:safeDb.properties.length
 
 };
 
@@ -4362,1091 +4364,363 @@ function financialReportBuildHTML(data){
 
 const range=data.range;
 
-/*
-  التقرير يعتمد مباشرة على db الحالي الذي يتم تحديثه لحظيًا من Firestore.
-  لذلك أي إضافة أو تعديل أو حذف محفوظ في المجموعات الحالية ينعكس عند
-  إنشاء التقرير التالي، مع تقسيم الجداول تلقائيًا إلى صفحات A4 حتى لا
-  يتم قص أي سجل مهما زاد عدد السجلات.
-*/
+/\* ===== بيانات مختصرة بنفس ترتيب التقرير المرجعي ===== \*/
 
 const officeExpenseCategories={};
 data.officeExpenses.forEach(x=>{
-financialReportAddCategory(
-officeExpenseCategories,
-x.name,
-x.amount
-);
+financialReportAddCategory(officeExpenseCategories,x.name,x.amount);
 });
 
-const projectRows=data.projects
-.slice()
-.sort((a,b)=>String(a.name||"").localeCompare(String(b.name||""),"ar"))
-.map(p=>{
+const projectRows=data.projects.map(p=>{
 let inc=0,exp=0;
-
-data.transactions
-.filter(t=>t.projectId===p.id)
-.forEach(t=>{
+data.transactions.filter(t=>t.projectId===p.id).forEach(t=>{
 if(t.type==="income") inc+=Number(t.amount)||0;
 else exp+=Number(t.amount)||0;
 });
-
 return financialReportRow([
-financialReportEsc(p.name||"-"),
+financialReportEsc(p.name),
 financialReportMoney(inc),
 financialReportMoney(exp),
 financialReportMoney(inc-exp),
 p.status==="closed"?"مغلق":"مفتوح"
 ]);
-
 });
 
 const projectCategoryRows=financialReportSortedCategories(
 (()=>{
 const o={};
 data.transactions.forEach(t=>{
-if(t.type==="expense"){
-financialReportAddCategory(o,t.category,t.amount);
-}
+if(t.type==="expense") financialReportAddCategory(o,t.category,t.amount);
 });
 return o;
 })()
-).map(x=>
-financialReportRow([
-financialReportEsc(x.label),
-financialReportMoney(x.total)
-])
-);
+).map(x=>financialReportRow([financialReportEsc(x.label),financialReportMoney(x.total)]));
 
-const contractingIncomeRows=
-financialReportSortedCategories(
-data.contractingIncomeCategories
-).map(x=>
-financialReportRow([
-financialReportEsc(x.label),
-financialReportMoney(x.total)
-])
-);
+const contractingIncomeRows=financialReportSortedCategories(data.contractingIncomeCategories)
+.map(x=>financialReportRow([financialReportEsc(x.label),financialReportMoney(x.total)]));
 
-const contractingExpenseRows=
-financialReportSortedCategories(
-data.contractingExpenseCategories
-).map(x=>
-financialReportRow([
-financialReportEsc(x.label),
-financialReportMoney(x.total)
-])
-);
+const contractingExpenseRows=financialReportSortedCategories(data.contractingExpenseCategories)
+.map(x=>financialReportRow([financialReportEsc(x.label),financialReportMoney(x.total)]));
 
-const serviceRows=
-Object.values(data.servicesCategories)
+const serviceRows=Object.values(data.servicesCategories)
 .sort((a,b)=>b.profit-a.profit)
-.map(x=>
-financialReportRow([
+.map(x=>financialReportRow([
 financialReportEsc(x.label),
 financialReportMoney(x.income),
 financialReportMoney(x.expense),
 financialReportMoney(x.profit)
-])
-);
+]));
 
-const propertyRows=
-Object.entries(data.rentalByProperty)
-.sort(
-(a,b)=>
-(b[1].income-b[1].expense)-
-(a[1].income-a[1].expense)
-)
-.map(([name,x])=>
-financialReportRow([
+const propertyRows=Object.entries(data.rentalByProperty)
+.sort((a,b)=>(b[1].income-b[1].expense)-(a[1].income-a[1].expense))
+.map(([name,x])=>financialReportRow([
 financialReportEsc(name),
 financialReportMoney(x.income),
 financialReportMoney(x.expense),
 financialReportMoney(x.income-x.expense),
 financialReportMoney(x.activeDeposits)
-])
-);
+]));
 
-const propertyCategoryRows=
-financialReportSortedCategories(
-data.propertyExpenseCategories
-).map(x=>
-financialReportRow([
-financialReportEsc(x.label),
-financialReportMoney(x.total)
-])
-);
+const propertyCategoryRows=financialReportSortedCategories(data.propertyExpenseCategories)
+.map(x=>financialReportRow([financialReportEsc(x.label),financialReportMoney(x.total)]));
 
 const personalRows=data.personalExpenses
 .slice()
-.sort(
-(a,b)=>
-String(b.date||"").localeCompare(
-String(a.date||"")
-)
-)
-.map(x=>
-financialReportRow([
-financialReportEsc(x.date||"-"),
+.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")) )
+.map(x=>financialReportRow([
+financialReportEsc(x.date),
 "مصروف",
 financialReportEsc(x.note||"-"),
 financialReportMoney(x.amount)
-])
-);
+]));
 
 const personalIncomeRows=data.personalIncome
 .slice()
-.sort(
-(a,b)=>
-String(b.date||"").localeCompare(
-String(a.date||"")
-)
-)
-.map(x=>
-financialReportRow([
-financialReportEsc(x.date||"-"),
+.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")) )
+.map(x=>financialReportRow([
+financialReportEsc(x.date),
 "إيراد",
 financialReportEsc(x.name||"-"),
 financialReportMoney(x.amount),
 financialReportEsc(x.note||"-")
-])
-);
+]));
 
-const officeIncomeRows=data.officeIncome
-.slice()
-.sort(
-(a,b)=>
-String(b.date||"").localeCompare(
-String(a.date||"")
-)
-)
-.map(x=>
-financialReportRow([
-financialReportEsc(x.date||"-"),
+const officeIncomeRows=data.officeIncome.map(x=>financialReportRow([
+financialReportEsc(x.date),
 financialReportEsc(x.name||"-"),
 financialReportMoney(x.amount),
 financialReportEsc(x.note||"-")
-])
-);
+]));
 
-const officeExpenseRows=data.officeExpenses
-.slice()
-.sort(
-(a,b)=>
-String(b.date||"").localeCompare(
-String(a.date||"")
-)
-)
-.map(x=>
-financialReportRow([
-financialReportEsc(x.date||"-"),
+const officeExpenseRows=data.officeExpenses.map(x=>financialReportRow([
+financialReportEsc(x.date),
 financialReportEsc(x.name||"-"),
 financialReportMoney(x.amount),
 financialReportEsc(x.note||"-")
-])
-);
+]));
 
-const contractingRows=data.contracting
-.slice()
-.sort(
-(a,b)=>
-String(b.date||"").localeCompare(
-String(a.date||"")
-)
-)
-.map(x=>
-financialReportRow([
-financialReportEsc(x.date||"-"),
-financialReportEsc(
-x.type==="income"?"دخل":"مصروف"
-),
+const contractingRows=data.contracting.map(x=>financialReportRow([
+financialReportEsc(x.date),
+financialReportEsc(x.type==="income"?"دخل":"مصروف"),
 financialReportEsc(x.name||"-"),
 financialReportEsc(x.category||"-"),
 financialReportMoney(x.amount),
 financialReportEsc(x.note||"-")
-])
-);
+]));
 
-const projectOperationsRows=data.transactions
-.slice()
-.sort(
-(a,b)=>
-String(b.date||"").localeCompare(
-String(a.date||"")
-)
-)
-.map(t=>{
+const projectOperationsRows=data.transactions.map(t=>{
 const p=data.projects.find(x=>x.id===t.projectId);
-
 return financialReportRow([
-financialReportEsc(t.date||"-"),
+financialReportEsc(t.date),
 financialReportEsc(p?p.name:"غير محدد"),
-financialReportEsc(
-t.type==="income"?"دخل":"مصروف"
-),
+financialReportEsc(t.type==="income"?"دخل":"مصروف"),
 financialReportEsc(t.category||"-"),
 financialReportMoney(t.amount),
 financialReportEsc(t.note||"-")
 ]);
-
 });
 
-const serviceOperationsRows=data.services
-.filter(x=>x.recordType!=="general_expense")
-.slice()
-.sort(
-(a,b)=>
-String(b.date||"").localeCompare(
-String(a.date||"")
-)
-)
-.map(x=>{
-const collected=
-Number(x.collectedAmount)||0;
-
-const expense=
-x.expense!==undefined
-?
-Number(x.expense)||0
-:
-Math.max(
-0,
-collected-(Number(x.profit)||0)
-);
-
+const serviceOperationsRows=data.services.filter(x=>x.recordType!=="general\_expense").map(x=>{
+const collected=Number(x.collectedAmount)||0;
+const expense=x.expense!==undefined?Number(x.expense)||0\:Math.max(0,collected-(Number(x.profit)||0));
 return financialReportRow([
-financialReportEsc(x.date||"-"),
+financialReportEsc(x.date),
 financialReportEsc(x.category||"-"),
 financialReportMoney(collected),
 financialReportMoney(expense),
 financialReportMoney(collected-expense),
 financialReportEsc(x.note||"-")
 ]);
-
 });
 
-const serviceGeneralExpenseRows=data.services
-.filter(x=>x.recordType==="general_expense")
-.slice()
-.sort(
-(a,b)=>
-String(b.date||"").localeCompare(
-String(a.date||"")
-)
-)
-.map(x=>
-financialReportRow([
-financialReportEsc(x.date||"-"),
+const serviceGeneralExpenseRows=data.services.filter(x=>x.recordType==="general\_expense").map(x=>financialReportRow([
+financialReportEsc(x.date),
 financialReportEsc(x.category||"-"),
 financialReportMoney(x.amount),
 financialReportEsc(x.note||"-")
-])
-);
+]));
 
-const rentalRows=data.rentals
-.slice()
-.sort(
-(a,b)=>
-String(b.date||"").localeCompare(
-String(a.date||"")
-)
-)
-.map(r=>{
-const p=data.properties.find(
-x=>x.id===r.propertyId
-);
-
+const rentalRows=data.rentals.map(r=>{
+const p=data.properties.find(x=>x.id===r.propertyId);
 const amount=Number(r.amount)||0;
 const exp=Number(r.expenseAmount)||0;
 const deposit=Number(r.depositAmount)||0;
-
 return financialReportRow([
-financialReportEsc(r.date||"-"),
+financialReportEsc(r.date),
 financialReportEsc(p?p.title:"غير محدد"),
 financialReportEsc(r.unit||"-"),
-financialReportEsc(r.rentalCategory||"-"),
 financialReportEsc(r.tenant||"-"),
 financialReportMoney(amount),
 financialReportMoney(deposit),
 financialReportMoney(exp),
 financialReportMoney(amount-exp),
-financialReportEsc(
-r.depositStatus==="refunded"
-?
-"مسترد"
-:
-"نشط"
-),
-financialReportEsc(r.expenseCategory||"-"),
+financialReportEsc(r.depositStatus==="refunded"?"مسترد":"نشط"),
 financialReportEsc(r.note||"-")
 ]);
-
 });
 
-const propertyExpenseRows=data.propertyExpenses
-.slice()
-.sort(
-(a,b)=>
-String(b.date||"").localeCompare(
-String(a.date||"")
-)
-)
-.map(x=>
-financialReportRow([
-financialReportEsc(x.date||"-"),
+const propertyExpenseRows=data.propertyExpenses.map(x=>financialReportRow([
+financialReportEsc(x.date),
 financialReportEsc(x.category||"-"),
 financialReportMoney(x.amount),
 financialReportEsc(x.note||"-")
-])
-);
+]));
 
 function table(rows,headers){
 return financialReportTable(rows,headers);
 }
 
 function kpi(label,value,cls=""){
-return `
-<div class="report-kpi">
-<div class="report-kpi-label">
-${financialReportEsc(label)}
-</div>
-<div class="report-kpi-value ${cls}">
-${value}
-</div>
-</div>
-`;
+return \`\<div class="report-kpi">\<div class="report-kpi-label">${financialReportEsc(label)}\</div>\<div class="report-kpi-value ${cls}">${value}\</div>\</div>\`;
 }
 
 function pageHeader(title){
-return `
-<div class="report-page-header">
-${title}
-</div>
-`;
+return \`\<div class="report-page-header">${title}\</div>\`;
 }
 
-/*
-  عدد الصفوف في الصفحة ليس رقمًا ثابتًا لكل التقرير؛
-  الجداول ذات الأعمدة الكثيرة تأخذ عددًا أقل من الصفوف.
-  بهذه الطريقة لا يتم قص السجلات عند زيادة البيانات مستقبلًا.
-*/
-function chunkRows(rows,size){
-if(!rows.length) return [[]];
+return \`
+\<div class="financial-report">
 
-const chunks=[];
+\<!-- الصفحة 1: الغلاف -->
+\<div class="report-page report-cover-page">
+\<div class="report-cover-title">التقرير المالي الشامل\</div>
+\<div class="report-cover-subtitle">نظام الإدارة الشامل\</div>
+\<div class="report-cover-box">
+\<div>\<strong>الفترة المالية:\</strong> ${financialReportEsc(range.label)}\</div>
+\<div>\<strong>من:\</strong> \<span class="report-number" dir="ltr">${financialReportEsc(range.start)}\</span>\</div>
+\<div>\<strong>إلى:\</strong> \<span class="report-number" dir="ltr">${financialReportEsc(range.end)}\</span>\</div>
+\<div>\<strong>تاريخ إصدار التقرير:\</strong> \<span class="report-number" dir="ltr">${financialReportEsc(new Date().toLocaleDateString("ar-SA"))}\</span>\</div>
+\</div>
+\</div>
 
-for(let i=0;i<rows.length;i+=size){
-chunks.push(rows.slice(i,i+size));
-}
-
-return chunks;
-}
-
-function reportPage(content,extraClass=""){
-return `
-<div class="report-page ${extraClass}">
-${content}
-</div>
-`;
-}
-
-function recordsPages(title,rows,headers,size=11){
-return chunkRows(rows,size).map(
-(chunk,index)=>
-reportPage(`
-${pageHeader(
-index===0
-?
-title
-:
-`${title} — استكمال ${index+1}`
-)}
-<div class="report-section">
-${table(chunk,headers)}
-</div>
-`)
-);
-}
-
-const pages=[];
-
-/* ================= الغلاف ================= */
-
-pages.push(
-reportPage(`
-<div class="report-cover-title">
-التقرير المالي الشامل
-</div>
-
-<div class="report-cover-subtitle">
-نظام الإدارة الشامل
-</div>
-
-<div class="report-cover-box">
-
-<div>
-<strong>الفترة المالية:</strong>
-${financialReportEsc(range.label)}
-</div>
-
-<div>
-<strong>من:</strong>
-<span class="report-number" dir="ltr">
-${financialReportEsc(range.start)}
-</span>
-</div>
-
-<div>
-<strong>إلى:</strong>
-<span class="report-number" dir="ltr">
-${financialReportEsc(range.end)}
-</span>
-</div>
-
-<div>
-<strong>تاريخ إصدار التقرير:</strong>
-<span class="report-number" dir="ltr">
-${financialReportEsc(
-new Date().toLocaleDateString("ar-SA")
-)}
-</span>
-</div>
-
-</div>
-`,"report-cover-page")
-);
-
-/* ================= المكتب ================= */
-
-pages.push(
-reportPage(`
+\<!-- الصفحة 2: المكتب -->
+\<div class="report-page">
 ${pageHeader("🏢 المكتب")}
-
-<div class="report-kpis">
-${kpi(
-"دخل المكتب",
-financialReportMoney(data.officeIncomeTotal),
-"report-income"
-)}
-${kpi(
-"مصاريف المكتب",
-financialReportMoney(data.officeExpenseTotal),
-"report-expense"
-)}
-${kpi(
-"صافي المكتب",
-financialReportMoney(
-data.officeIncomeTotal-
-data.officeExpenseTotal
-),
-"report-profit"
-)}
-${kpi(
-"عدد عمليات الدخل",
-financialReportEsc(data.officeIncome.length)
-)}
-</div>
-
-<div class="report-section">
-<div class="report-section-title">
-ملخص المكتب
-</div>
-
+\<div class="report-kpis">
+${kpi("دخل المكتب",financialReportMoney(data.officeIncomeTotal),"report-income")}
+${kpi("مصاريف المكتب",financialReportMoney(data.officeExpenseTotal),"report-expense")}
+${kpi("صافي المكتب",financialReportMoney(data.officeIncomeTotal-data.officeExpenseTotal),"report-profit")}
+${kpi("عدد عمليات الدخل",financialReportEsc(data.officeIncome.length))}
+\</div>
+\<div class="report-section">
+\<div class="report-section-title">ملخص المكتب\</div>
 ${table([
-financialReportRow([
-"دخل المكتب",
-financialReportMoney(data.officeIncomeTotal)
-]),
-financialReportRow([
-"مصاريف المكتب",
-financialReportMoney(data.officeExpenseTotal)
-]),
-financialReportRow([
-"صافي المكتب",
-financialReportMoney(
-data.officeIncomeTotal-
-data.officeExpenseTotal
-)
-]),
-financialReportRow([
-"عدد عمليات الدخل",
-financialReportEsc(data.officeIncome.length)
-]),
-financialReportRow([
-"عدد المصروفات",
-financialReportEsc(data.officeExpenses.length)
-])
+financialReportRow(["دخل المكتب",financialReportMoney(data.officeIncomeTotal)]),
+financialReportRow(["مصاريف المكتب",financialReportMoney(data.officeExpenseTotal)]),
+financialReportRow(["صافي المكتب",financialReportMoney(data.officeIncomeTotal-data.officeExpenseTotal)]),
+financialReportRow(["عدد عمليات الدخل",financialReportEsc(data.officeIncome.length)]),
+financialReportRow(["عدد المصروفات",financialReportEsc(data.officeExpenses.length)])
 ],["البيان","القيمة"])}
-</div>
+\</div>
+\<div class="report-section">
+\<div class="report-section-title">مصروفات المكتب حسب البند\</div>
+${table(Object.values(officeExpenseCategories).sort((a,b)=>b.total-a.total).slice(0,7).map(x=>financialReportRow([financialReportEsc(x.label),financialReportMoney(x.total)])),["البند","إجمالي المصروف"])}
+\</div>
+\<div class="report-section">
+\<div class="report-section-title">جميع عمليات دخل المكتب\</div>
+${table(officeIncomeRows.slice(0,2),["التاريخ","الاسم","المبلغ","الملاحظات"])}
+\</div>
+\<div class="report-section">
+\<div class="report-section-title">جميع مصروفات المكتب\</div>
+${table(officeExpenseRows.slice(0,4),["التاريخ","البند","المبلغ","الملاحظات"])}
+\</div>
+\</div>
 
-<div class="report-section">
-<div class="report-section-title">
-مصروفات المكتب حسب البند
-</div>
+\<!-- الصفحة 3: استكمال المكتب -->
+\<div class="report-page">
+${pageHeader("🏢 المكتب — استكمال العمليات")}
+\<div class="report-section">
+\<div class="report-section-title">باقي مصروفات المكتب\</div>
+${table(officeExpenseRows.slice(4),["التاريخ","البند","المبلغ","الملاحظات"])}
+\</div>
+\<div class="report-note">تم نقل بقية عمليات المصروفات إلى هذه الصفحة حتى يبقى ترتيب التقرير مطابقًا للنموذج المرجعي ولا تتداخل الجداول.\</div>
+\</div>
 
-${table(
-Object.values(officeExpenseCategories)
-.sort((a,b)=>b.total-a.total)
-.map(x=>
-financialReportRow([
-financialReportEsc(x.label),
-financialReportMoney(x.total)
-])
-),
-["البند","إجمالي المصروف"]
-)}
-</div>
-`)
-);
-
-pages.push(
-...recordsPages(
-"🏢 المكتب — جميع عمليات دخل المكتب",
-officeIncomeRows,
-["التاريخ","الاسم","المبلغ","الملاحظات"],
-13
-)
-);
-
-pages.push(
-...recordsPages(
-"🏢 المكتب — جميع مصروفات المكتب",
-officeExpenseRows,
-["التاريخ","البند","المبلغ","الملاحظات"],
-13
-)
-);
-
-/* ================= المقاولات ================= */
-
-pages.push(
-reportPage(`
+\<!-- الصفحة 4: المقاولات -->
+\<div class="report-page">
 ${pageHeader("🏢 المقاولات")}
-
-<div class="report-kpis">
-${kpi(
-"إجمالي الدخل",
-financialReportMoney(data.contractingIncome),
-"report-income"
-)}
-${kpi(
-"إجمالي المصروف",
-financialReportMoney(data.contractingExpense),
-"report-expense"
-)}
-${kpi(
-"صافي الربح",
-financialReportMoney(
-data.contractingIncome-
-data.contractingExpense
-),
-"report-profit"
-)}
-${kpi(
-"عدد العمليات",
-financialReportEsc(data.contracting.length)
-)}
-</div>
-
-<div class="report-section">
-<div class="report-section-title">
-ملخص المقاولات
-</div>
-
+\<div class="report-kpis">
+${kpi("إجمالي الدخل",financialReportMoney(data.contractingIncome),"report-income")}
+${kpi("إجمالي المصروف",financialReportMoney(data.contractingExpense),"report-expense")}
+${kpi("صافي الربح",financialReportMoney(data.contractingIncome-data.contractingExpense),"report-profit")}
+${kpi("عدد العمليات",financialReportEsc(data.contracting.length))}
+\</div>
+\<div class="report-section">\<div class="report-section-title">ملخص المقاولات\</div>
 ${table([
-financialReportRow([
-"دخل المقاولات",
-financialReportMoney(data.contractingIncome)
-]),
-financialReportRow([
-"مصروفات المقاولات",
-financialReportMoney(data.contractingExpense)
-]),
-financialReportRow([
-"صافي المقاولات",
-financialReportMoney(
-data.contractingIncome-
-data.contractingExpense
-)
-]),
-financialReportRow([
-"عدد العمليات",
-financialReportEsc(data.contracting.length)
-])
-],["البيان","القيمة"])}
-</div>
+financialReportRow(["دخل المقاولات",financialReportMoney(data.contractingIncome)]),
+financialReportRow(["مصروفات المقاولات",financialReportMoney(data.contractingExpense)]),
+financialReportRow(["صافي المقاولات",financialReportMoney(data.contractingIncome-data.contractingExpense)]),
+financialReportRow(["عدد العمليات",financialReportEsc(data.contracting.length)])
+],["البيان","القيمة"])}\</div>
+\<div class="report-section">\<div class="report-section-title">ملخص تصنيف الدخل\</div>${table(contractingIncomeRows,["التصنيف","إجمالي الدخل"])}\</div>
+\<div class="report-section">\<div class="report-section-title">ملخص تصنيف المصروفات\</div>${table(contractingExpenseRows,["التصنيف","إجمالي المصروف"])}\</div>
+\<div class="report-section">\<div class="report-section-title">جميع عمليات المقاولات\</div>${table(contractingRows,["التاريخ","النوع","الاسم / البند","التصنيف","المبلغ","البيان"])}\</div>
+\</div>
 
-<div class="report-section">
-<div class="report-section-title">
-ملخص تصنيف الدخل
-</div>
-
-${table(
-contractingIncomeRows,
-["التصنيف","إجمالي الدخل"]
-)}
-</div>
-
-<div class="report-section">
-<div class="report-section-title">
-ملخص تصنيف المصروفات
-</div>
-
-${table(
-contractingExpenseRows,
-["التصنيف","إجمالي المصروف"]
-)}
-</div>
-`)
-);
-
-pages.push(
-...recordsPages(
-"🏢 المقاولات — جميع العمليات",
-contractingRows,
-["التاريخ","النوع","الاسم / البند","التصنيف","المبلغ","البيان"],
-11
-)
-);
-
-/* ================= المشاريع ================= */
-
-pages.push(
-reportPage(`
+\<!-- الصفحة 5: المشاريع -->
+\<div class="report-page">
 ${pageHeader("🏗️ المشاريع")}
-
-<div class="report-kpis">
-${kpi(
-"إجمالي الدخل",
-financialReportMoney(data.projectIncome),
-"report-income"
-)}
-${kpi(
-"إجمالي المصروف",
-financialReportMoney(data.projectExpense),
-"report-expense"
-)}
-${kpi(
-"صافي الربح",
-financialReportMoney(
-data.projectIncome-
-data.projectExpense
-),
-"report-profit"
-)}
-${kpi(
-"عدد المشاريع",
-financialReportEsc(data.projects.length)
-)}
-</div>
-
-<div class="report-section">
-<div class="report-section-title">
-ملخص المشاريع
-</div>
-
+\<div class="report-kpis">
+${kpi("إجمالي الدخل",financialReportMoney(data.projectIncome),"report-income")}
+${kpi("إجمالي المصروف",financialReportMoney(data.projectExpense),"report-expense")}
+${kpi("صافي الربح",financialReportMoney(data.projectIncome-data.projectExpense),"report-profit")}
+${kpi("عدد المشاريع",financialReportEsc(data.projects.length))}
+\</div>
+\<div class="report-section">\<div class="report-section-title">ملخص المشاريع\</div>
 ${table([
-financialReportRow([
-"إجمالي الدخل",
-financialReportMoney(data.projectIncome)
-]),
-financialReportRow([
-"إجمالي المصروفات",
-financialReportMoney(data.projectExpense)
-]),
-financialReportRow([
-"صافي الربح",
-financialReportMoney(
-data.projectIncome-
-data.projectExpense
-)
-]),
-financialReportRow([
-"عدد المشاريع",
-financialReportEsc(data.projects.length)
-]),
-financialReportRow([
-"عدد العمليات",
-financialReportEsc(data.transactions.length)
-])
-],["البيان","القيمة"])}
-</div>
+financialReportRow(["إجمالي الدخل",financialReportMoney(data.projectIncome)]),
+financialReportRow(["إجمالي المصروفات",financialReportMoney(data.projectExpense)]),
+financialReportRow(["صافي الربح",financialReportMoney(data.projectIncome-data.projectExpense)]),
+financialReportRow(["عدد المشاريع",financialReportEsc(data.projects.length)]),
+financialReportRow(["عدد العمليات",financialReportEsc(data.transactions.length)])
+],["البيان","القيمة"])}\</div>
+\<div class="report-section">\<div class="report-section-title">بيانات كل مشروع\</div>${table(projectRows,["المشروع","الدخل","المصروف","الصافي","الحالة"])}\</div>
+\<div class="report-section">\<div class="report-section-title">مصروفات المشاريع حسب التصنيف\</div>${table(projectCategoryRows,["التصنيف","إجمالي المصروف"])}\</div>
+\<div class="report-section">\<div class="report-section-title">جميع عمليات المشاريع\</div>${table(projectOperationsRows,["التاريخ","المشروع","النوع","التصنيف","المبلغ","البيان"])}\</div>
+\</div>
 
-<div class="report-section">
-<div class="report-section-title">
-مصروفات المشاريع حسب التصنيف
-</div>
-
-${table(
-projectCategoryRows,
-["التصنيف","إجمالي المصروف"]
-)}
-</div>
-`)
-);
-
-pages.push(
-...recordsPages(
-"🏗️ المشاريع — بيانات كل مشروع",
-projectRows,
-["المشروع","الدخل","المصروف","الصافي","الحالة"],
-10
-)
-);
-
-pages.push(
-...recordsPages(
-"🏗️ المشاريع — جميع العمليات",
-projectOperationsRows,
-["التاريخ","المشروع","النوع","التصنيف","المبلغ","البيان"],
-11
-)
-);
-
-/* ================= الخدمات ================= */
-
-pages.push(
-reportPage(`
+\<!-- الصفحة 6: الخدمات -->
+\<div class="report-page">
 ${pageHeader("🛠️ دخل الخدمات")}
+\<div class="report-kpis">
+${kpi("إجمالي الدخل",financialReportMoney(data.servicesIncome),"report-income")}
+${kpi("إجمالي المصروف",financialReportMoney(data.servicesExpense),"report-expense")}
+${kpi("صافي الربح",financialReportMoney(data.servicesIncome-data.servicesExpense),"report-profit")}
+${kpi("عدد العمليات",financialReportEsc(data.services.length))}
+\</div>
+\<div class="report-section">\<div class="report-section-title">ملخص دخل الخدمات\</div>${table([
+financialReportRow(["إجمالي دخل الخدمات",financialReportMoney(data.servicesIncome)]),
+financialReportRow(["إجمالي مصروفات الخدمات",financialReportMoney(data.servicesExpense)]),
+financialReportRow(["صافي الخدمات",financialReportMoney(data.servicesIncome-data.servicesExpense)]),
+financialReportRow(["عدد العمليات",financialReportEsc(data.services.length)])
+],["البيان","القيمة"])}\</div>
+\<div class="report-section">\<div class="report-section-title">ربحية الخدمات حسب التصنيف\</div>${table(serviceRows,["الخدمة","الدخل","المصروف","الربح"])}\</div>
+\<div class="report-section">\<div class="report-section-title">جميع عمليات الخدمات\</div>${table(serviceOperationsRows,["التاريخ","الخدمة","المبلغ المحصل","المصروف","الربح","البيان"])}\</div>
+\<div class="report-section">\<div class="report-section-title">المصروفات المستقلة للخدمات\</div>${table(serviceGeneralExpenseRows,["التاريخ","المصروف / التصنيف","المبلغ","البيان"])}\</div>
+\</div>
 
-<div class="report-kpis">
-${kpi(
-"إجمالي الدخل",
-financialReportMoney(data.servicesIncome),
-"report-income"
-)}
-${kpi(
-"إجمالي المصروف",
-financialReportMoney(data.servicesExpense),
-"report-expense"
-)}
-${kpi(
-"صافي الربح",
-financialReportMoney(
-data.servicesIncome-
-data.servicesExpense
-),
-"report-profit"
-)}
-${kpi(
-"عدد العمليات",
-financialReportEsc(data.services.length)
-)}
-</div>
-
-<div class="report-section">
-<div class="report-section-title">
-ملخص دخل الخدمات
-</div>
-
-${table([
-financialReportRow([
-"إجمالي دخل الخدمات",
-financialReportMoney(data.servicesIncome)
-]),
-financialReportRow([
-"إجمالي مصروفات الخدمات",
-financialReportMoney(data.servicesExpense)
-]),
-financialReportRow([
-"صافي الخدمات",
-financialReportMoney(
-data.servicesIncome-
-data.servicesExpense
-)
-]),
-financialReportRow([
-"عدد العمليات",
-financialReportEsc(data.services.length)
-])
-],["البيان","القيمة"])}
-</div>
-
-<div class="report-section">
-<div class="report-section-title">
-ربحية الخدمات حسب التصنيف
-</div>
-
-${table(
-serviceRows,
-["الخدمة","الدخل","المصروف","الربح"]
-)}
-</div>
-`)
-);
-
-pages.push(
-...recordsPages(
-"🛠️ الخدمات — جميع العمليات",
-serviceOperationsRows,
-["التاريخ","الخدمة","المبلغ المحصل","المصروف","الربح","البيان"],
-10
-)
-);
-
-pages.push(
-...recordsPages(
-"🛠️ الخدمات — المصروفات المستقلة",
-serviceGeneralExpenseRows,
-["التاريخ","المصروف / التصنيف","المبلغ","البيان"],
-13
-)
-);
-
-/* ================= العقارات ================= */
-
-pages.push(
-reportPage(`
+\<!-- الصفحة 7: العقارات -->
+\<div class="report-page">
 ${pageHeader("🔑 إيجارات العقارات")}
+\<div class="report-kpis">
+${kpi("إجمالي الإيجارات",financialReportMoney(data.rentalIncome),"report-income")}
+${kpi("مصاريف الإيجارات والعقارات",financialReportMoney(data.rentalExpense+data.propertyExpenseTotal),"report-expense")}
+${kpi("صافي الربح",financialReportMoney(data.rentalIncome-data.rentalExpense-data.propertyExpenseTotal),"report-profit")}
+${kpi("عدد العقارات",financialReportEsc(data.properties.length))}
+\</div>
+\<div class="report-section">\<div class="report-section-title">ملخص إيجارات العقارات\</div>${table([
+financialReportRow(["إجمالي دخل الإيجارات",financialReportMoney(data.rentalIncome)]),
+financialReportRow(["مصاريف عمليات الإيجار",financialReportMoney(data.rentalExpense)]),
+financialReportRow(["مصاريف العقارات الشاملة",financialReportMoney(data.propertyExpenseTotal)]),
+financialReportRow(["صافي ربح الإيجارات والعقارات",financialReportMoney(data.rentalIncome-data.rentalExpense-data.propertyExpenseTotal)]),
+financialReportRow(["التأمينات النشطة خلال الفترة",financialReportMoney(data.activeDeposits)]),
+financialReportRow(["التأمينات المستردة خلال الفترة",financialReportMoney(data.refundedDeposits)]),
+financialReportRow(["عدد العقارات",financialReportEsc(data.properties.length)]),
+financialReportRow(["عدد عمليات الإيجار",financialReportEsc(data.rentals.length)])
+],["البيان","القيمة"])}\</div>
+\<div class="report-section">\<div class="report-section-title">تحليل العقارات\</div>${table(propertyRows,["العقار","الإيجارات","المصروفات","الصافي","التأمينات النشطة"])}\</div>
+\<div class="report-section">\<div class="report-section-title">مصروفات العقارات حسب التصنيف\</div>${table(propertyCategoryRows,["التصنيف","إجمالي المصروف"])}\</div>
+\<div class="report-section">\<div class="report-section-title">جميع عمليات الإيجار\</div>${table(rentalRows.slice(0,4),["التاريخ","العقار","الوحدة","المستأجر","الإيجار","التأمين","المصروف","الصافي","حالة التأمين","الملاحظات"])}\</div>
+\</div>
 
-<div class="report-kpis">
-${kpi(
-"إجمالي الإيجارات",
-financialReportMoney(data.rentalIncome),
-"report-income"
-)}
-${kpi(
-"مصاريف الإيجارات والعقارات",
-financialReportMoney(
-data.rentalExpense+
-data.propertyExpenseTotal
-),
-"report-expense"
-)}
-${kpi(
-"صافي الربح",
-financialReportMoney(
-data.rentalIncome-
-data.rentalExpense-
-data.propertyExpenseTotal
-),
-"report-profit"
-)}
-${kpi(
-"عدد العقارات",
-financialReportEsc(data.properties.length)
-)}
-</div>
+\<!-- الصفحة 8: استكمال العقارات -->
+\<div class="report-page">
+${pageHeader("🔑 إيجارات العقارات — استكمال")}
+\<div class="report-section">\<div class="report-section-title">باقي عمليات الإيجار\</div>${table(rentalRows.slice(4),["التاريخ","العقار","الوحدة","المستأجر","الإيجار","التأمين","المصروف","الصافي","حالة التأمين","الملاحظات"])}\</div>
+\<div class="report-section">\<div class="report-section-title">جميع المصاريف الشاملة للعقارات\</div>${table(propertyExpenseRows,["التاريخ","التصنيف","المبلغ","الملاحظات"])}\</div>
+\<div class="report-warning">
+التأمينات النشطة معروضة بشكل مستقل عن الإيرادات التشغيلية لأنها مبالغ مرتبطة بالتزامات تجاه المستأجرين وليست إيرادًا تشغيليًا.\<br>\<br>
+\<strong>التأمينات النشطة الحالية في النظام: ${financialReportMoney(data.currentActiveDeposits)}\</strong>\<br>
+\<strong>التأمينات المستردة الحالية في النظام: ${financialReportMoney(data.currentRefundedDeposits)}\</strong>
+\</div>
+\</div>
 
-<div class="report-section">
-<div class="report-section-title">
-ملخص إيجارات العقارات
-</div>
-
-${table([
-financialReportRow([
-"إجمالي دخل الإيجارات",
-financialReportMoney(data.rentalIncome)
-]),
-financialReportRow([
-"مصاريف عمليات الإيجار",
-financialReportMoney(data.rentalExpense)
-]),
-financialReportRow([
-"مصاريف العقارات الشاملة",
-financialReportMoney(data.propertyExpenseTotal)
-]),
-financialReportRow([
-"صافي ربح الإيجارات والعقارات",
-financialReportMoney(
-data.rentalIncome-
-data.rentalExpense-
-data.propertyExpenseTotal
-)
-]),
-financialReportRow([
-"التأمينات النشطة خلال الفترة",
-financialReportMoney(data.activeDeposits)
-]),
-financialReportRow([
-"التأمينات المستردة خلال الفترة",
-financialReportMoney(data.refundedDeposits)
-]),
-financialReportRow([
-"عدد العقارات",
-financialReportEsc(data.properties.length)
-]),
-financialReportRow([
-"عدد عمليات الإيجار",
-financialReportEsc(data.rentals.length)
-])
-],["البيان","القيمة"])}
-</div>
-
-<div class="report-section">
-<div class="report-section-title">
-تحليل العقارات
-</div>
-
-${table(
-propertyRows,
-["العقار","الإيجارات","المصروفات","الصافي","التأمينات النشطة"]
-)}
-</div>
-
-<div class="report-section">
-<div class="report-section-title">
-مصروفات العقارات حسب التصنيف
-</div>
-
-${table(
-propertyCategoryRows,
-["التصنيف","إجمالي المصروف"]
-)}
-</div>
-`)
-);
-
-pages.push(
-...recordsPages(
-"🔑 إيجارات العقارات — جميع عمليات الإيجار",
-rentalRows,
-[
-"التاريخ",
-"العقار",
-"الوحدة",
-"تصنيف الإيجار",
-"المستأجر",
-"الإيجار",
-"التأمين",
-"المصروف",
-"الصافي",
-"حالة التأمين",
-"تصنيف المصروف",
-"الملاحظات"
-],
-7
-)
-);
-
-pages.push(
-...recordsPages(
-"🔑 إيجارات العقارات — جميع المصاريف الشاملة",
-propertyExpenseRows,
-["التاريخ","التصنيف","المبلغ","الملاحظات"],
-13
-)
-);
-
-pages.push(
-reportPage(`
-${pageHeader("🔑 إيجارات العقارات — حالة التأمينات")}
-
-<div class="report-warning">
-
-التأمينات النشطة معروضة بشكل مستقل عن الإيرادات التشغيلية لأنها مبالغ مرتبطة بالتزامات تجاه المستأجرين وليست إيرادًا تشغيليًا.
-
-<br><br>
-
-<strong>
-التأمينات النشطة الحالية في النظام:
-${financialReportMoney(data.currentActiveDeposits)}
-</strong>
-
-<br>
-
-<strong>
-التأمينات المستردة الحالية في النظام:
-${financialReportMoney(data.currentRefundedDeposits)}
-</strong>
-
-</div>
-`)
-);
-
-/* ================= المصاريف الشخصية ================= */
-
-pages.push(
-reportPage(`
+\<!-- الصفحة 9: المصاريف الشخصية -->
+\<div class="report-page">
 ${pageHeader("💳 المصاريف الشخصية")}
+\<div class="report-kpis">
+${kpi("إجمالي المصاريف الشخصية",financialReportMoney(data.personalExpenseTotal),"report-expense")}
+${kpi("عدد المصروفات",financialReportEsc(data.personalExpenses.length))}
+${kpi("المصاريف التشغيلية للنشاط",financialReportMoney(data.totalBusinessExpense),"report-expense")}
+${kpi("الصافي بعد المصاريف الشخصية",financialReportMoney(data.totalAfterPersonal),"report-profit")}
+\</div>
+\<div class="report-section">\<div class="report-section-title">ملخص المصاريف الشخصية\</div>${table([
+financialReportRow(["إجمالي المصاريف الشخصية",financialReportMoney(data.personalExpenseTotal)]),
+financialReportRow(["إجمالي الإيرادات الشخصية",financialReportMoney(data.personalIncomeTotal)]),
+financialReportRow(["عدد المصروفات",financialReportEsc(data.personalExpenses.length)]),
+financialReportRow(["عدد الإيرادات",financialReportEsc(data.personalIncome.length)]),
+financialReportRow(["الصافي بعد المصاريف الشخصية",financialReportMoney(data.totalAfterPersonal)])
+],["البيان","القيمة"])}\</div>
+\<div class="report-section">\<div class="report-section-title">جميع المصاريف الشخصية\</div>${table(personalRows,["التاريخ","النوع","البيان","المبلغ"])}\</div>
+\<div class="report-section">\<div class="report-section-title">جميع الإيرادات الشخصية\</div>${table(personalIncomeRows,["التاريخ","النوع","الإيراد","المبلغ","الملاحظة"])}\</div>
+\<div class="report-note">المصاريف الشخصية معروضة بشكل مستقل عن نتيجة نشاط الأعمال حتى لا تختلط بالمصروفات التشغيلية للنشاط.\</div>
+\</div>
 
-<div class="report-kpis">
-${kpi(
-"إجمالي المصاريف الشخصية",
-financialReportMoney(data.personalExpenseTotal),
-"report-expense"
-)}
-${kpi(
-"إجمالي الإيرادات الشخصية",
-financialReportMoney(data.personalIncomeTotal),
-"report-income"
-)}
-${kpi(
-"المصاريف التشغيلية للنشاط",
-financialReportMoney(data.totalBusinessExpense),
-"report-expense"
-)}
-${kpi(
-"الصافي بعد المصاريف الشخصية",
-financialReportMoney(data.totalAfterPersonal),
-"report-profit"
-)}
-</div>
-
-<div class="report-section">
-<div class="report-section-title">
-ملخص المصاريف الشخصية
-</div>
-
-${table([
-financialReportRow([
-"إجمالي المصاريف الشخصية",
-financialReportMoney(data.personalExpenseTotal)
-]),
-financialReportRow([
-"إجمالي الإيرادات الشخصية",
-financialReportMoney(data.personalIncomeTotal)
-]),
-financialReportRow([
-"عدد المصروفات",
-financialReportEsc(data.personalExpenses.length)
-]),
-financialReportRow([
-"عدد الإيرادات",
-financialReportEsc(data.personalIncome.length)
-]),
-financialReportRow([
-"الصافي بعد المصاريف الشخصية",
-financialReportMoney(data.totalAfterPersonal)
-])
-],["البيان","القيمة"])}
-</div>
-
-<div class="report-note">
-المصاريف الشخصية معروضة بشكل مستقل عن نتيجة نشاط الأعمال حتى لا تختلط بالمصروفات التشغيلية للنشاط.
-</div>
-`)
-);
-
-pages.push(
-...recordsPages(
-"💳 المصاريف الشخصية — جميع المصروفات",
-personalRows,
-["التاريخ","النوع","البيان","المبلغ"],
-13
-)
-);
-
-pages.push(
-...recordsPages(
-"💳 المصاريف الشخصية — جميع الإيرادات",
-personalIncomeRows,
-["التاريخ","النوع","الإيراد","المبلغ","الملاحظة"],
-11
-)
-);
-
-/* ================= ترقيم صفحات التقرير ================= */
-
-return `
-<div class="financial-report">
-
-${pages.join("")}
-
-</div>
-`;
+\</div>
+\`;
 
 }
+
 async function generateFinancialReportPDF(){
 
 const button=document.getElementById("generateFinancialReportBtn");
@@ -5467,24 +4741,24 @@ if(!auth.currentUser){
 throw new Error("يجب تسجيل الدخول أولاً.");
 }
 
-if(typeof window.html2canvas!=="function"){
+if(typeof window\.html2canvas!=="function"){
 throw new Error("مكتبة تحويل التقرير إلى صورة غير محملة. تأكد من الاتصال بالإنترنت ثم أعد فتح الصفحة.");
 }
 
-if(!window.jspdf || typeof window.jspdf.jsPDF!=="function"){
+if(!window\.jspdf || typeof window\.jspdf.jsPDF!=="function"){
 throw new Error("مكتبة PDF غير محملة. تأكد من الاتصال بالإنترنت ثم أعد فتح الصفحة.");
 }
 
 const range=getFinancialReportDateRange();
 const data=financialReportBuildData(range);
 
-/*
+/\*
   طريقة التصدير الجديدة:
   كل .report-page يتم تصويره كصورة مستقلة بدقة عالية وسرعة أفضل،
   ثم توضع الصورة مباشرة على صفحة A4 واحدة في jsPDF.
   بهذه الطريقة لا يوجد html2pdf pagination ولا إعادة حساب RTL
   ولا انحراف للمحتوى إلى اليسار.
-*/
+\*/
 wrapper=document.createElement("div");
 wrapper.style.position="fixed";
 wrapper.style.left="-100000px";
@@ -5518,36 +4792,36 @@ if(!reportElement){
 throw new Error("تعذر تجهيز محتوى التقرير المالي.");
 }
 
-const pages=Array.from(reportElement.querySelectorAll(":scope > .report-page"));
+const pages=Array.from(reportElement.querySelectorAll("\:scope > .report-page"));
 
 if(!pages.length){
 throw new Error("لم يتم العثور على صفحات التقرير.");
 }
 
-const {jsPDF}=window.jspdf;
+const {jsPDF}=window\.jspdf;
 const pdf=new jsPDF({
 unit:"mm",
 format:"a4",
 orientation:"portrait",
-compress:true,
-putOnlyUsedFonts:true
+compress\:true,
+putOnlyUsedFonts\:true
 });
 
-const A4_WIDTH_MM=210;
-const A4_HEIGHT_MM=297;
-const RENDER_SCALE=2.0;
+const A4\_WIDTH\_MM=210;
+const A4\_HEIGHT\_MM=297;
+const RENDER\_SCALE=2.0;
 
-for(let i=0;i<pages.length;i++){
+for(let i=0;i\<pages.length;i++){
 
 const page=pages[i];
 
-button.textContent=`جاري تجهيز التقرير... ${i+1} / ${pages.length}`;
+button.textContent=\`جاري تجهيز التقرير... ${i+1} / ${pages.length}\`;
 
-/*
+/\*
   نعطي الصفحة عرضها الحقيقي قبل التصوير.
   لا نستخدم width:794px ولا windowWidth ثابت،
   لأن ذلك كان سبب انزياح التقرير في النسخ السابقة.
-*/
+\*/
 page.style.width="210mm";
 page.style.height="297mm";
 page.style.minWidth="210mm";
@@ -5559,19 +4833,19 @@ page.style.transform="none";
 page.style.left="0";
 page.style.right="auto";
 
-const canvas=await window.html2canvas(page,{
-scale:RENDER_SCALE,
-useCORS:true,
-allowTaint:false,
+const canvas=await window\.html2canvas(page,{
+scale\:RENDER\_SCALE,
+useCORS\:true,
+allowTaint\:false,
 backgroundColor:"#ffffff",
-logging:false,
-removeContainer:true,
-foreignObjectRendering:false,
+logging\:false,
+removeContainer\:true,
+foreignObjectRendering\:false,
 imageTimeout:15000,
 scrollX:0,
 scrollY:0,
-windowWidth:Math.max(document.documentElement.clientWidth,1024),
-windowHeight:Math.max(document.documentElement.clientHeight,1200)
+windowWidth\:Math.max(document.documentElement.clientWidth,1024),
+windowHeight\:Math.max(document.documentElement.clientHeight,1200)
 });
 
 const imageData=canvas.toDataURL("image/jpeg",0.94);
@@ -5585,19 +4859,19 @@ imageData,
 "JPEG",
 0,
 0,
-A4_WIDTH_MM,
-A4_HEIGHT_MM,
+A4\_WIDTH\_MM,
+A4\_HEIGHT\_MM,
 undefined,
 "FAST"
 );
 
-/* تحرير الذاكرة بعد كل صفحة */
+/\* تحرير الذاكرة بعد كل صفحة \*/
 canvas.width=1;
 canvas.height=1;
 
 }
 
-pdf.save(`التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf`);
+pdf.save(\`التقرير-المالي-${range.label.replace(/\s+/g,"-")}.pdf\`);
 
 document.getElementById("financialReportModal").style.display="none";
 
@@ -5621,7 +4895,7 @@ button.textContent="📄 إنشاء التقرير PDF";
 
 document.getElementById("generateFinancialReportBtn").onclick=generateFinancialReportPDF;
 
-/* ================= Firestore helpers ================= */
+/\* ================= Firestore helpers ================= \*/
 
 function collection(
 firestoreInstance,
@@ -5658,7 +4932,7 @@ options
 
 }
 
-/* ================= المقاولات ================= */
+/\* ================= المقاولات ================= \*/
 
 function renderContracting(){
 
@@ -5684,7 +4958,7 @@ inc+=amount;
 
 if(!incomeCategories[categoryKey]){
 incomeCategories[categoryKey]={
-label:rawCategory,
+label\:rawCategory,
 total:0
 };
 }
@@ -5697,7 +4971,7 @@ exp+=amount;
 
 if(!expenseCategories[categoryKey]){
 expenseCategories[categoryKey]={
-label:rawCategory,
+label\:rawCategory,
 total:0
 };
 }
@@ -5722,7 +4996,7 @@ document.getElementById("contractingExpense").innerHTML=money(exp);
 
 document.getElementById("contractingProfit").innerHTML=money(inc-exp);
 
-/* ===== ملخص تصنيف الدخل ===== */
+/\* ===== ملخص تصنيف الدخل ===== \*/
 
 const incomeSummaryBody=
 document.getElementById("contractingIncomeSummaryBody");
@@ -5734,35 +5008,35 @@ const incomeKeys=Object.keys(incomeCategories);
 incomeSummaryBody.innerHTML=
 incomeKeys.length
 ?
-incomeKeys.map(key=>`
+incomeKeys.map(key=>\`
 
-<tr>
+\<tr>
 
-<td>
-<strong>${escapeHTML(incomeCategories[key].label)}</strong>
-</td>
+\<td>
+\<strong>${escapeHTML(incomeCategories[key].label)}\</strong>
+\</td>
 
-<td class="income">
+\<td class="income">
 ${money(incomeCategories[key].total)}
-</td>
+\</td>
 
-</tr>
+\</tr>
 
-`).join("")
+\`).join("")
 :
-`
-<tr>
-<td colspan="2">
-<div class="empty">
+\`
+\<tr>
+\<td colspan="2">
+\<div class="empty">
 لا توجد عمليات دخل في الفترة المحددة
-</div>
-</td>
-</tr>
-`;
+\</div>
+\</td>
+\</tr>
+\`;
 
 }
 
-/* ===== ملخص تصنيف المصروفات ===== */
+/\* ===== ملخص تصنيف المصروفات ===== \*/
 
 const expenseSummaryBody=
 document.getElementById("contractingExpenseSummaryBody");
@@ -5774,118 +5048,120 @@ const expenseKeys=Object.keys(expenseCategories);
 expenseSummaryBody.innerHTML=
 expenseKeys.length
 ?
-expenseKeys.map(key=>`
+expenseKeys.map(key=>\`
 
-<tr>
+\<tr>
 
-<td>
-<strong>${escapeHTML(expenseCategories[key].label)}</strong>
-</td>
+\<td>
+\<strong>${escapeHTML(expenseCategories[key].label)}\</strong>
+\</td>
 
-<td class="expense">
+\<td class="expense">
 ${money(expenseCategories[key].total)}
-</td>
+\</td>
 
-</tr>
+\</tr>
 
-`).join("")
+\`).join("")
 :
-`
-<tr>
-<td colspan="2">
-<div class="empty">
+\`
+\<tr>
+\<td colspan="2">
+\<div class="empty">
 لا توجد عمليات مصروف في الفترة المحددة
-</div>
-</td>
-</tr>
-`;
+\</div>
+\</td>
+\</tr>
+\`;
 
 }
 
-/* ===== سجل العمليات ===== */
+/\* ===== سجل العمليات ===== \*/
 
 const body=document.getElementById("contractingBody");
 
 body.innerHTML=
 records.length
 ?
-records.map(x=>`
+records.map(x=>\`
 
-<tr>
+\<tr>
 
-<td
+\<td
 class="editable-cell"
 onclick="inlineEditCell(this,'contracting','${x.id}','date','date')">
 
-<span class="num-val">
+\<span class="num-val">
 ${escapeHTML(x.date)}
-</span>
+\</span>
 
-</td>
+\</td>
 
-<td class="${x.type==="income"?'income':'expense'}">
+\<td class="${x.type==="income"?'income':'expense'}">
 ${x.type==="income"?'دخل':'مصروف'}
-</td>
+\</td>
 
-<td
+\<td
 class="editable-cell"
 onclick="inlineEditCell(this,'contracting','${x.id}','name')">
 
-<strong>
+\<strong>
 ${escapeHTML(x.name||x.category||"-")}
-</strong>
+\</strong>
 
-</td>
+\</td>
 
-<td
+\<td
 class="editable-cell"
 onclick="inlineEditCell(this,'contracting','${x.id}','category')">
 
 ${escapeHTML(x.category||"-")}
 
-</td>
+\</td>
 
-<td class="editable-cell ${x.type==="income"?'income':'expense'}" onclick="inlineEditCell(this,'contracting','${x.id}','amount','number')">
+\<td class="editable-cell ${x.type==="income"?'income':'expense'}" onclick="inlineEditCell(this,'contracting','${x.id}','amount','number')">
 
 ${money(x.amount)}
 
-</td>
+\</td>
 
-<td
+\<td
 class="editable-cell"
 onclick="inlineEditCell(this,'contracting','${x.id}','note')">
 
 ${escapeHTML(x.note||"-")}
 
-</td>
+\</td>
 
-<td>
+\<td>
 
 
 
-<button
+
+
+\<button
 class="btn red"
 onclick="deleteContracting('${x.id}')">
 
 حذف
 
-</button>
+\</button>
 
-</td>
+\</td>
 
-</tr>
+\</tr>
 
-`).join("")
+\`).join("")
 :
-`
-<tr>
-<td colspan="7">
-<div class="empty">
+\`
+\<tr>
+\<td colspan="7">
+\<div class="empty">
 لا توجد عمليات في الفترة المحددة
-</div>
-</td>
-</tr>
-`;
+\</div>
+\</td>
+\</tr>
+\`;
 
 }
 
@@ -5914,7 +5190,7 @@ document.getElementById("conCategory").value=category;
 }else{
 
 const useExisting=confirm(
-`يوجد تصنيف مشابه: "${categoryMatch.label}"\n\nاضغط «موافق» لاستخدام التصنيف الموجود، أو «إلغاء» لإنشاء تصنيف جديد باسم "${category}".`
+\`يوجد تصنيف مشابه: "${categoryMatch.label}"\n\nاضغط «موافق» لاستخدام التصنيف الموجود، أو «إلغاء» لإنشاء تصنيف جديد باسم "${category}".\`
 );
 
 if(useExisting){
@@ -5951,7 +5227,7 @@ name,
 category,
 amount,
 note,
-createdAt:serverTimestamp()
+createdAt\:serverTimestamp()
 }
 );
 
@@ -5974,7 +5250,8 @@ btn.textContent="حفظ العملية";
 };
 
 
-window.deleteContracting=async function(id){
+
+window\.deleteContracting=async function(id){
 
 if(!confirm("هل تريد حذف العملية؟"))return;
 
@@ -5992,7 +5269,7 @@ alert(e.message);
 
 };
 
-/* ================= إحصائيات المشاريع ================= */
+/\* ================= إحصائيات المشاريع ================= \*/
 
 function updateStats(){
 
@@ -6022,9 +5299,9 @@ updateWallet();
 
 }
 
-/* =====================================================
+/\* =====================================================
    المصاريف الشخصية
-===================================================== */
+\===================================================== \*/
 
 async function addPersonalExpenseToFirebase(data){
 
@@ -6036,15 +5313,15 @@ throw new Error(
 await addDoc(
 collection(
 firestore,
-"personal_expenses"
+"personal\_expenses"
 ),
 {
-date:data.date,
-amount:Number(data.amount)||0,
-note:data.note||"",
-createdAt:serverTimestamp(),
-createdBy:auth.currentUser.uid,
-userEmail:auth.currentUser.email||""
+date\:data.date,
+amount\:Number(data.amount)||0,
+note\:data.note||"",
+createdAt\:serverTimestamp(),
+createdBy\:auth.currentUser.uid,
+userEmail\:auth.currentUser.email||""
 }
 );
 
@@ -6060,16 +5337,16 @@ throw new Error(
 await addDoc(
 collection(
 firestore,
-"personal_income"
+"personal\_income"
 ),
 {
-date:today(),
-name:data.name||"",
-amount:Number(data.amount)||0,
-note:data.note||"",
-createdAt:serverTimestamp(),
-createdBy:auth.currentUser.uid,
-userEmail:auth.currentUser.email||""
+date\:today(),
+name\:data.name||"",
+amount\:Number(data.amount)||0,
+note\:data.note||"",
+createdAt\:serverTimestamp(),
+createdBy\:auth.currentUser.uid,
+userEmail\:auth.currentUser.email||""
 }
 );
 
@@ -6133,7 +5410,7 @@ const sortedMonths=[...new Set([...expenseMonths,...incomeMonths])].sort((a,b)=>
 
 if(!sortedMonths.length){
 
-container.innerHTML=`<div class="empty">لا توجد مصاريف أو إيرادات شخصية في الفترة المحددة.</div>`;
+container.innerHTML=\`\<div class="empty">لا توجد مصاريف أو إيرادات شخصية في الفترة المحددة.\</div>\`;
 
 return;
 
@@ -6144,113 +5421,113 @@ container.innerHTML=sortedMonths.map(month=>{
 const group=grouped[month]||{total:0,items:[]};
 const incomeGroup=incomeGrouped[month]||{total:0,items:[]};
 
-const expenseRows=group.items.map(item=>`
+const expenseRows=group.items.map(item=>\`
 
-<tr>
+\<tr>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'personal_expenses','${item.id}','date','date')">
-<span class="num-val">${escapeHTML(item.date)}</span>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'personal\_expenses','${item.id}','date','date')">
+\<span class="num-val">${escapeHTML(item.date)}\</span>
+\</td>
 
-<td class="editable-cell expense" onclick="inlineEditCell(this,'personal_expenses','${item.id}','amount','number')">${money(item.amount)}</td>
+\<td class="editable-cell expense" onclick="inlineEditCell(this,'personal\_expenses','${item.id}','amount','number')">${money(item.amount)}\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'personal_expenses','${item.id}','note')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'personal\_expenses','${item.id}','note')">
 ${escapeHTML(item.note||"")}
-</td>
+\</td>
 
-<td>
+\<td>
 
-<button class="btn red" onclick="deletePersonalExpense('${item.id}')">حذف</button>
-</td>
+\<button class="btn red" onclick="deletePersonalExpense('${item.id}')">حذف\</button>
+\</td>
 
-</tr>
+\</tr>
 
-`).join("");
+\`).join("");
 
-const incomeRows=incomeGroup.items.map(item=>`
+const incomeRows=incomeGroup.items.map(item=>\`
 
-<tr>
+\<tr>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'personal_income','${item.id}','name')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'personal\_income','${item.id}','name')">
 ${escapeHTML(item.name||"-")}
-</td>
+\</td>
 
-<td class="editable-cell income" onclick="inlineEditCell(this,'personal_income','${item.id}','amount','number')">${money(item.amount)}</td>
+\<td class="editable-cell income" onclick="inlineEditCell(this,'personal\_income','${item.id}','amount','number')">${money(item.amount)}\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'personal_income','${item.id}','note')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'personal\_income','${item.id}','note')">
 ${escapeHTML(item.note||"")}
-</td>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'personal_income','${item.id}','date','date')">
-<span class="num-val">${escapeHTML(item.date)}</span>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'personal\_income','${item.id}','date','date')">
+\<span class="num-val">${escapeHTML(item.date)}\</span>
+\</td>
 
-<td>
-<button class="btn red" onclick="deletePersonalIncome('${item.id}')">حذف</button>
-</td>
+\<td>
+\<button class="btn red" onclick="deletePersonalIncome('${item.id}')">حذف\</button>
+\</td>
 
-</tr>
+\</tr>
 
-`).join("");
+\`).join("");
 
-return `
+return \`
 
-<div class="month-group-card">
+\<div class="month-group-card">
 
-<div class="month-header">
+\<div class="month-header">
 
-<h4>
+\<h4>
 📅 شهر:
-<span class="num-val">${month}</span>
+\<span class="num-val">${month}\</span>
 الميلادي
-</h4>
+\</h4>
 
-<div>
-<span class="expense">المصروفات: ${money(group.total)}</span>
+\<div>
+\<span class="expense">المصروفات: ${money(group.total)}\</span>
 &nbsp; | &nbsp;
-<span class="income">الإيرادات: ${money(incomeGroup.total)}</span>
+\<span class="income">الإيرادات: ${money(incomeGroup.total)}\</span>
 &nbsp; | &nbsp;
-<strong class="${profitClass(incomeGroup.total-group.total)}">الصافي: ${money(incomeGroup.total-group.total)}</strong>
-</div>
+\<strong class="${profitClass(incomeGroup.total-group.total)}">الصافي: ${money(incomeGroup.total-group.total)}\</strong>
+\</div>
 
-</div>
+\</div>
 
-${group.items.length?`
-<h4 style="margin:12px 0 8px">📉 المصاريف</h4>
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th>التاريخ</th>
-<th>المصروف</th>
-<th>الملاحظة</th>
-<th>إجراء</th>
-</tr>
-</thead>
-<tbody>${expenseRows}</tbody>
-</table>
-</div>`:""}
+${group.items.length?\`
+\<h4 style="margin:12px 0 8px">📉 المصاريف\</h4>
+\<div class="table-wrap">
+\<table>
+\<thead>
+\<tr>
+\<th>التاريخ\</th>
+\<th>المصروف\</th>
+\<th>الملاحظة\</th>
+\<th>إجراء\</th>
+\</tr>
+\</thead>
+\<tbody>${expenseRows}\</tbody>
+\</table>
+\</div>\`:""}
 
-${incomeGroup.items.length?`
-<h4 style="margin:18px 0 8px">📈 الإيرادات</h4>
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th>الإيراد</th>
-<th>المبلغ</th>
-<th>الملاحظة</th>
-<th>التاريخ</th>
-<th>إجراء</th>
-</tr>
-</thead>
-<tbody>${incomeRows}</tbody>
-</table>
-</div>`:""}
+${incomeGroup.items.length?\`
+\<h4 style="margin:18px 0 8px">📈 الإيرادات\</h4>
+\<div class="table-wrap">
+\<table>
+\<thead>
+\<tr>
+\<th>الإيراد\</th>
+\<th>المبلغ\</th>
+\<th>الملاحظة\</th>
+\<th>التاريخ\</th>
+\<th>إجراء\</th>
+\</tr>
+\</thead>
+\<tbody>${incomeRows}\</tbody>
+\</table>
+\</div>\`:""}
 
-</div>
+\</div>
 
-`;
+\`;
 
 }).join("");
 
@@ -6338,13 +5615,13 @@ btn.textContent="حفظ الإيراد";
 
 };
 
-window.deletePersonalExpense = async function(id){
+window\.deletePersonalExpense = async function(id){
 
 if(!confirm("هل تريد حذف هذا المصروف؟")) return;
 
 try {
 
-await deleteDoc(doc(firestore, "personal_expenses", id));
+await deleteDoc(doc(firestore, "personal\_expenses", id));
 
 } catch(e) {
 
@@ -6354,21 +5631,21 @@ alert("حدث خطأ أثناء الحذف:\n" + e.message);
 
 };
 
-window.deletePersonalIncome = async function(id){
+window\.deletePersonalIncome = async function(id){
 
 if(!confirm("هل تريد حذف هذا الإيراد؟")) return;
 
 try {
-await deleteDoc(doc(firestore,"personal_income",id));
+await deleteDoc(doc(firestore,"personal\_income",id));
 } catch(e) {
 alert("حدث خطأ أثناء حذف الإيراد:\n"+e.message);
 }
 
 };
 
-/* =====================================================
+/\* =====================================================
    المكتب
-===================================================== */
+\===================================================== \*/
 
 async function addOfficeExpenseToFirebase(data){
 
@@ -6380,21 +5657,21 @@ throw new Error(
 await addDoc(
 collection(
 firestore,
-"office_expenses"
+"office\_expenses"
 ),
 {
 
-date:data.date,
+date\:data.date,
 
-name:data.name,
+name\:data.name,
 
-amount:Number(data.amount)||0,
+amount\:Number(data.amount)||0,
 
-note:data.note||"",
+note\:data.note||"",
 
-createdAt:serverTimestamp(),
+createdAt\:serverTimestamp(),
 
-createdBy:auth.currentUser.uid,
+createdBy\:auth.currentUser.uid,
 
 userEmail:
 auth.currentUser.email||""
@@ -6432,63 +5709,63 @@ const incomeBody=document.getElementById("officeIncomeBody");
 
 if(incomeBody){
 
-incomeBody.innerHTML=incomes.length?incomes.map(item=>`
+incomeBody.innerHTML=incomes.length?incomes.map(item=>\`
 
-<tr>
+\<tr>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'office_income','${item.id}','date','date')">
-<span class="num-val">${escapeHTML(item.date)}</span>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'office\_income','${item.id}','date','date')">
+\<span class="num-val">${escapeHTML(item.date)}\</span>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'office_income','${item.id}','name')">
-<strong>${escapeHTML(item.name)}</strong>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'office\_income','${item.id}','name')">
+\<strong>${escapeHTML(item.name)}\</strong>
+\</td>
 
-<td class="editable-cell income" onclick="inlineEditCell(this,'office_income','${item.id}','amount','number')">${money(item.amount)}</td>
+\<td class="editable-cell income" onclick="inlineEditCell(this,'office\_income','${item.id}','amount','number')">${money(item.amount)}\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'office_income','${item.id}','note')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'office\_income','${item.id}','note')">
 ${escapeHTML(item.note||"")}
-</td>
+\</td>
 
-<td>
+\<td>
 
-<button class="btn red" onclick="deleteOfficeIncome('${item.id}')">حذف</button>
-</td>
+\<button class="btn red" onclick="deleteOfficeIncome('${item.id}')">حذف\</button>
+\</td>
 
-</tr>
+\</tr>
 
-`).join(""):`<tr><td colspan="5"><div class="empty">لا يوجد دخل مكتب في الفترة المحددة</div></td></tr>`;
+\`).join(""):\`\<tr>\<td colspan="5">\<div class="empty">لا يوجد دخل مكتب في الفترة المحددة\</div>\</td>\</tr>\`;
 
 }
 
 const tbody=document.getElementById("officeExpensesBody");
 
-tbody.innerHTML=expenses.length?expenses.map(item=>`
+tbody.innerHTML=expenses.length?expenses.map(item=>\`
 
-<tr>
+\<tr>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','date','date')">
-<span class="num-val">${escapeHTML(item.date)}</span>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'office\_expenses','${item.id}','date','date')">
+\<span class="num-val">${escapeHTML(item.date)}\</span>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','name')">
-<strong>${escapeHTML(item.name)}</strong>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'office\_expenses','${item.id}','name')">
+\<strong>${escapeHTML(item.name)}\</strong>
+\</td>
 
-<td class="editable-cell expense" onclick="inlineEditCell(this,'personal_expenses','${item.id}','amount','number')">${money(item.amount)}</td>
+\<td class="editable-cell expense" onclick="inlineEditCell(this,'personal\_expenses','${item.id}','amount','number')">${money(item.amount)}\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'office_expenses','${item.id}','note')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'office\_expenses','${item.id}','note')">
 ${escapeHTML(item.note||"")}
-</td>
+\</td>
 
-<td>
+\<td>
 
-<button class="btn red" onclick="deleteOfficeExpense('${item.id}')">حذف</button>
-</td>
+\<button class="btn red" onclick="deleteOfficeExpense('${item.id}')">حذف\</button>
+\</td>
 
-</tr>
+\</tr>
 
-`).join(""):`<tr><td colspan="5"><div class="empty">لا توجد مصاريف مكتب في الفترة المحددة</div></td></tr>`;
+\`).join(""):\`\<tr>\<td colspan="5">\<div class="empty">لا توجد مصاريف مكتب في الفترة المحددة\</div>\</td>\</tr>\`;
 
 }
 
@@ -6613,13 +5890,13 @@ this.disabled=true;
 try{
 
 await addDoc(
-collection(firestore,"office_income"),
+collection(firestore,"office\_income"),
 {
 date,
 name,
 amount,
 note,
-createdAt:serverTimestamp()
+createdAt\:serverTimestamp()
 }
 );
 
@@ -6640,14 +5917,15 @@ this.disabled=false;
 };
 
 
-window.deleteOfficeIncome=async function(id){
+
+window\.deleteOfficeIncome=async function(id){
 
 if(!confirm("هل تريد حذف هذا الدخل؟"))return;
 
 try{
 
 await deleteDoc(
-doc(firestore,"office_income",id)
+doc(firestore,"office\_income",id)
 );
 
 }catch(e){
@@ -6659,7 +5937,8 @@ alert(e.message);
 };
 
 
-window.deleteOfficeExpense=
+
+window\.deleteOfficeExpense=
 async function(id){
 
 if(
@@ -6674,7 +5953,7 @@ try{
 await deleteDoc(
 doc(
 firestore,
-"office_expenses",
+"office\_expenses",
 id
 )
 );
@@ -6690,9 +5969,9 @@ e.message
 
 };
 
-/* =====================================================
+/\* =====================================================
    المشاريع
-===================================================== */
+\===================================================== \*/
 
 document
 .querySelectorAll("#tabs .tab")
@@ -6747,56 +6026,56 @@ return;
 
 const records=filterBySelectedMonth(db.transactions,"projects");
 
-let html=`
+let html=\`
 
 ${monthFilterHTML("projects")}
 
-<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+\<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>➕ إضافة مشروع جديد</h3>
+\<h3>➕ إضافة مشروع جديد\</h3>
 
-<div class="grid">
+\<div class="grid">
 
-<div class="field">
-<label>اسم المشروع</label>
-<input id="projName" placeholder="مثال: مشروع برج الرياض">
-</div>
+\<div class="field">
+\<label>اسم المشروع\</label>
+\<input id="projName" placeholder="مثال: مشروع برج الرياض">
+\</div>
 
-<div style="align-self:end">
-<button class="btn green" id="saveProjectBtn">إضافة المشروع</button>
-</div>
+\<div style="align-self\:end">
+\<button class="btn green" id="saveProjectBtn">إضافة المشروع\</button>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<h3>📋 قائمة المشاريع</h3>
+\<h3>📋 قائمة المشاريع\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
-<th>اسم المشروع</th>
-<th>التصنيف</th>
-<th>إجمالي الدخل</th>
-<th>إجمالي المصاريف</th>
-<th>الصافي</th>
-<th>الحالة</th>
-<th>إجراءات</th>
-</tr>
+\<tr>
+\<th>اسم المشروع\</th>
+\<th>التصنيف\</th>
+\<th>إجمالي الدخل\</th>
+\<th>إجمالي المصاريف\</th>
+\<th>الصافي\</th>
+\<th>الحالة\</th>
+\<th>إجراءات\</th>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody>
+\<tbody>
 
-`;
+\`;
 
 if(!db.projects.length){
 
-html+=`<tr><td colspan="7"><div class="empty">لا توجد مشاريع حتى الآن</div></td></tr>`;
+html+=\`\<tr>\<td colspan="7">\<div class="empty">لا توجد مشاريع حتى الآن\</div>\</td>\</tr>\`;
 
 }else{
 
@@ -6814,73 +6093,75 @@ else pExp+=Number(t.amount)||0;
 
 const pNet=pInc-pExp;
 
-html+=`
+html+=\`
 
-<tr>
+\<tr>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'projects','${p.id}','name')">
-<strong>${escapeHTML(p.name)}</strong>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'projects','${p.id}','name')">
+\<strong>${escapeHTML(p.name)}\</strong>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'projects','${p.id}','category')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'projects','${p.id}','category')">
 ${escapeHTML(p.category||"عام")}
-</td>
+\</td>
 
-<td class="income">
+\<td class="income">
 ${money(pInc)}
-</td>
+\</td>
 
-<td class="expense">
+\<td class="expense">
 ${money(pExp)}
-</td>
+\</td>
 
-<td class="${profitClass(pNet)}">
+\<td class="${profitClass(pNet)}">
 ${money(pNet)}
-</td>
+\</td>
 
-<td>
-${p.status==="closed"?'<span class="expense">مغلق</span>':'<span class="income">مفتوح</span>'}
-</td>
+\<td>
+${p.status==="closed"?'\<span class="expense">مغلق\</span>':'\<span class="income">مفتوح\</span>'}
+\</td>
 
-<td>
+\<td>
 
-<div class="actions">
+\<div class="actions">
 
-<button class="btn blue" onclick="openSingleProject('${p.id}')">
+\<button class="btn blue" onclick="openSingleProject('${p.id}')">
 التفاصيل
-</button>
+\</button>
 
 
 
-<button class="btn orange" onclick="toggleProjectStatus('${p.id}')">
+
+
+\<button class="btn orange" onclick="toggleProjectStatus('${p.id}')">
 ${p.status==="closed"?'فتح المشروع':'إغلاق المشروع'}
-</button>
+\</button>
 
-<button class="btn red" onclick="deleteProject('${p.id}')">
+\<button class="btn red" onclick="deleteProject('${p.id}')">
 حذف
-</button>
+\</button>
 
-</div>
+\</div>
 
-</td>
+\</td>
 
-</tr>
+\</tr>
 
-`;
+\`;
 
 });
 
 }
 
-html+=`
+html+=\`
 
-</tbody>
+\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-`;
+\`;
 
 content.innerHTML=html;
 
@@ -6902,7 +6183,7 @@ collection(firestore,"projects"),
 {
 name,
 status:"open",
-createdAt:serverTimestamp()
+createdAt\:serverTimestamp()
 }
 );
 
@@ -6922,7 +6203,7 @@ this.disabled=false;
 
 }
 
-window.openSingleProject=function(id){
+window\.openSingleProject=function(id){
 
 currentOpenedProjectId=id;
 
@@ -6930,7 +6211,7 @@ render("projects");
 
 };
 
-window.closeSingleProject=function(){
+window\.closeSingleProject=function(){
 
 currentOpenedProjectId=null;
 
@@ -6938,7 +6219,7 @@ render("projects");
 
 };
 
-window.toggleProjectStatus=async function(id){
+window\.toggleProjectStatus=async function(id){
 
 const p=db.projects.find(x=>x.id===id);
 
@@ -6949,7 +6230,7 @@ try{
 await updateDoc(
 doc(firestore,"projects",id),
 {
-status:p.status==="closed"?"open":"closed"
+status\:p.status==="closed"?"open":"closed"
 }
 );
 
@@ -7000,7 +6281,7 @@ const raw=String(t.category||"عام").trim()||"عام";
 
 const key=normalizedCategoryKey(raw);
 
-if(!catTotals[key])catTotals[key]={label:raw,total:0};
+if(!catTotals[key])catTotals[key]={label\:raw,total:0};
 
 catTotals[key].total+=Number(t.amount)||0;
 
@@ -7015,176 +6296,176 @@ db.transactions
 )
 ].sort();
 
-let html=`
+let html=\`
 
 ${monthFilterHTML("projects")}
 
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:10px">
+\<div style="display\:flex;justify-content\:space-between;align-items\:center;margin-bottom:15px;flex-wrap\:wrap;gap:10px">
 
-<h2>
+\<h2>
 🏗️ مشروع: ${escapeHTML(proj.name)}
-</h2>
+\</h2>
 
-<button class="btn secondary" onclick="closeSingleProject()">
+\<button class="btn secondary" onclick="closeSingleProject()">
 ← العودة للمشاريع
-</button>
+\</button>
 
-</div>
+\</div>
 
-<div class="stats" style="margin-bottom:20px">
+\<div class="stats" style="margin-bottom:20px">
 
-<div class="stat">
-<small>إجمالي الدخل</small>
-<strong class="income">${money(pInc)}</strong>
-</div>
+\<div class="stat">
+\<small>إجمالي الدخل\</small>
+\<strong class="income">${money(pInc)}\</strong>
+\</div>
 
-<div class="stat">
-<small>إجمالي المصاريف</small>
-<strong class="expense">${money(pExp)}</strong>
-</div>
+\<div class="stat">
+\<small>إجمالي المصاريف\</small>
+\<strong class="expense">${money(pExp)}\</strong>
+\</div>
 
-<div class="stat">
-<small>صافي الربح</small>
-<strong class="${profitClass(pNet)}">${money(pNet)}</strong>
-</div>
+\<div class="stat">
+\<small>صافي الربح\</small>
+\<strong class="${profitClass(pNet)}">${money(pNet)}\</strong>
+\</div>
 
-<div class="stat">
-<small>عدد العمليات</small>
-<strong>${formatNum(pTxs.length)}</strong>
-</div>
+\<div class="stat">
+\<small>عدد العمليات\</small>
+\<strong>${formatNum(pTxs.length)}\</strong>
+\</div>
 
-</div>
+\</div>
 
-<div class="card" style="margin-bottom:20px">
+\<div class="card" style="margin-bottom:20px">
 
-<h3>📊 مصروفات المشروع حسب التصنيف</h3>
+\<h3>📊 مصروفات المشروع حسب التصنيف\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
-<tr>
-<th>التصنيف</th>
-<th>المجموع</th>
-</tr>
-</thead>
+\<thead>
+\<tr>
+\<th>التصنيف\</th>
+\<th>المجموع\</th>
+\</tr>
+\</thead>
 
-<tbody>
+\<tbody>
 
 ${
 Object.keys(catTotals).length
 ?
-Object.keys(catTotals).map(k=>`
+Object.keys(catTotals).map(k=>\`
 
-<tr>
+\<tr>
 
-<td>
+\<td>
 ${escapeHTML(catTotals[k].label)}
-</td>
+\</td>
 
-<td class="expense">
+\<td class="expense">
 ${money(catTotals[k].total)}
-</td>
+\</td>
 
-</tr>
+\</tr>
 
-`).join("")
+\`).join("")
 :
-`<tr><td colspan="2"><div class="empty">لا توجد مصروفات في الفترة المحددة</div></td></tr>`
+\`\<tr>\<td colspan="2">\<div class="empty">لا توجد مصروفات في الفترة المحددة\</div>\</td>\</tr>\`
 }
 
-</tbody>
+\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
+\<div class="card" style="background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:20px">
 
-<h3>➕ إضافة عملية للمشروع</h3>
+\<h3>➕ إضافة عملية للمشروع\</h3>
 
-<div class="grid">
+\<div class="grid">
 
-<div class="field">
+\<div class="field">
 
-<label>نوع العملية</label>
+\<label>نوع العملية\</label>
 
-<select id="txType">
-<option value="income">دفعة مقبوضة (دخل)</option>
-<option value="expense">مصروف</option>
-</select>
+\<select id="txType">
+\<option value="income">دفعة مقبوضة (دخل)\</option>
+\<option value="expense">مصروف\</option>
+\</select>
 
-</div>
+\</div>
 
-<div class="field">
-<label>التاريخ</label>
-<input id="txDate" type="date" value="${today()}">
-</div>
+\<div class="field">
+\<label>التاريخ\</label>
+\<input id="txDate" type="date" value="${today()}">
+\</div>
 
-<div class="field">
-<label>المبلغ (SAR)</label>
-<input id="txAmount" type="number" min="0" step="0.01" placeholder="0">
-</div>
+\<div class="field">
+\<label>المبلغ (SAR)\</label>
+\<input id="txAmount" type="number" min="0" step="0.01" placeholder="0">
+\</div>
 
-<div class="field">
+\<div class="field">
 
-<label>التصنيف / البيان</label>
+\<label>التصنيف / البيان\</label>
 
-<input
+\<input
 id="txCategory"
 list="projectCategoriesList"
 placeholder="اكتب تصنيف جديد أو اختر الموجود">
 
-<datalist id="projectCategoriesList">
+\<datalist id="projectCategoriesList">
 
-${categoryValues.map(c=>`<option value="${escapeHTML(c)}"></option>`).join("")}
+${categoryValues.map(c=>\`\<option value="${escapeHTML(c)}">\</option>\`).join("")}
 
-</datalist>
+\</datalist>
 
-</div>
+\</div>
 
-<div class="field full">
-<label>ملاحظات</label>
-<input id="txNote" placeholder="ملاحظات تفصيلية...">
-</div>
+\<div class="field full">
+\<label>ملاحظات\</label>
+\<input id="txNote" placeholder="ملاحظات تفصيلية...">
+\</div>
 
-<div class="full">
-<button class="btn green" id="saveTxBtn">حفظ العملية</button>
-</div>
+\<div class="full">
+\<button class="btn green" id="saveTxBtn">حفظ العملية\</button>
+\</div>
 
-</div>
+\</div>
 
-</div>
+\</div>
 
-<h3>📋 سجل عمليات المشروع</h3>
+\<h3>📋 سجل عمليات المشروع\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
-<th>التاريخ</th>
-<th>النوع</th>
-<th>التصنيف</th>
-<th>المبلغ</th>
-<th>الملاحظات</th>
-<th>إجراء</th>
-</tr>
+\<tr>
+\<th>التاريخ\</th>
+\<th>النوع\</th>
+\<th>التصنيف\</th>
+\<th>المبلغ\</th>
+\<th>الملاحظات\</th>
+\<th>إجراء\</th>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody>
+\<tbody>
 
-`;
+\`;
 
 if(!pTxs.length){
 
-html+=`<tr><td colspan="6"><div class="empty">لا توجد عمليات في الفترة المحددة</div></td></tr>`;
+html+=\`\<tr>\<td colspan="6">\<div class="empty">لا توجد عمليات في الفترة المحددة\</div>\</td>\</tr>\`;
 
 }else{
 
@@ -7192,52 +6473,52 @@ pTxs.forEach(t=>{
 
 const isInc=t.type==="income";
 
-html+=`
+html+=\`
 
-<tr>
+\<tr>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','date','date')">
-<span class="num-val">${escapeHTML(t.date)}</span>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','date','date')">
+\<span class="num-val">${escapeHTML(t.date)}\</span>
+\</td>
 
-<td class="${isInc?'income':'expense'}">
+\<td class="${isInc?'income':'expense'}">
 ${isInc?'دفعة':'مصروف'}
-</td>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','category')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','category')">
 ${escapeHTML(t.category||"-")}
-</td>
+\</td>
 
-<td class="editable-cell ${isInc?'income':'expense'}" onclick="inlineEditCell(this,'transactions','${t.id}','amount','number')">
+\<td class="editable-cell ${isInc?'income':'expense'}" onclick="inlineEditCell(this,'transactions','${t.id}','amount','number')">
 ${money(t.amount)}
-</td>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','note')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','note')">
 ${escapeHTML(t.note||"-")}
-</td>
+\</td>
 
-<td>
+\<td>
 
-<button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button>
-</td>
+\<button class="btn red" onclick="deleteTransaction('${t.id}')">حذف\</button>
+\</td>
 
-</tr>
+\</tr>
 
-`;
+\`;
 
 });
 
 }
 
-html+=`
+html+=\`
 
-</tbody>
+\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-`;
+\`;
 
 content.innerHTML=html;
 
@@ -7284,13 +6565,13 @@ try{
 await addDoc(
 collection(firestore,"transactions"),
 {
-projectId:projId,
+projectId\:projId,
 type,
 date,
 amount,
 category,
 note,
-createdAt:serverTimestamp()
+createdAt\:serverTimestamp()
 }
 );
 
@@ -7314,7 +6595,7 @@ this.disabled=false;
 
 }
 
-window.deleteProject=async function(id){
+window\.deleteProject=async function(id){
 
 if(!confirm("هل أنت تأكد من حذف هذا المشروع وكافة عملياته؟")) return;
 
@@ -7340,7 +6621,7 @@ alert(e.message);
 
 };
 
-window.deleteTransaction=async function(id){
+window\.deleteTransaction=async function(id){
 
 if(!confirm("هل تريد حذف هذه العملية؟")) return;
 
@@ -7368,35 +6649,35 @@ else exp+=Number(t.amount)||0;
 
 });
 
-content.innerHTML=`
+content.innerHTML=\`
 
-<h3>📊 الملخص العام والمؤشرات</h3>
+\<h3>📊 الملخص العام والمؤشرات\</h3>
 
-<div class="stats">
+\<div class="stats">
 
-<div class="stat">
-<small>إجمالي الإيرادات المقبوضة</small>
-<strong class="income">${money(inc)}</strong>
-</div>
+\<div class="stat">
+\<small>إجمالي الإيرادات المقبوضة\</small>
+\<strong class="income">${money(inc)}\</strong>
+\</div>
 
-<div class="stat">
-<small>إجمالي المصاريف المصروفة</small>
-<strong class="expense">${money(exp)}</strong>
-</div>
+\<div class="stat">
+\<small>إجمالي المصاريف المصروفة\</small>
+\<strong class="expense">${money(exp)}\</strong>
+\</div>
 
-<div class="stat">
-<small>صافي الربح العام</small>
-<strong class="${profitClass(inc-exp)}">${money(inc-exp)}</strong>
-</div>
+\<div class="stat">
+\<small>صافي الربح العام\</small>
+\<strong class="${profitClass(inc-exp)}">${money(inc-exp)}\</strong>
+\</div>
 
-<div class="stat">
-<small>إجمالي عدد المشاريع</small>
-<strong>${formatNum(db.projects.length)}</strong>
-</div>
+\<div class="stat">
+\<small>إجمالي عدد المشاريع\</small>
+\<strong>${formatNum(db.projects.length)}\</strong>
+\</div>
 
-</div>
+\</div>
 
-`;
+\`;
 
 }
 
@@ -7404,37 +6685,37 @@ function renderTransactionsView(content){
 
 const records=filterBySelectedMonth(db.transactions,"projects");
 
-let html=`
+let html=\`
 
 ${monthFilterHTML("projects")}
 
-<h3>📋 جميع عمليات المشاريع المسجلة</h3>
+\<h3>📋 جميع عمليات المشاريع المسجلة\</h3>
 
-<div class="table-wrap">
+\<div class="table-wrap">
 
-<table>
+\<table>
 
-<thead>
+\<thead>
 
-<tr>
-<th>التاريخ</th>
-<th>المشروع</th>
-<th>النوع</th>
-<th>التصنيف</th>
-<th>المبلغ</th>
-<th>الملاحظات</th>
-<th>إجراء</th>
-</tr>
+\<tr>
+\<th>التاريخ\</th>
+\<th>المشروع\</th>
+\<th>النوع\</th>
+\<th>التصنيف\</th>
+\<th>المبلغ\</th>
+\<th>الملاحظات\</th>
+\<th>إجراء\</th>
+\</tr>
 
-</thead>
+\</thead>
 
-<tbody>
+\<tbody>
 
-`;
+\`;
 
 if(!records.length){
 
-html+=`<tr><td colspan="7"><div class="empty">لا توجد عمليات في الفترة المحددة</div></td></tr>`;
+html+=\`\<tr>\<td colspan="7">\<div class="empty">لا توجد عمليات في الفترة المحددة\</div>\</td>\</tr>\`;
 
 }else{
 
@@ -7444,66 +6725,66 @@ const p=db.projects.find(proj=>proj.id===t.projectId);
 
 const isInc=t.type==="income";
 
-html+=`
+html+=\`
 
-<tr>
+\<tr>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','date','date')">
-<span class="num-val">${escapeHTML(t.date)}</span>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','date','date')">
+\<span class="num-val">${escapeHTML(t.date)}\</span>
+\</td>
 
-<td>
-<strong>${escapeHTML(p?p.name:"غير محدد")}</strong>
-</td>
+\<td>
+\<strong>${escapeHTML(p?p.name:"غير محدد")}\</strong>
+\</td>
 
-<td>
-<span class="${isInc?'income':'expense'}">
+\<td>
+\<span class="${isInc?'income':'expense'}">
 ${isInc?'دفعة':'مصروف'}
-</span>
-</td>
+\</span>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','category')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','category')">
 ${escapeHTML(t.category||"-")}
-</td>
+\</td>
 
-<td class="editable-cell ${isInc?'income':'expense'}" onclick="inlineEditCell(this,'transactions','${t.id}','amount','number')">
+\<td class="editable-cell ${isInc?'income':'expense'}" onclick="inlineEditCell(this,'transactions','${t.id}','amount','number')">
 ${money(t.amount)}
-</td>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','note')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'transactions','${t.id}','note')">
 ${escapeHTML(t.note||"-")}
-</td>
+\</td>
 
-<td>
+\<td>
 
-<button class="btn red" onclick="deleteTransaction('${t.id}')">حذف</button>
-</td>
+\<button class="btn red" onclick="deleteTransaction('${t.id}')">حذف\</button>
+\</td>
 
-</tr>
+\</tr>
 
-`;
+\`;
 
 });
 
 }
 
-html+=`
+html+=\`
 
-</tbody>
+\</tbody>
 
-</table>
+\</table>
 
-</div>
+\</div>
 
-`;
+\`;
 
 content.innerHTML=html;
 
 }
 
-/* =====================================================
+/\* =====================================================
    الخدمات
-===================================================== */
+\===================================================== \*/
 
 function updateServicesDataList() {
 
@@ -7524,7 +6805,7 @@ const dataList = document.getElementById("servicesList");
 if (dataList) {
 
 dataList.innerHTML = Array.from(categoriesSet).map(cat => 
-`<option value="${escapeHTML(cat)}">`
+\`\<option value="${escapeHTML(cat)}">\`
 ).join("");
 
 }
@@ -7566,7 +6847,7 @@ if(!list) return;
 const categories=getContractingCategories();
 
 list.innerHTML=categories.map(category=>
-`<option value="${escapeHTML(category)}"></option>`
+\`\<option value="${escapeHTML(category)}">\</option>\`
 ).join("");
 
 }
@@ -7576,7 +6857,7 @@ function contractingCategoryDistance(a,b){
 const aa=normalizedCategoryKey(a);
 const bb=normalizedCategoryKey(b);
 
-const matrix=Array.from({length:aa.length+1},()=>
+const matrix=Array.from({length\:aa.length+1},()=>
 Array(bb.length+1).fill(0)
 );
 
@@ -7615,7 +6896,7 @@ const categories=getContractingCategories();
 for(const category of categories){
 
 if(normalizedCategoryKey(category)===normalized){
-return {type:"exact",label:category};
+return {type:"exact",label\:category};
 }
 
 }
@@ -7640,7 +6921,7 @@ if((contained && Math.abs(normalized.length-candidate.length)<=8) || score>=0.72
 
 if(score>bestScore){
  bestScore=score;
- best={type:"similar",label:category,score};
+ best={type:"similar",label\:category,score};
 }
 
 }
@@ -7656,7 +6937,7 @@ function normalizedCategoryKey(value){
 const text=String(value||"").trim().toLowerCase();
 
 return text
-.replace(/[\s\-_.،,]+/g,"")
+.replace(/[\s\\-\_.،,]+/g,"")
 .replace(/[أإآ]/g,"ا")
 .replace(/ة/g,"ه")
 .replace(/ى/g,"ي");
@@ -7684,7 +6965,7 @@ const generalExpenses=[];
 
 records.forEach(s=>{
 
-if(s.recordType==="general_expense"){
+if(s.recordType==="general\_expense"){
 
 const amount=Number(s.amount)||0;
 
@@ -7721,7 +7002,7 @@ const key=normalizedCategoryKey(raw);
 if(!summary[key]){
 
 summary[key]={
-label:raw,
+label\:raw,
 collected:0,
 expense:0,
 profit:0
@@ -7794,39 +7075,39 @@ document.getElementById(
 sumBody.innerHTML=
 Object.keys(summary).length
 ?
-Object.keys(summary).map(k=>`
+Object.keys(summary).map(k=>\`
 
-<tr>
+\<tr>
 
-<td>
-<strong>${escapeHTML(summary[k].label)}</strong>
-</td>
+\<td>
+\<strong>${escapeHTML(summary[k].label)}\</strong>
+\</td>
 
-<td class="income">
+\<td class="income">
 ${money(summary[k].collected)}
-</td>
+\</td>
 
-<td class="expense">
+\<td class="expense">
 ${money(summary[k].expense)}
-</td>
+\</td>
 
-<td class="profit-positive">
+\<td class="profit-positive">
 ${money(summary[k].profit)}
-</td>
+\</td>
 
-</tr>
+\</tr>
 
-`).join("")
+\`).join("")
 :
-`
-<tr>
-<td colspan="4">
-<div class="empty">
+\`
+\<tr>
+\<td colspan="4">
+\<div class="empty">
 لا توجد بيانات للخدمات في الفترة المحددة
-</div>
-</td>
-</tr>
-`;
+\</div>
+\</td>
+\</tr>
+\`;
 
 const srvBody=
 document.getElementById(
@@ -7835,7 +7116,7 @@ document.getElementById(
 
 const incomeRecords=
 records.filter(
-s=>s.recordType!=="general_expense"
+s=>s.recordType!=="general\_expense"
 );
 
 srvBody.innerHTML=
@@ -7859,54 +7140,54 @@ collected-(Number(s.profit)||0)
 const profit=
 collected-expense;
 
-return `
+return \`
 
-<tr>
+\<tr>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','date','date')">
-<span class="num-val">${escapeHTML(s.date)}</span>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','date','date')">
+\<span class="num-val">${escapeHTML(s.date)}\</span>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','category')">
-<strong>${escapeHTML(s.category||"عام")}</strong>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','category')">
+\<strong>${escapeHTML(s.category||"عام")}\</strong>
+\</td>
 
-<td class="${profitClass(profit)}">
+\<td class="${profitClass(profit)}">
 ${money(profit)}
-</td>
+\</td>
 
-<td class="editable-cell income" onclick="inlineEditCell(this,'services','${s.id}','collectedAmount','number')">
+\<td class="editable-cell income" onclick="inlineEditCell(this,'services','${s.id}','collectedAmount','number')">
 ${money(collected)}
-</td>
+\</td>
 
-<td class="editable-cell expense" onclick="inlineEditCell(this,'services','${s.id}','expense','number')">
+\<td class="editable-cell expense" onclick="inlineEditCell(this,'services','${s.id}','expense','number')">
 ${money(expense)}
-</td>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','note')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','note')">
 ${escapeHTML(s.note||"-")}
-</td>
+\</td>
 
-<td>
+\<td>
 
-<button class="btn red" onclick="deleteService('${s.id}')">حذف</button>
-</td>
+\<button class="btn red" onclick="deleteService('${s.id}')">حذف\</button>
+\</td>
 
-</tr>
+\</tr>
 
-`;
+\`;
 
 }).join("")
 :
-`
-<tr>
-<td colspan="7">
-<div class="empty">
+\`
+\<tr>
+\<td colspan="7">
+\<div class="empty">
 لا توجد عمليات دخل خدمات في الفترة المحددة
-</div>
-</td>
-</tr>
-`;
+\</div>
+\</td>
+\</tr>
+\`;
 
 const geBody=
 document.getElementById(
@@ -7916,44 +7197,44 @@ document.getElementById(
 geBody.innerHTML=
 generalExpenses.length
 ?
-generalExpenses.map(s=>`
+generalExpenses.map(s=>\`
 
-<tr>
+\<tr>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','date','date')">
-<span class="num-val">${escapeHTML(s.date||"")}</span>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','date','date')">
+\<span class="num-val">${escapeHTML(s.date||"")}\</span>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','category')">
-<strong>${escapeHTML(s.category||"عام")}</strong>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','category')">
+\<strong>${escapeHTML(s.category||"عام")}\</strong>
+\</td>
 
-<td class="editable-cell expense" onclick="inlineEditCell(this,'services','${s.id}','amount','number')">
+\<td class="editable-cell expense" onclick="inlineEditCell(this,'services','${s.id}','amount','number')">
 ${money(s.amount)}
-</td>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','note')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'services','${s.id}','note')">
 ${escapeHTML(s.note||"-")}
-</td>
+\</td>
 
-<td>
+\<td>
 
-<button class="btn red" onclick="deleteService('${s.id}')">حذف</button>
-</td>
+\<button class="btn red" onclick="deleteService('${s.id}')">حذف\</button>
+\</td>
 
-</tr>
+\</tr>
 
-`).join("")
+\`).join("")
 :
-`
-<tr>
-<td colspan="5">
-<div class="empty">
+\`
+\<tr>
+\<td colspan="5">
+\<div class="empty">
 لا توجد مصروفات مستقلة للخدمات في الفترة المحددة
-</div>
-</td>
-</tr>
-`;
+\</div>
+\</td>
+\</tr>
+\`;
 
 }
 
@@ -8001,11 +7282,11 @@ collection(firestore,"services"),
 date,
 category,
 recordType:"income",
-profit:collectedAmount-expense,
+profit\:collectedAmount-expense,
 collectedAmount,
 expense,
 note,
-createdAt:serverTimestamp()
+createdAt\:serverTimestamp()
 }
 );
 
@@ -8060,12 +7341,12 @@ try{
 await addDoc(
 collection(firestore,"services"),
 {
-recordType:"general_expense",
+recordType:"general\_expense",
 date,
 category,
 amount,
 note,
-createdAt:serverTimestamp()
+createdAt\:serverTimestamp()
 }
 );
 
@@ -8085,7 +7366,7 @@ btn.disabled=false;
 
 };
 
-window.deleteService=async function(id){
+window\.deleteService=async function(id){
 
 if(!confirm("هل تريد حذف هذه العملية؟")) return;
 
@@ -8101,9 +7382,9 @@ alert(e.message);
 
 };
 
-/* =====================================================
+/\* =====================================================
    العقارات
-===================================================== */
+\===================================================== \*/
 
 function renderRentals(){
 
@@ -8226,15 +7507,15 @@ db.propertyExpenses,
 
 if(!db.properties.length){
 
-tbody.innerHTML=`
-<tr>
-<td colspan="8">
-<div class="empty">
+tbody.innerHTML=\`
+\<tr>
+\<td colspan="8">
+\<div class="empty">
 لا توجد عقارات مضافة حتى الآن
-</div>
-</td>
-</tr>
-`;
+\</div>
+\</td>
+\</tr>
+\`;
 
 return;
 
@@ -8276,67 +7557,69 @@ pRent+
 pRet-
 (pRentExp+pPropExp);
 
-return `
+return \`
 
-<tr>
+\<tr>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'properties','${p.id}','title')">
-<strong>${escapeHTML(p.title)}</strong>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'properties','${p.id}','title')">
+\<strong>${escapeHTML(p.title)}\</strong>
+\</td>
 
-<td class="income">
+\<td class="income">
 ${money(pRent)}
-</td>
+\</td>
 
-<td class="expense">
+\<td class="expense">
 ${money(pRentExp)}
-</td>
+\</td>
 
-<td class="expense">
+\<td class="expense">
 ${money(pPropExp)}
-</td>
+\</td>
 
-<td class="${profitClass(pNet)}">
+\<td class="${profitClass(pNet)}">
 ${money(pNet)}
-</td>
+\</td>
 
-<td style="color:#2563eb">
+\<td style="color:#2563eb">
 ${money(pRef)}
-</td>
+\</td>
 
-<td style="color:#d97706">
+\<td style="color:#d97706">
 ${money(pRet)}
-</td>
+\</td>
 
-<td>
+\<td>
 
-<div class="actions">
+\<div class="actions">
 
-<button
+\<button
 class="btn blue"
 onclick="openPropertyDetails('${p.id}')">
 
 إدارة العقار
 
-</button>
+\</button>
 
 
 
-<button
+
+
+\<button
 class="btn red"
 onclick="deleteProperty('${p.id}')">
 
 حذف
 
-</button>
+\</button>
 
-</div>
+\</div>
 
-</td>
+\</td>
 
-</tr>
+\</tr>
 
-`;
+\`;
 
 }).join("");
 
@@ -8368,7 +7651,7 @@ firestore,
 ),
 {
 title,
-createdAt:serverTimestamp()
+createdAt\:serverTimestamp()
 }
 );
 
@@ -8388,7 +7671,7 @@ this.disabled=false;
 
 };
 
-window.deleteProperty=async function(id){
+window\.deleteProperty=async function(id){
 
 if(
 !confirm(
@@ -8434,7 +7717,7 @@ pe=>
 batch.delete(
 doc(
 firestore,
-"property_expenses",
+"property\_expenses",
 pe.id
 )
 )
@@ -8450,13 +7733,9 @@ alert(e.message);
 
 };
 
-window.openPropertyDetails=function(id){
+window\.openPropertyDetails=function(id){
 
 currentOpenedPropertyId=id;
-
-document.getElementById(
-"rentalOverviewStats"
-).style.display="none";
 
 document.getElementById(
 "rentalMainView"
@@ -8470,13 +7749,9 @@ renderRentals();
 
 };
 
-window.closePropertyDetails=function(){
+window\.closePropertyDetails=function(){
 
 currentOpenedPropertyId=null;
-
-document.getElementById(
-"rentalOverviewStats"
-).style.display="grid";
 
 document.getElementById(
 "rentalMainView"
@@ -8517,7 +7792,7 @@ unique[key]=raw;
 list.innerHTML=
 Object.values(unique)
 .sort((a,b)=>a.localeCompare(b,"ar"))
-.map(category=>`<option value="${escapeHTML(category)}"></option>`)
+.map(category=>\`\<option value="${escapeHTML(category)}">\</option>\`)
 .join("");
 
 }
@@ -8642,7 +7917,7 @@ formatNum(
 pExpenses.length
 );
 
-/* ===== ملخص تصنيفات الإيجار داخل العقار ===== */
+/\* ===== ملخص تصنيفات الإيجار داخل العقار ===== \*/
 
 const rentalCategorySummary={};
 
@@ -8657,8 +7932,8 @@ const key=normalizedCategoryKey(raw);
 if(!rentalCategorySummary[key]){
 
 rentalCategorySummary[key]={
-label:raw,
-units:new Set(),
+label\:raw,
+units\:new Set(),
 contracts:0,
 total:0
 };
@@ -8692,39 +7967,39 @@ Object.values(rentalCategorySummary)
 rentalCategorySummaryBody.innerHTML=
 rentalCategoryRows.length
 ?
-rentalCategoryRows.map(item=>`
+rentalCategoryRows.map(item=>\`
 
-<tr>
+\<tr>
 
-<td>
-<strong>${escapeHTML(item.label)}</strong>
-</td>
+\<td>
+\<strong>${escapeHTML(item.label)}\</strong>
+\</td>
 
-<td>
+\<td>
 ${formatNum(item.units.size)}
-</td>
+\</td>
 
-<td>
+\<td>
 ${formatNum(item.contracts)}
-</td>
+\</td>
 
-<td class="income">
+\<td class="income">
 ${money(item.total)}
-</td>
+\</td>
 
-</tr>
+\</tr>
 
-`).join("")
+\`).join("")
 :
-`
-<tr>
-<td colspan="4">
-<div class="empty">
+\`
+\<tr>
+\<td colspan="4">
+\<div class="empty">
 لا توجد تصنيفات إيجار مسجلة لهذا العقار في الفترة المحددة
-</div>
-</td>
-</tr>
-`;
+\</div>
+\</td>
+\</tr>
+\`;
 
 const contractsBody=
 document.getElementById(
@@ -8744,100 +8019,102 @@ r.depositStatus==="refunded";
 
 const net=
 Number(r.amount||0)+
-(isRef?0:deposit)-
+(isRef?0\:deposit)-
 Number(r.expenseAmount||0);
 
-return `
+return \`
 
-<tr>
+\<tr>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','date','date')">
-<span class="num-val">${escapeHTML(r.date)}</span>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','date','date')">
+\<span class="num-val">${escapeHTML(r.date)}\</span>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','unit')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','unit')">
 ${escapeHTML(r.unit||"-")}
-</td>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','rentalCategory')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','rentalCategory')">
 ${escapeHTML(r.rentalCategory||"-")}
-</td>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','tenant')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','tenant')">
 ${escapeHTML(r.tenant||"-")}
-</td>
+\</td>
 
-<td class="editable-cell income" onclick="inlineEditCell(this,'rentals','${r.id}','amount','number')">
+\<td class="editable-cell income" onclick="inlineEditCell(this,'rentals','${r.id}','amount','number')">
 ${money(r.amount)}
-</td>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','depositAmount','number')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','depositAmount','number')">
 ${money(r.depositAmount)}
-</td>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','expenseCategory')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','expenseCategory')">
 ${escapeHTML(r.expenseCategory||"-")}
-</td>
+\</td>
 
-<td class="editable-cell expense" onclick="inlineEditCell(this,'rentals','${r.id}','expenseAmount','number')">
+\<td class="editable-cell expense" onclick="inlineEditCell(this,'rentals','${r.id}','expenseAmount','number')">
 ${money(r.expenseAmount)}
-</td>
+\</td>
 
-<td class="${profitClass(net)}">
+\<td class="${profitClass(net)}">
 ${money(net)}
-</td>
+\</td>
 
-<td>
+\<td>
 
 ${
 deposit > 0
 ?
-`<button
+\`\<button
 class="btn ${isRef?'blue':'orange'}"
 onclick="toggleDeposit('${r.id}','${isRef?'active':'refunded'}')">
 
 ${isRef?'تم الاسترداد':'مستمر (نشط)'}
 
-</button>`
+\</button>\`
 :
 ""
 }
 
-</td>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','note')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'rentals','${r.id}','note')">
 ${escapeHTML(r.note||"-")}
-</td>
+\</td>
 
-<td>
+\<td>
 
 
 
-<button
+
+
+\<button
 class="btn red"
 onclick="deleteRentContract('${r.id}')">
 
 حذف
 
-</button>
+\</button>
 
-</td>
+\</td>
 
-</tr>
+\</tr>
 
-`;
+\`;
 
 }).join("")
 :
-`
-<tr>
-<td colspan="12">
-<div class="empty">
+\`
+\<tr>
+\<td colspan="12">
+\<div class="empty">
 لا توجد عمليات إيجار في الفترة المحددة
-</div>
-</td>
-</tr>
-`;
+\</div>
+\</td>
+\</tr>
+\`;
 
 const expensesBody=
 document.getElementById(
@@ -8847,53 +8124,55 @@ document.getElementById(
 expensesBody.innerHTML=
 pExpenses.length
 ?
-pExpenses.map(pe=>`
+pExpenses.map(pe=>\`
 
-<tr>
+\<tr>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','date','date')">
-<span class="num-val">${escapeHTML(pe.date)}</span>
-</td>
+\<td class="editable-cell" onclick="inlineEditCell(this,'property\_expenses','${pe.id}','date','date')">
+\<span class="num-val">${escapeHTML(pe.date)}\</span>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','category')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'property\_expenses','${pe.id}','category')">
 ${escapeHTML(pe.category||"عام")}
-</td>
+\</td>
 
-<td class="editable-cell expense" onclick="inlineEditCell(this,'property_expenses','${pe.id}','amount','number')">
+\<td class="editable-cell expense" onclick="inlineEditCell(this,'property\_expenses','${pe.id}','amount','number')">
 ${money(pe.amount)}
-</td>
+\</td>
 
-<td class="editable-cell" onclick="inlineEditCell(this,'property_expenses','${pe.id}','note')">
+\<td class="editable-cell" onclick="inlineEditCell(this,'property\_expenses','${pe.id}','note')">
 ${escapeHTML(pe.note||"-")}
-</td>
+\</td>
 
-<td>
+\<td>
 
 
 
-<button
+
+
+\<button
 class="btn red"
 onclick="deletePropertyExpense('${pe.id}')">
 
 حذف
 
-</button>
+\</button>
 
-</td>
+\</td>
 
-</tr>
+\</tr>
 
-`).join("")
+\`).join("")
 :
-`
-<tr>
-<td colspan="5">
-<div class="empty">
+\`
+\<tr>
+\<td colspan="5">
+\<div class="empty">
 لا توجد مصاريف شاملة في الفترة المحددة
-</div>
-</td>
-</tr>
-`;
+\</div>
+\</td>
+\</tr>
+\`;
 
 }
 
@@ -9086,7 +8365,7 @@ try{
 await addDoc(
 collection(
 firestore,
-"property_expenses"
+"property\_expenses"
 ),
 {
 
@@ -9131,7 +8410,7 @@ this.disabled=false;
 
 };
 
-window.toggleDeposit=async function(id, newStatus){
+window\.toggleDeposit=async function(id, newStatus){
 
 try{
 
@@ -9142,7 +8421,7 @@ firestore,
 id
 ),
 {
-depositStatus:newStatus
+depositStatus\:newStatus
 }
 );
 
@@ -9159,7 +8438,7 @@ alert(e.message);
 
 };
 
-window.deleteRentContract=async function(id){
+window\.deleteRentContract=async function(id){
 
 if(
 !confirm(
@@ -9186,7 +8465,7 @@ alert(e.message);
 
 };
 
-window.inlineEditCell=async function(
+window\.inlineEditCell=async function(
 cell,
 collectionName,
 id,
@@ -9202,15 +8481,15 @@ cell.dataset.editing="1";
 const sourceMap={
 projects:"projects",
 transactions:"transactions",
-office_expenses:"officeExpenses",
-office_income:"officeIncome",
+office\_expenses:"officeExpenses",
+office\_income:"officeIncome",
 contracting:"contracting",
 services:"services",
 properties:"properties",
 rentals:"rentals",
-property_expenses:"propertyExpenses",
-personal_expenses:"personalExpenses",
-personal_income:"personalIncome"
+property\_expenses:"propertyExpenses",
+personal\_expenses:"personalExpenses",
+personal\_income:"personalIncome"
 };
 
 const source=
@@ -9313,7 +8592,7 @@ collectionName,
 id
 ),
 {
-[field]:value
+[field]\:value
 }
 );
 
@@ -9379,8 +8658,8 @@ activeTab.dataset.view
 );
 
 }else if(
-collectionName==="office_expenses"||
-collectionName==="office_income"
+collectionName==="office\_expenses"||
+collectionName==="office\_income"
 ){
 
 renderOffice();
@@ -9399,14 +8678,14 @@ renderServices();
 
 }else if(
 collectionName==="rentals"||
-collectionName==="property_expenses"
+collectionName==="property\_expenses"
 ){
 
 renderRentals();
 
 }else if(
-collectionName==="personal_expenses"||
-collectionName==="personal_income"
+collectionName==="personal\_expenses"||
+collectionName==="personal\_income"
 ){
 
 renderPersonal();
@@ -9429,7 +8708,7 @@ activeTab.dataset.view
 
 }
 
-window.editRecord=async function(
+window\.editRecord=async function(
 collectionName,
 id,
 fields
@@ -9438,15 +8717,15 @@ fields
 const sourceMap={
 projects:"projects",
 transactions:"transactions",
-office_expenses:"officeExpenses",
-office_income:"officeIncome",
+office\_expenses:"officeExpenses",
+office\_income:"officeIncome",
 contracting:"contracting",
 services:"services",
 properties:"properties",
 rentals:"rentals",
-property_expenses:"propertyExpenses",
-personal_expenses:"personalExpenses",
-personal_income:"personalIncome"
+property\_expenses:"propertyExpenses",
+personal\_expenses:"personalExpenses",
+personal\_income:"personalIncome"
 };
 
 const source=
@@ -9510,7 +8789,7 @@ label="المصروف";
 
 const val=
 prompt(
-`تعديل ${label}:`,
+\`تعديل ${label}:\`,
 current[field]??""
 );
 
@@ -9572,7 +8851,7 @@ e.message
 
 };
 
-window.deletePropertyExpense=async function(id){
+window\.deletePropertyExpense=async function(id){
 
 if(
 !confirm(
@@ -9586,7 +8865,7 @@ try{
 await deleteDoc(
 doc(
 firestore,
-"property_expenses",
+"property\_expenses",
 id
 )
 );
@@ -9599,8 +8878,8 @@ alert(e.message);
 
 };
 
-</script>
+\</script>
 
-</body>
+\</body>
 
-</html>
+\</html>
