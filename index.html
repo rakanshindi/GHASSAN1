@@ -4574,26 +4574,16 @@ financialReportRow(["عدد المصروفات",financialReportEsc(data.officeEx
 </div>
 <div class="report-section">
 <div class="report-section-title">مصروفات المكتب حسب البند</div>
-${table(Object.values(officeExpenseCategories).sort((a,b)=>b.total-a.total).slice(0,7).map(x=>financialReportRow([financialReportEsc(x.label),financialReportMoney(x.total)])),["البند","إجمالي المصروف"])}
+${table(Object.values(officeExpenseCategories).sort((a,b)=>b.total-a.total).map(x=>financialReportRow([financialReportEsc(x.label),financialReportMoney(x.total)])),["البند","إجمالي المصروف"])}
 </div>
 <div class="report-section">
 <div class="report-section-title">جميع عمليات دخل المكتب</div>
-${table(officeIncomeRows.slice(0,2),["التاريخ","الاسم","المبلغ","الملاحظات"])}
+${table(officeIncomeRows,["التاريخ","الاسم","المبلغ","الملاحظات"])}
 </div>
 <div class="report-section">
 <div class="report-section-title">جميع مصروفات المكتب</div>
-${table(officeExpenseRows.slice(0,4),["التاريخ","البند","المبلغ","الملاحظات"])}
+${table(officeExpenseRows,["التاريخ","البند","المبلغ","الملاحظات"])}
 </div>
-</div>
-
-<!-- الصفحة 3: استكمال المكتب -->
-<div class="report-page">
-${pageHeader("🏢 المكتب — استكمال العمليات")}
-<div class="report-section">
-<div class="report-section-title">باقي مصروفات المكتب</div>
-${table(officeExpenseRows.slice(4),["التاريخ","البند","المبلغ","الملاحظات"])}
-</div>
-<div class="report-note">تم نقل بقية عمليات المصروفات إلى هذه الصفحة حتى يبقى ترتيب التقرير مطابقًا للنموذج المرجعي ولا تتداخل الجداول.</div>
 </div>
 
 <!-- الصفحة 4: المقاولات -->
@@ -4680,13 +4670,12 @@ financialReportRow(["عدد عمليات الإيجار",financialReportEsc(data
 ],["البيان","القيمة"])}</div>
 <div class="report-section"><div class="report-section-title">تحليل العقارات</div>${table(propertyRows,["العقار","الإيجارات","المصروفات","الصافي","التأمينات النشطة"])}</div>
 <div class="report-section"><div class="report-section-title">مصروفات العقارات حسب التصنيف</div>${table(propertyCategoryRows,["التصنيف","إجمالي المصروف"])}</div>
-<div class="report-section"><div class="report-section-title">جميع عمليات الإيجار</div>${table(rentalRows.slice(0,4),["التاريخ","العقار","الوحدة","المستأجر","الإيجار","التأمين","المصروف","الصافي","حالة التأمين","الملاحظات"])}</div>
+<div class="report-section"><div class="report-section-title">جميع عمليات الإيجار</div>${table(rentalRows,["التاريخ","العقار","الوحدة","المستأجر","الإيجار","التأمين","المصروف","الصافي","حالة التأمين","الملاحظات"])}</div>
 </div>
 
-<!-- الصفحة 8: استكمال العقارات -->
+<!-- الصفحة 8: المصاريف الشاملة للعقارات -->
 <div class="report-page">
-${pageHeader("🔑 إيجارات العقارات — استكمال")}
-<div class="report-section"><div class="report-section-title">باقي عمليات الإيجار</div>${table(rentalRows.slice(4),["التاريخ","العقار","الوحدة","المستأجر","الإيجار","التأمين","المصروف","الصافي","حالة التأمين","الملاحظات"])}</div>
+${pageHeader("🔑 إيجارات العقارات — المصاريف الشاملة")}
 <div class="report-section"><div class="report-section-title">جميع المصاريف الشاملة للعقارات</div>${table(propertyExpenseRows,["التاريخ","التصنيف","المبلغ","الملاحظات"])}</div>
 <div class="report-warning">
 التأمينات النشطة معروضة بشكل مستقل عن الإيرادات التشغيلية لأنها مبالغ مرتبطة بالتزامات تجاه المستأجرين وليست إيرادًا تشغيليًا.<br><br>
@@ -4823,11 +4812,12 @@ button.textContent=`جاري تجهيز التقرير... ${i+1} / ${pages.lengt
   لأن ذلك كان سبب انزياح التقرير في النسخ السابقة.
 */
 page.style.width="210mm";
-page.style.height="297mm";
+page.style.height="auto";
 page.style.minWidth="210mm";
 page.style.minHeight="297mm";
 page.style.maxWidth="210mm";
-page.style.maxHeight="297mm";
+page.style.maxHeight="none";
+page.style.overflow="visible";
 page.style.margin="0";
 page.style.transform="none";
 page.style.left="0";
@@ -4848,11 +4838,38 @@ windowWidth:Math.max(document.documentElement.clientWidth,1024),
 windowHeight:Math.max(document.documentElement.clientHeight,1200)
 });
 
-const imageData=canvas.toDataURL("image/jpeg",0.94);
+/*
+  الصفحة قد تحتوي على عدد كبير من العمليات. لذلك لا نقص البيانات
+  ولا نستخدم slice؛ نلتقط الصفحة كاملة ثم نقسمها تلقائيًا إلى
+  صفحات A4 متتابعة حتى تظهر جميع البيانات والمبالغ المحفوظة.
+*/
+const chunkHeight=Math.max(1,Math.round(canvas.width*(A4_HEIGHT_MM/A4_WIDTH_MM)));
+const totalChunks=Math.ceil(canvas.height/chunkHeight);
 
-if(i>0){
+for(let chunkIndex=0;chunkIndex<totalChunks;chunkIndex++){
+
+if(i>0 || chunkIndex>0){
 pdf.addPage("a4","portrait");
 }
+
+const sourceY=chunkIndex*chunkHeight;
+const currentHeight=Math.min(chunkHeight,canvas.height-sourceY);
+
+const chunkCanvas=document.createElement("canvas");
+chunkCanvas.width=canvas.width;
+chunkCanvas.height=currentHeight;
+
+const chunkContext=chunkCanvas.getContext("2d");
+chunkContext.fillStyle="#ffffff";
+chunkContext.fillRect(0,0,chunkCanvas.width,chunkCanvas.height);
+chunkContext.drawImage(
+canvas,
+0,sourceY,canvas.width,currentHeight,
+0,0,chunkCanvas.width,currentHeight
+);
+
+const imageData=chunkCanvas.toDataURL("image/jpeg",0.94);
+const renderedHeight=A4_WIDTH_MM*(currentHeight/canvas.width);
 
 pdf.addImage(
 imageData,
@@ -4860,10 +4877,14 @@ imageData,
 0,
 0,
 A4_WIDTH_MM,
-A4_HEIGHT_MM,
+renderedHeight,
 undefined,
 "FAST"
 );
+
+chunkCanvas.width=1;
+chunkCanvas.height=1;
+}
 
 /* تحرير الذاكرة بعد كل صفحة */
 canvas.width=1;
