@@ -1665,29 +1665,7 @@ class="save-status">
 📋 قائمة مصاريف المكتب
 </h3>
 
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>التاريخ</th>
-<th>اسم البند</th>
-<th>المبلغ</th>
-<th>الملاحظات</th>
-<th>إجراء</th>
-
-</tr>
-
-</thead>
-
-<tbody id="officeExpensesBody"></tbody>
-
-</table>
-
-</div>
+<div id="officeExpensesBody"></div>
 
 <h3>📋 قائمة دخل المكتب</h3>
 
@@ -6105,26 +6083,16 @@ ${escapeHTML(item.note||"")}
 
 /* ===== مصاريف المكتب: سنة ← شهر ← العمليات ===== */
 
-const tbody=document.getElementById("officeExpensesBody");
+const expensesContainer=document.getElementById("officeExpensesBody");
 
-if(tbody){
+if(expensesContainer){
 
 if(selected==="all"){
-
-tbody.innerHTML=`
-<tr>
-<td colspan="5" style="padding:0;border:0">
-${officeRenderGroupedExpenses(expenses)}
-</td>
-</tr>
-`;
-
+expensesContainer.innerHTML=officeRenderGroupedExpenses(expenses);
 }else{
-
-tbody.innerHTML=expenses.length
-?officeBuildExpenseRows(expenses)
-:`<tr><td colspan="5"><div class="empty">لا توجد مصاريف مكتب في الفترة المحددة</div></td></tr>`;
-
+expensesContainer.innerHTML=expenses.length
+?`<div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>اسم البند</th><th>المبلغ</th><th>الملاحظات</th><th>إجراء</th></tr></thead><tbody>${officeBuildExpenseRows(expenses)}</tbody></table></div>`
+:`<div class="empty">لا توجد مصاريف مكتب في الفترة المحددة</div>`;
 }
 
 }
