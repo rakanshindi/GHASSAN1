@@ -420,6 +420,86 @@ font-size:15px;
 font-weight:800
 }
 
+
+
+/* ===== تقسيم المصاريف والإيرادات الشخصية حسب السنة والشهر ===== */
+.personal-year-group{
+background:#f8fafc;
+border:1px solid #dbe3ea;
+border-radius:14px;
+padding:10px;
+margin-bottom:12px
+}
+
+.personal-year-header,
+.personal-month-header{
+width:100%;
+border:0;
+text-align:right;
+background:#fff;
+color:#111827;
+border:1px solid #e2e8f0;
+border-radius:12px;
+padding:12px 14px;
+font:inherit;
+cursor:pointer;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+}
+
+.personal-year-header:hover,
+.personal-month-header:hover{
+background:#f8fafc
+}
+
+.personal-year-main,
+.personal-month-main{
+display:flex;
+align-items:center;
+gap:8px;
+font-weight:900
+}
+
+.personal-year-arrow,
+.personal-month-arrow{
+font-size:14px;
+width:18px;
+text-align:center;
+flex:0 0 18px
+}
+
+.personal-year-meta,
+.personal-month-meta{
+display:flex;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+justify-content:flex-start
+}
+
+.personal-year-content{
+padding:10px 2px 0
+}
+
+.personal-month-group{
+background:#fff;
+border:1px solid #e5e7eb;
+border-radius:12px;
+padding:8px;
+margin-bottom:9px
+}
+
+.personal-month-content{
+padding:10px 4px 2px
+}
+
+.personal-year-total,
+.personal-month-total{
+font-weight:900
+}
+
 .month-filter{
 display:flex;
 align-items:center;
@@ -5386,7 +5466,9 @@ const amt=Number(item.amount)||0;
 
 total+=amt;
 
-const monthKey=(item.date&&item.date.length>=7)?item.date.substring(0,7):"غير محدد";
+const monthKey=(item.date&&item.date.length>=7)
+?item.date.substring(0,7)
+:"غير محدد";
 
 if(!grouped[monthKey]) grouped[monthKey]={total:0,items:[]};
 
@@ -5401,7 +5483,9 @@ const amt=Number(item.amount)||0;
 
 incomeTotal+=amt;
 
-const monthKey=(item.date&&item.date.length>=7)?item.date.substring(0,7):"غير محدد";
+const monthKey=(item.date&&item.date.length>=7)
+?item.date.substring(0,7)
+:"غير محدد";
 
 if(!incomeGrouped[monthKey]) incomeGrouped[monthKey]={total:0,items:[]};
 
@@ -5423,7 +5507,8 @@ const container=document.getElementById("personalMonthlyContainer");
 
 const expenseMonths=Object.keys(grouped);
 const incomeMonths=Object.keys(incomeGrouped);
-const sortedMonths=[...new Set([...expenseMonths,...incomeMonths])].sort((a,b)=>b.localeCompare(a));
+const sortedMonths=[...new Set([...expenseMonths,...incomeMonths])]
+.sort((a,b)=>b.localeCompare(a));
 
 if(!sortedMonths.length){
 
@@ -5433,7 +5518,74 @@ return;
 
 }
 
-container.innerHTML=sortedMonths.map(month=>{
+/* ===== تجميع الأشهر داخل السنوات ===== */
+const years={};
+
+sortedMonths.forEach(month=>{
+
+let year="غير محدد";
+
+if(/^\\d{4}-\\d{2}$/.test(month)){
+const parts=month.split("-");
+year=parts[0];
+}
+
+if(!years[year]) years[year]=[];
+years[year].push(month);
+
+});
+
+const sortedYears=Object.keys(years).sort((a,b)=>{
+if(a==="غير محدد") return 1;
+if(b==="غير محدد") return -1;
+return Number(b)-Number(a);
+});
+
+container.innerHTML=sortedYears.map(year=>{
+
+const months=years[year].sort((a,b)=>b.localeCompare(a));
+
+let yearExpenseTotal=0;
+let yearIncomeTotal=0;
+let yearExpenseCount=0;
+
+months.forEach(month=>{
+const group=grouped[month]||{total:0,items:[]};
+const incomeGroup=incomeGrouped[month]||{total:0,items:[]};
+yearExpenseTotal+=Number(group.total)||0;
+yearIncomeTotal+=Number(incomeGroup.total)||0;
+yearExpenseCount+=group.items.length;
+});
+
+const yearNet=yearIncomeTotal-yearExpenseTotal;
+const safeYearKey=year.replace(/[^0-9A-Za-z\u0600-\u06FF_-]/g,"_");
+
+return `
+
+<div class="personal-year-group">
+
+<button
+ type="button"
+ class="personal-year-header"
+ onclick="togglePersonalYear('${escapeHTML(year)}')">
+
+<div class="personal-year-main">
+<span class="personal-year-arrow" id="personalYearArrow_${safeYearKey}">▶</span>
+<span>📅 ${escapeHTML(year)}</span>
+</div>
+
+<div class="personal-year-meta">
+<span>${formatNum(yearExpenseCount)} مصروف</span>
+<span class="expense personal-year-total">المصاريف: ${money(yearExpenseTotal)}</span>
+<span class="income personal-year-total">الإيرادات: ${money(yearIncomeTotal)}</span>
+<strong class="${profitClass(yearNet)}">الصافي: ${money(yearNet)}</strong>
+</div>
+
+</button>
+
+<div id="personalYearContent_${safeYearKey}" class="personal-year-content" style="display:none">
+
+${months.map(month=>{
 
 const group=grouped[month]||{total:0,items:[]};
 const incomeGroup=incomeGrouped[month]||{total:0,items:[]};
@@ -5446,7 +5598,9 @@ const expenseRows=group.items.map(item=>`
 <span class="num-val">${escapeHTML(item.date)}</span>
 </td>
 
-<td class="editable-cell expense" onclick="inlineEditCell(this,'personal_expenses','${item.id}','amount','number')">${money(item.amount)}</td>
+<td class="editable-cell expense" onclick="inlineEditCell(this,'personal_expenses','${item.id}','amount','number')">
+${money(item.amount)}
+</td>
 
 <td class="editable-cell" onclick="inlineEditCell(this,'personal_expenses','${item.id}','note')">
 ${escapeHTML(item.note||"")}
@@ -5469,7 +5623,9 @@ const incomeRows=incomeGroup.items.map(item=>`
 ${escapeHTML(item.name||"-")}
 </td>
 
-<td class="editable-cell income" onclick="inlineEditCell(this,'personal_income','${item.id}','amount','number')">${money(item.amount)}</td>
+<td class="editable-cell income" onclick="inlineEditCell(this,'personal_income','${item.id}','amount','number')">
+${money(item.amount)}
+</td>
 
 <td class="editable-cell" onclick="inlineEditCell(this,'personal_income','${item.id}','note')">
 ${escapeHTML(item.note||"")}
@@ -5487,27 +5643,37 @@ ${escapeHTML(item.note||"")}
 
 `).join("");
 
+const monthLabel=/^\\d{4}-\\d{2}$/.test(month)
+?`${arabicMonths[Number(month.slice(5,7))-1]||month} ${month.slice(0,4)}`
+:month;
+
+const monthNet=(Number(incomeGroup.total)||0)-(Number(group.total)||0);
+const safeMonthKey=month.replace(/[^0-9A-Za-z\u0600-\u06FF_-]/g,"_");
+const monthDomKey=`${safeYearKey}_${safeMonthKey}`;
+
 return `
 
-<div class="month-group-card">
+<div class="personal-month-group">
 
-<div class="month-header">
+<button
+ type="button"
+ class="personal-month-header"
+ onclick="togglePersonalMonth('${escapeHTML(year)}','${escapeHTML(month)}')">
 
-<h4>
-📅 شهر:
-<span class="num-val">${month}</span>
-الميلادي
-</h4>
-
-<div>
-<span class="expense">المصروفات: ${money(group.total)}</span>
-&nbsp; | &nbsp;
-<span class="income">الإيرادات: ${money(incomeGroup.total)}</span>
-&nbsp; | &nbsp;
-<strong class="${profitClass(incomeGroup.total-group.total)}">الصافي: ${money(incomeGroup.total-group.total)}</strong>
+<div class="personal-month-main">
+<span class="personal-month-arrow" id="personalMonthArrow_${monthDomKey}">▶</span>
+<span>📆 ${escapeHTML(monthLabel)}</span>
 </div>
 
+<div class="personal-month-meta">
+<span class="expense personal-month-total">المصاريف: ${money(group.total)}</span>
+<span class="income personal-month-total">الإيرادات: ${money(incomeGroup.total)}</span>
+<strong class="${profitClass(monthNet)}">الصافي: ${money(monthNet)}</strong>
 </div>
+
+</button>
+
+<div id="personalMonthContent_${monthDomKey}" class="personal-month-content" style="display:none">
 
 ${group.items.length?`
 <h4 style="margin:12px 0 8px">📉 المصاريف</h4>
@@ -5544,11 +5710,51 @@ ${incomeGroup.items.length?`
 
 </div>
 
+</div>
+
+`;
+
+}).join("")}
+
+</div>
+
+</div>
+
 `;
 
 }).join("");
 
 }
+
+window.togglePersonalYear=function(year){
+
+const key=String(year).replace(/[^0-9A-Za-z\u0600-\u06FF_-]/g,"_");
+const content=document.getElementById(`personalYearContent_${key}`);
+const arrow=document.getElementById(`personalYearArrow_${key}`);
+
+if(!content) return;
+
+const open=content.style.display!=="none";
+content.style.display=open?"none":"block";
+if(arrow) arrow.textContent=open?"▶":"▼";
+
+};
+
+window.togglePersonalMonth=function(year,month){
+
+const yearKey=String(year).replace(/[^0-9A-Za-z\u0600-\u06FF_-]/g,"_");
+const monthKey=String(month).replace(/[^0-9A-Za-z\u0600-\u06FF_-]/g,"_");
+const domKey=`${yearKey}_${monthKey}`;
+const content=document.getElementById(`personalMonthContent_${domKey}`);
+const arrow=document.getElementById(`personalMonthArrow_${domKey}`);
+
+if(!content) return;
+
+const open=content.style.display!=="none";
+content.style.display=open?"none":"block";
+if(arrow) arrow.textContent=open?"▶":"▼";
+
+};
 
 document.getElementById("savePersonalExpenseBtn").onclick = async function(){
 
