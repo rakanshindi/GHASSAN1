@@ -1037,7 +1037,7 @@ id="closeFinancialReportBtn">
 
 </div>
 
-<div class="portal-card" id="selectRentals">
+<div class="portal-card" id="selectRentals" onclick="openRentals()">
 
 <span class="portal-icon">🔑</span>
 
@@ -1066,22 +1066,6 @@ id="closeFinancialReportBtn">
 </div>
 
 <!-- ================= المقاولات ================= -->
-
-
-
-<!-- ================= المصاريف الشخصية ================= -->
-
-
-
-<!-- ================= المكتب ================= -->
-
-
-
-<!-- ================= المشاريع ================= -->
-
-
-
-<!-- ================= الخدمات ================= -->
 
 <div id="servicesSection" style="display:none">
 
@@ -2292,7 +2276,7 @@ return Number(value)>=0
 function navigateTo(screenId) {
 
 const screens = [
-"portalScreen", 
+"portalScreen",
 "servicesSection", 
 "rentalsSection", 
 ];
@@ -2760,8 +2744,7 @@ String(b.date||"")
 String(a.date||"")
 )
 );
-const officeSection=document.getElementById("officeSection");
-if(officeSection && officeSection.style.display==="block") renderOffice();
+if(document.getElementById("officeSection")?.style.display==="block") renderOffice();
 updateWallet();
 },error=>console.error("Office Income Firebase Error:",error));
 
@@ -2776,8 +2759,7 @@ String(b.date||"")
 String(a.date||"")
 )
 );
-const contractingSection=document.getElementById("contractingSection");
-if(contractingSection && contractingSection.style.display==="block") renderContracting();
+if(document.getElementById("contractingSection")?.style.display==="block") renderContracting();
 updateWallet();
 },error=>console.error("Contracting Firebase Error:",error));
 
@@ -7268,7 +7250,8 @@ ${money(pRet)}
 
 <button
 class="btn blue"
-onclick="openPropertyDetails('${p.id}')">
+type="button"
+data-open-property="${escapeHTML(p.id)}">
 
 إدارة العقار
 
@@ -7405,10 +7388,9 @@ alert(e.message);
 };
 
 document.addEventListener("click",function(e){
-const btn=e.target.closest("[data-open-property]");
-if(!btn) return;
-e.preventDefault();
-const id=btn.getAttribute("data-open-property");
+const button=e.target.closest("button[data-open-property]");
+if(!button) return;
+const id=button.getAttribute("data-open-property");
 if(id) window.openPropertyDetails(id);
 });
 
