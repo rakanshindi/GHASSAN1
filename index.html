@@ -2619,7 +2619,7 @@ if(
 activeTab &&
 document.getElementById(
 "projectsSection"
-).style.display==="block"
+)?.style.display==="block"
 ){
 
 render(
@@ -2673,7 +2673,7 @@ if(
 activeTab &&
 document.getElementById(
 "projectsSection"
-).style.display==="block"
+)?.style.display==="block"
 ){
 
 render(
@@ -2719,7 +2719,7 @@ String(a.date||"")
 if(
 document.getElementById(
 "officeSection"
-).style.display==="block"
+)?.style.display==="block"
 ){
 
 renderOffice();
@@ -7251,7 +7251,7 @@ ${money(pRet)}
 <button
 class="btn blue"
 type="button"
-data-open-property="${escapeHTML(p.id)}">
+onclick="window.openPropertyDetails('${p.id}')" data-open-property="${escapeHTML(p.id)}">
 
 إدارة العقار
 
@@ -7387,12 +7387,6 @@ alert(e.message);
 
 };
 
-document.addEventListener("click",function(e){
-const button=e.target.closest("button[data-open-property]");
-if(!button) return;
-const id=button.getAttribute("data-open-property");
-if(id) window.openPropertyDetails(id);
-});
 
 window.openPropertyDetails=function(id){
 
