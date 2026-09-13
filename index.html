@@ -2964,7 +2964,7 @@ String(a.date||"")
 )
 );
 
-if(document.getElementById("personalSection").style.display==="block"){renderPersonal();}
+if(document.getElementById("personalSection")?.style.display==="block"){renderPersonal();}
 updateWallet();
 
 },
@@ -3000,7 +3000,7 @@ String(a.date||"")
 )
 );
 
-if(document.getElementById("personalSection").style.display==="block"){
+if(document.getElementById("personalSection")?.style.display==="block"){
 renderPersonal();
 }
 updateWallet();
@@ -7403,6 +7403,14 @@ alert(e.message);
 }
 
 };
+
+document.addEventListener("click",function(e){
+const btn=e.target.closest("[data-open-property]");
+if(!btn) return;
+e.preventDefault();
+const id=btn.getAttribute("data-open-property");
+if(id) window.openPropertyDetails(id);
+});
 
 window.openPropertyDetails=function(id){
 
