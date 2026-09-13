@@ -7251,8 +7251,7 @@ ${money(pRet)}
 <button
 class="btn blue"
 type="button"
-data-open-property="${escapeHTML(p.id)}"
-onclick="return false;">
+data-open-property="${escapeHTML(p.id)}">
 
 إدارة العقار
 
@@ -7388,21 +7387,6 @@ alert(e.message);
 
 };
 
-
-document.addEventListener("click",function(event){
-const button=event.target.closest("button[data-open-property]");
-if(!button) return;
-event.preventDefault();
-event.stopPropagation();
-const id=button.getAttribute("data-open-property");
-if(!id) return;
-currentOpenedPropertyId=id;
-const main=document.getElementById("rentalMainView");
-const detail=document.getElementById("rentalDetailView");
-if(main) main.style.display="none";
-if(detail) detail.style.display="block";
-if(typeof renderRentals === "function") renderRentals();
-},true);
 
 window.openPropertyDetails=function(id){
 
@@ -8550,3 +8534,18 @@ alert(e.message);
 </body>
 
 </html>
+<script>
+document.addEventListener("click", function(event) {
+  const button = event.target.closest("button[data-open-property]");
+  if (!button) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  const id = button.getAttribute("data-open-property");
+  if (!id) return;
+  if (typeof window.openPropertyDetails === "function") {
+    window.openPropertyDetails(id);
+  } else {
+    console.error("openPropertyDetails is not available");
+  }
+}, true);
+</script>
