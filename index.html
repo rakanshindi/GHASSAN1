@@ -7151,7 +7151,8 @@ ${money(pRet)}
 
 <button
 class="btn blue"
-onclick="openPropertyDetails('${p.id}')">
+data-property-id="${p.id}"
+type="button">
 
 إدارة العقار
 
@@ -7286,6 +7287,18 @@ alert(e.message);
 }
 
 };
+
+document.addEventListener("click",function(e){
+
+const button=e.target.closest("button[data-property-id]");
+
+if(!button) return;
+
+const id=button.getAttribute("data-property-id");
+
+if(id) window.openPropertyDetails(id);
+
+});
 
 window.openPropertyDetails=function(id){
 
