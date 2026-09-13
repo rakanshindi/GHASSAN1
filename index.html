@@ -4669,7 +4669,7 @@ onclick="deleteContracting('${x.id}')">
 
 }
 
-if(document.getElementById("saveContractingBtn")) document.getElementById("saveContractingBtn").onclick=async function(){
+document.getElementById("saveContractingBtn").onclick=async function(){
 
 const btn=this;
 
@@ -5192,7 +5192,7 @@ if(arrow) arrow.textContent=open?"▶":"▼";
 
 };
 
-if(document.getElementById("savePersonalExpenseBtn")) document.getElementById("savePersonalExpenseBtn").onclick = async function(){
+document.getElementById("savePersonalExpenseBtn").onclick = async function(){
 
 const btn = this;
 
@@ -5428,7 +5428,9 @@ ${escapeHTML(item.note||"")}
 
 }
 
-if(document.getElementById("saveOfficeExpenseBtn")) document.getElementById("saveOfficeExpenseBtn").onclick=
+document.getElementById(
+"saveOfficeExpenseBtn"
+).onclick=
 async function(){
 
 const btn=this;
@@ -5527,7 +5529,7 @@ btn.textContent=
 
 };
 
-if(document.getElementById("saveOfficeIncomeBtn")) document.getElementById("saveOfficeIncomeBtn").onclick=async function(){
+document.getElementById("saveOfficeIncomeBtn").onclick=async function(){
 
 const date=document.getElementById("offIncDate").value;
 
@@ -5818,7 +5820,7 @@ html+=`
 
 content.innerHTML=html;
 
-if(document.getElementById("saveProjectBtn")) document.getElementById("saveProjectBtn").onclick=async function(){
+document.getElementById("saveProjectBtn").onclick=async function(){
 
 const name=document.getElementById("projName").value.trim();
 
@@ -7249,7 +7251,8 @@ ${money(pRet)}
 <button
 class="btn blue"
 type="button"
-onclick="window.openPropertyDetails('${p.id}')">
+data-open-property="${escapeHTML(p.id)}"
+onclick="return false;">
 
 إدارة العقار
 
@@ -7385,6 +7388,21 @@ alert(e.message);
 
 };
 
+
+document.addEventListener("click",function(event){
+const button=event.target.closest("button[data-open-property]");
+if(!button) return;
+event.preventDefault();
+event.stopPropagation();
+const id=button.getAttribute("data-open-property");
+if(!id) return;
+currentOpenedPropertyId=id;
+const main=document.getElementById("rentalMainView");
+const detail=document.getElementById("rentalDetailView");
+if(main) main.style.display="none";
+if(detail) detail.style.display="block";
+if(typeof renderRentals === "function") renderRentals();
+},true);
 
 window.openPropertyDetails=function(id){
 
