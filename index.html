@@ -4669,7 +4669,7 @@ onclick="deleteContracting('${x.id}')">
 
 }
 
-document.getElementById("saveContractingBtn").onclick=async function(){
+if(document.getElementById("saveContractingBtn")) document.getElementById("saveContractingBtn").onclick=async function(){
 
 const btn=this;
 
@@ -5192,7 +5192,7 @@ if(arrow) arrow.textContent=open?"▶":"▼";
 
 };
 
-document.getElementById("savePersonalExpenseBtn").onclick = async function(){
+if(document.getElementById("savePersonalExpenseBtn")) document.getElementById("savePersonalExpenseBtn").onclick = async function(){
 
 const btn = this;
 
@@ -5428,9 +5428,7 @@ ${escapeHTML(item.note||"")}
 
 }
 
-document.getElementById(
-"saveOfficeExpenseBtn"
-).onclick=
+if(document.getElementById("saveOfficeExpenseBtn")) document.getElementById("saveOfficeExpenseBtn").onclick=
 async function(){
 
 const btn=this;
@@ -5529,7 +5527,7 @@ btn.textContent=
 
 };
 
-document.getElementById("saveOfficeIncomeBtn").onclick=async function(){
+if(document.getElementById("saveOfficeIncomeBtn")) document.getElementById("saveOfficeIncomeBtn").onclick=async function(){
 
 const date=document.getElementById("offIncDate").value;
 
@@ -5820,7 +5818,7 @@ html+=`
 
 content.innerHTML=html;
 
-document.getElementById("saveProjectBtn").onclick=async function(){
+if(document.getElementById("saveProjectBtn")) document.getElementById("saveProjectBtn").onclick=async function(){
 
 const name=document.getElementById("projName").value.trim();
 
@@ -7251,7 +7249,7 @@ ${money(pRet)}
 <button
 class="btn blue"
 type="button"
-onclick="window.openPropertyDetails('${p.id}')" data-open-property="${escapeHTML(p.id)}">
+onclick="window.openPropertyDetails('${p.id}')">
 
 إدارة العقار
 
