@@ -4570,91 +4570,6 @@ onclick="deleteContracting('${x.id}')">
 
 }
 
-document.getElementById("saveContractingBtn").onclick=async function(){
-
-const btn=this;
-
-const date=document.getElementById("conDate").value;
-
-const type=document.getElementById("conType").value;
-
-const name=document.getElementById("conName").value.trim();
-
-let category=document.getElementById("conCategory").value.trim();
-
-const categoryMatch=findSimilarContractingCategory(category);
-
-if(categoryMatch){
-
-if(categoryMatch.type==="exact"){
-
-category=categoryMatch.label;
-
-document.getElementById("conCategory").value=category;
-
-}else{
-
-const useExisting=confirm(
-`يوجد تصنيف مشابه: "${categoryMatch.label}"\n\nاضغط «موافق» لاستخدام التصنيف الموجود، أو «إلغاء» لإنشاء تصنيف جديد باسم "${category}".`
-);
-
-if(useExisting){
-
-category=categoryMatch.label;
-document.getElementById("conCategory").value=category;
-
-}
-
-}
-
-}
-
-const amount=Number(document.getElementById("conAmount").value);
-
-const note=document.getElementById("conNote").value.trim();
-
-if(!date||!name||!(amount>0)){
-alert("أدخل التاريخ والاسم والمبلغ الصحيح.");
-return;
-}
-
-btn.disabled=true;
-btn.textContent="جاري الحفظ...";
-
-try{
-
-await addDoc(
-collection(firestore,"contracting"),
-{
-date,
-type,
-name,
-category,
-amount,
-note,
-createdAt:serverTimestamp()
-}
-);
-
-document.getElementById("conName").value="";
-document.getElementById("conCategory").value="";
-document.getElementById("conAmount").value="";
-document.getElementById("conNote").value="";
-
-}catch(e){
-
-alert(e.message);
-
-}finally{
-
-btn.disabled=false;
-btn.textContent="حفظ العملية";
-
-}
-
-};
-
-
 window.deleteContracting=async function(id){
 
 if(!confirm("هل تريد حذف العملية؟"))return;
@@ -5093,88 +5008,6 @@ if(arrow) arrow.textContent=open?"▶":"▼";
 
 };
 
-document.getElementById("savePersonalExpenseBtn").onclick = async function(){
-
-const btn = this;
-
-const date = document.getElementById("perExpDate").value;
-
-const amount = Number(document.getElementById("perExpAmount").value);
-
-const note = document.getElementById("perExpNote").value.trim();
-
-if(!date){
-
-alert("اختر التاريخ.");
-
-return;
-
-}
-
-if(!(amount > 0)){
-
-alert("أدخل مبلغ مصروف صحيح.");
-
-return;
-
-}
-
-btn.disabled = true;
-btn.textContent = "جاري الحفظ...";
-
-try {
-
-await addPersonalExpenseToFirebase({ date, amount, note });
-
-document.getElementById("perExpAmount").value = "";
-document.getElementById("perExpNote").value = "";
-
-} catch(e) {
-
-console.error(e);
-
-alert("حدث خطأ أثناء الحفظ:\n" + e.message);
-
-} finally {
-
-btn.disabled = false;
-
-btn.textContent = "حفظ المصروف الشخصي";
-
-}
-
-};
-
-document.getElementById("savePersonalIncomeBtn").onclick = async function(){
-
-const btn=this;
-const name=document.getElementById("perIncName").value.trim();
-const amount=Number(document.getElementById("perIncAmount").value);
-const note=document.getElementById("perIncNote").value.trim();
-
-if(!(amount>0)){
-alert("أدخل مبلغ إيراد صحيح.");
-return;
-}
-
-btn.disabled=true;
-btn.textContent="جاري الحفظ...";
-
-try{
-await addPersonalIncomeToFirebase({name,amount,note});
-document.getElementById("perIncName").value="";
-document.getElementById("perIncAmount").value="";
-document.getElementById("perIncNote").value="";
-}catch(e){
-console.error(e);
-alert("حدث خطأ أثناء حفظ الإيراد:\n"+e.message);
-}finally{
-btn.disabled=false;
-btn.textContent="حفظ الإيراد";
-}
-
-};
-
 window.deletePersonalExpense = async function(id){
 
 if(!confirm("هل تريد حذف هذا المصروف؟")) return;
@@ -5430,53 +5263,6 @@ btn.textContent=
 
 };
 
-document.getElementById("saveOfficeIncomeBtn").onclick=async function(){
-
-const date=document.getElementById("offIncDate").value;
-
-const name=document.getElementById("offIncName").value.trim();
-
-const amount=Number(document.getElementById("offIncAmount").value);
-
-const note=document.getElementById("offIncNote").value.trim();
-
-if(!date||!name||!(amount>0)){
-alert("أدخل التاريخ والاسم والمبلغ الصحيح.");
-return;
-}
-
-this.disabled=true;
-
-try{
-
-await addDoc(
-collection(firestore,"office_income"),
-{
-date,
-name,
-amount,
-note,
-createdAt:serverTimestamp()
-}
-);
-
-document.getElementById("offIncName").value="";
-document.getElementById("offIncAmount").value="";
-document.getElementById("offIncNote").value="";
-
-}catch(e){
-
-alert(e.message);
-
-}finally{
-
-this.disabled=false;
-
-}
-
-};
-
-
 window.deleteOfficeIncome=async function(id){
 
 if(!confirm("هل تريد حذف هذا الدخل؟"))return;
@@ -5720,44 +5506,6 @@ html+=`
 `;
 
 content.innerHTML=html;
-
-document.getElementById("saveProjectBtn").onclick=async function(){
-
-const name=document.getElementById("projName").value.trim();
-
-if(!name){
-alert("أدخل اسم المشروع.");
-return;
-}
-
-this.disabled=true;
-
-try{
-
-await addDoc(
-collection(firestore,"projects"),
-{
-name,
-status:"open",
-createdAt:serverTimestamp()
-}
-);
-
-document.getElementById("projName").value="";
-
-}catch(e){
-
-alert(e.message);
-
-}finally{
-
-this.disabled=false;
-
-}
-
-};
-
-}
 
 window.openSingleProject=function(id){
 
