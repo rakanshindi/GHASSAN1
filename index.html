@@ -1019,6 +1019,12 @@ id="closeFinancialReportBtn">
 
 <div class="portal-selection">
 
+
+
+
+
+
+
 <div class="portal-card" id="selectServices">
 
 <span class="portal-icon">🛠️</span>
@@ -1031,7 +1037,7 @@ id="closeFinancialReportBtn">
 
 </div>
 
-<div class="portal-card" id="selectRentals" onclick="openRentals()">
+<div class="portal-card" id="selectRentals">
 
 <span class="portal-icon">🔑</span>
 
@@ -1042,6 +1048,8 @@ id="closeFinancialReportBtn">
 </p>
 
 </div>
+
+
 
 </div>
 
@@ -1056,6 +1064,22 @@ id="closeFinancialReportBtn">
 </div>
 
 </div>
+
+<!-- ================= المقاولات ================= -->
+
+
+
+<!-- ================= المصاريف الشخصية ================= -->
+
+
+
+<!-- ================= المكتب ================= -->
+
+
+
+<!-- ================= المشاريع ================= -->
+
+
 
 <!-- ================= الخدمات ================= -->
 
@@ -2333,6 +2357,35 @@ updateWallet();
 
 };
 
+window.openOffice=function(){
+
+selectedMonths.office="all";
+
+navigateTo("officeSection");
+
+document.getElementById("offExpDate").value=today();
+document.getElementById("offIncDate").value=today();
+
+renderOffice();
+
+};
+
+window.openContracting=function(){
+selectedMonths.contracting="all";
+navigateTo("contractingSection");
+document.getElementById("conDate").value=today();
+renderContracting();
+};
+
+window.openProjects=function(){
+
+selectedMonths.projects="all";
+navigateTo("projectsSection");
+
+render("projects");
+
+};
+
 window.openServices=function(){
 
 selectedMonths.services="all";
@@ -2354,6 +2407,19 @@ selectedMonths.rentals="all";
 navigateTo("rentalsSection");
 
 renderRentals();
+
+};
+
+window.openPersonal=function(){
+
+selectedMonths.personal="all";
+navigateTo("personalSection");
+
+document.getElementById(
+"perExpDate"
+).value=today();
+
+renderPersonal();
 
 };
 
@@ -2560,6 +2626,23 @@ id:item.id,
 
 updateStats();
 
+const activeTab=
+document.querySelector(
+".tab.active"
+);
+
+if(
+activeTab &&
+document.getElementById(
+"projectsSection"
+).style.display==="block"
+){
+
+render(
+activeTab.dataset.view
+);
+
+}
 
 },
 
@@ -2597,6 +2680,23 @@ String(a.date||"")
 
 updateStats();
 
+const activeTab=
+document.querySelector(
+".tab.active"
+);
+
+if(
+activeTab &&
+document.getElementById(
+"projectsSection"
+).style.display==="block"
+){
+
+render(
+activeTab.dataset.view
+);
+
+}
 
 },
 
@@ -2632,6 +2732,15 @@ String(a.date||"")
 )
 );
 
+if(
+document.getElementById(
+"officeSection"
+).style.display==="block"
+){
+
+renderOffice();
+
+}
 
 },
 
@@ -2651,6 +2760,8 @@ String(b.date||"")
 String(a.date||"")
 )
 );
+const officeSection=document.getElementById("officeSection");
+if(officeSection && officeSection.style.display==="block") renderOffice();
 updateWallet();
 },error=>console.error("Office Income Firebase Error:",error));
 
@@ -2665,6 +2776,8 @@ String(b.date||"")
 String(a.date||"")
 )
 );
+const contractingSection=document.getElementById("contractingSection");
+if(contractingSection && contractingSection.style.display==="block") renderContracting();
 updateWallet();
 },error=>console.error("Contracting Firebase Error:",error));
 
@@ -2851,6 +2964,7 @@ String(a.date||"")
 )
 );
 
+if(document.getElementById("personalSection").style.display==="block"){renderPersonal();}
 updateWallet();
 
 },
@@ -2886,6 +3000,9 @@ String(a.date||"")
 )
 );
 
+if(document.getElementById("personalSection").style.display==="block"){
+renderPersonal();
+}
 updateWallet();
 
 },
@@ -4570,6 +4687,91 @@ onclick="deleteContracting('${x.id}')">
 
 }
 
+document.getElementById("saveContractingBtn").onclick=async function(){
+
+const btn=this;
+
+const date=document.getElementById("conDate").value;
+
+const type=document.getElementById("conType").value;
+
+const name=document.getElementById("conName").value.trim();
+
+let category=document.getElementById("conCategory").value.trim();
+
+const categoryMatch=findSimilarContractingCategory(category);
+
+if(categoryMatch){
+
+if(categoryMatch.type==="exact"){
+
+category=categoryMatch.label;
+
+document.getElementById("conCategory").value=category;
+
+}else{
+
+const useExisting=confirm(
+`يوجد تصنيف مشابه: "${categoryMatch.label}"\n\nاضغط «موافق» لاستخدام التصنيف الموجود، أو «إلغاء» لإنشاء تصنيف جديد باسم "${category}".`
+);
+
+if(useExisting){
+
+category=categoryMatch.label;
+document.getElementById("conCategory").value=category;
+
+}
+
+}
+
+}
+
+const amount=Number(document.getElementById("conAmount").value);
+
+const note=document.getElementById("conNote").value.trim();
+
+if(!date||!name||!(amount>0)){
+alert("أدخل التاريخ والاسم والمبلغ الصحيح.");
+return;
+}
+
+btn.disabled=true;
+btn.textContent="جاري الحفظ...";
+
+try{
+
+await addDoc(
+collection(firestore,"contracting"),
+{
+date,
+type,
+name,
+category,
+amount,
+note,
+createdAt:serverTimestamp()
+}
+);
+
+document.getElementById("conName").value="";
+document.getElementById("conCategory").value="";
+document.getElementById("conAmount").value="";
+document.getElementById("conNote").value="";
+
+}catch(e){
+
+alert(e.message);
+
+}finally{
+
+btn.disabled=false;
+btn.textContent="حفظ العملية";
+
+}
+
+};
+
+
 window.deleteContracting=async function(id){
 
 if(!confirm("هل تريد حذف العملية؟"))return;
@@ -5008,6 +5210,88 @@ if(arrow) arrow.textContent=open?"▶":"▼";
 
 };
 
+document.getElementById("savePersonalExpenseBtn").onclick = async function(){
+
+const btn = this;
+
+const date = document.getElementById("perExpDate").value;
+
+const amount = Number(document.getElementById("perExpAmount").value);
+
+const note = document.getElementById("perExpNote").value.trim();
+
+if(!date){
+
+alert("اختر التاريخ.");
+
+return;
+
+}
+
+if(!(amount > 0)){
+
+alert("أدخل مبلغ مصروف صحيح.");
+
+return;
+
+}
+
+btn.disabled = true;
+btn.textContent = "جاري الحفظ...";
+
+try {
+
+await addPersonalExpenseToFirebase({ date, amount, note });
+
+document.getElementById("perExpAmount").value = "";
+document.getElementById("perExpNote").value = "";
+
+} catch(e) {
+
+console.error(e);
+
+alert("حدث خطأ أثناء الحفظ:\n" + e.message);
+
+} finally {
+
+btn.disabled = false;
+
+btn.textContent = "حفظ المصروف الشخصي";
+
+}
+
+};
+
+document.getElementById("savePersonalIncomeBtn").onclick = async function(){
+
+const btn=this;
+const name=document.getElementById("perIncName").value.trim();
+const amount=Number(document.getElementById("perIncAmount").value);
+const note=document.getElementById("perIncNote").value.trim();
+
+if(!(amount>0)){
+alert("أدخل مبلغ إيراد صحيح.");
+return;
+}
+
+btn.disabled=true;
+btn.textContent="جاري الحفظ...";
+
+try{
+await addPersonalIncomeToFirebase({name,amount,note});
+document.getElementById("perIncName").value="";
+document.getElementById("perIncAmount").value="";
+document.getElementById("perIncNote").value="";
+}catch(e){
+console.error(e);
+alert("حدث خطأ أثناء حفظ الإيراد:\n"+e.message);
+}finally{
+btn.disabled=false;
+btn.textContent="حفظ الإيراد";
+}
+
+};
+
 window.deletePersonalExpense = async function(id){
 
 if(!confirm("هل تريد حذف هذا المصروف؟")) return;
@@ -5263,6 +5547,53 @@ btn.textContent=
 
 };
 
+document.getElementById("saveOfficeIncomeBtn").onclick=async function(){
+
+const date=document.getElementById("offIncDate").value;
+
+const name=document.getElementById("offIncName").value.trim();
+
+const amount=Number(document.getElementById("offIncAmount").value);
+
+const note=document.getElementById("offIncNote").value.trim();
+
+if(!date||!name||!(amount>0)){
+alert("أدخل التاريخ والاسم والمبلغ الصحيح.");
+return;
+}
+
+this.disabled=true;
+
+try{
+
+await addDoc(
+collection(firestore,"office_income"),
+{
+date,
+name,
+amount,
+note,
+createdAt:serverTimestamp()
+}
+);
+
+document.getElementById("offIncName").value="";
+document.getElementById("offIncAmount").value="";
+document.getElementById("offIncNote").value="";
+
+}catch(e){
+
+alert(e.message);
+
+}finally{
+
+this.disabled=false;
+
+}
+
+};
+
+
 window.deleteOfficeIncome=async function(id){
 
 if(!confirm("هل تريد حذف هذا الدخل؟"))return;
@@ -5506,6 +5837,44 @@ html+=`
 `;
 
 content.innerHTML=html;
+
+document.getElementById("saveProjectBtn").onclick=async function(){
+
+const name=document.getElementById("projName").value.trim();
+
+if(!name){
+alert("أدخل اسم المشروع.");
+return;
+}
+
+this.disabled=true;
+
+try{
+
+await addDoc(
+collection(firestore,"projects"),
+{
+name,
+status:"open",
+createdAt:serverTimestamp()
+}
+);
+
+document.getElementById("projName").value="";
+
+}catch(e){
+
+alert(e.message);
+
+}finally{
+
+this.disabled=false;
+
+}
+
+};
+
+}
 
 window.openSingleProject=function(id){
 
@@ -6898,9 +7267,8 @@ ${money(pRet)}
 <div class="actions">
 
 <button
-type="button"
 class="btn blue"
-onclick="window.openPropertyDetails('${p.id}'); return false;">
+onclick="openPropertyDetails('${p.id}')">
 
 إدارة العقار
 
